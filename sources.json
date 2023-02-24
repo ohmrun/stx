@@ -28,7 +28,7 @@
     "stx_show",
     "stx_stream",
     "stx_test",
-    "stx_xset",
+    "stx_ds_xset",
     "walker"
   ]
 }
