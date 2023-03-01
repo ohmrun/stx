@@ -1,0 +1,77 @@
+[submodule "pico"]
+	path = pico
+	url = git@github.com:ohmrun/stx_pico.git
+	branch = develop
+[submodule "nano"]
+	path = nano
+	url = git@github.com:ohmrun/stx_nano.git
+	branch = develop
+[submodule "fn"]
+	path = fn
+	url = git@github.com:ohmrun/stx_fn.git
+	branch = develop
+[submodule "fail"]
+	path = fail
+	url = git@github.com:ohmrun/stx_fail.git
+	branch = develop
+[submodule "ds"]
+	path = ds
+	url = git@github.com:ohmrun/stx_ds.git
+	branch = develop
+[submodule "assert"]
+	path = assert
+	url = git@github.com:ohmrun/stx_assert.git
+	branch = develop
+[submodule "fp"]
+	path = fp
+	url = git@github.com:ohmrun/stx_fp.git
+	branch = develop
+[submodule "makro"]
+	path = makro
+	url = git@github.com:ohmrun/stx_makro.git
+	branch = develop
+[submodule "log"]
+	path = log
+	url = git@github.com:ohmrun/stx_log
+	branch = develop
+[submodule "pkg"]
+	path = pkg
+	url = git@github.com:ohmrun/stx_pkg
+	branch = develop
+[submodule "asys"]
+	path = asys
+	url = git@github.com:ohmrun/stx_asys
+	branch = develop
+[submodule "coroutine"]
+	path = coroutine
+	url = git@github.com:ohmrun/stx_coroutine
+	branch = develop
+[submodule "fletcher"]
+	path = fletcher
+	url = git@github.com:ohmrun/fletcher
+	branch = develop
+[submodule "stream"]
+	path = stream
+	url = git@github.com:ohmrun/stx_stream
+	branch = develop
+[submodule "proxy"]
+	path = proxy
+	url = git@github.com:ohmrun/stx_proxy
+[submodule "parse"]
+	path = parse
+	url = git@github.com:ohmrun/stx_parse
+[submodule "pml"]
+	path = pml
+	url = git@github.com:ohmrun/pml
+[submodule "test"]
+	path = test
+	url = git@github.com:ohmrun/stx_test
+[submodule "show"]
+	path = show
+	url = git@github.com:ohmrun/stx_show
+[submodule "bake"]
+	path = bake
+	url = git@github.com:ohmrun/stx_bake
+[submodule "config"]
+	path = config
+	url = git@github.com:ohmrun/stx_config
