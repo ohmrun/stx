@@ -75,3 +75,33 @@
 [submodule "config"]
 	path = config
 	url = git@github.com:ohmrun/stx_config
+[submodule "walker"]
+	path = walker
+	url = git@github.com:ohmrun/walker.git
+[submodule "build"]
+	path = build
+	url = git@github.com:ohmrun/stx_build.git
+[submodule "cli"]
+	path = cli
+	url = git@github.com:ohmrun/stx_cli
+[submodule "data"]
+	path = data
+	url = git@github.com:ohmrun/stx_data
+[submodule "di"]
+	path = di
+	url = git@github.com:ohmrun/stx_di
+[submodule "http_client"]
+	path = http_client
+	url = git@github.com:ohmrun/stx_http_client
+[submodule "om"]
+	path = om
+	url = git@github.com:ohmrun/stx_om
+[submodule "query"]
+	path = query
+	url = git@github.com:ohmrun/stx_query
+[submodule "ds_xset"]
+	path = ds_xset
+	url = git@github.com:ohmrun/stx_ds_xset
+[submodule "schema"]
+	path = schema
+	url = git@github.com:ohmrun/stx_schema

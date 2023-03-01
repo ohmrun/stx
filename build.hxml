@@ -1,0 +1,3 @@
+--library hxmlparser
+--library hscript
+-lib stx
