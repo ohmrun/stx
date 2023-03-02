@@ -23,14 +23,16 @@ class Plugin{
         final tI      = t.get();
         var s         = Std.string(tI.pos);
             s         = s.substr(5,s.length - 6);
-        //trace(s);
+        trace(s);
         final a       = s.split(":");
         final f       = a[0];
         //trace(f);
         final d       = Path.directory(f);
+        //trace(d);
         final p       = new Path(d);
         final sep     = p.backslash ? "\\" : "/";
         final aI      = d.split(sep).slice(0,-5);
+        aI.push('lib');
         var nx        = absolute_path_of(sep,aI);
         //trace(nx);
         final dirs    = FileSystem.readDirectory(nx).filter(
@@ -105,7 +107,7 @@ class Plugin{
               trace(arg);
               switch(arg){
                 case HxmlArgument.Comment(_)        : 
-                case HxmlArgument.ClassPath(path)   :
+                case HxmlArgument.ClassPath(path)   : throw 'unimplemented';
                 case HxmlArgument.Macro(str)        : 
                   final expr    = str;
                   final parser  = new hscript.Parser();
@@ -154,7 +156,7 @@ class Plugin{
                               Compiler.include("",true,[],cp,true);
                               final cls           = Type.resolveClass(module);
                               if(cls == null){
-                                throw "SHIT";
+                                throw "Null Type";
                               }
                               for(str in Type.getClassFields(cls)){
                                 Reflect.setField(o,str,Reflect.field(cls,str));
@@ -172,7 +174,7 @@ class Plugin{
                   }
                   interp.execute(ast);
                 case HxmlArgument.Define(def)       : 
-                  //Context.
+                  throw "unimplemented";
                 default : 
               }
             }

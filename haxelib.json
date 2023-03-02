@@ -22,7 +22,10 @@
         "tink_io"           : "",
         "tink_chunk"        : "",
         "printf"            : "",
-        "equals"            : ""
+        "equals"            : "",
+        "spectatory"        : "",
+        "coconut.ui"        : "",
+        "http-status"       : ""
     },
     "classPath": "src/main/haxe"
 }
