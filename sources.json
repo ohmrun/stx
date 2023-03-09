@@ -1,6 +1,8 @@
 {
   "root"        : "/mnt/dat/i/prj/haxe/published",
   "directories" : [
+    "halva",
+    "fletcher",
     "pml",
     "stx_assert",
     "stx_asys",

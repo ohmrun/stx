@@ -13,6 +13,7 @@ repo=lib/fail
 repo=lib/fletcher
 repo=lib/fn
 repo=lib/fp
+repo=lib/halva
 repo=lib/http_client
 repo=lib/log
 repo=lib/makro

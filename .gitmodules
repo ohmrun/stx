@@ -122,3 +122,6 @@
 	path = lib/schema
 	url = git@github.com:ohmrun/stx_schema
 	branch = develop
+[submodule "lib/halva"]
+	path = lib/halva
+	url = git@github.com:ohmrun/halva
