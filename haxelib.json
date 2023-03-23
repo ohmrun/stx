@@ -21,7 +21,7 @@
         "tink_streams"      : "",
         "tink_io"           : "",
         "tink_chunk"        : "",
-        "printf"            : "",
+        "polygonal-printf"  : "",
         "equals"            : "",
         "spectatory"        : "",
         "coconut.ui"        : "",

@@ -32,7 +32,8 @@ class Plugin{
         final sep     = p.backslash ? "\\" : "/";
         final aI      = d.split(sep).slice(0,-5);
         var nx        = absolute_path_of(sep,aI);
-        //trace(nx);
+            nx        = Path.join([nx,'lib']);
+        trace(nx);
         final dirs    = FileSystem.readDirectory(nx).filter(
           s -> {
             return switch(s){
@@ -165,7 +166,6 @@ class Plugin{
                            // if()
                            trace(set);
                           }
-                          
                         default : 
                       }
                     default : 
@@ -240,4 +240,7 @@ class Plugin{
     }
     return nx;
   }
+  // static public function trace(str:String,?pos:haxe.PosInfos){
+  //   haxe.Log.trace(str,pos);
+  // }
 }

@@ -1,49 +1,49 @@
 [submodule "pico"]
-	path = lib/pico
+	path = lib/stx_pico
 	url = git@github.com:ohmrun/stx_pico.git
 	branch = develop
 [submodule "nano"]
-	path = lib/nano
+	path = lib/stx_nano
 	url = git@github.com:ohmrun/stx_nano.git
 	branch = develop
 [submodule "fn"]
-	path = lib/fn
+	path = lib/stx_fn
 	url = git@github.com:ohmrun/stx_fn.git
 	branch = develop
 [submodule "fail"]
-	path = lib/fail
+	path = lib/stx_fail
 	url = git@github.com:ohmrun/stx_fail.git
 	branch = develop
 [submodule "ds"]
-	path = lib/ds
+	path = lib/stx_ds
 	url = git@github.com:ohmrun/stx_ds.git
 	branch = develop
 [submodule "assert"]
-	path = lib/assert
+	path = lib/stx_assert
 	url = git@github.com:ohmrun/stx_assert.git
 	branch = develop
 [submodule "fp"]
-	path = lib/fp
+	path = lib/stx_fp
 	url = git@github.com:ohmrun/stx_fp.git
 	branch = develop
 [submodule "makro"]
-	path = lib/makro
+	path = lib/stx_makro
 	url = git@github.com:ohmrun/stx_makro.git
 	branch = develop
 [submodule "log"]
-	path = lib/log
+	path = lib/stx_log
 	url = git@github.com:ohmrun/stx_log
 	branch = develop
 [submodule "pkg"]
-	path = lib/pkg
+	path = lib/stx_pkg
 	url = git@github.com:ohmrun/stx_pkg
 	branch = develop
 [submodule "asys"]
-	path = lib/asys
+	path = lib/stx_asys
 	url = git@github.com:ohmrun/stx_asys
 	branch = develop
 [submodule "coroutine"]
-	path = lib/coroutine
+	path = lib/stx_coroutine
 	url = git@github.com:ohmrun/stx_coroutine
 	branch = develop
 [submodule "fletcher"]
@@ -51,15 +51,15 @@
 	url = git@github.com:ohmrun/fletcher
 	branch = develop
 [submodule "stream"]
-	path = lib/stream
+	path = lib/stx_stream
 	url = git@github.com:ohmrun/stx_stream
 	branch = develop
 [submodule "proxy"]
-	path = lib/proxy
+	path = lib/stx_proxy
 	url = git@github.com:ohmrun/stx_proxy
 	branch = develop
 [submodule "parse"]
-	path = lib/parse
+	path = lib/stx_parse
 	url = git@github.com:ohmrun/stx_parse
 	branch = develop
 [submodule "pml"]
@@ -67,19 +67,19 @@
 	url = git@github.com:ohmrun/pml
 	branch = develop
 [submodule "test"]
-	path = lib/test
+	path = lib/stx_test
 	url = git@github.com:ohmrun/stx_test
 	branch = develop
 [submodule "show"]
-	path = lib/show
+	path = lib/stx_show
 	url = git@github.com:ohmrun/stx_show
 	branch = develop
 [submodule "bake"]
-	path = lib/bake
+	path = lib/stx_bake
 	url = git@github.com:ohmrun/stx_bake
 	branch = develop
 [submodule "config"]
-	path = lib/config
+	path = lib/stx_config
 	url = git@github.com:ohmrun/stx_config
 	branch = develop
 [submodule "walker"]
@@ -87,39 +87,39 @@
 	url = git@github.com:ohmrun/walker.git
 	branch = develop
 [submodule "build"]
-	path = lib/build
+	path = lib/stx_build
 	url = git@github.com:ohmrun/stx_build.git
 	branch = develop
 [submodule "cli"]
-	path = lib/cli
+	path = lib/stx_cli
 	url = git@github.com:ohmrun/stx_cli
 	branch = develop
 [submodule "data"]
-	path = lib/data
+	path = lib/stx_data
 	url = git@github.com:ohmrun/stx_data
 	branch = develop
 [submodule "di"]
-	path = lib/di
+	path = lib/stx_di
 	url = git@github.com:ohmrun/stx_di
 	branch = develop
 [submodule "http_client"]
-	path = lib/http_client
+	path = lib/stx_http_client
 	url = git@github.com:ohmrun/stx_http_client
 	branch = develop
 [submodule "om"]
-	path = lib/om
+	path = lib/stx_om
 	url = git@github.com:ohmrun/stx_om
 	branch = develop
 [submodule "query"]
-	path = lib/query
+	path = lib/stx_query
 	url = git@github.com:ohmrun/stx_query
 	branch = develop
 [submodule "ds_xset"]
-	path = lib/ds_xset
+	path = lib/stx_ds_xset
 	url = git@github.com:ohmrun/stx_ds_xset
 	branch = develop
 [submodule "schema"]
-	path = lib/schema
+	path = lib/stx_schema
 	url = git@github.com:ohmrun/stx_schema
 	branch = develop
 [submodule "lib/halva"]

@@ -1,0 +1,14 @@
+{
+  "build" : {
+    "-lib" : ["stx"],
+    "unit" : {
+      "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"]
+    },
+    "test" : {
+      "-main" : "Test",
+      "interp" : {
+        "--interp" : "true"
+      }
+    }
+  }
+}
