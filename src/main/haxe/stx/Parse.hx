@@ -1,0 +1,224 @@
+package stx;
+
+using stx.Pico;
+using stx.Fail;
+using stx.Nano;
+using stx.Parse;
+using stx.Fn;
+
+import stx.parse.Parsers.*;
+
+typedef LiftArrayReader       = stx.parse.lift.LiftArrayReader;
+typedef LiftClusterReader     = stx.parse.lift.LiftClusterReader;
+typedef LiftStringReader      = stx.parse.lift.LiftStringReader;
+typedef LiftLinkedListReader  = stx.parse.lift.LiftLinkedListReader;
+
+
+typedef ParseInput<P>         = stx.parse.ParseInput<P>;
+typedef ParseResult<P,T>      = stx.parse.ParseResult<P,T>;
+typedef ParseResultLift       = stx.parse.ParseResult.ParseResultLift;
+
+typedef ParserApi<P,R>        = stx.parse.ParserApi<P,R>;
+typedef ParserCls<P,R>       	= stx.parse.ParserCls<P,R>;
+typedef Parser<P,R>           = stx.parse.Parser<P,R>;
+typedef Parsers            		= stx.parse.Parsers;
+typedef ParserLift            = stx.parse.parser.ParserLift;
+typedef ParseFailure 					= stx.fail.ParseFailure;
+typedef ParseFailureCode 			= stx.fail.ParseFailureCode;
+typedef ParseFailureCodeSum   = stx.fail.ParseFailureCode.ParseFailureCodeSum;
+
+class Parse{
+	@:noUsing static public function mergeString(a:String,b:String){
+		return a + b;
+	}
+	@:noUsing static public function mergeArray<T>(a:Array<T>,b:Array<T>){
+		return a.concat(b);
+	}
+	@:noUsing static public function mergeOption<T>(a:String, b:Option<String>){
+		return switch (b){ case Some(v) : a += v ; default : ''; } return a; 
+	}
+	@:noUsing static public function mergeTAndArray<T>(a:T, b:Array<T>):Array<T>{
+		return [a].concat(b);
+	}
+	@:noUsing static public function mergeOptionAndArray<T>(a:Option<T>, b:Array<T>):Array<T>{
+		return a.fold(
+			(t) -> [t].concat(b),
+			() 	-> b
+		);
+	}
+	static public var boolean 		= __.parse().id('true').or(__.parse().id('false'));
+	static public var integer     = __.parse().reg("^[\\+\\-]?\\d+");
+  static public var float 			= __.parse().reg("^[\\+\\-]?\\d+(\\.\\d+)?");
+  
+	static public function primitive():Parser<String,Primitive>{
+		return boolean.then((x) -> PBool(x == 'true' ? true : false))
+		.or(float.then(Std.parseFloat.fn().then(x -> PSprig(Byteal(NFloat(x))))))
+		.or(integer.then((str) -> PSprig(Byteal(NFloat((__.option(Std.parseInt(str)).defv(0)))))))
+		.or(literal.then(x -> PSprig(Textal(x))));
+	}
+		
+
+	static public var lower				= Range(97, 122);
+	static public var upper				= Range(65, 90);
+	static public var alpha				= Or(upper,lower);
+	static public var digit				= Range(48, 57);
+	static public var alphanum		= alpha.or(digit);
+	static public var ascii				= Range(0, 255);
+	
+	static public var valid				= alpha.or(digit).or(__.parse().id('_'));
+	
+	static public var tab					= __.parse().id('	');
+	static public var space				= __.parse().id(' ');
+	
+	static public var nl					= __.parse().id('\n');
+	static public var cr					= __.parse().id('\r\n');
+	static public var cr_or_nl		= nl.or(cr);
+
+	static public var gap					= tab.or(space);
+	static public var whitespace	= Range(0, 32).tagged('whitespace');
+
+	//static public var camel 			= lower.and_with(word, mergeString);
+	static public var word				= lower.or(upper).one_many().tokenize();//[a-z]*
+	static public var quote				= __.parse().id('"').or(__.parse().id("'"));
+	static public var escape			= __.parse().id('\\');
+	static public var not_escaped	= __.parse().id('\\\\');
+	
+	static public var x 					= not_escaped.not()._and(escape);
+	static public var x_quote 		= x._and(quote);
+
+	static public var literal 		= new stx.parse.term.Literal().asParser();
+	static public var symbol 			= Parsers.When(x -> StringTools.fastCodeAt(x,0) >= 33).one_many().tokenize().tagged('symbol');
+
+	static public	final brkt_l_square = __.parse().id('[');
+	static public	final brkt_r_square = __.parse().id(']');
+
+	static public function spaced( p : Parser<String,String> ) {
+		return p.and_(gap.many());
+	}
+	static public function returned(p : Parser<String,String>) {
+		return p.and_(whitespace.many());
+	}
+	@:noUsing static public function eq<I>(v:I):Parser<I,I>{
+		return SyncAnon(
+			(input:ParseInput<I>) -> input.head().fold(
+				(vI) 	-> v == vI ? input.tail().ok(vI) : input.erration('eq').failure(input),
+				(e) 	-> e.toParseFailure_with(input,false).failure(input),
+				() 		-> input.erration(E_Parse_ParseFailed('eq')).failure(input)
+			)
+		,'eq').asParser();
+	}
+}
+class LiftParse{
+  static public function parse(wildcard:Wildcard){
+    return new stx.parse.Module();
+  }
+  static public function ok<P,R>(rest:ParseInput<P>,match:R):ParseResult<P,R>{
+    return ParseResult.make(rest,Some(match),null);
+	}
+	static public function nil<P,R>(rest:ParseInput<P>):ParseResult<P,R>{
+    return ParseResult.make(rest,None,null);
+  }
+	static public function failure<P,R>(self:Refuse<ParseFailure>,rest:ParseInput<P>):ParseResult<P,R>{
+		return ParseResult.make(rest,None,self);
+	}
+	static public function no<P,R>(rest:ParseInput<P>,message:ParseFailureCode,fatal=false):ParseResult<P,R>{
+		return ParseResult.make(rest,None,erration(rest,message,fatal));
+	}
+	static public function cache<P,R>(parser:Void->Parser<P,R>):Parser<P,R>{
+		return Parsers.LAnon(parser).asParser();
+	}
+  static public function erration<P>(rest:ParseInput<P>,message:ParseFailureCode,fatal=false):Refuse<ParseFailure>{
+    return Refuse.pure(ParseFailure.make(@:privateAccess rest.content.index,message,fatal));
+  }
+  static public function parsify(regex:hre.RegExp,ipt:ParseInput<String>):hre.Match{
+    #if debug __.log().trace(_ -> _.pure(@:privateAccess ipt.content.data)); #end 
+    var data : String = (cast ipt).content.data;
+    if(data == null){
+      data = "";
+    }
+    data = data.substr(ipt.offset);
+    return regex.exec(data);
+  }
+	static public function sub<I,O,Oi,Oii>(p:Parser<I,O>,p0:Option<O>->Couple<ParseInput<Oi>,Parser<Oi,Oii>>){
+		return Anon(
+			function(input:ParseInput<I>):ParseResult<I,Oii>{
+				final res 		= p.apply(input);
+				return switch(res.is_ok()){
+					case true : 
+						final out 		= p0(res.value);
+						final reader 	= out.fst();
+						final parser 	= out.snd(); 
+						final resII 	= parser.apply(reader);
+						final inner 	= switch(resII.is_ok()){
+							case true : 
+								switch(resII.value){
+									case Some(ok) : res.asset.ok(ok);
+									case None  		: res.asset.nil();
+								}
+							case false : 
+								ParseResult.make(input,None,resII.error);
+						}
+						inner;
+					case false : res.fails();
+				}
+			},
+			Some('sub')
+		);
+	}
+	static public inline function tagged<I,T>(p : Parser<I,T>, tag : String):Parser<I,T> {
+    p.tag = Some(tag);
+    return TagRefuse(p, tag);
+	}
+	@:noUsing static public inline function succeed<I,O>(v:O):Parser<I,O>{
+    return new stx.parse.parser.term.Succeed(v).asParser();
+	}
+}
+//typedef LiftParseInputForwardToParser 	= stx.parse.lift.LiftParseInputForwardToParser;
+typedef LiftArrayOfParser 							= stx.parse.lift.LiftArrayOfParser;
+typedef LiftParseFailureCodeRefuse 			= stx.parse.lift.LiftParseFailureCodeRefuse;
+typedef LiftParseFailureCodeResult 		  = stx.parse.lift.LiftParseFailureCodeResult;
+
+class LiftParseFailure{
+	static public inline function is_parse_fail(self:Defect<ParseFailure>):Bool{
+    return (self.error.toIterable().toIter()).lfold( 
+			(next:Error<Decline<ParseFailure>>,memo:Bool) -> memo.if_else(
+				() -> true,
+				() -> next.data.fold(
+					ok -> switch(ok){
+						case EXTERNAL(x) : x.msg != ParseFailure.FAIL;
+						default : false;
+					},
+					() -> false
+				)
+			),
+			false
+		);
+
+	}
+  static public inline function is_fatal(self:Defect<ParseFailure>):Bool{
+    return self.error.toIterable().toIter().lfold( 
+			(next:Refuse<ParseFailure>,memo:Bool) -> memo.if_else(
+				() -> true,
+				() -> next.data.fold(
+					(ok) -> ok.fold(
+						x -> x.fatal,
+						_ -> false
+					),
+					() -> false
+				)
+			),
+			false
+		);
+  }
+  static public function toString(self:Defect<ParseFailure>){
+    return self.toRefuse().toIterable().toIter().map(
+			 x -> x.data.fold(
+				 ok -> ok.fold(
+					 okI 	-> Std.string(okI),
+					 _ 	  -> ''
+				 ),
+				 () -> ''
+			 )
+		).lfold1((n,m) -> '$m,$n');
+  }
+}

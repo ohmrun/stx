@@ -1,0 +1,26 @@
+package stx.makro.head.data;
+
+import stx.makro.Expr;
+
+class Gen {
+  public function new() {}
+  public function wrap(placeholder:HExpr, ct:ComplexType):Function return throw 'abstract';
+  public function nullable(e:HExpr):HExpr return throw 'abstract';
+  public function string():HExpr return throw 'abstract';
+  public function float():HExpr return throw 'abstract';
+  public function int():HExpr return throw 'abstract';
+  public function dyn(e:HExpr, ct:ComplexType):HExpr return throw 'abstract';
+  public function dynAccess(e:HExpr):HExpr return throw 'abstract';
+  public function bool():HExpr return throw 'abstract';
+  public function date():HExpr return throw 'abstract';
+  public function bytes():HExpr return throw 'abstract';
+  public function anon(fields:Array<FieldInfo>, ct:ComplexType):HExpr return throw 'abstract';
+  public function array(e:HExpr):HExpr return throw 'abstract';
+  public function map(k:HExpr, v:HExpr):HExpr return throw 'abstract';
+  public function enm(constructors:Array<EnumConstructor>, ct:ComplexType, pos:Position, gen:GenType):HExpr return throw 'abstract';
+  public function enumAbstract(names:Array<HExpr>, e:HExpr, ct:ComplexType, pos:Position):HExpr return throw 'abstract';
+  public function rescue(t:Type, pos:Position, gen:GenType):Option<HExpr> return throw 'abstract';
+  public function reject(t:Type):String return throw 'abstract';
+  public function shouldIncludeField(c:ClassField, owner:Option<ClassType>):Bool return true;
+  public function drive(type:Type, pos:Position, gen:Type->Position->HExpr):HExpr return gen(type, pos);
+}   

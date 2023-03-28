@@ -1,0 +1,16 @@
+package stx.assert.halva.comparable;
+
+import eu.ohmrun.halva.core.Memo in TMemo;
+
+class Memo<T> extends ComparableCls<TMemo<T>>{
+  public final inner : Comparable<T>;
+  public function new(inner){
+    this.inner = inner;
+  }
+  public function lt():Ord<TMemo<T>>{
+    return Ord.lift(new stx.assert.halva.ord.Memo(this.inner.lt()));
+  }
+  public function eq():Eq<TMemo<T>>{
+    return Eq.lift(new stx.assert.halva.eq.Memo(this.inner.eq()));
+  }
+}

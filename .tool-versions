@@ -2,3 +2,4 @@ rclone 1.61.1
 python 3.11.2
 please 16.27.3
 git 2.39.2
+just 1.13.0

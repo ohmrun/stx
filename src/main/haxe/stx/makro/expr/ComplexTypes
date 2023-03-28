@@ -1,0 +1,37 @@
+package stx.makro.expr;
+
+class ComplexTypes{
+  // static public function mod<T>():Y<Monoid<T>,ComplexType,T>{
+  //   return function rec(fn:Y<Monoid<T>,ComplexType,T>):Monoid<T>->ComplexType->T{
+  //     return function(m,ct:ComplexType){
+  //       function f(ct) return fn(rec)(m,ct);
+  //       return switch (ct) {
+  //         case TPath(p): 
+  //           m.unit();
+  //         case TFunction(args, ret): 
+  //         var a = args.fold(
+  //           (next,memo) -> m.plus(memo,f(next)),
+  //           m.unit()
+  //         );
+  //         var b = f(ret);
+  //         m.plus(a,b);
+  //         case TAnonymous(fields): 
+  //           m.unit();
+  //         case TParent(t):
+  //           f(t);
+  //         case TExtend(p, fields):
+  //           m.unit();
+  //         case TOptional(t):
+  //           f(t);
+  //         case TNamed(n, t):
+  //           f(t);
+  //         case TIntersection(tl):
+  //           tl.fold(
+  //             (next,memo) -> m.plus(memo,f(next)),
+  //             m.unit()
+  //           );
+  //       }
+  //     }
+  //   }
+  // }
+}
