@@ -14,69 +14,31 @@ class LogicCtr extends Clazz{
     return new stx.log.filter.term.Type(type).toLogic();
   }
   public function line<T>(n:Int):stx.log.Logic<T>{
-    return construct((info) -> { 
-      var result      = info.pos.map(x -> x.lineNumber == n).defv(false);
-      return result.if_else(
-        () -> Report.unit(),
-        () -> __.report(f -> f.of(E_Log_NotLine(n)))
-      );
-    });
+    return new stx.log.filter.term.Line(n).toLogic();
   }
   public function level<T>(level:stx.log.Level):stx.log.Logic<T>{
     return new stx.log.filter.term.Level(level).toLogic();
   }
   public function lines<T>(l:Int,h:Int):stx.log.Logic<T>{
-    return construct((
-      (info) -> info.pos.map(
-          pos -> ((pos.lineNumber >= l) && (pos.lineNumber <= h))
-        ).defv(false)
-         .if_else(
-          () -> Report.unit(),
-          () -> __.report(f -> f.of(E_Log_NotOfRange(l,h)))
-        )
-    ));
+    return new stx.log.filter.term.Lines(l,h).toLogic();
   }
   public function tag<T>(str:String):stx.log.Logic<T>{
-    return construct(
-      (info) -> info.stamp.tags.search(
-          (tag) -> tag == str
-      ).is_defined().if_else(
-        () -> Report.unit(),
-        () -> __.report(f -> f.of(E_Log_DoesNotContainTag(str)))
-      )
-    );
+    return new stx.log.filter.term.Tag(str).toLogic();
   }
   public function tags<T>(arr:Cluster<String>):stx.log.Logic<T>{
-    return new stx.log.filter.term.Includes(arr).toLogic();
+    return new stx.log.filter.term.Tags(arr).toLogic();
   }
   public function tagless<T>():stx.log.Logic<T>{
-    return construct(
-      (info) -> if(!(info).stamp.tags.is_defined()){
-        Report.unit();
-      }else{
-        __.report(f -> f.of(E_Log('not tagless')));
-      }
-    );
+    return new stx.log.filter.term.Tagless().toLogic();
   }
   public function method<T>(str:String):stx.log.Logic<T>{
-    return construct(
-      (info) -> (info.pos.map(
-        pos -> pos.methodName == str)
-      ).defv(false).if_else(
-        () -> Report.unit(),
-        () -> __.report(f -> f.of(E_Log_NotInMethod(str)))
-      )
-    );
+    return new stx.log.filter.term.Method(str).toLogic();
   }
   public function always<T>():stx.log.Logic<T>{
-    return construct(
-      (pos) -> Report.unit()
-    );
+    return new stx.log.filter.term.Always().toLogic();
   }
   public function never<T>():stx.log.Logic<T>{
-    return construct(
-      (value) -> Report.make(E_Log_Zero)
-    );
+    return new stx.log.filter.term.Never().toLogic();
   }
   public function clear(){
     return unit();
@@ -113,17 +75,50 @@ abstract Logic<T>(LogicSum<T>) from LogicSum<T> to LogicSum<T>{
     return LNot(lift(this));
   }
   public function apply(value:Value<T>):Report<LogFailure>{
+    function p(x){
+      #if (debug && verbose)
+      trace(x);
+      #end
+    }
     __.assert().exists(this);
     __.assert().exists(value);
     //trace(self);
     return switch(this){
-      case LAnd(l,r)  : l.apply(value).or(() -> r.apply(value));
-      case LOr(l,r)   : 
-        var fst = l.apply(value);
-        //trace(fst);
-        fst.is_defined().if_else(
-          () -> r.apply(value),
-          () -> fst
+      case LOr(l,r)     : 
+        final lI = l.apply(value);
+        //p('$l $lI');
+        return lI.fold(
+          er -> {
+            final rI = r.apply(value);
+            //p('$r $rI');
+            rI.fold(
+              e   -> p('NO: $self ($e)'),
+              () -> p('OK: $self')
+            );
+            return rI;
+          },
+          () -> {
+            p('OK: $self');
+            return Report.unit();
+          }
+        );
+      case LAnd(l,r)    : 
+        final lI = l.apply(value);
+        //p('$l $lI');
+        lI.is_defined().if_else(
+          () -> {
+            p('NO: $self $lI');
+            return lI;
+          },
+          () -> {
+            final rI = r.apply(value);
+            //p('$r $rI');
+            rI.fold(
+              e  -> p('NO: $self $e'),
+              () -> p('OK: $self')
+            );
+            return rI;
+          }
         );
       case LNot(v)    : v.apply(value).fold(
         (e) -> Report.unit(),
@@ -191,7 +186,7 @@ class LogicLift{
       case LNot(l) : 
         '!$l';
       case LV(v) : 
-        '$v';
+        v.canonical();
     }
   }
 }

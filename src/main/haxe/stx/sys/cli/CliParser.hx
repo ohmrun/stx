@@ -3,9 +3,15 @@ package stx.sys.cli;
 import stx.parse.Parser in Prs;
 using stx.sys.cli.CliParser;
 
+//local helpers//
 function id(str){
   return __.parse().id(str);
 }
+/////////////////
+
+/**
+ * Parser designed to pull a cluster of `CliToken`s from a `String`
+ */
 class CliParser{
   static public function g<T,U>(p:Prs<String,U>):Prs<String,U>{
     return Parse.gap.many()._and(p);
@@ -26,25 +32,35 @@ class CliParser{
   public function new(){}
 
   public function parse(ipt:ParseInput<String>):Provide<ParseResult<String,Cluster<CliToken>>>{
+    trace('parse');
     return 
-        Provide.pure(__.tracer()(opt()
-        .or(arg())
-        .and_(Parse.whitespace.or(Parsers.Eof()))
-        .then(Option.pure)
-        .one_many()
-        .then(
-          (arr) -> {
-            __.log().debug(_ -> _.pure(arr));
-            return arr.flat_map(
-              opt -> opt.fold(
-                x -> x,
-                () -> [].imm()
-              )
-            );
-          }
-        ).apply(ipt)));
+        Provide.pure(
+          (
+            opt()
+              .or(arg())
+              .and_(Parse.whitespace.or(Parsers.Eof()))
+              .then(Option.pure)
+              .one_many()
+              .then(
+                (arr) -> {
+                  __.log().debug(_ -> _.pure(arr));
+                  return arr.flat_map(
+                    opt -> opt.fold(
+                      x -> x,
+                      () -> [].imm()
+                    )
+                  );
+                }
+              ).apply(ipt)
+          )
+        ).map(
+            (x) -> {
+              __.log().debug('$x');
+              return x;
+            }
+        );
   }
-  public function opt():AbstractParser<String,Cluster<CliToken>>{
+  static public function opt():AbstractParser<String,Cluster<CliToken>>{
     return double_minus.and(word()).then(__.decouple((x,y) -> [Opt('$x$y')].imm())).or(
       minus.and(word()).then(
         __.decouple(
@@ -66,7 +82,7 @@ class CliParser{
         )
     )).tagged('opt');
   }
-  public function arg():AbstractParser<String,Cluster<CliToken>>{
+  static public function arg():AbstractParser<String,Cluster<CliToken>>{
     return word().then(x -> [Arg(x)]);
   }
 }
