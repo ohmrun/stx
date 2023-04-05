@@ -75,8 +75,8 @@
 	url = git@github.com:ohmrun/stx_show
 	branch = develop
 [submodule "bake"]
-	path = lib/stx_bake
-	url = git@github.com:ohmrun/stx_bake
+	path = lib/bake
+	url = git@github.com:ohmrun/bake
 	branch = develop
 [submodule "config"]
 	path = lib/stx_config
@@ -99,7 +99,7 @@
 	url = git@github.com:ohmrun/stx_data
 	branch = develop
 [submodule "di"]
-	path = lib/stx_di
+	path = lib/stx_makro_di
 	url = git@github.com:ohmrun/stx_di
 	branch = develop
 [submodule "http_client"]

@@ -1,3 +1,4 @@
 --macro stx.makro.Plugin.use()
 --macro stx.bake.Plugin.use()
+--macro stx.makro.di.Plugin.use()
 #--macro stx.release.Plugin.use().
