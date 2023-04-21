@@ -1,6 +1,7 @@
+repo=lib/amble
 repo=lib/stx_assert
 repo=lib/stx_asys
-repo=lib/stx_bake
+repo=lib/bake
 repo=lib/stx_build
 repo=lib/stx_cli
 repo=lib/stx_config

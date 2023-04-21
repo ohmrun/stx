@@ -125,3 +125,6 @@
 [submodule "lib/halva"]
 	path = lib/halva
 	url = git@github.com:ohmrun/halva
+[submodule "lib/amble"]
+	path = lib/amble
+	url = git@github.com:ohmrun/amble.git

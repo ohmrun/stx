@@ -1,0 +1,7 @@
+package stx.show.term;
+
+class Bool extends Indented<std.Bool>{
+	override public function show(v : std.Bool,indent:Indent) : String {
+    return super.show(if (v) 'true' else 'false');
+  }
+}

@@ -1,0 +1,15 @@
+package stx.show.term;
+
+class ObjectShow extends Indented<Dynamic>{
+  override public function show(v:Dynamic,indent):String{
+    if(Reflect.fields(v).length == 0){
+      return std.Std.string(v); // fix : Haxe mistypes nodejs native error
+    }
+    var buf = [];
+    for(k in Reflect.fields(v)) {
+      var i = Reflect.field(v, k);
+      buf.push(k + ":" + Show.getShowFor(i)(i));
+    }
+    return "{" + buf.join(",") + "}";
+  }
+}

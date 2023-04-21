@@ -1,6 +1,7 @@
 {
   "root"        : "/mnt/dat/i/prj/haxe/published",
   "directories" : [
+    "amble",
     "halva",
     "fletcher",
     "pml",
