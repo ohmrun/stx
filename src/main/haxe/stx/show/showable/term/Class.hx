@@ -8,7 +8,7 @@ class Class extends ShowableCls<Dynamic>{
     super();
     this.type = type;
   }
-  public function show(self:Dynamic,state:State):Res<Response,ShowFailure>{
+  public function show(self:Dynamic,state:State):Upshot<Response,ShowFailure>{
     
     return throw UNIMPLEMENTED;
   }

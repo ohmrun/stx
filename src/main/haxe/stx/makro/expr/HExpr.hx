@@ -67,7 +67,7 @@ class HExprLift{
   /**
     Creates getter only properties of the underlying type for Abstracts.
   **/
-  static public function shim(self:Type,pos:Position):Res<Cluster<StdField>,MakroTypeFailure>{
+  static public function shim(self:Type,pos:Position):Upshot<Cluster<StdField>,MakroTypeFailure>{
     return switch(self){
       case TMono(t)               : __.reject(__.fault().of(E_MakroType_UnexpectedMono));
       case TEnum(t,params)        : __.reject(__.fault().of(E_MakroType_UnexpectedEnum));

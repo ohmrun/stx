@@ -43,7 +43,7 @@ class Main{
       Produce.lift(Fletcher.Then(
         context,
         Fletcher.Sync(
-          (x:Res<CliContext,CliFailure>) -> {
+          (x:Upshot<CliContext,CliFailure>) -> {
             __.log().debug('$x');
             return __.accept(x);
           }

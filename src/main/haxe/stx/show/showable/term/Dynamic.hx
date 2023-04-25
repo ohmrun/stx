@@ -1,7 +1,7 @@
 package stx.show.showable.term;
 
 class Dynamic extends ShowableCls<StdDynamic>{
-  public function show(self:StdDynamic,state:State):Res<Response,ShowFailure>{
+  public function show(self:StdDynamic,state:State):Upshot<Response,ShowFailure>{
     return switch(std.Type.typeof(self)){
       case TNull            : new stx.show.showable.term.String().show('null',state);
       case TInt             : new stx.show.showable.term.Int().show(self,state);

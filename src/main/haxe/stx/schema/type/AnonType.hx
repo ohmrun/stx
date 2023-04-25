@@ -80,8 +80,8 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   }
 }
 class AnonTypeLift{
-  static public function toGComplexType_with(self:AnonType,rest:SType->Res<GComplexType,SchemaFailure>){
-    return Res.bind_fold(
+  static public function toGComplexType_with(self:AnonType,rest:SType->Upshot<GComplexType,SchemaFailure>){
+    return Upshot.bind_fold(
       self.fields.pop(),
       (next:Field,memo:Cluster<GField>) -> 
         rest(next.type).map(

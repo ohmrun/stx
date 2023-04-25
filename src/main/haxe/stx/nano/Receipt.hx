@@ -111,7 +111,7 @@ class ReceiptLift extends Clazz{
   static public function has_value<T,E>(self:ReceiptDef<T,E>){
     return self.value != null;
   }
-  static public function toRes<T,E>(self:Receipt<T,E>):Res<T,E>{
+  static public function toUpshot<T,E>(self:Receipt<T,E>):Upshot<T,E>{
     return switch(self.has_errors()){
       case true   : __.reject(self.toDefect().toRefuse());
       case false  : __.accept(self.value); 

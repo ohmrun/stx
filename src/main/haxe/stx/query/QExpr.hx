@@ -34,11 +34,11 @@ abstract QExpr<T>(QExprSum<T>) from QExprSum<T> to QExprSum<T>{
 	
 }
 class QExprLift{
-	// static public function apply<T>(self:QExpr<T>,val:T,api:QueryApi<T>):Res<QResult,QueryFailure>{
+	// static public function apply<T>(self:QExpr<T>,val:T,api:QueryApi<T>):Upshot<QResult,QueryFailure>{
 	// 	final f = apply.bind(_,api);
 	// 	return switch(self){
 	// 		case QVal(v) 									: __.accept(QTrue);//TODO: is this right?
-	// 		case QRes(result)							: __.accept(result);
+	// 		case QUpshot(result)							: __.accept(result);
 		
 	// 		case QAnd(l,r) 								: f(l).zip(f(r)).map(__.decouple((l,r)-> l && r));
 	// 		case QOr(l,r)									: f(l).zip(f(r)).map(__.decouple((l,r)-> l || r));

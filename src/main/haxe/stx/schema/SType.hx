@@ -270,13 +270,13 @@ class STypeLift{
   static public function equals(self:SType,that:SType):Bool{
     return eq().comply(self,that).is_equal();
   }
-  // static public function mod_else(self:SType,fn:SType->Res<SType,SchemaFailure>):Res<SType,SchemaFailure>{
+  // static public function mod_else(self:SType,fn:SType->Upshot<SType,SchemaFailure>):Upshot<SType,SchemaFailure>{
   //   final f = mod_else.bind(_,fn);
   //   return switch(self.data){
   //     case STNative(t)      : fn(self);
   //     case STAnon(t)        : 
   //       final tI = t.pop();
-  //       final ts = Res.bind_fold(
+  //       final ts = Upshot.bind_fold(
   //         tI.fields.pop(),
   //         (next,memo:Cluster<Field>) -> {
   //           return f(next.type).map(tII -> Field.make(next.name,tII)).map(memo.snoc);
@@ -286,7 +286,7 @@ class STypeLift{
   //       ts.map(fields -> tI.copy(null,fields).toSType()).flat_map(f);
   //     case STRecord(t)      :
   //       final tI = t.pop();
-  //       final ts = Res.bind_fold(
+  //       final ts = Upshot.bind_fold(
   //         tI.fields.pop(),
   //         (next,memo:Cluster<Field>) -> {
   //           return f(next.type).map(tII -> Field.make(next.name,tII)).map(memo.snoc);
@@ -300,7 +300,7 @@ class STypeLift{
   //       return inner.map(type -> type.copy(null,null,type)).flat_map(f);
   //     case STUnion(t)       :
   //       final tI = t.pop();
-  //       final ts = Res.bind_fold(
+  //       final ts = Upshot.bind_fold(
   //         tI.rest,
   //         (next,memo:Cluster<SType>) -> {
   //           return f(next).map(memo.snoc);

@@ -1,7 +1,7 @@
 package stx.show.showable.term;
 
 class Object extends ShowableCls<Dynamic>{
-  public function show(self:Dynamic,state:State):Res<Response,ShowFailure>{
+  public function show(self:Dynamic,state:State):Upshot<Response,ShowFailure>{
     final fields = 
       Reflect.fields(self).map(
         (field_name) -> KV.make(field_name,Reflect.field(self,field_name))
@@ -12,7 +12,7 @@ class Object extends ShowableCls<Dynamic>{
     final state = state.with_request(
       request -> request.with_node(_ -> LArray(H))
     );
-    final responses = Res.bind_fold(
+    final responses = Upshot.bind_fold(
       fields,
       (next:KV<StdString,Dynamic>,memo:Couple<Cluster<Response>,State>) -> {
         final key_display = '${next.key}: ';

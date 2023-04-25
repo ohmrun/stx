@@ -21,7 +21,7 @@ typedef FileDef = Attempt<HasDevice,Ensemble<String>,ConfigFailure>;
             (couple:Couple<String,Raw>) -> {
               final kind = couple.snd().kind();
               return kind.absolute.if_else(
-                () -> Produce.fromRes(couple.snd().toArchive()).errate(e -> (e:FsFailure)),
+                () -> Produce.fromUpshot(couple.snd().toArchive()).errate(e -> (e:FsFailure)),
                 () -> state.device.shell.cwd.pop().produce(state).errate(e -> (e:FsFailure)).adjust(
                   (dir:stx.fs.path.Directory) -> couple.snd().toAttachment().map(__.couple.bind(dir)).errate(e -> (e:FsFailure))
                 ).adjust(

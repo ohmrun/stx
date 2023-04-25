@@ -67,7 +67,7 @@ class Munge{
   static final p_typ = id(typ);
   static final p_ano = id(ano);
   
-  // static public function decode(value:String):Res<Identity,SchemaFailure>{
+  // static public function decode(value:String):Upshot<Identity,SchemaFailure>{
   //   final input = value.reader();   
   //   return p_ident().and(
       

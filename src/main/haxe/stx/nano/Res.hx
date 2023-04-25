@@ -2,8 +2,8 @@ package stx.nano;
 
 import tink.core.Noise;
 
-@:using(stx.nano.Res.ResLift)
-@:using(stx.nano.Res.ResSumLift)
+@:using(stx.nano.Upshot.ResLift)
+@:using(stx.nano.Upshot.ResSumLift)
 enum ResSum<T,E>{
   Accept(t:T);
   Reject(e:Refuse<E>);
@@ -13,19 +13,19 @@ class ResSumLift{
     return ResLift.toString(self);
   }
 }
-@:using(stx.nano.Res.ResLift)
-abstract Res<T,E>(ResSum<T,E>) from ResSum<T,E> to ResSum<T,E>{
+@:using(stx.nano.Upshot.ResLift)
+abstract Upshot<T,E>(ResSum<T,E>) from ResSum<T,E> to ResSum<T,E>{
   public inline function new(self) this = self;
   static public var _(default,never) = ResLift;
 
-  private var self(get,never):Res<T,E>;
-  private function get_self():Res<T,E> return lift(this);
+  private var self(get,never):Upshot<T,E>;
+  private function get_self():Upshot<T,E> return lift(this);
   
-  @:noUsing static public inline function lift<T,E>(self:ResSum<T,E>):Res<T,E> return new Res(self);
-  @:noUsing static public function accept<T,E>(t:T):Res<T,E>                    return lift(Accept(t));
-  @:noUsing static public function reject<T,E>(e:Refuse<E>):Res<T,E>               return lift(Reject(e));
+  @:noUsing static public inline function lift<T,E>(self:ResSum<T,E>):Upshot<T,E> return new Upshot(self);
+  @:noUsing static public function accept<T,E>(t:T):Upshot<T,E>                    return lift(Accept(t));
+  @:noUsing static public function reject<T,E>(e:Refuse<E>):Upshot<T,E>               return lift(Reject(e));
 
-  @:noUsing static public function fromReport<E>(self:Report<E>):Res<Noise,E>{
+  @:noUsing static public function fromReport<E>(self:Report<E>):Upshot<Noise,E>{
     return lift(self.fold(
       (ok:Refuse<E>)   -> reject(ok),
       ()              -> accept(Noise)
@@ -33,7 +33,7 @@ abstract Res<T,E>(ResSum<T,E>) from ResSum<T,E> to ResSum<T,E>{
   }
   public function prj():ResSum<T,E> return this;
 
-  @:from static public function fromOutcome<T,E>(self:Outcome<T,Refuse<E>>):Res<T,E>{
+  @:from static public function fromOutcome<T,E>(self:Outcome<T,Refuse<E>>):Upshot<T,E>{
     var ocd : ResSum<T,E> = switch(self){
       case Success(ok) : Accept(ok);
       case Failure(no) : Reject(no);
@@ -46,9 +46,9 @@ abstract Res<T,E>(ResSum<T,E>) from ResSum<T,E> to ResSum<T,E>{
       case Reject(no) : Failure(no);
     }
   }
-  @:noUsing static public function bind_fold<T,E,Z>(arr:Iter<T>,fn:T->Z->Res<Z,E>,init:Z):Res<Z,E>{
+  @:noUsing static public function bind_fold<T,E,Z>(arr:Iter<T>,fn:T->Z->Upshot<Z,E>,init:Z):Upshot<Z,E>{
     return arr.lfold(
-      (next:T,memo:Res<Z,E>) -> memo.fold(
+      (next:T,memo:Upshot<Z,E>) -> memo.fold(
         (ok)  -> fn(next,ok),
         (no)  -> reject(no)
       ),
@@ -86,29 +86,29 @@ abstract Res<T,E>(ResSum<T,E>) from ResSum<T,E> to ResSum<T,E>{
 }
 class ResLift{
   @:nb("toString() isn't called in the normal way.","//T:{ toString : () -> String }")
-  static public function toString<T,E>(self:Res<T,E>):String{
+  static public function toString<T,E>(self:Upshot<T,E>):String{
     return self.fold(
       (x) -> 'Accept(${x})',
       (e) -> 'Reject(${e.toString()})'
     );
   }
-  static public inline function errata<T,E,EE>(self:Res<T,E>,fn:Refuse<E>->Refuse<EE>):Res<T,EE>{
-    return Res.lift(
+  static public inline function errata<T,E,EE>(self:Upshot<T,E>,fn:Refuse<E>->Refuse<EE>):Upshot<T,EE>{
+    return Upshot.lift(
       self.fold(
-        (t) -> Res.accept(t),
-        (e) -> Res.reject(fn(e))
+        (t) -> Upshot.accept(t),
+        (e) -> Upshot.reject(fn(e))
       )
     );
   }
-  static public inline function errate<T,E,EE>(self:Res<T,E>,fn:E->EE):Res<T,EE>{
+  static public inline function errate<T,E,EE>(self:Upshot<T,E>,fn:E->EE):Upshot<T,EE>{
     return errata(self,
       (e) -> e.errate(fn)
     );
   }
-  static public inline function zip<T,TT,E>(self:ResSum<T,E>,that:ResSum<TT,E>):Res<Couple<T,TT>,E>{
+  static public inline function zip<T,TT,E>(self:ResSum<T,E>,that:ResSum<TT,E>):Upshot<Couple<T,TT>,E>{
     return zip_with(self,that,Couple.make);
   }
-  static public inline function zip_with<T,TT,Z,E>(self:ResSum<T,E>,that:ResSum<TT,E>,with:T->TT->Z):Res<Z,E>{
+  static public inline function zip_with<T,TT,Z,E>(self:ResSum<T,E>,that:ResSum<TT,E>,with:T->TT->Z):Upshot<Z,E>{
     return switch([self,that]){
       case [Reject(e),Reject(ee)]     : Reject(e.concat(ee));
       case [Reject(e),_]              : Reject(e);
@@ -116,13 +116,13 @@ class ResLift{
       case [Accept(t),Accept(tt)]     : Accept(with(t,tt));
     }
   }
-  static public inline function map<T,E,TT>(self:ResSum<T,E>,fn:T->TT):Res<TT,E>{
+  static public inline function map<T,E,TT>(self:ResSum<T,E>,fn:T->TT):Upshot<TT,E>{
     return flat_map(self,(x) -> Accept(fn(x)));
   }
-  static public inline function flat_map<T,E,TT>(self:ResSum<T,E>,fn:T->ResSum<TT,E>):Res<TT,E>{
-    return Res.lift(fold(self,(t) -> fn(t),(e) -> Reject(e)));
+  static public inline function flat_map<T,E,TT>(self:ResSum<T,E>,fn:T->ResSum<TT,E>):Upshot<TT,E>{
+    return Upshot.lift(fold(self,(t) -> fn(t),(e) -> Reject(e)));
   }
-  static public inline function adjust<T,E,TT>(self:ResSum<T,E>,fn:T->ResSum<TT,E>):Res<TT,E>{
+  static public inline function adjust<T,E,TT>(self:ResSum<T,E>,fn:T->ResSum<TT,E>):Upshot<TT,E>{
     return flat_map(self,fn);
   }
   static public inline function fold<T,E,TT>(self:ResSum<T,E>,fn:T->TT,er:Refuse<E>->TT):TT{
@@ -134,7 +134,7 @@ class ResLift{
   static public inline function fudge<T,E>(self:ResSum<T,E>):T{
     return fold(self,(t) -> t,(e) -> throw(e));
   }
-  static public inline function elide<T,E>(self:ResSum<T,E>):Res<Dynamic,E>{
+  static public inline function elide<T,E>(self:ResSum<T,E>):Upshot<Dynamic,E>{
     return fold(self,
       (t) -> Reject((t:Dynamic)),
       (e) -> Accept(e)
@@ -158,7 +158,7 @@ class ResLift{
   static public inline function rectify<T,E>(self:ResSum<T,E>,fn:Refuse<E>->ResSum<T,E>):ResSum<T,E>{
     return fold(
       self,
-      (ok)  -> Res.accept(ok),
+      (ok)  -> Upshot.accept(ok),
       (no)  -> fn(no)
     );
   }
@@ -169,16 +169,16 @@ class ResLift{
       (e) -> fn(e)
     );
   }
-  static public function effects<T,E>(self:ResSum<T,E>,success:T->Void,failure:Refuse<E>->Void):Res<T,E>{
+  static public function effects<T,E>(self:ResSum<T,E>,success:T->Void,failure:Refuse<E>->Void):Upshot<T,E>{
     return fold(
       self,
       (ok) -> {
         success(ok);
-        return Res.accept(ok);
+        return Upshot.accept(ok);
       },
       (e) -> {
         failure(e);
-        return Res.reject(e);
+        return Upshot.reject(e);
       }
     );
   }
@@ -190,10 +190,10 @@ class ResLift{
     );
   }
   static public function toPledge<T,E>(self:ResSum<T,E>):Pledge<T,E>{
-    return Pledge.fromRes(self);
+    return Pledge.fromUpshot(self);
   }
   static public function pledge<T,E>(self:ResSum<T,E>):Pledge<T,E>{
-    return Pledge.fromRes(self);
+    return Pledge.fromUpshot(self);
   }
   static public function point<T,E>(self:ResSum<T,E>,fn:T->Report<E>):Report<E>{
     return fold(

@@ -1,16 +1,16 @@
 package stx.show;
 
 typedef ShowableDef<T> = {
-  public function show(value:T,state:State):Res<Response,ShowFailure>;
+  public function show(value:T,state:State):Upshot<Response,ShowFailure>;
   public function toShowable():Showable<T>;
 }
 interface ShowableApi<T>{
-  public function show(value:T,state:State):Res<Response,ShowFailure>;
+  public function show(value:T,state:State):Upshot<Response,ShowFailure>;
   public function toShowable():Showable<T>;
 }
 abstract class ShowableCls<T> implements ShowableApi<T>{
   public function new(){}
-  abstract public function show(value:T,state:State):Res<Response,ShowFailure>;
+  abstract public function show(value:T,state:State):Upshot<Response,ShowFailure>;
   public function toShowable():Showable<T>{
     return this;
   }

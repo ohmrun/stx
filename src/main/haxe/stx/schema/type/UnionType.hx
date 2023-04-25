@@ -96,12 +96,12 @@ class UnionTypeLift{
   //   //       __.decouple(
   //   //         (l:GField,r:GField) -> {
   //   //           final methods         = [l,r];
-  //   //           final l_accessors     = Res.bind_fold(
+  //   //           final l_accessors     = Upshot.bind_fold(
   //   //             self.lhs.fields,
   //   //             (next:Field,memo:Cluster<GField>) -> next.fetchGField_shim(state).map(memo.concat),
   //   //             [].imm()
   //   //           );
-  //   //           final r_accessors     = Res.bind_fold(
+  //   //           final r_accessors     = Upshot.bind_fold(
   //   //             self.rhs.fields,
   //   //             (next:Field,memo:Cluster<GField>) -> next.fetchGField_shim(state).map(memo.concat),
   //   //             [].imm()

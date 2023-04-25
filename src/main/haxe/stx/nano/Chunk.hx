@@ -250,7 +250,7 @@ class ChunkLift{
       () -> Tap
     );
   }
-  static public function toRes<O,E>(self:Chunk<O,E>){
+  static public function toUpshot<O,E>(self:Chunk<O,E>){
     return self.fold(
       ok  -> __.accept(ok),
       (e) -> __.reject(e),

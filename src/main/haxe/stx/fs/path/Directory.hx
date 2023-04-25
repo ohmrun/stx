@@ -277,9 +277,9 @@ class DirectoryLift{
   @:noUsing static public inline function into(self:Directory,track:TrackDef):Directory{
     return self.into(track);
   }
-  static public function archive(self:Directory,that:Attachment):Res<Archive,FsFailure>{
+  static public function archive(self:Directory,that:Attachment):Upshot<Archive,FsFailure>{
     return that.track.lfold(
-      (next:Move,memo:Res<Track,FsFailure>) -> switch([next,memo]){
+      (next:Move,memo:Upshot<Track,FsFailure>) -> switch([next,memo]){
           case [Into(name),Accept(dir)] : __.accept(dir.concat([name]));
           case [From,Accept(dir)]       : dir.up().errate(e -> (e:FsFailure));
           case [_,Reject(_)]            : memo;

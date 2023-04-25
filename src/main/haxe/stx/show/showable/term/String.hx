@@ -3,7 +3,7 @@ package stx.show.showable.term;
 import String as TString;
 
 class String extends ShowableCls<TString>{
-  public function show(self:TString,state:State):Res<Response,ShowFailure>{
+  public function show(self:TString,state:State):Upshot<Response,ShowFailure>{
     // final string          = '$self';
     // final length          = string.length;
     // final width_remaining = state.width_remaining;
