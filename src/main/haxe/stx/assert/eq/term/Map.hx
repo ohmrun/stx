@@ -2,7 +2,7 @@ package stx.assert.eq.term;
 
 import haxe.ds.Map as StdMap;
 
-class Map<K,V> implements EqApi<StdMap<K,V>>{
+class Map<K,V> extends EqCls<StdMap<K,V>>{
   var eq : Eq<V>;
 
   public function new(eq){

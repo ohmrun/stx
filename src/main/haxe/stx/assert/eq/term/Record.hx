@@ -2,10 +2,9 @@ package stx.assert.eq.term;
 
 import stx.nano.Record in RecordT;
 
-class Record<T> implements EqApi<RecordT<T>> extends Clazz{
+class Record<T> extends EqCls<RecordT<T>>{
   public var inner(default,null):Eq<T>;
   public function new(inner){
-    super();
     this.inner = inner;
   }
   public function comply(a:RecordT<T>,b:RecordT<T>):Equaled{

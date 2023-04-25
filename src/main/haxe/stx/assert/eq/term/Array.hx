@@ -1,6 +1,6 @@
 package stx.assert.eq.term;
 
-class Array<V> implements EqApi<StdArray<V>>{
+class Array<V> extends EqCls<StdArray<V>>{
   var inner : Eq<V>;
 
   public function new(inner){

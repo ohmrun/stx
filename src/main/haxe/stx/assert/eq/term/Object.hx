@@ -1,6 +1,7 @@
 package stx.assert.eq.term;
 
-class Object implements EqApi<Any> extends Clazz{
+class Object extends EqCls<Any>{
+  public function new(){}
   public function comply(a:Any,b:Any):Equaled{
     var o = AreEqual;
 

@@ -1,6 +1,7 @@
 package stx.assert.ds.xset.eq.term;
 
-class XSetPlace implements EqApi<XSetPlaceT> extends Clazz{
+class XSetPlace extends EqCls<XSetPlaceT>{
+  public function new(){}
   public function comply(a:XSetPlaceT,b:XSetPlaceT):Equaled{
     return switch ([a,b]){
       case ([Field(idx,key),Field(idx0, key0)]) : 

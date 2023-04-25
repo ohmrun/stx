@@ -2,7 +2,8 @@ package stx.assert.eq.term;
 
 import stx.nano.Primitive in PrimitiveT;
 
-class Primitive implements EqApi<PrimitiveT> extends Clazz{
+class Primitive extends EqCls<PrimitiveT>{
+  public function new(){}
   public function comply(lhs:PrimitiveT,rhs:PrimitiveT):Equaled{
     return switch([lhs,rhs]){
       case [PNull,PNull]                                                  : AreEqual;

@@ -1,6 +1,6 @@
 package eu.ohmrun;
 
-using eu.ohmrun.fletcher.Logging;
+
 using tink.CoreApi;
 using stx.Pico;
 using stx.Nano;
@@ -9,6 +9,7 @@ using stx.Log;
 using stx.Assert;
 using eu.ohmrun.fletcher.Core;
 using eu.ohmrun.Fletcher;
+using eu.ohmrun.fletcher.Logging;
 
 typedef ArwOutDef<R,E>    = Outcome<R,Defect<E>>;
 typedef ArwOut<R,E>       = ArwOutDef<R,E>; 
@@ -16,6 +17,7 @@ typedef ArwOut<R,E>       = ArwOutDef<R,E>;
 interface FletcherApi<P,Pi,E> extends StxMemberApi{
   final source : Position;
   public function defer(p:P,cont:Terminal<Pi,E>):Work;
+  public function toFletcher():Fletcher<P,Pi,E>;
 }
 abstract class FletcherCls<P,R,E> implements FletcherApi<P,R,E> extends StxMemberCls{
   public final source : Position;
@@ -28,7 +30,10 @@ abstract class FletcherCls<P,R,E> implements FletcherApi<P,R,E> extends StxMembe
   }
   abstract public function defer(p:P,cont:Terminal<R,E>):Work;
   public function toString(){
-  return Type.getClassName(Type.getClass(this)) + ":" + source;
+    return Type.getClassName(Type.getClass(this)) + ":" + source;
+  }
+  public function toFletcher():Fletcher<P,R,E>{
+    return this;
   }
 }
 typedef FletcherFun<P,Pi,E> = P -> Terminal<Pi,E> -> Work;
@@ -263,6 +268,7 @@ typedef FiberDef                = eu.ohmrun.fletcher.Fiber.FiberDef;
 
 typedef Convert<I,O>            = eu.ohmrun.fletcher.Convert<I,O>;
 typedef ConvertDef<I,O>         = eu.ohmrun.fletcher.Convert.ConvertDef<I,O>;
+typedef ConvertArg<P,R>         = eu.ohmrun.fletcher.Convert.ConvertArg<P,R>;
 
 typedef Provide<O>              = eu.ohmrun.fletcher.Provide<O>;
 typedef ProvideDef<O>           = eu.ohmrun.fletcher.Provide.ProvideDef<O>;
@@ -360,7 +366,23 @@ class FletcherWildcards{
   static public inline function recover<P,E>(wildcard:Wildcard,self:RecoverDef<P,E>){
     return Recover.lift(self);
   }
+  static public inline function convert<P,R>(wildcard:Wildcard,self:ConvertArg<P,R>){
+    return Convert.lift(self);
+  }
   // static public inline function sequent<P,R,E>(wildcard:Wildcard,self:SequentArg<P,R,E>):Sequent<P,R,E>{
   //   return Sequent.bump(self);
+  // }
+}
+// class LiftFletcherLoad{
+//   static public function load<P,R,E>(self:Context<P,R,E>,arrowlet:Fletcher<P,R,E>):Fiber{
+//     return Fiber.lift(new Completion(self,arrowlet));
+//   }
+// }
+class LiftProvideLoad{
+  static public function load<P,R,E>(self:Context<Noise,R,Noise>,arrowlet:Provide<R>):Fiber{
+    return Fiber.lift(new eu.ohmrun.fletcher.Completion(self,arrowlet.toFletcher()));
+  }
+  // static public function fly<R,E>(wildcard:Wildcard,arrowlet:Provide<R>,?on_value:R->Void,?on_error:Defect<Noise>->Void):Fiber{
+  //   return Fiber.lift(new eu.ohmrun.fletcher.Completion(Context.make(Noise,on_value,on_error),arrowlet));
   // }
 }

@@ -18,7 +18,7 @@ class ReceiptCls<T,E> extends DefectCls<E> implements ReceiptApi<T,E>{
     final test = () -> {
       done = true;
       if(error.is_defined()){
-        error.raise();
+        error.crack();
       }else if(value == null){
         throw 'undefined'; 
       }

@@ -1,7 +1,7 @@
 package stx.assert.ds.xset.eq.term;
 
 
-class XSetVal<K,V> implements EqApi<XSetValT<K,V>>{
+class XSetVal<K,V> extends EqCls<XSetValT<K,V>>{
   var val_comparable:Comparable<V>;
   public function new(val_comparable:Comparable<V>){
     this.val_comparable = val_comparable;

@@ -1,6 +1,6 @@
 package stx.assert.ds.xset.eq.term;
 
-class XSet<K,V> implements EqApi<XSetVal<K,V>>{
+class XSet<K,V> extends EqCls<XSetVal<K,V>>{
   var with : With<K,V>;
   public function new(with){
     this.with = with;

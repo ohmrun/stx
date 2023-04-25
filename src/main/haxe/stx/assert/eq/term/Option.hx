@@ -1,6 +1,6 @@
 package stx.assert.eq.term;
 
-class Option<T> implements EqApi<StdOption<T>>{
+class Option<T> extends EqCls<StdOption<T>>{
   var eq : Eq<T>;
   public function new(eq){
     this.eq = eq;

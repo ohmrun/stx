@@ -1,8 +1,10 @@
 package eu.ohmrun.fletcher;
 
 typedef ProvideDef<O> = ConvertDef<Noise,O>;
+@:transitive
 @:using(eu.ohmrun.fletcher.Provide.ProvideLift)
-@:forward abstract Provide<O>(ProvideDef<O>) from ProvideDef<O> to ProvideDef<O>{
+@:forward abstract Provide<O>(ProvideDef<O>) from ProvideDef<O> to ProvideDef<O> 
+{
   static public var _(default,never) = ProvideLift;
   public inline function new(self) this = self;
   static public inline function lift<O>(self:ProvideDef<O>):Provide<O> return new Provide(self);
@@ -37,7 +39,7 @@ typedef ProvideDef<O> = ConvertDef<Noise,O>;
       Fletcher.Anon((_:Noise,cont:Terminal<O,Noise>) -> fn(cont))
     );
   }
-  static public inline function bind_fold<T,O>(fn:Convert<Couple<T,O>,O>,arr:Cluster<T>,seed:O):Provide<O>{
+  static public inline function bind_fold<T,O>(fn:Convert<Couple<T,O>,O>,arr:Iter<T>,seed:O):Provide<O>{
     return arr.lfold(
       (next:T,memo:Provide<O>) -> {
         return memo.convert(

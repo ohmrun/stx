@@ -1,6 +1,6 @@
 package stx.assert.eq.term;
 
-class NotNull<T> implements EqApi<T>{
+class NotNull<T> extends EqCls<T>{
   var eq : Eq<Dynamic>;
   public function new(eq){
     this.eq = eq;

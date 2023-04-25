@@ -176,10 +176,10 @@ class ReportLift{
       default                   : fn(None);
     }
   }
-  static public function raise<T>(self:ReportSum<T>):Void{
+  static public function crack<T>(self:ReportSum<T>):Void{
     fold(
       self,
-      e   -> e.raise(),
+      e   -> e.crack(),
       ()  -> {} 
     );
   }

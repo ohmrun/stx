@@ -1,6 +1,6 @@
 package stx.assert.eq.term;
 
-class Deferred<T> implements EqApi<T>{
+class Deferred<T> extends EqCls<T>{
   var eq      : Eq<T>;
 
   public function new(){};

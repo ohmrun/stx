@@ -2,7 +2,7 @@ package stx.assert.eq.term;
 
 import stx.nano.Couple as StdCouple;
 
-class Couple<L,R> implements EqApi<stx.nano.Couple<L,R>>{
+class Couple<L,R> extends EqCls<stx.nano.Couple<L,R>>{
   var l : Eq<L>;
   var r : Eq<R>;
 

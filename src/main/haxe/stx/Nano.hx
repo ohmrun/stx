@@ -43,16 +43,26 @@ enum Tup2<L,R>{
   tuple2(l:L,r:R);
 }
 class Tup2Lift{
-  static public inline function cat<L,R,Z>(self:Tup2<L,R>,fn:L->R->Z):Z{
+  static public inline function detuple<L,R,Z>(wildcard:Wildcard,fn:L->R->Z):Tup2<L,R> -> Z{
+    return (tp:Tup2<L,R>) -> {
+      return switch(tp){
+          case tuple2(l,r) : fn(l,r);
+      }
+    }
+  }
+  static public inline function reduce<L,R,Z>(self:Tup2<L,R>,fn:L->R->Z):Z{
     return switch(self){
       case tuple2(l,r) : fn(l,r);
     }
   }
   static public inline function fst<L,R>(self:Tup2<L,R>):L{
-    return cat(self,(l,_) -> l);
+    return reduce(self,(l,_) -> l);
   }
   static public inline function snd<L,R>(self:Tup2<L,R>):R{
-    return cat(self,(_,r) -> r);
+    return reduce(self,(_,r) -> r);
+  }
+  static public inline function mapl<L,LL,R>(self:Tup2<L,R>,fn:L->LL):Tup2<LL,R>{
+    return reduce(self,(l,r) -> tuple2(fn(l),r));
   }
 }
 enum Tup3<Ti,Tii,Tiii>{
@@ -69,8 +79,8 @@ typedef Twin<T>                 = Couple<T,T>;
 typedef TripleDef<Ti,Tii,Tiii>  = stx.nano.Triple.TripleDef<Ti,Tii,Tiii>;
 typedef Triple<Ti,Tii,Tiii>     = stx.nano.Triple<Ti,Tii,Tiii>;
 
-typedef ResSum<T,E>             = stx.nano.Upshot.ResSum<T,E>;
-typedef Upshot<T,E>                = stx.nano.Upshot<T,E>;
+typedef UpshotSum<T,E>          = stx.nano.Upshot.UpshotSum<T,E>;
+typedef Upshot<T,E>             = stx.nano.Upshot<T,E>;
 
 // typedef DeclineSum<T>       = stx.nano.Decline.DeclineSum<T>;
 //typedef Decline<T>          = stx.nano.Decline<T>;

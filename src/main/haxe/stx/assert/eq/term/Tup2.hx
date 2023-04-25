@@ -2,7 +2,7 @@ package stx.assert.eq.term;
 
 import stx.Nano.Tup2 as TTup2;
 
-class Tup2<L,R> implements EqApi<TTup2<L,R>>{
+class Tup2<L,R> extends EqCls<TTup2<L,R>>{
   var l : Eq<L>;
   var r : Eq<R>;
 

@@ -1,6 +1,6 @@
 package stx.assert.eq.term;
 
-class NullOr<T> implements EqApi<Null<T>>{
+class NullOr<T> extends EqCls<Null<T>>{
   final inner : Eq<T>;
   public function new(inner:Eq<T>){
     this.inner = inner;

@@ -1,7 +1,7 @@
 package stx.assert.eq.term;
 
-class Unknown implements EqApi<Dynamic> extends Clazz{
-
+class Unknown extends EqCls<Dynamic>{
+  public function new(){}
   public function comply(a:Dynamic,b:Dynamic){
     return if(Reflect.hasField(a,'equals')){
       new HasFunction().comply(a,b);

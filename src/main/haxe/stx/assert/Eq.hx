@@ -18,9 +18,13 @@ import stx.assert.eq.term.NullOr;
 
 interface EqApi<T>{
   public function comply(lhs:T,rhs:T):Equaled;
+  public function toEqApi():EqApi<T>;
 }
 abstract class EqCls<T> implements EqApi<T>{
   abstract public function comply(lhs:T,rhs:T):Equaled;
+  public function toEqApi():EqApi<T>{
+    return this;
+  }
 }
 class EqCtr extends Clazz{
 

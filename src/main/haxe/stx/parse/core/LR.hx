@@ -67,7 +67,7 @@ class LRLift{
   static function grow<I,T>(p: Parser<I,T>, genKey : Int -> String, rest: ParseInput<I>, head: Head): ParseResult<I,T> {
     //store the head into the recursionHeads
     rest.setRecursionHead(head);
-    var oldUpshot =
+    var oldRes =
       switch (rest.getFromCache(genKey).fudge()) {
         case MemoParsed(ans)  : ans;
         default               : throw "impossible match";
@@ -83,7 +83,7 @@ class LRLift{
 
     return switch (res.is_ok()) {
       case true:
-        if (oldUpshot.pos().offset < res.pos().offset ) {
+        if (oldRes.pos().offset < res.pos().offset ) {
           rest.updateCacheAndGet(genKey, MemoParsed(res));
           return grow(p, genKey, rest, head);
         } else {

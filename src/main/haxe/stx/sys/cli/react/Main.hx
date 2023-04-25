@@ -63,7 +63,7 @@ class Main{
       },
       (e) -> {
         __.log().fatal('$e');
-        e.raise();
+        e.crack();
       }
     ).submit();
   }

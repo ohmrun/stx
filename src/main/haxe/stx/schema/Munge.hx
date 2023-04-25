@@ -1,9 +1,10 @@
 package stx.schema;
 
+import stx.parse.parsers.StringParsers as SParse;
 using stx.Parse;
 
 function id(str){
-  return __.parse().id(str);
+  return __.parse().parsers().string().id(str);
 }
 class Munge{
   static final fld : String = "___FLD___";
@@ -94,8 +95,8 @@ class Munge{
     );
   }
   static public function p_name(){
-    return Parse.upper.or(id("_")).and(
-      Parse.alpha.many()
+    return SParse.upper.or(id("_")).and(
+      SParse.alpha.many()
     ).then(
       __.decouple(
         (l:String,r:Cluster<String>) -> '${l}${r.join("")}'
@@ -103,6 +104,6 @@ class Munge{
     );
   }
   static public function p_pack(){
-    return Parse.lower.one_many().tokenize();
+    return SParse.lower.one_many().tokenize();
   }
 }

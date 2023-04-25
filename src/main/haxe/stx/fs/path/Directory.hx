@@ -218,8 +218,8 @@ class DirectoryLift{
   }
   static public function tree(dir:Directory):Modulate<HasDevice,PExpr<Entry>,FsFailure>{
     __.log().trace('tree: $dir');
-    var init  = Arrange.fromFun1Attempt(entries).convert(Convert.Fun((x:Cluster<Either<String,Entry>>) -> x.toIterable()));
-    var c     = Modulate.pure(dir).reframe().arrange(entries).convert(Convert.Fun((x:Cluster<Either<String,Entry>>) -> x.toIterable()));
+    var init  = Arrange.fromFun1Attempt(entries);
+    var c     = (Modulate.pure(dir).reframe().arrange(entries)).map(x -> x.toIter());
     
     function fn(either:Either<String,Entry>,t:PExpr<Entry>):Modulate<HasDevice,PExpr<Entry>,FsFailure>{
       __.log().trace(_ -> _.pure(either));
@@ -230,14 +230,31 @@ class DirectoryLift{
           var next = tree(into);
           __.log().trace(_ -> _.pure(next));
           
-          next.convert(
-            function(t1){
-              return t.conflate(PGroup(Cons(PGroup(Cons(PLabel(string),Cons(t1,Nil))),Nil)));
-            }
+          
+          final rest = next.arrange(
+            __.arrange(
+              (t1:PExpr<Entry>) -> {
+                return __.convert(function(dev:HasDevice){
+                  final split = string.split(dev.device.sep);
+                  final entry = Entry.make(split[0],split[1]);
+                  return switch(t){
+                    case PArray(arr) : PArray(arr.snoc(PValue(entry)).snoc(t1));
+                    case PEmpty      : PArray([PValue(entry),t1]);
+                    default          : PArray([PValue(entry),t1]);
+                  }
+                }); 
+              }
+            )
           );
+          rest;
+          //$type(rest);
         case Right(entry) : Modulate.pure(
-            t.conflate(PValue(entry))
-          );
+          switch(t){
+            case PArray(arr) : PArray(arr.snoc(PValue(entry)));
+            case PEmpty      : PArray([PValue(entry)]);
+            default          : PArray([PValue(entry)]);
+          }
+        );
       }
     }
     var ut  = Arrange.pure(PEmpty);

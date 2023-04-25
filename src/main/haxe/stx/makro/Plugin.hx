@@ -26,25 +26,25 @@ class Plugin{
   static function module(arr:Cluster<ModuleType>){
     //__.log().trace('onAfterTyping');
     // #if make
-      method(arr.map_filter(
-        (mt) -> switch(mt){
-          case TClassDecl(c)     : Some(TInst(c,[]));
-          case TEnumDecl(e)      : Some(TEnum(e,[]));
-          case TTypeDecl(t)      : Some(TType(t,[]));
-          case TAbstract(a)      : Some(TAbstract(a,[]));
-          default                : None;
-        }
-      ));
+    for(module in arr){
+      apply(module);
+    }
     // #end
   }
-  static function method(arr:Cluster<StdMacroType>){
-    for(t in arr){
-      var type    = HType._.makro(t);
-      var base    = __.option(type.getBaseType()).force();
-      var entries = base.meta.get().filter(
-          (mde) -> mde.name.startsWith(":stx.makro")//TODO -> too general
+  static function apply(self:ModuleType){
+    final v = switch(self){
+      case TClassDecl(c)     : Some(TInst(c,[]));
+      case TEnumDecl(e)      : Some(TEnum(e,[]));
+      case TTypeDecl(t)      : Some(TType(t,[]));
+      case TAbstract(a)      : Some(TAbstract(a,[]));
+      default                : None;
+    }
+    for (t in v){
+      final type    = HType._.makro(t);
+      final base    = __.option(type.getBaseType()).force();
+      final entries = base.meta.get().filter(
+          (mde) -> mde.name.startsWith(":stx.makro")
       );
-      //__.log().trace(_ -> _.pure(entries));
       for(entry in entries){
         var body      = entry.name.split(".");
             body[0]   = body[0].substr(1);

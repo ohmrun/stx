@@ -5,6 +5,7 @@ enum ArrangeArgSum<I,S,O,E>{
   ArrangeArgPure(o:O);
   ArrangeArgUpshot(res:Upshot<O,E>);
   ArrangeArgFun1Attempt(f:I->Attempt<S,O,E>);
+  ArrangeArgFun1Convert(f:I->Convert<S,O>);
   ArrangeArgFun1Modulate(f:I->Modulate<S,O,E>);
 }
 abstract ArrangeArg<I,S,O,E>(ArrangeArgSum<I,S,O,E>) from ArrangeArgSum<I,S,O,E>{
@@ -16,6 +17,9 @@ abstract ArrangeArg<I,S,O,E>(ArrangeArgSum<I,S,O,E>) from ArrangeArgSum<I,S,O,E>
   }
   @:from static public function fromArgFun1Attempt<I,S,O,E>(f:I->Attempt<S,O,E>):ArrangeArg<I,S,O,E>{
     return ArrangeArgFun1Attempt(f);
+  }
+  @:from static public function fromArrangeArgFun1Convert<I,S,O,E>(f:I->Convert<S,O>):ArrangeArg<I,S,O,E>{
+    return ArrangeArgFun1Convert(f);
   }
   @:from static public function fromArgUpshot<I,S,O,E>(res:Upshot<O,E>):ArrangeArg<I,S,O,E>{
     return ArrangeArgUpshot(res);
@@ -39,8 +43,9 @@ typedef ArrangeDef<I,S,O,E>             = ModulateDef<Couple<I,S>,O,E>;
   @:noUsing static public inline function bump<I,S,O,E>(self:ArrangeArg<I,S,O,E>):Arrange<I,S,O,E>{
     return switch(self){
       case ArrangeArgPure(o)            : Arrange.pure(o);
-      case ArrangeArgUpshot(res)           : Arrange.fromUpshot(res);
+      case ArrangeArgUpshot(res)        : Arrange.fromUpshot(res);
       case ArrangeArgFun1Attempt(f)     : Arrange.fromFun1Attempt(f);  
+      case ArrangeArgFun1Convert(s)     : Arrange.fromArrangeArgFun1Convert(s);
       case ArrangeArgFun1Modulate(f)    : Arrange.fromFun1Modulate(f);  
     }
   }
@@ -102,7 +107,16 @@ typedef ArrangeDef<I,S,O,E>             = ModulateDef<Couple<I,S>,O,E>;
         )
     ));
   }
-  @:noUsing static public function bind_fold<I,S,E,T>(fn:T->I->Modulate<S,I,E>,iterable:Iterable<T>):Option<Arrange<I,S,I,E>>{
+  @:from static public function fromArrangeArgFun1Convert<I,S,O,E>(f:I->Convert<S,O>):Arrange<I,S,O,E>{
+    return lift(Fletcher.Anon(
+      (i:Upshot<Couple<I,S>,E>,cont:Terminal<Upshot<O,E>,Noise>) -> {
+        return i.fold(
+          i -> cont.receive(f(i.fst()).map(__.accept).forward((i.snd()))),
+          e -> cont.value(__.reject(e)).serve()
+        );
+    }));
+  }
+  @:noUsing static public function bind_fold<I,S,E,T>(fn:T->I->Modulate<S,I,E>,iterable:Iter<T>):Option<Arrange<I,S,I,E>>{
     return iterable
      .toIter()
      .map((t:T) -> (fn.bind1(t):I->Modulate<S,I,E>))
@@ -160,7 +174,17 @@ class ArrangeLift{
     return Arrange.lift(
       Fletcher.Anon(
         (res:Upshot<Couple<I,S>,EE>,cont:Terminal<Upshot<O,EE>,Noise>) -> res.fold(
-          i -> cont.receive(self.map((res:Upshot<O,E>) -> res.errata(fn)).forward(__.accept(i))),
+          i -> cont.receive(
+            (
+              self.forward(__.accept(i)).map(
+                (res:Upshot<O,E>) -> (res.errata(fn):Upshot<O,EE>)
+              )
+            )
+            // Modulate._.modulate(
+            //   self,
+            //   (res:Upshot<O,E>) -> (res.errata(fn):Upshot<O,EE>)
+            // ).forward(__.accept(i) )
+          ),
           e -> cont.value(__.reject(e)).serve()
         )
       )
@@ -211,6 +235,12 @@ class ArrangeLift{
     var d = Arrange.lift(b.split(c).map((tp:Couple<Oi,O>) -> tp.swap()));
     //$type(d);
     return d;
+  }
+  static public function map<I,S,O,Oi,E>(self:Arrange<I,S,O,E>,that:O->Oi):Arrange<I,S,Oi,E>{
+    return Arrange.lift(Fletcher._.then(
+      self,
+      Fletcher.Sync((res:Upshot<O,E>) -> (res.map)(that))
+    ));
   }
   //static public function arrange<I,S,O,Oi,E>(self:Arrange<I,S,O,E>,that:Arrange<)
 }

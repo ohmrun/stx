@@ -1,6 +1,6 @@
 package stx.assert.eq.term;
 
-class Anon<T> implements EqApi<T>{
+class Anon<T> extends EqCls<T>{
   var delegate : T -> T -> Equaled;
   public function new(self){
     this.delegate = self;

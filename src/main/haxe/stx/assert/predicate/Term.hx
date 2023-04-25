@@ -2,8 +2,8 @@ package stx.assert.predicate;
 
 import stx.assert.predicate.term.*;
 
-class Term extends Clazz{
-  static public var ZERO(default,never) = new Term();
+class Base extends Clazz{
+  static public var ZERO(default,never) = new Base();
 
   public function always<T>(?pos:Pos):Predicate<T,AssertFailure>{
     return new Always();

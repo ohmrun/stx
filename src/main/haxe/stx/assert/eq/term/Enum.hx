@@ -1,6 +1,7 @@
 package stx.assert.eq.term;
 
-class Enum implements EqApi<Dynamic> extends Clazz{
+class Enum extends EqCls<Dynamic>{
+  public function new(){}
   public function comply(a:Dynamic,b:Dynamic):Equaled{
     return if(0 != std.Type.enumIndex(a) - std.Type.enumIndex(b)){
       NotEqual;
