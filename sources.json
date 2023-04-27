@@ -6,7 +6,6 @@
     "pml",
     "stx_assert",
     "stx_asys",
-    "bake",
     "stx_cli",
     "stx_config",
     "stx_coroutine",
