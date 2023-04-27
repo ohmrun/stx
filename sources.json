@@ -1,5 +1,5 @@
 {
-  "root"        : "/mnt/dat/i/prj/haxe/published",
+  "root"        : "/mnt/dat/i/prj/haxe/pub/ohmrun/stx",
   "directories" : [
     "amble",
     "halva",
@@ -32,6 +32,7 @@
     "stx_stream",
     "stx_test",
     "stx_ds_xset",
-    "walker"
+    "walker",
+    "glot"
   ]
 }

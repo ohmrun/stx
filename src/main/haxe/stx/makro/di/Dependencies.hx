@@ -51,7 +51,7 @@ using stx.makro.di.DI;
   }
   #if macro
   private function register(cl:Class<stx.makro.di.core.Assembly>){
-    //trace('stx.Dependencies.register $cl');
+    trace('stx.Dependencies.register $cl');
     new stx.makro.di.Registry().push(cl);
   }
   #end

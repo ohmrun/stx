@@ -4,6 +4,7 @@ import tink.priority.Item;
 import tink.priority.Queue;
 import tink.priority.ID;
 
+@:autoBuild(stx.makro.di.core.macro.AssemblyBuild.build())
 @:stx.makro.di.Dependencies.register(__)
 class Assembly implements AssemblyApi{
   private final function new(){
