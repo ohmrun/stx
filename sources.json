@@ -1,7 +1,6 @@
 {
   "root"        : "/mnt/dat/i/prj/haxe/pub/ohmrun/stx",
   "directories" : [
-    "amble",
     "halva",
     "fletcher",
     "pml",
