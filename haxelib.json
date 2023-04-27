@@ -9,7 +9,7 @@
     "contributors": [
         "0b1kn00b"
     ],
-    "releasenote": "Initial Kermit",
+    "releasenote": "No build errors",
     "version": "0.1.0",
     "url": "https://github.com/ohmrun/stx",
     "dependencies": {
