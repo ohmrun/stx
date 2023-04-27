@@ -15,7 +15,6 @@
     "dependencies": {
         "console.hx"        : "",
         "tink_core"         : "",
-        "tink_runloop"      : "",
         "hscript"           : "",
         "hxmlparser"        : "",
         "haxe-files"        : "",
