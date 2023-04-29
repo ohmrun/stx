@@ -8,6 +8,7 @@ class Option<T> extends EqCls<StdOption<T>>{
   public function comply(a:StdOption<T>,b:StdOption<T>):Equaled{
     return switch([a,b]){
       case [Some(l),Some(r)]          : eq.comply(l,r);
+      case [None,None]                : true;
       default                         : false;
     }
   }

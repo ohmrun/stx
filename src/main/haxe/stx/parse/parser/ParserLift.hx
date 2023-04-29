@@ -113,6 +113,11 @@ class ParserLift{
       }
     ).asParser();
   }
+  /**
+   * Takes a parser that returns a cluster of strings and returns a parser that returns a string.
+   * @param p 
+   * @return Parser<String,String>
+   */
   static public function tokenize(p:Parser<String,Cluster<String>>):Parser<String,String>{
 		return p.then(
 			(arr) -> __.option(arr).defv([]).join("")

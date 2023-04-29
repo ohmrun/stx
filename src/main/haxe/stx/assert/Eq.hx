@@ -101,5 +101,8 @@ class EqCtr extends Clazz{
   @:noUsing static public function Tup2<L,R>(l:Eq<L>,r:Eq<R>):Eq<Tup2<L,R>>{
     return new stx.assert.eq.term.Tup2(l,r);
   }
+  @:noUsing static public function StringMap<T>(inner:Eq<T>):Eq<haxe.ds.StringMap<T>>{
+    return new stx.assert.eq.term.StringMap(inner);
+  }
 }
 
