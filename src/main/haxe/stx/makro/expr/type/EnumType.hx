@@ -2,7 +2,7 @@ package stx.makro.expr.type;
 
 class EnumType{
   @:noUsing static public function getSimpleBinaryCases(e0,e1,uses:HTFunArgCluster->HTFunArgCluster->Option<HExpr>,pos){
-    function prep(str:String,p:TFunParam):TFunParam return  { name : '${str}${p.name}', opt : p.opt, t : p.t };
+    function prep(str:String,p:HTFunArg):HTFunArg return  { name : '${str}${p.name}', opt : p.opt, t : p.t };
     
     return getBinaryCases(
       e0,e1,
@@ -32,10 +32,10 @@ class EnumType{
     );
   }
   @:noUsing static public function getBinaryCases(e0,e1,gen:HEnumValueConstructor->HEnumValueConstructor->Array<Case>,pos){
-    var lparams = getConstructors(e0);
-    var rparams = getConstructors(e1);
-    var e0id    = getModule(e0);
-    var e1id    = getModule(e1);
+    var lparams = HEnumType._.getConstructors(e0);
+    var rparams = HEnumType._.getConstructors(e1);
+    var e0id    = HEnumType._.getModule(e0);
+    var e1id    = HEnumType._.getModule(e1);
 
     var consl = lparams.toIter().map(
       (tp) -> HEnumValueConstructor.make(e0,e0id.call(tp.fst()),tp.snd())
@@ -56,15 +56,15 @@ class EnumType{
       []
     );
     HExprDef.ESwitch(
-      HExprDef.EArrayDecl([HExpr.mark(pos),HExpr.mark(pos)]).to_macro_at(pos),
+      HExprDef.EArrayDecl([HExpr.mark(pos),HExpr.mark(pos)].imm()).to_macro_at(pos),
       next.prj(),
       HExpr.unit(pos)
     ).to_macro_at(pos);
   }
-  @:noUsing static public function getSwitch(e:EnumType,gen:Unary<HEnumValueConstructor,Array<Case>>,pos):HExpr{
-    var cons  = getConstructors(e);    
+  @:noUsing static public function getSwitch(e:HEnumType,gen:Unary<HEnumValueConstructor,Array<Case>>,pos):HExpr{
+    var cons  = HEnumType._.getConstructors(e);    
     var cases = cons.toIter().map(Field.fromCouple).map(
-          (c:Field<TFunParamArray>) -> EnumValueConstructor.make(e,getModule(e).call(c.key),c.val)
+          (c:Field<HTFunArgCluster>) -> HEnumValueConstructor.make(e,HEnumType._.getModule(e).call(c.key),c.val)
         ).map(gen).fold(
           (next,memo:Array<Case>) ->  memo.concat(next),
           []
@@ -75,7 +75,7 @@ class EnumType{
       HExpr.unit(pos)
     ).to_macro_at(pos);
   }
-  @:noUsing static public function getSimpleSwitch(e:EnumType,gen:HTFunArgCluster->Option<HExpr>,pos):HExpr{
+  @:noUsing static public function getSimpleSwitch(e:StdEnumType,gen:HTFunArgCluster->Option<HExpr>,pos):HExpr{
     return getSwitch(e,
       function(cons){
         var args = HExprCluster.lift(cons.args.map(
@@ -105,7 +105,7 @@ class EnumType{
     );
   }
   /**
-   * Creates a switch for EnumType e, use the names of the TFunParamArray to access the variables from HExpr
+   * Creates a switch for EnumType e, use the names of the HTFunArgCluster to access the variables from HExpr
    * ref will be the $x in
    *  switch($x)...
    * HExpr will be the $expr in 
@@ -114,17 +114,17 @@ class EnumType{
    * @param handler 
    * @return StringMap<U>
    */
-  @:noUsing static public function switcher<U>(e:EnumType,handler:Array<HTFunArg>->HExpr,pos,def):HExpr->HExpr{
-    var each = constructorHandler(e,
+  @:noUsing static public function switcher<U>(e:StdEnumType,handler:Array<HTFunArg>->HExpr,pos,def):HExpr->HExpr{
+    var each = HEnumType._.constructorHandler(e,
       handler.fn().split((x)->x)
     );
     var next = [];
     for(key => val in each){
       var case_call_source = val.snd();
-      var case_call : HExprCluster = case_call_source.map(
-        (v:TFunArg) -> LiftMakro.toModule(v.name).map(x -> LiftModuleToHExpr.toHExpr(x,pos)).force()
-      );
-      var head  = LiftModuleToHExpr.toHExpr(LiftMakro.toModule(key).force(),pos);
+      var case_call : HExprCluster = HExprCluster.lift(case_call_source.map(
+        (v:HTFunArg) -> LiftMakro.toModule(v.name).map(x -> LiftModuleToHExpr.toHExpr(x,pos)).fudge()
+      ));
+      var head  = LiftModuleToHExpr.toHExpr(LiftMakro.toModule(key).fudge(),pos);
       var value = !case_call.is_defined() ? head : HExprDef.ECall(head,case_call).to_macro_at(pos);
       var case_ : Case = {
         expr    : val.fst().toExpr(),

@@ -182,7 +182,7 @@ class CharsLift{
   /**
     Returns an iter of `value`.
   **/
-  static public function iter(self : Chars) : Iter<Chars> {
+  static public function toIter(self : Chars) : Iter<Chars> {
     var index = 0;
     return Iter.make({
         hasNext: function() {

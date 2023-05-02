@@ -1,5 +1,6 @@
 package stx.makro;
 
+#if macro
 using stx.makro.Logging;
 using stx.System;
 using StringTools;
@@ -10,7 +11,7 @@ import haxe.macro.ExprTools;
 import haxe.macro.MacroStringTools;
 
 import haxe.macro.Type as StdMacroType;
-
+#end
 class Plugin{
   static public macro function use(){
     //#if (test||debug)
@@ -23,6 +24,7 @@ class Plugin{
     Context.onAfterTyping(module);
     return macro {};
   }
+  #if macro
   static function module(arr:Cluster<ModuleType>){
     //__.log().trace('onAfterTyping');
     // #if make
@@ -79,4 +81,5 @@ class Plugin{
       default                   : ExprTools.getValue(e);
     }
   }
+  #end
 }

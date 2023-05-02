@@ -1,3 +1,3 @@
 package stx.makro.core;
 
-typedef TFunArgDef =  { name : String, opt : Bool, t : Type };
+typedef HTFunArgDef =  { name : String, opt : Bool, t : Type };

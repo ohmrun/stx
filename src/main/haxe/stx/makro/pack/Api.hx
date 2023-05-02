@@ -7,7 +7,7 @@ import stx.makro.Expr;
 class Api{
   public function new(){}
   public function ref(name,pos){
-    return stx.makro.pack.HExpr.ref(name,pos);
+    return stx.makro.HExpr.ref(name,pos);
   }
   public function def(){
     return new ApiHExprDef();
@@ -22,9 +22,9 @@ class Api{
 class ApiHExprDef{
   public function new(){}
   private function lift(self){
-    HExpr.lift(self);
+    return HExprDef.lift(self);
   }
-  public function econst(v):HExprDef{
+  public function econst(v:StdConstant):HExprDef{
     return lift(EConst(v));
   }
   public function ecall(self,with):HExprDef{
@@ -33,7 +33,7 @@ class ApiHExprDef{
   public function eswitch(e,cases,def):HExprDef{
     return lift(ESwitch(e,cases,def));
   }
-  public function earraydecl(vals):HExprDef{
+  public function earraydecl(vals:Array<StdExpr>):HExprDef{
     return lift(EArrayDecl(vals));
   }
   public function ebinop(op,l,r):HExprDef{
@@ -61,6 +61,6 @@ class ApiConst{
 class ApiLiterals{
   public function new(){}
   public function bool(b:Bool,pos):HExpr{
-    return new ApiConst().ident(b ? 'true' : 'false').to_macro_at(pos);
+    return HConstant.lift(new ApiConst().ident(b ? 'true' : 'false')).to_macro_at(pos);
   }
 }

@@ -12,7 +12,7 @@ abstract HTypeParamDecl(StdTypeParamDecl) from StdTypeParamDecl to StdTypeParamD
 }
 class HTypeParamDeclLift{
   @:noUsing static public function lift(self:StdTypeParamDecl){
-    return TypeParamDecl.lift(self);
+    return HTypeParamDecl.lift(self);
   }
 
 }

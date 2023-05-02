@@ -9,6 +9,41 @@
       "interp" : {
         "--interp" : "true"
       }
+    },
+    "docs" : {
+      "--macro" : [
+        "include('stx',true,['stx.makro','tink','hre','equals','hscript','httpstatus'])"
+      ],
+      "-lib" : "stx",
+      "-D"   :  "doc-gen",
+      "-xml" :  "docs/doc.xml" 
     }
+  },
+  "run" : {
+    "docs" : [
+      ["hx","build","docs"],
+      ["hx","run","dox"]
+    ],
+    "dox"  : [
+      [
+        "haxelib","run","dox",
+        "-i","docs",
+        "-o","../ohmrun.github.io/",
+        "-ex", "bake",
+        "-ex", "bootstrap*",
+        "-ex", "haxe",
+        "-ex", "hx",
+        "-ex", "tink.*",
+        "-ex", "hre.*",
+        "-ex", "equals.*",
+        "-ex", "hscript*",
+        "-ex", "httpstatus",
+        "-in", "stx.*",
+        "-in", "eu.*"
+      ]
+    ],
+    "serve" : [
+      ["nekotools","server","-d","../ohmrun.github.io/","-rewrite"]
+    ]
   }
 }
