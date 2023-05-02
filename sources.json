@@ -31,6 +31,7 @@
     "stx_test",
     "stx_ds_xset",
     "walker",
-    "glot"
+    "glot",
+    "stx_parse_ini"
   ]
 }
