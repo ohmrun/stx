@@ -2,7 +2,10 @@ package stx.io.process;
 
 import stx.io.process.server.term.Impl as ProcessServerCls;
 
-
+/**
+ * Server that sends `ProcessRequests` to `stdout` and produces `ProcessResponses`.
+ * Requires a `ProcessClient` to operate.
+ */
 typedef ProcessServerDef = Server<ProcessRequest,ProcessResponse,Noise,ProcessFailure>;
 
 class ProcessServerLift{
@@ -17,6 +20,9 @@ class ProcessServerLift{
     return that;
   }
 }
+
+@:using(stx.proxy.core.Proxy.ProxyLift)
+@:using(stx.proxy.core.Server.ServerLift)
 @:using(stx.io.process.ProcessServer.ProcessServerLift)
 @:transitive abstract ProcessServer(ProcessServerDef) from ProcessServerDef to ProcessServerDef{
   public function new(self) this = self;
@@ -31,6 +37,9 @@ class ProcessServerLift{
   }
   @:noUsing static public function make(command:Cluster<String>,?detached:Bool):ProcessServer{
     return ProcessServer.lift(ProcessServerCls.makeI(command,detached).reply());
+  }
+  @:noUsing static public function Make(command:Cluster<String>,?detached:Bool):Server<ProcessRequest,ProcessResponse,Noise,ProcessFailure>{
+    return make(command,detached);
   }
   @:to public function toProxy():Proxy<Closed,Noise,ProcessRequest,ProcessResponse,Noise,ProcessFailure>{
     return this.prj();

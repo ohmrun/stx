@@ -30,6 +30,7 @@ class Impl{
     this.state  = __.option(state).defv(ProcessState.make(Io_Process_Init));
   }
   private function get_state(?block = false){
+    __.log().debug('get_state');
     this.stdout = this.stdout.mandate(
       IReqState,
       (res) -> {
