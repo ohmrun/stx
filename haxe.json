@@ -2,7 +2,11 @@
   "build" : {
     "-lib" : ["stx"],
     "unit" : {
-      "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"]
+      "--times" : true,
+      "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
+      "hl" : {
+        "--hl" : "build/hl/unit.hl"
+      }
     },
     "test" : {
       "-main" : "Test",

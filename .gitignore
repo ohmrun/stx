@@ -1,6 +1,7 @@
 /.haxelib
 /.env.machine
 package-lock.json
+/.VSCodeCounter
 
 # Entries below this point are managed by Please (DO NOT EDIT)
 plz-out

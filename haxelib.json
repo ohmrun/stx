@@ -10,7 +10,7 @@
         "0b1kn00b"
     ],
     "releasenote": "No build errors",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "url": "https://github.com/ohmrun/stx",
     "dependencies": {
         "bake"              : "",
@@ -18,8 +18,6 @@
         "tink_core"         : "",
         "hscript"           : "",
         "hxmlparser"        : "",
-        "haxe-files"        : "",
-        "hre"               : "",
         "tink_streams"      : "",
         "tink_io"           : "",
         "tink_chunk"        : "",
