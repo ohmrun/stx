@@ -1,6 +1,6 @@
 # stx_release
 
-A svelte 46,000 loc
+A svelte 46kloc
 This is the build repo for the stx library, containing all the published ohmrun libraries fit to print.
 
 
