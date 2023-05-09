@@ -7,7 +7,6 @@
     "stx_assert",
     "stx_asys",
     "stx_cli",
-    "stx_config",
     "stx_coroutine",
     "stx_data",
     "stx_makro_di",

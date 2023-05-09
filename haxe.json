@@ -6,6 +6,22 @@
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
       "hl" : {
         "--hl" : "build/hl/unit.hl"
+      },
+      "cpp" : {
+        "--cpp" : "build/cpp"
+      },
+      "php" : {
+        "--php" : "build/php"
+      },
+      "python" : {
+        "--python" : "build/python"
+      },
+      "javascript" : {
+        "--macro" : "exclude('stx.asys')",
+        "--js"    : "build/javascript/unit.js"
+      },
+      "neko" : {
+        "--neko" : "build/neko/main.n"
       }
     },
     "test" : {

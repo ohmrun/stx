@@ -1,13 +1,18 @@
 package stx;
 
+#if (sys || nodejs)
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 using stx.Pico;
 
 class Nano{
   static public function digests(wildcard:Wildcard):Digests{
     return wildcard;
   } 
-  static public function stx<T>(wildcard:Wildcard):Stx<T>{
-    return new Stx();
+  static public function stx<T>(wildcard:Wildcard):STX<T>{
+    return STX;
   }
   static public var _(default,never) = LiftNano;
   
@@ -174,7 +179,7 @@ typedef Defect<E>               = stx.nano.Defect<E>;
 typedef DefectDef<E>            = stx.nano.Defect.DefectDef<E>;
 typedef DefectApi<E>            = stx.nano.Defect.DefectApi<E>;
 typedef DefectCls<E>            = stx.nano.Defect.DefectCls<E>;
-typedef Scuttle                 = Defect<tink.core.Noise>;
+typedef Scuttle                 = Defect<Nada>;
 typedef Reaction<T>             = Outcome<T,Scuttle>;
 
 typedef Resource                = stx.nano.Resource;
@@ -334,3 +339,34 @@ class LiftEnumValue{
   }
 }
 
+#if (sys || nodejs)
+class SysLift{
+  static public function cwd(self:Class<std.Sys>)
+    return {
+       get : ()           -> std.Sys.getCwd(),
+       put : (str:String) -> { std.Sys.setCwd(str); }
+    }
+  static public function fs(self:Class<std.Sys>) return new Fs();
+  static public function dir(self:Class<std.Sys>) return new Dir();
+
+  static public function env(self:Class<std.Sys>,key:String):Option<String>{
+    return Option.make(std.Sys.getEnv(key));
+  }
+}
+private class Fs extends Clazz{
+  public function exists(str:String):Bool{
+    return FileSystem.exists(str);
+  }
+  public function get(str:String):String{
+    return File.getContent(str);
+  }
+  public inline function set(key:String,val:String):Void{
+    File.saveContent(key,val);
+  }
+}
+private class Dir extends Clazz{
+  public function put(path:String){
+    FileSystem.createDirectory(path);
+  }
+}
+#end

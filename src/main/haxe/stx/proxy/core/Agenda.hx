@@ -7,7 +7,7 @@ using stx.stream.Work;
 /**
  * Def for `stx.proxy.core.Agenda`
  */
-typedef AgendaDef<E>     = ProxySum<Closed,Noise,Noise,Closed,Noise,E>;
+typedef AgendaDef<E>     = ProxySum<Closed,Nada,Nada,Closed,Nada,E>;
 
 /**
  * Represents a sequence of closed over function calls, possibly yielding
@@ -29,17 +29,17 @@ abstract Agenda<E>(AgendaDef<E>) from AgendaDef<E> to AgendaDef<E>{
   @:from static public function fromEffect<E>(self:Effect<E>):Agenda<E>{
     function handler(self:EffectDef<E>):AgendaDef<E>{
       return switch(self){
-        case Wait(fn)                     : Await(Closed.ZERO, (_:Noise) -> handler(fn(Noise)) );
-        case Emit(head,tail)              : Await(Noise, (_:Noise) -> handler(tail));
+        case Wait(fn)                     : Await(Closed.ZERO, (_:Nada) -> handler(fn(Nada)) );
+        case Emit(head,tail)              : Await(Nada, (_:Nada) -> handler(tail));
         case Hold(slot)                   : __.belay(slot.map(handler));
-        case Halt(Production(_))          : Ended(Val(Noise));
+        case Halt(Production(_))          : Ended(Val(Nada));
         case Halt(Terminated(Stop))       : Ended(Tap);
         case Halt(Terminated(Exit(e)))    : Ended(End(e));
       }
     }
     return lift(__.belay(Belay.fromThunk(handler.bind(self))));
   }
-  @:to public function toProxy():Proxy<Closed,Noise,Noise,Closed,Noise,E>{
+  @:to public function toProxy():Proxy<Closed,Nada,Nada,Closed,Nada,E>{
     return this;
   }
   public var error(get,never):Report<E>;
@@ -55,13 +55,13 @@ class AgendaLift{
     return Execute.lift(Fletcher.fromApi(new AgendaExecute(self)));
   }
 }
-class AgendaExecute<E> extends FletcherCls<Noise,Report<E>,Noise>{
+class AgendaExecute<E> extends FletcherCls<Nada,Report<E>,Nada>{
   public var action : Agenda<E>;
   public function new(action){
     super();
     this.action = action;
   }
-  public function defer(_:Noise,cont:Terminal<Report<E>,Noise>):Work{
+  public function defer(_:Nada,cont:Terminal<Report<E>,Nada>):Work{
     var error     = __.report();
     final report  = (x:Report<E>) -> {
       error = x;
@@ -118,8 +118,8 @@ private class AgendaCyclerCls<E> implements stx.stream.Cycle.CyclerApi{
         return new AgendaCyclerCls(Agenda.lift(x),report).toCyclerApi();
       }
       this.value = (switch(action){
-        case Await(_, arw)    : Future.irreversible((cb) -> cb(c(arw(null)).toCyclerApi()));
-        case Yield(_, arw)    : Future.irreversible((cb) -> cb(c(arw(null)).toCyclerApi()));
+        case Await(_, arw)    : Future.irreversible((cb) -> cb(c(arw(Nada)).toCyclerApi()));
+        case Yield(_, arw)    : Future.irreversible((cb) -> cb(c(arw(Nada)).toCyclerApi()));
         case Ended(End(null)) : null;
         case Ended(End(e))    : 
           __.log().debug('ready to report $e');
@@ -136,7 +136,7 @@ private class AgendaCyclerCls<E> implements stx.stream.Cycle.CyclerApi{
               next_agenda = x;
             }
             final lhs = ft.prj().environment(
-              Noise,
+              Nada,
               (agenda)  -> set_next_agenda(c(agenda)),
               (e)       -> __.crack(e)            
             ).cycle();

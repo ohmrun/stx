@@ -48,7 +48,7 @@ class ParserLift{
   //   ));
   // }
 
-  // static public inline function postfix<I,T,TT>(p:Parser<I,T>,fn:ParseResult<I,T>->TT):Fletcher<ParseInput<I>,TT,Noise>{
+  // static public inline function postfix<I,T,TT>(p:Parser<I,T>,fn:ParseResult<I,T>->TT):Fletcher<ParseInput<I>,TT,Nada>{
   //   return Fletcher.Then(
   //     p,
   //     Fletcher.Sync(fn)

@@ -3,7 +3,7 @@ package stx.io;
 using stx.Coroutine;
 using stx.coroutine.Core;
 
-typedef InputDef  = CoroutineSum<InputRequest,InputResponse,Noise,IoFailure>;
+typedef InputDef  = CoroutineSum<InputRequest,InputResponse,Nada,IoFailure>;
 
 @:using(stx.coroutine.pack.Tunnel.TunnelLift)
 @:using(stx.io.Input.InputLift)
@@ -17,9 +17,11 @@ typedef InputDef  = CoroutineSum<InputRequest,InputResponse,Noise,IoFailure>;
   }
   @:noUsing static public function lift(self:InputDef):Input return new Input(self);
 
+  #if (sys || nodejs)
   static public function Keyboard(shell:ShellApi):Input{
-    return lift(stx.io.input.term.Keyboard.make(shell));
+    return lift(sys.stx.io.input.term.Keyboard.make(shell));
   }
+  #end
   @:from static public function fromTunnel(self:Tunnel<InputRequest,InputResponse,IoFailure>){
     return lift(self.prj());
   }
@@ -60,7 +62,7 @@ class InputLift{
           if(!done){
             __.term(__.fault().of(E_Io_Exhausted(Retry.unit(),true)));
           }else{
-            __.prod(Noise);
+            __.prod(Nada);
           } 
         case Halt(Terminated(Stop))     : __.stop();
         case Halt(Terminated(Exit(e)))  : __.exit(e);

@@ -1,3 +1,5 @@
 package stx.asys;
 
-typedef Module = stx.asys.ASys;
+class Module extends Clazz{
+  
+}

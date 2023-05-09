@@ -10,8 +10,10 @@ using stx.Nano;
 using stx.ASys;
 using stx.Proxy;
 using stx.Fn;
+using stx.io.Process;
 using eu.ohmrun.Fletcher;
 using stx.Coroutine;
+using stx.Fs;
 
 import haxe.io.Bytes;
 

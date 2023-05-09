@@ -4,7 +4,7 @@ import stx.nano.Couple as StdCouple;
 
 
 import stx.assert.eq.term.Primitive; 
-import stx.assert.eq.term.Noise; 
+import stx.assert.eq.term.Nada; 
 import stx.assert.eq.term.Anon;
 import stx.assert.eq.term.*;
 import stx.assert.eq.term.Couple;
@@ -58,8 +58,8 @@ class EqCtr extends Clazz{
   @:noUsing static public function Anon<T>(fn:T->T->Equaled):Eq<T>{
     return new Anon(fn);
   }
-  @:noUsing static public function Noise():Eq<tink.core.Noise>{
-    return new Eq(new Noise());
+  @:noUsing static public function Nada():Eq<stx.pico.Nada>{
+    return new Eq(new Nada());
   }
   @:noUsing static public function Bool():Eq<StdBool>{
     return Anon(

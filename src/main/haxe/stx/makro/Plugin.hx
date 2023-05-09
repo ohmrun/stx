@@ -1,9 +1,11 @@
 package stx.makro;
 
+using stx.Nano;
+
 #if macro
 using stx.makro.Logging;
-using stx.System;
 using StringTools;
+
 
 import haxe.macro.Compiler;
 import haxe.macro.Type;
@@ -17,8 +19,8 @@ class Plugin{
     //#if (test||debug)
     __.log().info('stx.makro.Plugin.use');
     //#end
-    var args          = __.sys().args();
-    var gen_location  = Way.fromPath(new haxe.io.Path(__.sys().cwd().get())).concat(['src','gen','haxe']);
+    var args          = Sys.args();
+    var gen_location  = Way.fromPath(new haxe.io.Path(Sys.cwd().get())).concat(['src','gen','haxe']);
     
     Compiler.addClassPath(gen_location.toOsString());
     Context.onAfterTyping(module);

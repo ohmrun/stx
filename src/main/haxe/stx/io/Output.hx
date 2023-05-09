@@ -2,12 +2,20 @@ package stx.io;
  
 using stx.Coroutine;
 
-typedef OutputDef = Coroutine<OutputRequest,Report<IoFailure>,Noise,IoFailure>;
+/**
+ * Coroutine for an Output 
+ */
+typedef OutputDef = Coroutine<OutputRequest,Report<IoFailure>,Nada,IoFailure>;
 
+/**
+ * Coroutine for an Output 
+ */
 @:using(stx.coroutine.core.Coroutine.CoroutineLift)
 @:using(stx.io.Output.OutputLift)
 @:callable @:forward abstract Output(OutputDef) from OutputDef to OutputDef{
   static public var _(default,never) = OutputLift;
+  
+  @stx.meta.pure
   @:noUsing static public function pure(self:StdOut):Output{
     return new Output(self);
   }
@@ -16,7 +24,7 @@ typedef OutputDef = Coroutine<OutputRequest,Report<IoFailure>,Noise,IoFailure>;
   }
 }
 class OutputLift{
-  static public function relate(self:OutputDef):Relate<OutputRequest,Noise,IoFailure>{
+  static public function relate(self:OutputDef):Relate<OutputRequest,Nada,IoFailure>{
     return Coroutine._.relate(self,x -> x);
   }
 }

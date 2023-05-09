@@ -94,7 +94,7 @@ class GExprCtr extends Clazz{
   public function Call(e:CTR<GExprCtr,GExpr>,params:CTR<GExprCtr,Cluster<GExpr>>){
     return lift(GECall(e(this),params(this)));
   }
-  public function New(t:CTR<GTypePathCtr,GTypePath>,params:CTR<GExprCtr,Cluster<GExpr>>){
+  public function Nu(t:CTR<GTypePathCtr,GTypePath>,params:CTR<GExprCtr,Cluster<GExpr>>){
     return lift(GENew(t(GTypePath.__),params(this)));
   }
   public function Unop(op,postFix,e:CTR<GExprCtr,GExpr>){

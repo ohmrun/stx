@@ -49,14 +49,14 @@ abstract XSetTree(XSetTreeDef) from XSetTreeDef{
   public function keyspace():XSetTree{
     return this.keyspace();
   }
-  @:noUsing static public function fromSpine(sp:Spine<Noise>):XSetTree{
+  @:noUsing static public function fromSpine(sp:Spine<Nada>):XSetTree{
     var rec = null;
         rec = 
     function(sp):XSetTreeDef{
       return switch sp {
         case Collate(arr) : 
           var out = arr.prj().imap(
-            (i:Int,kv:Field<Thunk<Spine<Noise>>>) -> {
+            (i:Int,kv:Field<Thunk<Spine<Nada>>>) -> {
               return switch(kv.val()){
                 case Primate(p) : SetVal(Field(i,kv.key),p);
                 case x          : SetObj(Field(i,kv.key),rec(x));
