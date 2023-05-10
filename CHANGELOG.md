@@ -2,10 +2,18 @@
 ## [Unreleased]
 
 
+<a name="v0.4.0"></a>
+## [v0.4.0] - 2023-05-10
+### Doc
+- add git-chglog to .toolversions
+- CHANGELOG.md
+
+
 <a name="v0.3.0"></a>
 ## v0.3.0 - 2023-05-09
 ### Dev
 - unit building
 
 
-[Unreleased]: https://github.com/ohmrun/stx/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/ohmrun/stx/compare/v0.4.0...HEAD
+[v0.4.0]: https://github.com/ohmrun/stx/compare/v0.3.0...v0.4.0
