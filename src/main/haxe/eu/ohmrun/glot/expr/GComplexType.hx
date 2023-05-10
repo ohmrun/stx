@@ -69,6 +69,7 @@ abstract GComplexType(GComplexTypeSum) from GComplexTypeSum to GComplexTypeSum{
 	}
 }
 class GComplexTypeLift{
+	#if macro
 	static public function to_macro_at(self:GComplexType,pos:Position){
 		return @:privateAccess switch(self){
 			case GTPath( p )             : TPath( p.to_macro_at(pos) );
@@ -81,6 +82,7 @@ class GComplexTypeLift{
 			case GTIntersection(tl)      : TIntersection(tl.map(x -> x.to_macro_at(pos)).prj());
 		}		
 	}
+	#end
 }
 /**
 	return switch(self){

@@ -45,6 +45,7 @@ enum GBinopSum{
 	}
  }
  class GBinopLift{
+  #if macro
   static public function to_macro_at(self:GBinop,pos:Position):Binop{
     return switch(self){
       case GOpAdd             : OpAdd;
@@ -76,6 +77,7 @@ enum GBinopSum{
       #end
     }
   } 
+  #end
   // static public function spell(self:GBinop){
   //   final e = __.glot().expr();
   //   switch(self){

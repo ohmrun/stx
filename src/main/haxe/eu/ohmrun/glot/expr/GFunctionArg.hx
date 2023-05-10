@@ -47,6 +47,7 @@ typedef GFunctionArgDef = {
 	}
 }
 class GFunctionArgLift{
+  #if macro
   static public function to_macro_at(self:GFunctionArg,pos:Position):FunctionArg{
     return {
       name    : self.name,
@@ -56,4 +57,6 @@ class GFunctionArgLift{
       meta    : __.option(self.meta).map(x -> x.to_macro_at(pos)).defv(null)
     }
   }
+  #end
 }
+

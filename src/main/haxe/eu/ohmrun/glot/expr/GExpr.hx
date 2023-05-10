@@ -170,6 +170,7 @@ class GExprCtr extends Clazz{
 	}
 }
 class GExprLift{
+  #if macro
   static public function to_macro_at(self:Null<GExpr>,pos:Position):Expr{
     final f = to_macro_at.bind(_,pos);
     return {
@@ -212,6 +213,7 @@ class GExprLift{
       }
     }
   }
+  #end
   // static public function spell(self:GExpr){
   //   final self = __.glot().expr();
   //   return switch(self){

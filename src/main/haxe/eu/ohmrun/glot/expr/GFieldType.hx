@@ -45,6 +45,7 @@ abstract GFieldType(GFieldTypeSum) from GFieldTypeSum to GFieldTypeSum{
 	// }
 }
 class GFieldTypeLift{
+  #if macro
   static public function to_macro_at(self:GFieldType,pos:Position){
     return switch(self){
       case GFVar( t  , e)            :  FVar(__.option(t).map(ct -> ct.to_macro_at(pos)).defv(null)  , __.option(e).map(e -> e.to_macro_at(pos)).defv(null));
@@ -57,4 +58,5 @@ class GFieldTypeLift{
       );
     } 
   }
+  #end
 }

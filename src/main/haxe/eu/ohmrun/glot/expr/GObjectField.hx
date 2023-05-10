@@ -39,6 +39,7 @@ typedef GObjectFieldDef = {
 	}
 }
 class GObjectFieldLift{
+  #if macro
   static public function to_macro_at(self:GObjectField,pos:Position){
     return {
       field  : self.field,
@@ -46,4 +47,5 @@ class GObjectFieldLift{
       quotes : __.option(self.quotes).map(x -> x.to_macro_at(pos)).defv(null)
     }
   }
+  #end
 }

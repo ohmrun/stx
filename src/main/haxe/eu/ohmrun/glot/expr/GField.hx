@@ -47,6 +47,7 @@ typedef GFieldDef = {
 	}
 }
 class GFieldLift{
+  #if macro
   static public function to_macro_at(self:GField,pos:Position):Field{
     return @:privateAccess {
       name      : self.name,
@@ -57,4 +58,5 @@ class GFieldLift{
       pos       : pos
     }
   }
+  #end
 }

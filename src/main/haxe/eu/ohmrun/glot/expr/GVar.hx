@@ -52,6 +52,7 @@ typedef GVarDef = {
 	}
 }
 class GVarLift{
+	#if macro
 	static public function to_macro_at(self:GVar,pos:Position){
 		return {
 			name 				: self.name,
@@ -62,4 +63,5 @@ class GVarLift{
 			meta 				: __.option(self.meta).map(x -> x.to_macro_at(pos)).defv(null)
 		}		
 	}
+	#end
 }

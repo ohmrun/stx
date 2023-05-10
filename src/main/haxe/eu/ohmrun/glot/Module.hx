@@ -1,9 +1,11 @@
 package eu.ohmrun.glot;
 
 class Module extends Clazz{
+  #if macro
   public function to_macro_at(){
     return GExpr.__;
   }  
+  #end
   public function type(){
     return GTypeDefinition.__;
   }

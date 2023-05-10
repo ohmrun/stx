@@ -62,6 +62,7 @@ abstract GTypeDefKind(GTypeDefKindSum) from GTypeDefKindSum to GTypeDefKindSum{
 	// }
 }
 class GTypeDefKindLift{
+  #if macro
   static public function to_macro_at(self:GTypeDefKind,pos:Position):TypeDefKind{
     return @:privateAccess switch(self){
       case GTDEnum               : TDEnum;
@@ -85,4 +86,5 @@ class GTypeDefKindLift{
           TDField(kind.to_macro_at(pos),access.map(x -> x.to_macro_at(pos)).prj());
     }
   }
+  #end
 }

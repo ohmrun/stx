@@ -47,6 +47,7 @@ abstract GAccess(GAccessSum) from GAccessSum to GAccessSum{
 	}
 }
 class GAccessLift{
+	#if macro
 	static public function to_macro_at(self:GAccess,pos:Position):Access{
 		return switch(self){
 			case GAPrivate 			: APrivate;
@@ -62,4 +63,5 @@ class GAccessLift{
 			case GAOverload			: AOverload;
 		}
 	}
+	#end
 }

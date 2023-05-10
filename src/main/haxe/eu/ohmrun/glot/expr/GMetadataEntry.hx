@@ -32,6 +32,7 @@ typedef GMetadataEntryDef = {
 	}
 }
 class GMetadataEntryLift{
+  #if macro
   static public function to_macro_at(self:GMetadataEntry,pos:Position):MetadataEntry{
     return @:privateAccess {
       name    : self.name,
@@ -39,6 +40,7 @@ class GMetadataEntryLift{
       pos     : pos
     };
   }
+  #end
   // static public function denote(self:GMetadataEntry){
   //   final e = __.glot().expr();
   //   return e.Call(

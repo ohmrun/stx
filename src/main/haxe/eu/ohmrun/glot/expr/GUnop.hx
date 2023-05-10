@@ -22,6 +22,7 @@ abstract GUnop(GUnopSum) from GUnopSum to GUnopSum{
 	}
 }
 class GUnopLift{
+  #if macro
   static public function to_macro_at(self:GUnop,pos:Position):Unop{
     return switch(self){
       case GOpIncrement     : OpIncrement;
@@ -32,4 +33,5 @@ class GUnopLift{
       case GOpSpread        : OpSpread;
     }
   }
+  #end
 }

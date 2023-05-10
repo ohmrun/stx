@@ -7,6 +7,7 @@ enum GFunctionKind{
 	GFArrow;
 }
 class GFunctionKindLift{
+	#if macro
 	static public function to_macro_at(self:GFunctionKind,pos:Position):FunctionKind{
 		return switch(self){
 			case GFAnonymous           :		FAnonymous;
@@ -14,4 +15,5 @@ class GFunctionKindLift{
 			case GFArrow               :		FArrow;
 		}
 	}
+	#end
 }

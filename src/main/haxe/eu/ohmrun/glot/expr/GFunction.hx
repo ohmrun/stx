@@ -50,6 +50,7 @@ typedef GFunctionDef = {
 	}
 }
 class GFunctionLift{
+  #if macro
   static public function to_macro_at(self:GFunction,pos:Position):Function{
     return @:privateAccess {
       args    : self.args.map(arg -> arg.to_macro_at(pos)).prj(),
@@ -58,4 +59,5 @@ class GFunctionLift{
       params  : __.option(self.params).map(x -> x.map(y -> y.to_macro_at(pos)).prj()).defv([])
     }
   }
+  #end
 }

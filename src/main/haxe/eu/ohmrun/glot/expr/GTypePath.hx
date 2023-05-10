@@ -64,6 +64,7 @@ typedef GTypePathDef = {
   }
 }
 class GTypePathLift{
+  #if macro
   static public function to_macro_at(self:GTypePath,pos:Position):TypePath{
     return @:privateAccess {
       name    : self.name,
@@ -72,4 +73,5 @@ class GTypePathLift{
       sub     : self.sub
     }
   } 
+  #end
 }

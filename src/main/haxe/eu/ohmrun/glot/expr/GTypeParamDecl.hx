@@ -44,6 +44,7 @@ typedef GTypeParamDeclDef = {
 	}
 }
 class GTypeParamDeclLift{
+  #if macro
   static public function to_macro_at(self:GTypeParamDecl,pos:Position):TypeParamDecl{
     return @:privateAccess {
       name        : self.name,
@@ -55,4 +56,5 @@ class GTypeParamDeclLift{
       #end
     };
   }
+  #end
 }

@@ -42,6 +42,7 @@ typedef GCaseDef = {
 	// }
 }
 class GCaseLift{
+  #if macro
   static public function to_macro_at(self:GCase,pos:Position){
     return @:privateAccess {
       values  : __.option(self.values).map(x -> x.map(y -> y.to_macro_at(pos)).prj()).defv([]),
@@ -49,4 +50,5 @@ class GCaseLift{
       expr    : __.option(self.expr).map(x -> x.to_macro_at(pos)).defv(null) 
     }
   }
+  #end
 }

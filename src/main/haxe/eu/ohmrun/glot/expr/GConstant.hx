@@ -49,6 +49,7 @@ abstract GConstant(GConstantSum) from GConstantSum to GConstantSum{
   }
 }
 class GConstantLift{
+  #if macro
   static public function to_macro_at(self:GConstant,pos:Position){
     return switch(self){
       #if (haxe_ver > 4.205) 
@@ -63,6 +64,7 @@ class GConstantLift{
       case GCRegexp(r, opt)  : CRegexp(r, opt);  
     }
   }
+  #end
   static public function toGComplexType(self:GConstant){
     final c = __.glot().ctype();
     return switch(self){

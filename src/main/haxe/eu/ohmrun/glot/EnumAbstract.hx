@@ -42,7 +42,7 @@ class EnumAbstract{
       _ -> [],
       meta -> [
         meta.Make(
-          ':enum'
+          'enum'
         )
       ].imm()
     );
