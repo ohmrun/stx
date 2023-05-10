@@ -4,6 +4,8 @@
     "halva",
     "fletcher",
     "pml",
+    "pml_om",
+    "pml_xml",
     "stx_assert",
     "stx_asys",
     "stx_cli",
