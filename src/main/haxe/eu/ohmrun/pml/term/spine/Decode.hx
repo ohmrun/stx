@@ -1,12 +1,10 @@
-package eu.ohmrun.pml.term;
+package eu.ohmrun.pml.term.spine;
 
 import stx.om.spine.Spine in TSpine;
 
-typedef PmlSpine = TSpine<Tup2<PmlSpine,PmlSpine>>;
-
-class Spine extends Clazz{
+class Decode extends Clazz{
   public function apply(expr:PExpr<Atom>):PmlSpine{
-    trace(expr);
+    __.log().trace('$expr');
     return switch(expr){
       case PLabel(name) : Primate(PSprig(Textal(':$name')));
       case PApply(name) : Primate(PSprig(Textal('#$name')));

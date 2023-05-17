@@ -1,10 +1,10 @@
 package stx.assert.module;
 
-class Crunch extends Clazz{
-  var module  : Module;
+class Effect extends Clazz{
+  var module  : Expect;
   public function new(pos){
     super();
-    this.module = new Module(pos);
+    this.module = new Expect(pos);
   }
   public inline function equals<T>(lhs:T,rhs:T)                              this.module.equals().comply(lhs,rhs).crunch();
   public inline function alike<E:StdEnumValue>(lhs:E,rhs:E)                  this.module.alike().comply(lhs,rhs).crunch();

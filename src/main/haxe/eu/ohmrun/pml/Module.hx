@@ -5,11 +5,12 @@ class Module extends Clazz{
   public function parse(string:String){
     return PExpr.parse(string);
   }
-  public function parseI(){
+  public function parser(){
     var p = new stx.parse.pml.Parser();
     var l = stx.parse.pml.Lexer;
     return (input:ParseInput<String>) -> {
       final a = l.main.apply(input);
+      trace(a);
       return if(a.is_ok()){
         a.value.fold(
           ok -> p.main().apply(ok.reader()),

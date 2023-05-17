@@ -10,6 +10,7 @@ import haxe.ds.StringMap;
 using tink.CoreApi;
 
 import stx.alias.StdType;
+import stx.alias.StdEnumValue;
 
 using stx.Pico;
 using stx.Fail;

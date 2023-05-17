@@ -2,6 +2,9 @@ package stx.assert.eq.term;
 
 import haxe.ds.StringMap in TStringMap;
 
+/**
+ * `stx.assert.Eq` for `StringMap`.
+ */
 class StringMap<T> extends EqCls<TStringMap<T>>{
   final inner : Eq<T>;
   public function new(inner){

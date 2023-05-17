@@ -14,15 +14,27 @@ import haxe.macro.MacroStringTools;
 
 import haxe.macro.Type as StdMacroType;
 #end
+/**
+ * Any class with metadata starting `stx.makro` will be used in the following way:
+ * e.g in `stx.makro.Test.use(__,1)`
+ * `stx.makro.Test` is constructed with no parameters
+ * `use` is called with the `haxe.macro.Type` where the metadata is found denoted by `__`, and 1
+ * so the class should look like
+ * ```haxe
+ * package stx.makro;
+ * class Test{
+ *  public function use(type:haxe.macro.Type,int:Int){
+ *    ///...
+ *  }
+ * }
+ * ```
+ */
 class Plugin{
   static public macro function use(){
     //#if (test||debug)
     __.log().info('stx.makro.Plugin.use');
     //#end
     var args          = Sys.args();
-    var gen_location  = Way.fromPath(new haxe.io.Path(Sys.cwd().get())).concat(['src','gen','haxe']);
-    
-    Compiler.addClassPath(gen_location.toOsString());
     Context.onAfterTyping(module);
     return macro {};
   }
@@ -36,6 +48,7 @@ class Plugin{
     // #end
   }
   static function apply(self:ModuleType){
+
     final v = switch(self){
       case TClassDecl(c)     : Some(TInst(c,[]));
       case TEnumDecl(e)      : Some(TEnum(e,[]));
@@ -49,17 +62,19 @@ class Plugin{
       final entries = base.meta.get().filter(
           (mde) -> mde.name.startsWith(":stx.makro")
       );
+      //trace(entries);
       for(entry in entries){
+        __.log().trace("here");
         var body      = entry.name.split(".");
             body[0]   = body[0].substr(1);
-        //trace(body);
+        __.log().trace(_ -> _.thunk(() -> '$body'));
         var method    = body.pop();
         var params    = entry.params.map(parameter.bind(type)).prj();
         var path      = body.join(".");
         
-        //trace(body.join("."));
-        var clazz     = stx.StdType.resolveClass(path);
-        //__.log().trace(_ -> _.pure(clazz));
+        __.log().trace(body.join("."));
+        var clazz     = stx.alias.StdType.resolveClass(path);
+        __.log().trace(_ -> _.pure(clazz));
         if(clazz == null){
           #if (test || debug)
             #if (!stfu)
@@ -67,11 +82,12 @@ class Plugin{
             #end
           #end
         }
+        __.log().trace(_ -> _.thunk(() -> '$clazz'));
         for (clazz in __.option(clazz)){
           var value       = std.Type.createInstance(clazz,[]);
-          //trace(value);
-          var method_ref  = std.Reflect.field(value,method);
-          //trace(method_ref);
+          __.log().trace(_ -> _.thunk(() -> '$value'));
+          var method_ref  : haxe.Constraints.Function = std.Reflect.field(value,method);
+          __.log().trace(_ -> _.thunk(() -> '$method_ref'));
           Reflect.callMethod(value,method_ref,params);
         }
       }

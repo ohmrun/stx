@@ -27,7 +27,10 @@ abstract class OrdCls<T> implements OrdApi<T>{
     return this;
   }
 }
-
+/**
+ * Abstract for order function api.
+ * Individual constructors at `__.assert().Ord()`
+ */
 @:forward abstract Ord<T>(OrdApi<T>) from OrdApi<T> to OrdApi<T>{
   public inline function new(self){
     this = self;

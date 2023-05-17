@@ -16,19 +16,33 @@ import stx.assert.eq.term.Cluster;
 import stx.assert.eq.term.EnumValueIndex;
 import stx.assert.eq.term.NullOr;
 
+/**
+ * Equality function Api
+ */
 interface EqApi<T>{
   public function comply(lhs:T,rhs:T):Equaled;
   public function toEqApi():EqApi<T>;
 }
+/**
+ * Equality function Api
+ * abstract class for `T -> T -> Equaled`
+ */
 abstract class EqCls<T> implements EqApi<T>{
   abstract public function comply(lhs:T,rhs:T):Equaled;
   public function toEqApi():EqApi<T>{
     return this;
   }
 }
+/**
+ * Constructors for `Eq`
+ */
 class EqCtr extends Clazz{
 
 }
+/**
+ * Abstract for equality function Api
+ * Individual constructors at `__.assert().Eq()`.
+ */
 @:forward abstract Eq<T>(EqApi<T>) from EqApi<T> to EqApi<T>{
   static public var __(default,never) = new EqCtr();
   public inline function new(self){
