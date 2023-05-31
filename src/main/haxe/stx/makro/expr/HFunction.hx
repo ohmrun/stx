@@ -1,5 +1,17 @@
 package stx.makro.expr;
 
+final Expr = __.makro().expr;
+
+class HFunctionCtr extends Clazz{
+  public function Make(args:CTR<HFunctionArgCtr,Array<HFunctionArg>>,?ret:CTR<HComplexTypeCtr,HComplexType>,?expr:CTR<HExprCtr,HExpr>,?params:CTR<HTypeParamDeclCtr,Array<HTypeParamDecl>>){
+    return HFunction.make(
+      args.apply(Expr.HFunctionArg),
+      __.option(params).map(f -> f.apply(Expr.HTypeParamDecl)).defv(null),
+      __.option(expr).map(f -> f.apply(Expr.HExpr)).defv(null),
+      __.option(ret).map(f -> f.apply(Expr.HComplexType)).defv(null)
+    );
+  }
+}
 /*
   typedef Function = {
     var args:Array<FunctionArg>;
@@ -8,11 +20,12 @@ package stx.makro.expr;
     var ?params:Array<TypeParamDecl>;
   }
 */
+typedef HFunctionDef = Function;
 @:using(stx.makro.expr.HFunction.HFunctionLift)
-abstract HFunction(Function) from Function to Function{
+@:forward abstract HFunction(Function) from Function to Function{
   public function new(self) this = self;
   @:noUsing static public function lift(self:Function):HFunction return new HFunction(self);
-  @:noUsing static public function make(args:Cluster<HFunctionArg>,?params,?expr,?ret){
+  @:noUsing static public function make(args:Array<HFunctionArg>,?params:Array<HTypeParamDecl>,?expr:HExpr,?ret:HComplexType){
     return lift({
       args    : args.prj(),
       params  : __.option(params).defv([]),

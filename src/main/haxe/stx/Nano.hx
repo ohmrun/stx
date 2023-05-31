@@ -200,7 +200,7 @@ typedef Wildcard                = stx.nano.Wildcard;
 typedef ReportSum<E>            = stx.nano.ReportSum<E>;
 typedef Report<E>               = stx.nano.Report<E>;
 typedef Position                = stx.nano.Position;
-typedef PrimitiveDef            = stx.nano.Primitive.PrimitiveDef;
+typedef PrimitiveSum            = stx.nano.Primitive.PrimitiveSum;
 typedef Primitive               = stx.nano.Primitive;
 
 typedef SlotCls<T>              = stx.nano.Slot.SlotCls<T>;
@@ -287,6 +287,9 @@ typedef Equity<I,O,E>           = stx.nano.Equity<I,O,E>;
 typedef EquityDef<I,O,E>        = stx.nano.Equity.EquityDef<I,O,E>;
 typedef EquityCls<I,O,E>        = stx.nano.Equity.EquityCls<I,O,E>;
 typedef EquityApi<I,O,E>        = stx.nano.Equity.EquityApi<I,O,E>;
+
+typedef Coord                   = stx.nano.Coord;
+typedef CoordSum                = stx.nano.Coord.CoordSum;
 
 typedef Retry                   = stx.nano.Retry;
 class LiftFutureToSlot{

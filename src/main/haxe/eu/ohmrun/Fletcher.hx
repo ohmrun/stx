@@ -55,21 +55,21 @@ typedef FletcherDef<P,Pi,E> = FletcherApi<P,Pi,E>;
   @:from static public function fromApi<P,Pi,E>(self:FletcherApi<P,Pi,E>){
     return lift(self); 
   }
-  static public function unit<P,E>():Fletcher<P,P,E>{
+  @:noUsing static public function unit<P,E>():Fletcher<P,P,E>{
     return Sync(x -> x);
   }
-  static public function constant<P,R,E>(self:ArwOut<R,E>):Fletcher<P,R,E>{
+  @:noUsing static public function constant<P,R,E>(self:ArwOut<R,E>):Fletcher<P,R,E>{
     return Fletcher.Anon(
       (_:P,cont:Terminal<R,E>) -> cont.receive(cont.issue(self))
     );
   }
-  static public function pure<P,R,E>(self:R):Fletcher<P,R,E>{
+  @:noUsing static public function pure<P,R,E>(self:R):Fletcher<P,R,E>{
     return constant(__.success(self));
   }
-  static public inline function fromFun1R<P,R,E>(self:P->R):Fletcher<P,R,E>{
+  @:noUsing static public inline function fromFun1R<P,R,E>(self:P->R):Fletcher<P,R,E>{
     return Sync(self);
   }
-  static public inline function fromFunXR<R,E>(self:Void->R):Fletcher<Nada,R,E>{
+  @:noUsing static public inline function fromFunXR<R,E>(self:Void->R):Fletcher<Nada,R,E>{
     return Sync((_:Nada) -> self());
   }
   //?pos:haxe.PosInfos
@@ -82,7 +82,9 @@ typedef FletcherDef<P,Pi,E> = FletcherApi<P,Pi,E>;
     return Receiver.lift(
       Cont.Anon(
         function(k:ReceiverSinkApi<Pi,E>){
+          #if debug
           __.log().trace('forward called $p');
+          #end
           var ft : FutureTrigger<ArwOut<Pi,E>> = Future.trigger();
           var fst = f.defer(
             p,
@@ -250,19 +252,6 @@ class FletcherLift{
    );
   } 	
 }
-
-typedef TerminalSinkDef<R,E>    = eu.ohmrun.fletcher.TerminalSink.TerminalSinkDef<R,E>;
-typedef TerminalSink<R,E>       = eu.ohmrun.fletcher.TerminalSink<R,E>;
-//typedef ReceiverApi<R,E>        = eu.ohmrun.fletcher.Receiver.ReceiverApi<R,E>;
-typedef ReceiverCls<R,E>        = eu.ohmrun.fletcher.Receiver.ReceiverCls<R,E>;
-typedef ReceiverDef<R,E>        = eu.ohmrun.fletcher.Receiver.ReceiverDef<R,E>;
-typedef Receiver<R,E>           = eu.ohmrun.fletcher.Receiver<R,E>;
-typedef TerminalAbs<R,E>        = eu.ohmrun.fletcher.Terminal.TerminalAbs<R,E>;
-typedef TerminalCls<R,E>        = eu.ohmrun.fletcher.Terminal.TerminalCls<R,E>;
-typedef TerminalApi<R,E>        = eu.ohmrun.fletcher.Terminal.TerminalApi<R,E>;
-typedef Terminal<R,E>           = eu.ohmrun.fletcher.Terminal<R,E>;
-typedef Waypoint<R,E>           = Terminal<Upshot<R,E>,Nada>;
-
 typedef Fiber                   = eu.ohmrun.fletcher.Fiber;
 typedef FiberDef                = eu.ohmrun.fletcher.Fiber.FiberDef;
 
@@ -322,13 +311,6 @@ typedef Reform<P,R,E>           = eu.ohmrun.fletcher.Reform<P,R,E>;
 
 typedef ResolveDef<I,E>         = eu.ohmrun.fletcher.Resolve.ResolveDef<I,E>;
 typedef Resolve<I,E>            = eu.ohmrun.fletcher.Resolve<I,E>;
-
-typedef TerminalInputDef<R,E>   = eu.ohmrun.fletcher.TerminalInput.TerminalInputDef<R,E>;
-typedef TerminalInput<R,E>      = eu.ohmrun.fletcher.TerminalInput<R,E>;
-
-typedef ReceiverSink<R,E>       = eu.ohmrun.fletcher.ReceiverSink<R,E>;
-typedef ReceiverSinkCls<R,E>    = eu.ohmrun.fletcher.ReceiverSink.ReceiverSinkCls<R,E>;
-typedef ReceiverSinkApi<R,E>    = eu.ohmrun.fletcher.ReceiverSink.ReceiverSinkApi<R,E>;
 
 typedef RegulateDef<R,E>        = eu.ohmrun.fletcher.Regulate.RegulateDef<R,E>;
 typedef Regulate<R,E>           = eu.ohmrun.fletcher.Regulate<R,E>;

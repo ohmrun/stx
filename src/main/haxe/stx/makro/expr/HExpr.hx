@@ -1,17 +1,21 @@
 package stx.makro.expr;
 
+final Expr = __.makro().expr;
+
+class HExprCtr extends Clazz{
+  public function Make(def:CTR<HExprdefCtr,HExprdef>,?pos:Position){
+    return def.apply(new HExprdefCtr());
+  }
+}
+
+typedef HExprDef = StdExpr;
+
 @:using(stx.makro.expr.HExpr.HExprLift)
-@:forward abstract HExpr(StdExpr) from StdExpr{
+@:forward abstract HExpr(StdExpr){
   static public var ZERO(default,never) : HExpr  = lift( {expr : EBlock([]), pos : null } );
   static public var _(default,never) = HExprLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:StdExpr):HExpr return new HExpr(self);
-  @:noUsing static public function make(expr:HExprDef,pos:Position){
-    return lift({
-      expr  : expr.prj(),
-      pos   : pos 
-    });
-  }
   public function prj():StdExpr return this;
   private var self(get,never):HExpr;
   private function get_self():HExpr return lift(this);
@@ -20,16 +24,21 @@ package stx.makro.expr;
   //   return fromExpr(self);
   // }
   @:noUsing static public function fromExpr(self:haxe.macro.Expr):HExpr{
-    return self;
+    return lift(self);
   }
   @:noUsing static public function mark(pos:Position):HExpr{
-    return HExprDef.MARK.to_macro_at(pos);
+    return HExprdef.MARK.to_macro_at(pos);
   }
-  @:noUsing static public function unit(pos:Position):HExpr{
-    return HExprDef.ZERO.to_macro_at(pos);
+  @:noUsing static public function make(?def:HExprdef,?pos:Position):HExpr{
+    return lift(
+      {
+        expr : __.option(def).defv(HExprdef.ZERO).prj(), 
+        pos  : __.option(pos).defv(new HPositionCtr().Make()) 
+      }
+    );
   }  
   #if macro
-  @:noUsing static public function getType(self:HExpr):HType{
+  static public function getType(self:HExpr):HType{
     return HType.lift(Context.typeof(self.toExpr()));
   }
   #end
@@ -47,9 +56,9 @@ package stx.makro.expr;
     var printer = new haxe.macro.Printer();
     return printer.printExpr(this);
   }
-  public var to_macro_at(get,never):HExprDef;
-  public function get_to_macro_at():HExprDef{
-    return HExprDef.lift(this.expr);
+  public var to_macro_at(get,never):HExprdef;
+  public function get_to_macro_at():HExprdef{
+    return HExprdef.lift(this.expr);
   }
 }
 
@@ -68,7 +77,7 @@ class HExprLift{
     Creates getter only properties of the underlying type for Abstracts.
   **/
   static public function shim(self:Type,pos:Position):Upshot<Cluster<StdField>,MakroTypeFailure>{
-    return switch(self){
+    return #if macro switch(self){
       case TMono(t)               : __.reject(__.fault().of(E_MakroType_UnexpectedMono));
       case TEnum(t,params)        : __.reject(__.fault().of(E_MakroType_UnexpectedEnum));
       case TType(t,params)        : __.reject(__.fault().of(E_MakroType_UnexpectedTDef(t.get())));
@@ -82,23 +91,23 @@ class HExprLift{
                 default : 
                   Some(HField.make(
                     f.name,
-                    HFieldType.FProp(
+                    Expr.HFieldType.FProp(
                       PAccFn,
                       PAccNever,
-                      HComplexType.lift(haxe.macro.TypeTools.toComplexType(f.type)),
-                      HExprDef.EFunction(
-                        HFunction.make([],null,
-                          HExprDef.EReturn(
-                              HExprDef.EField(
-                                HConstant.CIdent('this').to_macro_at(pos).prj(),
+                      f.type.toHType().toComplexType(),
+                      Expr.HExprdef.Function(
+                        Expr.HFunction.Make([],null,
+                          Expr.HExprdef.Return(
+                              Expr.HExprdef.Field(
+                                Expr.HConstant.Ident('this').to_macro_at(pos),
                                 f.name
                               ).to_macro_at(pos)
                           ).to_macro_at(pos)
                         ).prj()
                       ).to_macro_at(pos)
                     ),
-                    pos,
-                    [HAccess.Public()]
+                    [HAccess.Public()],
+                    pos
                   ));
               }
               default                         : None;
@@ -114,7 +123,7 @@ class HExprLift{
       case TFun(args, ret)        : __.reject(__.fault().of(E_MakroType_UnexpectedTFun));
       case TDynamic(t)            : __.reject(__.fault().of(E_MakroType_DynamicUnsupported));
       case TLazy(f)               : __.reject(__.fault().of(E_MakroType_UnexpectedLazy));
-    }
+    } #else __.reject(f -> f.of(E_Makro_CalledFromRuntime)); #end
     //return throw UNIMPLEMENTED; 
   }
 }
@@ -128,7 +137,7 @@ class LiftHExpr extends Clazz{
   static public var MethodRef = {
     toHExpr : (self:MethodRef,?p:Position) -> stx.makro.expr.lift.LiftMethodRefToHExpr.toHExpr(self,p)
   }
-  static public var Module = {
-    toHExpr : (self:Module,?p:Position) -> stx.makro.expr.lift.LiftModuleToHExpr.toHExpr(self,p)
+  static public var Moniker = {
+    toHExpr : (self:Moniker,?p:Position) -> stx.makro.expr.lift.LiftMonikerToHExpr.toHExpr(self,p)
   }
 }

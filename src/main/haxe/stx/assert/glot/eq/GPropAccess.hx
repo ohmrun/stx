@@ -4,6 +4,6 @@ import eu.ohmrun.glot.expr.GPropAccess as GPropAccessT;
 
 class GPropAccess extends stx.assert.eq.term.Base<GPropAccessT> {
   public function comply(lhs:GPropAccessT,rhs:GPropAccessT){
-    return Eq.EnumValueIndex().comply(lhs,rhs);
+    return Eq.String().comply(lhs.toString(),rhs.toString());
   }
 }

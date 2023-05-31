@@ -1,23 +1,17 @@
 package eu.ohmrun.glot.expr;
 
 class GAccessCtr extends Clazz{
-	static public function unit(){
-		return new GAccessCtr();
-	}
-	private function lift(self:GAccessSum):GAccess{
-		return GAccess.lift(self);
-	}
-	public function Public() 		return lift(GAPublic);
-	public function Private() 	return lift(GAPrivate);
-	public function Static() 		return lift(GAStatic);
-	public function Override() 	return lift(GAOverride);
-	public function Dynamic() 	return lift(GADynamic);
-	public function Inline() 		return lift(GAInline);
-	public function Macro() 		return lift(GAMacro);
-	public function Final() 		return lift(GAFinal);
-	public function Extern() 		return lift(GAExtern);
-	public function Abstract() 	return lift(GAAbstract);
-	public function Overload() 	return lift(GAOverload);
+	public function Public() 		return GAccess.lift(GAPublic);
+	public function Private() 	return GAccess.lift(GAPrivate);
+	public function Static() 		return GAccess.lift(GAStatic);
+	public function Override() 	return GAccess.lift(GAOverride);
+	public function Dynamic() 	return GAccess.lift(GADynamic);
+	public function Inline() 		return GAccess.lift(GAInline);
+	public function Macro() 		return GAccess.lift(GAMacro);
+	public function Final() 		return GAccess.lift(GAFinal);
+	public function Extern() 		return GAccess.lift(GAExtern);
+	public function Abstract() 	return GAccess.lift(GAAbstract);
+	public function Overload() 	return GAccess.lift(GAOverload);
 }
 enum GAccessSum {
 	GAPublic;
@@ -34,13 +28,12 @@ enum GAccessSum {
 }
 @:using(eu.ohmrun.glot.expr.GAccess.GAccessLift)
 abstract GAccess(GAccessSum) from GAccessSum to GAccessSum{
-	static public var __(default,never) = new GAccessCtr();
   public function new(self) this = self;
   @:noUsing static public function lift(self:GAccessSum):GAccess return new GAccess(self);
 
   public function prj():GAccessSum return this;
   private var self(get,never):GAccess;
-  private function get_self():GAccess return lift(this);
+  private function get_self():GAccess return GAccess.lift(this);
 
 	public function toSource():GSource{
 		return Printer.ZERO.printAccess(this);
@@ -48,6 +41,7 @@ abstract GAccess(GAccessSum) from GAccessSum to GAccessSum{
 }
 class GAccessLift{
 	#if macro
+
 	static public function to_macro_at(self:GAccess,pos:Position):Access{
 		return switch(self){
 			case GAPrivate 			: APrivate;

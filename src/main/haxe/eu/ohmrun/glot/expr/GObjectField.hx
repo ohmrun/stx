@@ -1,16 +1,12 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GObjectFieldCtr extends Clazz{
-  static public function unit(){
-    return new GObjectFieldCtr();
-  }
-  private function lift(self:GObjectFieldDef):GObjectField{
-    return GObjectField.lift(self);
-  }
   public function Make(field:String,?expr:CTR<GExprCtr,GExpr>,?quotes){
     return GObjectField.make(
       field,
-      __.option(expr).map(f -> f(GExpr.__)).defv(null),
+      __.option(expr).map(f -> f(Expr.GExpr)).defv(null),
       quotes
     );
   }
@@ -22,7 +18,6 @@ typedef GObjectFieldDef = {
 }
 @:using(eu.ohmrun.glot.expr.GObjectField.GObjectFieldLift)
 @:forward abstract GObjectField(GObjectFieldDef) from GObjectFieldDef to GObjectFieldDef{
-  static public var __(default,never) = new GObjectFieldCtr();
   static public var _(default,never) = GObjectFieldLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:GObjectFieldDef):GObjectField return new GObjectField(self);

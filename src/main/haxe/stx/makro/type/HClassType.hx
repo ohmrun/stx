@@ -4,7 +4,7 @@ package stx.makro.type;
 @:forward abstract HClassType(ClassType) from ClassType to ClassType{
   static public var _(default,never) = HClassTypeLift;
   public function new(self)this = self;
-  static public inline function lift(self) return new HClassType(self);
+  @:noUsing static public inline function lift(self:ClassType) return new HClassType(self);
   
   public function prj():ClassType{
     return this;
@@ -12,37 +12,37 @@ package stx.makro.type;
   @:to public function toBaseType():BaseType{
     return this;
   }
-  public function interfaces(?ancestors:Bool):Array<HClassAndParam>{ return _.interfaces(this,ancestors); }
+  public function get_interface(?ancestors:Bool):Array<HClassAndParam>{ return _.get_interface(this,ancestors); }
 
-  public var fields(get,never):Cluster<HClassField>;
+/**
+ * This aliases weirdly
+*/
+//public var fields(get,never):Cluster<HClassField>;
   public function get_fields():Cluster<HClassField>{
     return this.fields.get();
   }
 }
 class HClassTypeLift{
-  @:noUsing static public function interfaces(ct:HClassType,?ancestors:Bool=false):Array<HClassAndParam>{
+  @:noUsing static public function get_interface(ct:HClassType,?ancestors:Bool=false):Array<HClassAndParam>{
     return switch(ancestors){
       case true   : 
         ct.prj().interfaces
           .map((x) -> (x:HClassAndParam))
           .concat(
-            HClassType._.ancestors(ct)
+            HClassType._.get_ancestors(ct)
               .flat_map(
                 (x) -> {
-                  return x.t.interfaces(ancestors).map((x) -> (x:HClassAndParam));
+                  return x.data.get_interface(ancestors).map((x) -> (x:HClassAndParam));
                 }
               )
           );
       case false  : ct.prj().interfaces.map((x) -> (x:HClassAndParam));
     }
   }
-  static public function ancestors(c:HClassType):Array<HClassAndParam>{
+  static public function get_ancestors(c:HClassType):Array<HClassAndParam>{
     var out = __.option(c.superClass).map(
       function rec(x:{t:Ref<ClassType>, params:StdArray<StdMacroType>}):Array<HClassAndParam>{
         var next : HClassType = x.t.get();
-        if(c.name == "NotherConfig"){
-          //trace(next);
-        }
         return __.option(next.superClass).map(rec).map(
           (y) -> [(x:HClassAndParam)].concat(y)
         ).defv([(x:HClassAndParam)]);

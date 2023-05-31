@@ -18,8 +18,8 @@ package stx.makro.type;
   public function getIdentity(){
     return Identity._.getTypeIdentity(this);
   }
-  public function getModule(){
-    return _.getModule(this);
+  public function getMoniker(){
+    return _.getMoniker(this);
   }
   public function getBaseType(){
     return _.getBaseType(this);
@@ -70,23 +70,22 @@ class HTypeLift{
       (bt) -> bt.meta.get()
     ).def(()->[]);
   }
-  static public function getTypeVars(type:HType):Array<{id:HTypeParameter,type:HType}>{
-    var implementations    = getParamImplementations(type);
+  static public function getTypeVars(type:HType):Cluster<{id:HSimpleTypeIdentifier,type:HType}>{
+    var implementations    = get_type_applications(type);
     var params             = getBaseType(type).params;
     var fields             = get_fields(type);
     var out                = [];
     for (i in 0...params.length){
       var param = params[i];
-      var p  = HTypeParameter.fromType(param.t);
+      var p     = HSimpleTypeIdentifier.fromType(param.t);
       __.log().trace('$p');
-      var impl = implementations[i];
-      
+      var impl  = implementations[i];
       out.push({
-        id  : p,
-        type : impl
+        id    : p,
+        type  : impl
       });
     }
-    return out;
+    return out.imm();
   }
   static public function get_fields(type:Type):Array<ClassField>{
     return switch(type){
@@ -148,15 +147,15 @@ class HTypeLift{
         });
     }
   }
-  static public function getModule(t:Type):Option<Module>{
+  static public function getMoniker(t:Type):Option<Moniker>{
     return if(is_anonymous(t)){
       None;
     }else{
       var base = getBaseType(t);
-      Some(stx.makro.core.Module.lift({
+      Some(stx.makro.type.core.Moniker.lift({
         name    : base.name,
         pack    : Way.lift(base.pack),
-        module  : None
+        module  : __.option(new haxe.io.Path(base.module))
       }));
     } 
   }
@@ -172,13 +171,36 @@ class HTypeLift{
       default                       : null;
     }
   }
-  static public function getParamImplementations(t:Type):Array<Type>{
+  static public function get_type_applications(t:Type):Array<Type>{
     return switch (t) {
       case TEnum( t , params )      : params;
       case TInst( t , params )      : params;
       case TType( t , params )      : params;
       case TAbstract( t , params )  : params;
       default                       : [];
+    }
+  }
+  // static public function is_direct_type(t:Type){
+    
+  // }
+  static public function get_type_parameters(self:Type):Cluster<HTypeParameter>{
+    return __.option(getBaseType(self)).map(
+      x -> x.params
+    ).defv([]);
+  }
+  #if macro
+  
+  #end
+  static public function get_all_fields(self:Type){
+    return switch(self){
+      case TInst(ref,params) : 
+        final type    = ref.get();
+        final rest    = (type:HClassType);
+        final uppers  = rest.get_ancestors();
+        final fields  = uppers.flat_map(x -> x.data.fields.get());
+        // trace(fields.join("\n"));
+        fields;
+      default                 : [];
     }
   }
 }

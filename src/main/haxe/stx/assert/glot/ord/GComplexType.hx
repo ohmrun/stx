@@ -15,7 +15,7 @@ class GComplexType extends OrdCls<GComplexTypeT>{
         }
         ord;
       case [GTAnonymous(fieldsI),GTAnonymous(fieldsII)]       : 
-        Ord.Cluster(new GField()).comply(fieldsI,fieldsII);
+        Ord.Cluster(new GEField()).comply(fieldsI,fieldsII);
       case [GTParent(tI),GTParent(tII)]                       : 
         comply(tI,tII);
       case [GTExtend(pI,fieldsI) ,GTExtend(pII,fieldsII)]     : 
@@ -25,9 +25,9 @@ class GComplexType extends OrdCls<GComplexTypeT>{
             rset = rset.concat(pII);
         var ord  = lset.less_than(rset);
         if(ord.is_not_less_than()){
-          var lset = RedBlackSet.make(Comparable.Anon(new stx.assert.glot.eq.GField(),new GField()));
+          var lset = RedBlackSet.make(Comparable.Anon(new stx.assert.glot.eq.GEField(),new GEField()));
             lset = lset.concat(fieldsI);
-          var rset = RedBlackSet.make(Comparable.Anon(new stx.assert.glot.eq.GField(),new GField()));
+          var rset = RedBlackSet.make(Comparable.Anon(new stx.assert.glot.eq.GEField(),new GEField()));
             rset = rset.concat(fieldsII);
           ord = lset.less_than(rset);
         }

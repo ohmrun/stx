@@ -20,11 +20,11 @@ class Mod{
           case EParenthesis( e )    :   f(lift(e));
           case EObjectDecl( fields ):   m.unit();//TODO
           case EArrayDecl(values)   :
-            HExprCluster.lift(values).fold(fld,m.unit());
+            HExprArray.lift(values).fold(fld,m.unit());
           case ECall( e , params  ) : 
-            HExprCluster.lift(params).fold(fld,f(lift(e)));
+            HExprArray.lift(params).fold(fld,f(lift(e)));
           case ENew( t , params )   : 
-            HExprCluster.lift(params).fold(fld,m.unit());
+            HExprArray.lift(params).fold(fld,m.unit());
           case EUnop( op , postFix , e ):
             f(lift(e));
           case EVars( vars ):
@@ -32,7 +32,7 @@ class Mod{
           case EFunction( name , f ):
             m.unit();
           case EBlock( exprs ):
-            HExprCluster.lift(exprs).fold(fld,m.unit());
+            HExprArray.lift(exprs).fold(fld,m.unit());
           case EFor( it, expr ):
             m.plus(f(lift(it)),f(lift(expr)));
           case EIf( econd , eif , eelse ):

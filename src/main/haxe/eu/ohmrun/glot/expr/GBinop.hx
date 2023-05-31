@@ -1,5 +1,35 @@
 package eu.ohmrun.glot.expr;
 
+class GBinopCtr extends Clazz{
+  public function Add(){ return GOpAdd;}
+  public function Mult(){ return GOpMult;}
+  public function Div(){ return GOpDiv;}
+  public function Sub(){ return GOpSub;}
+  public function Assign(){ return GOpAssign;}
+  public function Eq(){ return GOpEq;}
+  public function NotEq(){ return GOpNotEq;}
+  public function Gt(){ return GOpGt;}
+  public function Gte(){ return GOpGte;}
+  public function Lt(){ return GOpLt;}
+  public function Lte(){ return GOpLte;}
+  public function And(){ return GOpAnd;}
+  public function Or(){ return GOpOr;}
+  public function Xor(){ return GOpXor;}
+  public function BoolAnd(){ return GOpBoolAnd;}
+  public function BoolOr(){ return GOpBoolOr;}
+  public function Shl(){ return GOpShl;}
+  public function Shr(){ return GOpShr;}
+  public function UShr(){ return GOpUShr;}
+  public function Mod(){ return GOpMod;}
+  public function AssignOp(op:CTR<GBinopCtr,GBinop>){ return GOpAssignOp(op.apply(this));}
+  public function Interval(){ return GOpInterval;}
+  public function Arrow(){ return GOpArrow;}
+  public function In(){ return GOpIn;}
+
+  #if (haxe_ver > 4.205) 
+  public function NullCoal(){ return GOpNullCoal;}
+  #end
+}
 enum GBinopSum{
   GOpAdd;//`+`
   GOpMult;//`*`

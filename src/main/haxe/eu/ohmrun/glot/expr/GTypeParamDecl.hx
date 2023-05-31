@@ -1,16 +1,15 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GTypeParamDeclCtr extends Clazz{
-  static public function unit(){
-    return new GTypeParamDeclCtr();
-  }
   public function Make(name:String,?constraints:CTR<GComplexTypeCtr,Cluster<GComplexType>>,?params:CTR<GTypeParamDeclCtr,Cluster<GTypeParamDecl>>,meta:CTR<GMetadataEntryCtr,GMetadata>,?defaultType:CTR<GComplexTypeCtr,GComplexType>){
     return GTypeParamDecl.make(
       name,
-      __.option(constraints).map(f -> f(GComplexType.__)).defv(null),
-      __.option(params).map(f -> f(GTypeParamDecl.__)).defv(null),   
-      __.option(meta).map(f -> f(GMetadataEntry.__)).defv(null),
-      __.option(defaultType).map(f -> f(GComplexType.__)).defv(null)    
+      __.option(constraints).map(f -> f(Expr.GComplexType)).defv(null),
+      __.option(params).map(f -> f(Expr.GTypeParamDecl)).defv(null),   
+      __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(null),
+      __.option(defaultType).map(f -> f(Expr.GComplexType)).defv(null)    
     );
   }
 }
@@ -23,7 +22,6 @@ typedef GTypeParamDeclDef = {
 }
 @:using(eu.ohmrun.glot.expr.GTypeParamDecl.GTypeParamDeclLift)
 @:forward abstract GTypeParamDecl(GTypeParamDeclDef) from GTypeParamDeclDef to GTypeParamDeclDef{
-  static public var __(default,never) = new GTypeParamDeclCtr();
   public function new(self) this = self;
   @:noUsing static public function lift(self:GTypeParamDeclDef):GTypeParamDecl return new GTypeParamDecl(self);
   @:noUsing static public function make(name:String,?constraints:Cluster<GComplexType>,?params:Cluster<GTypeParamDecl>,?meta,defaultType){

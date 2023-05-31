@@ -1,20 +1,16 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GTypeDefinitionCtr extends Clazz{
-  static public function unit(){
-    return new GTypeDefinitionCtr();
-  }
-  private function lift(self:GTypeDefinitionDef):GTypeDefinition{
-    return GTypeDefinition.lift(self);
-  }
-  public function Make(name,pack,kind:CTR<GTypeDefKindCtr,GTypeDefKind>,fields:CTR<GFieldCtr,Cluster<GField>>,?params:CTR<GTypeParamDeclCtr,Cluster<GTypeParamDecl>>,?meta:CTR<GMetadataEntryCtr,GMetadata>,?isExtern,?doc:Null<String>){
+  public function Make(name,pack,kind:CTR<GTypeDefKindCtr,GTypeDefKind>,fields:CTR<GEFieldCtr,Cluster<GEField>>,?params:CTR<GTypeParamDeclCtr,Cluster<GTypeParamDecl>>,?meta:CTR<GMetadataEntryCtr,GMetadata>,?isExtern,?doc:Null<String>){
     return GTypeDefinition.make(
       name,
       pack,
-      kind(GTypeDefKind.__),
-      fields(GField.__),
-      __.option(params).map(f -> f(GTypeParamDecl.__)).defv([]),
-      __.option(meta).map(f -> f(GMetadataEntry.__)).defv(GMetadata.unit()),
+      kind(Expr.GTypeDefKind),
+      fields(Expr.GEField),
+      __.option(params).map(f -> f(Expr.GTypeParamDecl)).defv([]),
+      __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(GMetadata.unit()),
       isExtern,
       doc
     );
@@ -24,7 +20,7 @@ typedef GTypeDefinitionDef = {
   final name      : String;
 	final pack      : Cluster<String>;
   final kind      : GTypeDefKind;
-	final fields    : Cluster<GField>;
+	final fields    : Cluster<GEField>;
 
 	final ?params   : Cluster<GTypeParamDecl>;
 	final ?meta     : GMetadata;
@@ -33,14 +29,13 @@ typedef GTypeDefinitionDef = {
 }
 @:using(eu.ohmrun.glot.expr.GTypeDefinition.GTypeDefinitionLift)
 @:forward abstract GTypeDefinition(GTypeDefinitionDef) from GTypeDefinitionDef to GTypeDefinitionDef{
-  static public var __(default,never) = new GTypeDefinitionCtr();
   static public var _(default,never) = GTypeDefinitionLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:GTypeDefinitionDef):GTypeDefinition return new GTypeDefinition(self);
   @:noUsing static public function make(name,pack,kind,fields,?params,?meta,?isExtern,?doc){
     return lift({
       name        : name,
-      pack        : Wildcard.__.option(pack).defv([].imm()),
+      pack        : __.option(pack).defv([].imm()),
       kind        : kind,
       fields      : fields,
       params      : params,

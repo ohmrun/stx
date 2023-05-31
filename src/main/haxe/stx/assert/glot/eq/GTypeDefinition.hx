@@ -12,7 +12,7 @@ class GTypeDefinition extends stx.assert.eq.term.Base<GTypeDefinitionT> {
       eq = new GTypeDefKind().comply(lhs.kind,rhs.kind);
     }
     if(eq.is_ok()){
-      eq = Eq.Cluster(new GField()).comply(lhs.fields,rhs.fields);
+      eq = Eq.Cluster(new GEField()).comply(lhs.fields,rhs.fields);
     }
     if(eq.is_ok()){
       eq = Eq.NullOr(Eq.Cluster(new GTypeParamDecl())).comply(lhs.params,rhs.params);

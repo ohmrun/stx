@@ -1,6 +1,21 @@
 package stx.makro.expr;
 
-abstract HAccess(StdAccess) from StdAccess to StdAccess{
+class HAccessCtr extends Clazz{
+	public function Public() 		return HAccess.lift(APublic);
+	public function Private() 	return HAccess.lift(APrivate);
+	public function Static() 		return HAccess.lift(AStatic);
+	public function Override() 	return HAccess.lift(AOverride);
+	public function Dynamic() 	return HAccess.lift(ADynamic);
+	public function Inline() 		return HAccess.lift(AInline);
+	public function Macro() 		return HAccess.lift(AMacro);
+	public function Final() 		return HAccess.lift(AFinal);
+	public function Extern() 		return HAccess.lift(AExtern);
+	public function Abstract() 	return HAccess.lift(AAbstract);
+	public function Overload() 	return HAccess.lift(AOverload);
+}
+typedef HAccessDef = StdAccess;
+
+@:forward abstract HAccess(StdAccess) from StdAccess to StdAccess{
   public function new(self) this = self;
   @:noUsing static public function lift(self:StdAccess):HAccess return new HAccess(self);
 

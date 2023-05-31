@@ -1,5 +1,7 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 enum GExprSum{
   GEConst(c:GConstant);
   GEArray(e1:GExpr, e2:GExpr);
@@ -31,14 +33,11 @@ enum GExprSum{
   GEIs(e:GExpr, t:GComplexType);
 }
 class GExprCtr extends Clazz{
-  static public function unit(){
-    return new GExprCtr(); 
-  } 
-  private function lift(self:GExprSum){
-    return GExpr.lift(self);
+  public inline function Const(c:CTR<GConstantCtr,GConstant>){
+    return Constant(c);
   }
-  public function Const(c:CTR<GConstantCtr,GConstant>){
-    return lift(GEConst(c(GConstant.__)));
+  public function Constant(c:CTR<GConstantCtr,GConstant>){
+    return GExpr.lift(GEConst(c(Expr.GConstant)));
   } 
   public function Path(string:String){
     final parts = string.split(".");
@@ -65,100 +64,99 @@ class GExprCtr extends Clazz{
     );
   }
   public function Array(lhs:CTR<GExprCtr,GExpr>,rhs:CTR<GExprCtr,GExpr>){
-    return lift(GEArray(lhs(this),rhs(this)));
+    return GExpr.lift(GEArray(lhs(this),rhs(this)));
   }
   public function Binop(op,l:CTR<GExprCtr,GExpr>,r:CTR<GExprCtr,GExpr>){
-    return lift(GEBinop(op,l(this),r(this)));
+    return GExpr.lift(GEBinop(op,l(this),r(this)));
   }
   #if (haxe_ver > 4.205)
   public function Field(e:CTR<GExprCtr,GExpr>,field:String,?kind){
-    return lift(GEField(e(this),field,kind));
+    return GExpr.lift(GEField(e(this),field,kind));
   }
   #else
   public function Field(e:CTR<GExprCtr,GExpr>,field:String){
-    return lift(GEField(e(this),field));
+    return GExpr.lift(GEField(e(this),field));
   }
   #end
   public function Parenthesis(e:CTR<GExprCtr,GExpr>){
-    return lift(GEParenthesis(e(this)));
+    return GExpr.lift(GEParenthesis(e(this)));
   }
   public function Parens(e:CTR<GExprCtr,GExpr>){
-    return lift(GEParenthesis(e(this)));
+    return GExpr.lift(GEParenthesis(e(this)));
   }
   public function ObjectDecl(fields:CTR<GObjectFieldCtr,Cluster<GObjectField>>){
-    return lift(GEObjectDecl(fields(GObjectField.__)));
+    return GExpr.lift(GEObjectDecl(fields(Expr.GObjectField)));
   }
   public function ArrayDecl(values:CTR<GExprCtr,Cluster<GExpr>>){
-    return lift(GEArrayDecl(values(this)));
+    return GExpr.lift(GEArrayDecl(values(this)));
   }
   public function Call(e:CTR<GExprCtr,GExpr>,params:CTR<GExprCtr,Cluster<GExpr>>){
-    return lift(GECall(e(this),params(this)));
+    return GExpr.lift(GECall(e(this),params(this)));
   }
   public function Nu(t:CTR<GTypePathCtr,GTypePath>,params:CTR<GExprCtr,Cluster<GExpr>>){
-    return lift(GENew(t(GTypePath.__),params(this)));
+    return GExpr.lift(GENew(t(Expr.GTypePath),params(this)));
   }
   public function Unop(op,postFix,e:CTR<GExprCtr,GExpr>){
-    return lift(GEUnop(op,postFix,e(this)));
+    return GExpr.lift(GEUnop(op,postFix,e(this)));
   }
   public function Vars(vars:CTR<GVarCtr,Cluster<GVar>>){
-    return lift(GEVars(vars(GVar.__)));
+    return GExpr.lift(GEVars(vars(Expr.GVar)));
   }
   public function Function(f:CTR<GFunctionCtr,GFunction>,?kind){
-    return lift(GEFunction(kind,f(GFunction.__)));
+    return GExpr.lift(GEFunction(kind,f(Expr.GFunction)));
   }
   public function Block(exprs:CTR<GExprCtr,Cluster<GExpr>>){
-    return lift(GEBlock(exprs(this)));
+    return GExpr.lift(GEBlock(exprs(this)));
   }
   public function For(it:CTR<GExprCtr,GExpr>,expr:CTR<GExprCtr,GExpr>){
-    return lift(GEFor(it(this),expr(this)));
+    return GExpr.lift(GEFor(it(this),expr(this)));
   }
   public function If(it:CTR<GExprCtr,GExpr>,expr:CTR<GExprCtr,GExpr>,?eelse:CTR<GExprCtr,GExpr>){
-    return lift(GEIf(it(this),expr(this),__.option(eelse).map(f -> f(this)).defv(null)));
+    return GExpr.lift(GEIf(it(this),expr(this),__.option(eelse).map(f -> f(this)).defv(null)));
   }
   public function While(econd:CTR<GExprCtr,GExpr>,expr:CTR<GExprCtr,GExpr>,normalWhile){
-    return lift(GEWhile(econd(this),expr(this),normalWhile));
+    return GExpr.lift(GEWhile(econd(this),expr(this),normalWhile));
   }
   public function Switch(e:CTR<GExprCtr,GExpr>,cases:CTR<GCaseCtr,Cluster<GCase>>,?edef:CTR<GExprCtr,GExpr>){
-    return lift(GESwitch(e(this),cases(GCase.__),__.option(edef).map( f -> f(this)).defv(null)));
+    return GExpr.lift(GESwitch(e(this),cases(Expr.GCase),__.option(edef).map( f -> f(this)).defv(null)));
   }
   public function Try(e:CTR<GExprCtr,GExpr>,catches:CTR<GCatchCtr,Cluster<GCatch>>){
-    return lift(GETry(e(this),catches(GCatch.__)));
+    return GExpr.lift(GETry(e(this),catches(Expr.GCatch)));
   }
   public function Return(?e:CTR<GExprCtr,GExpr>){
-    return lift(GEReturn(__.option(e).map(f -> f(this)).defv(null)));
+    return GExpr.lift(GEReturn(__.option(e).map(f -> f(this)).defv(null)));
   }
   public function Break(){
-    return lift(GEBreak);
+    return GExpr.lift(GEBreak);
   }
   public function Continue(){
-    return lift(GEContinue);
+    return GExpr.lift(GEContinue);
   }
   public function Untyped(e:CTR<GExprCtr,GExpr>){
-    return lift(GEUntyped(e(this)));
+    return GExpr.lift(GEUntyped(e(this)));
   }
   public function Throw(e:CTR<GExprCtr,GExpr>){
-    return lift(GEThrow(e(this)));
+    return GExpr.lift(GEThrow(e(this)));
   }
   public function Cast(e:CTR<GExprCtr,GExpr>,t:CTR<GComplexTypeCtr,GComplexType>){
-    return lift(GECast(e(this),__.option(t).map(f -> f(GComplexType.__)).defv(null)));
+    return GExpr.lift(GECast(e(this),__.option(t).map(f -> f(Expr.GComplexType)).defv(null)));
   }
   public function Ternary(cond:CTR<GExprCtr,GExpr>,eif:CTR<GExprCtr,GExpr>,eelse:CTR<GExprCtr,GExpr>){
-    return lift(GETernary(cond(this),eif(this),eelse(this)));
+    return GExpr.lift(GETernary(cond(this),eif(this),eelse(this)));
   }
   public function CheckType(e:CTR<GExprCtr,GExpr>,t:CTR<GComplexTypeCtr,GComplexType>){
-    return lift(GECheckType(e(this),t(GComplexType.__)));
+    return GExpr.lift(GECheckType(e(this),t(Expr.GComplexType)));
   }
   public function Meta(s:CTR<GMetadataEntryCtr,GMetadataEntry>,e:CTR<GExprCtr,GExpr>){
-    return lift(GEMeta(s(GMetadataEntry.__),e(this)));
+    return GExpr.lift(GEMeta(s(Expr.GMetadataEntry),e(this)));
   }
   public function Is(e:CTR<GExprCtr,GExpr>,t:CTR<GComplexTypeCtr,GComplexType>){
-    return lift(GEIs(e(this),t(GComplexType.__)));
+    return GExpr.lift(GEIs(e(this),t(Expr.GComplexType)));
   }
 }
 @:using(eu.ohmrun.glot.expr.GExpr.GExprLift)
 @:forward abstract GExpr(GExprSum) from GExprSum to GExprSum{
-  static public var __(default,never) = new GExprCtr();
-  public function new(self) this = self;
+    public function new(self) this = self;
   @:noUsing static public function lift(self:GExprSum):GExpr return new GExpr(self);
 
   public function prj():GExprSum return this;
@@ -219,14 +217,14 @@ class GExprLift{
   //   return switch(self){
   //     case GEConst(c)                     : 
   //       e.Call(
-  //         e.Path('eu.ohmrun.glot.expr.GExpr.GExprSum.GEConst'),
+  //         e.Path('eu.ohmrun.glot.expr.Expr.GExprSum.GEConst'),
   //         [
   //           c.spell()
   //         ]
   //       );
   //     case GEArray(e1, e2)                : 
   //       e.Call(
-  //         e.Path('eu.ohmrun.glot.expr.GExpr.GExprSum.GEArray'),
+  //         e.Path('eu.ohmrun.glot.expr.Expr.GExprSum.GEArray'),
   //         [
   //           e1.spell(),
   //           e2.spell()

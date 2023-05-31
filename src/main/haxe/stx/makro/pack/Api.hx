@@ -10,7 +10,7 @@ class Api{
     return stx.makro.HExpr.ref(name,pos);
   }
   public function def(){
-    return new ApiHExprDef();
+    return new ApiHExprdef();
   }
   public function const(){
     return new ApiConst();
@@ -19,27 +19,27 @@ class Api{
     return new ApiLiterals();
   }
 }
-class ApiHExprDef{
+class ApiHExprdef{
   public function new(){}
   private function lift(self){
-    return HExprDef.lift(self);
+    return HExprdef.lift(self);
   }
-  public function econst(v:StdConstant):HExprDef{
+  public function econst(v:StdConstant):HExprdef{
     return lift(EConst(v));
   }
-  public function ecall(self,with):HExprDef{
+  public function ecall(self,with):HExprdef{
     return lift(ECall(self,with));
   }
-  public function eswitch(e,cases,def):HExprDef{
+  public function eswitch(e,cases,def):HExprdef{
     return lift(ESwitch(e,cases,def));
   }
-  public function earraydecl(vals:Array<StdExpr>):HExprDef{
+  public function earraydecl(vals:Array<StdExpr>):HExprdef{
     return lift(EArrayDecl(vals));
   }
-  public function ebinop(op,l,r):HExprDef{
+  public function ebinop(op,l,r):HExprdef{
     return lift(EBinop(op,l,r));
   }
-  public function efield(e,f):HExprDef{
+  public function efield(e,f):HExprdef{
     return lift(EField(e,f));
   }
 }

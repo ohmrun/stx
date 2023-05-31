@@ -40,7 +40,6 @@ import stx.makro.Type;
   import tink.macro.Member;
   
   using stx.makro.Expr;
-  using stx.makro.Def;
   
   import stx.makro.alias.*;
 

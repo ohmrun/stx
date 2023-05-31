@@ -1,20 +1,16 @@
 package eu.ohmrun.glot.expr;
 
+final _Expr = __.glot().Expr;
+
 class GTypeParamCtr extends Clazz{
-  static public function unit(){
-    return new GTypeParamCtr();
-  }
-  private function lift(self:GTypeParamSum){
-    return GTypeParam.lift(self);
-  }
   public function CType(type:CTR<GComplexTypeCtr,GComplexType>){
-    return lift(GTPType(type(GComplexType.__)));
+    return GTypeParam.lift(GTPType(type.apply(_Expr.GComplexType)));
   }
   public function ComplexType(type:CTR<GComplexTypeCtr,GComplexType>){
-    return lift(GTPType(type(GComplexType.__)));
+    return GTypeParam.lift(GTPType(type.apply(_Expr.GComplexType)));
   }
   public function Expr(expr:CTR<GExprCtr,GExpr>){
-    return lift(GTPExpr(expr(GExpr.__)));
+    return GTypeParam.lift(GTPExpr(expr.apply(_Expr.GExpr)));
   }
 }
 enum GTypeParamSum {

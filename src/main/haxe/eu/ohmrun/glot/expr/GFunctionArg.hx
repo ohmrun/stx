@@ -1,19 +1,15 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GFunctionArgCtr extends Clazz{
-  static public function unit(){
-    return new GFunctionArgCtr();
-  }
-  private function lift(self:GFunctionArgDef):GFunctionArg{
-    return GFunctionArg.lift(self);
-  }
   public function Make(name:String,type:CTR<GComplexTypeCtr,GComplexType>,?opt:Bool,?value:CTR<GExprCtr,GExpr>,?meta:CTR<GMetadataEntryCtr,GMetadata>){
-    return lift({
+    return GFunctionArg.lift({
       name  : name,
-      type  : type(GComplexType.__),
+      type  : type(Expr.GComplexType),
       opt   : opt,
-      value : __.option(value).map(f -> f(GExpr.__)).defv(null),
-      meta  : __.option(meta).map(f -> f(GMetadataEntry.__)).defv(null)
+      value : __.option(value).map(f -> f(Expr.GExpr)).defv(null),
+      meta  : __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(null)
     });
   }
 }
@@ -26,11 +22,10 @@ typedef GFunctionArgDef = {
 }
 @:using(eu.ohmrun.glot.expr.GFunctionArg.GFunctionArgLift)
 @:forward abstract GFunctionArg(GFunctionArgDef) from GFunctionArgDef to GFunctionArgDef{
-  static public var __(default,never) = new GFunctionArgCtr();
-  public function new(self) this = self;
+    public function new(self) this = self;
   @:noUsing static public function lift(self:GFunctionArgDef):GFunctionArg return new GFunctionArg(self);
   @:noUsing static public function make(name:String,type:GComplexType,?opt:Bool,?value:GExpr,?meta:GMetadata){
-    return lift({
+    return GFunctionArg.lift({
       name    : name,
       type    : type,
       opt     : opt,
@@ -40,7 +35,7 @@ typedef GFunctionArgDef = {
   }
   public function prj():GFunctionArgDef return this;
   private var self(get,never):GFunctionArg;
-  private function get_self():GFunctionArg return lift(this);
+  private function get_self():GFunctionArg return GFunctionArg.lift(this);
 
   public function toSource():GSource{
 		return Printer.ZERO.printFunctionArg(this);

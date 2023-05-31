@@ -21,6 +21,7 @@ class Map<K,V> extends EqCls<StdMap<K,V>>{
     }
     for(key => val in b){
       if(!a.exists(key)){
+        ok = false;
         break;
       }
     }

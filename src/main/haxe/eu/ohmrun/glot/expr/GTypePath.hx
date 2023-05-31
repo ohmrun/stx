@@ -1,18 +1,14 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GTypePathCtr extends Clazz{
-  static public function unit(){
-    return new GTypePathCtr();
-  }
-  private function lift(self:GTypePathDef):GTypePath{
-    return GTypePath.lift(self);
-  }
   public function Make(name:String,?pack,?sub:String,?params:CTR<GTypeParamCtr,Cluster<GTypeParam>>){
     return GTypePath.make(
       name,
       __.option(pack).defv([].imm()),
       sub,
-      __.option(params).map(f -> f(GTypeParamCtr.unit())).defv(null)
+      __.option(params).map(f -> f(Expr.GTypeParam)).defv(null)
     );
   }
   public function Ident(ident:Ident){
@@ -35,8 +31,7 @@ typedef GTypePathDef = {
 }
 @:using(eu.ohmrun.glot.expr.GTypePath.GTypePathLift)
 @:forward abstract GTypePath(GTypePathDef) from GTypePathDef to GTypePathDef{
-  static public var __(default,never) = new GTypePathCtr();
-  public function new(self) this = self;
+    public function new(self) this = self;
   @:noUsing static public function lift(self:GTypePathDef):GTypePath return new GTypePath(self);
   @:noUsing static public function make(name,?pack,?sub,?params){
     return lift({
@@ -51,13 +46,13 @@ typedef GTypePathDef = {
   private function get_self():GTypePath return lift(this);
 
   @:from static public function fromString(self){
-    return GTypePath.__.fromString(self);
+    return Expr.GTypePath.fromString(self);
   }
   public function toSource():GSource{
 		return Printer.ZERO.printTypePath(this);
 	}
   @:to public function toComplexType(){
-    return Wildcard.__.glot().ctype().Path(this);
+    return Wildcard.__.glot().Expr.GComplexType.Path(this);
   }
   @:to public function toTypeParam(){
     return toComplexType().toTypeParam();

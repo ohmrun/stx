@@ -14,7 +14,7 @@ class MetadataExtractor<C>{
     __.log().trace({ target : target, source : src() });
     var registered  = apply(arr);
         target.makro().getBaseType().meta.add(
-          target.getBaseType().getModule().toString(),
+          target.getBaseType().getMoniker().toString(),
           registered.map(Context.makeHExpr.bind(_,pos())).prj(),
           pos()
         );
@@ -33,7 +33,7 @@ class MetadataExtractor<C>{
     return None;
   }
   function src(){
-    return ':${source.getBaseType().getModule().toString()}';
+    return ':${source.getBaseType().getMoniker().toString()}';
   }
   function registered(type:Type):Bool{
     return type.stx().getBaseType().meta.has(src());
