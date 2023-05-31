@@ -12,19 +12,22 @@ package stx.makro.type;
   }
 }
 class HEnumTypeLift{  
-  @:noUsing static public function getModule(e:HEnumType):Module{
-    return stx.makro.core.Module.lift({
+  @:noUsing static public function getMoniker(e:HEnumType):Moniker{
+    return stx.makro.type.core.Moniker.lift({
       name    : e.name,
       pack    : Way.lift(e.pack),
       module  : new haxe.io.Path(e.module)
     });
   }
-  @:noUsing static public function getConstructors(e:HEnumType):Map<String,HTFunArgCluster>{
+  static public function toBaseType(self:HEnumType):BaseType{
+    return self.prj();
+  }
+  @:noUsing static public function getConstructors(e:HEnumType):Map<String,HTFunArgArray>{
     return e.constructs.toArrayKV().fold(
-      (next,memo:Map<String,HTFunArgCluster>) -> next.into(
+      (next,memo:Map<String,HTFunArgArray>) -> next.into(
         (k,v) -> switch v.type {
           case TFun(args,_) : 
-            memo.set(k,(args:HTFunArgCluster));
+            memo.set(k,(args:HTFunArgArray));
             memo;
           default           : 
             memo.set(k,[]);

@@ -1,13 +1,15 @@
 package stx.makro.expr.type;
 
+final Expr = __.makro().expr;
+
 class EnumType{
-  @:noUsing static public function getSimpleBinaryCases(e0,e1,uses:HTFunArgCluster->HTFunArgCluster->Option<HExpr>,pos){
+  @:noUsing static public function getSimpleBinaryCases(e0,e1,uses:HTFunArgArray->HTFunArgArray->Option<HExpr>,pos){
     function prep(str:String,p:HTFunArg):HTFunArg return  { name : '${str}${p.name}', opt : p.opt, t : p.t };
     
     return getBinaryCases(
       e0,e1,
       function(lc:HEnumValueConstructor,rc:HEnumValueConstructor){
-        var lhs = HExprDef.ECall(
+        var lhs = Expr.HExprdef.Call(
           LiftMethodRefToHExpr.toHExpr(lc.ref,pos),
           lc.args
           .map(prep.bind("l"))
@@ -15,7 +17,7 @@ class EnumType{
             (tfa) -> LiftConstantToHExpr.toHExpr(Constant.CIdent(tfa.name))
           )
         ).to_macro_at(pos);
-        var rhs = HExprDef.ECall(
+        var rhs = Expr.HExprdef.Call(
           LiftHExpr.MethodRef.toHExpr(rc.ref,pos),
           rc.args
           .map(prep.bind("r"))
@@ -34,8 +36,8 @@ class EnumType{
   @:noUsing static public function getBinaryCases(e0,e1,gen:HEnumValueConstructor->HEnumValueConstructor->Array<Case>,pos){
     var lparams = HEnumType._.getConstructors(e0);
     var rparams = HEnumType._.getConstructors(e1);
-    var e0id    = HEnumType._.getModule(e0);
-    var e1id    = HEnumType._.getModule(e1);
+    var e0id    = HEnumType._.getMoniker(e0);
+    var e1id    = HEnumType._.getMoniker(e1);
 
     var consl = lparams.toIter().map(
       (tp) -> HEnumValueConstructor.make(e0,e0id.call(tp.fst()),tp.snd())
@@ -55,36 +57,36 @@ class EnumType{
       ),
       []
     );
-    HExprDef.ESwitch(
-      HExprDef.EArrayDecl([HExpr.mark(pos),HExpr.mark(pos)].imm()).to_macro_at(pos),
+    Expr.HExprdef.Switch(
+      Expr.HExprdef.ArrayDecl([HExpr.mark(pos),HExpr.mark(pos)]).to_macro_at(pos),
       next.prj(),
-      HExpr.unit(pos)
+      HExpr.make(null,pos)
     ).to_macro_at(pos);
   }
   @:noUsing static public function getSwitch(e:HEnumType,gen:Unary<HEnumValueConstructor,Array<Case>>,pos):HExpr{
     var cons  = HEnumType._.getConstructors(e);    
     var cases = cons.toIter().map(Field.fromCouple).map(
-          (c:Field<HTFunArgCluster>) -> HEnumValueConstructor.make(e,HEnumType._.getModule(e).call(c.key),c.val)
+          (c:Field<HTFunArgArray>) -> HEnumValueConstructor.make(e,HEnumType._.getMoniker(e).call(c.key),c.val)
         ).map(gen).fold(
           (next,memo:Array<Case>) ->  memo.concat(next),
           []
         );
-    return HExprDef.ESwitch(
+    return Expr.HExprdef.Switch(
       HExpr.mark(pos),
       cases,
-      HExpr.unit(pos)
+      HExpr.make(null,pos)
     ).to_macro_at(pos);
   }
-  @:noUsing static public function getSimpleSwitch(e:StdEnumType,gen:HTFunArgCluster->Option<HExpr>,pos):HExpr{
+  @:noUsing static public function getSimpleSwitch(e:StdEnumType,gen:HTFunArgArray->Option<HExpr>,pos):HExpr{
     return getSwitch(e,
       function(cons){
-        var args = HExprCluster.lift(cons.args.map(
+        var args = HExprArray.lift(cons.args.map(
           (tfp) -> {
             return LiftConstantToHExpr.toHExpr(Constant.CIdent(tfp.name));
           }
         ));
         trace(cons.ref);
-        var call = HExprDef.ECall(
+        var call = Expr.HExprdef.Call(
           LiftHExpr.MethodRef.toHExpr(cons.ref,pos),
           args
         ).to_macro_at(pos);
@@ -105,7 +107,7 @@ class EnumType{
     );
   }
   /**
-   * Creates a switch for EnumType e, use the names of the HTFunArgCluster to access the variables from HExpr
+   * Creates a switch for EnumType e, use the names of the HTFunArgArray to access the variables from HExpr
    * ref will be the $x in
    *  switch($x)...
    * HExpr will be the $expr in 
@@ -121,18 +123,18 @@ class EnumType{
     var next = [];
     for(key => val in each){
       var case_call_source = val.snd();
-      var case_call : HExprCluster = HExprCluster.lift(case_call_source.map(
-        (v:HTFunArg) -> LiftMakro.toModule(v.name).map(x -> LiftModuleToHExpr.toHExpr(x,pos)).fudge()
+      var case_call : HExprArray = HExprArray.lift(case_call_source.map(
+        (v:HTFunArg) -> LiftMakro.toMoniker(v.name).map(x -> LiftMonikerToHExpr.toHExpr(x,pos)).fudge()
       ));
-      var head  = LiftModuleToHExpr.toHExpr(LiftMakro.toModule(key).fudge(),pos);
-      var value = !case_call.is_defined() ? head : HExprDef.ECall(head,case_call).to_macro_at(pos);
+      var head  = LiftMonikerToHExpr.toHExpr(LiftMakro.toMoniker(key).fudge(),pos);
+      var value = !case_call.is_defined() ? head : Expr.HExprdef.Call(head,case_call).to_macro_at(pos);
       var case_ : Case = {
         expr    : val.fst().toExpr(),
         values  : [value.toExpr()]
       }
       next.push(case_);
     }
-    return (ref) -> HExprDef.ESwitch(
+    return (ref) -> Expr.HExprdef.Switch(
         ref,next,def
       ).to_macro_at(pos);
   }

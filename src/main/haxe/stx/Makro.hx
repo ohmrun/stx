@@ -10,8 +10,10 @@ typedef MakroFailure            = stx.fail.MakroFailure;
 
 
 @:allow(stx.makro)class Makro{
+  static public function makro(self:Wildcard):stx.makro.Module{
+    return new stx.makro.Module();
+  }
   static public var anons(default,null) : AnonsMap = new AnonsMap();
-  static public var printer(default,null):haxe.macro.Printer = new haxe.macro.Printer();
 }
 abstract AnonsMap(StringMap<String>){
   public function new(){
@@ -29,10 +31,10 @@ abstract AnonsMap(StringMap<String>){
   }
 }
 class LiftMakro{
-  static public function toModule(str:String):Option<stx.makro.core.Module>{
+  static public function toMoniker(str:String):Option<stx.makro.type.core.Moniker>{
     var arr             = str.split(".");
     var name : String   = arr.pop();
-    return Some(new stx.makro.core.Module({
+    return Some(new stx.makro.type.core.Moniker({
       name : name,
       pack : Way.lift(arr),
       module : None

@@ -3,7 +3,6 @@ package stx.makro;
 using stx.Nano;
 
 #if macro
-using stx.makro.Logging;
 using StringTools;
 
 
@@ -14,6 +13,7 @@ import haxe.macro.MacroStringTools;
 
 import haxe.macro.Type as StdMacroType;
 #end
+using stx.makro.Logging;  
 /**
  * Any class with metadata starting `stx.makro` will be used in the following way:
  * e.g in `stx.makro.Test.use(__,1)`
@@ -86,6 +86,7 @@ class Plugin{
         for (clazz in __.option(clazz)){
           var value       = std.Type.createInstance(clazz,[]);
           __.log().trace(_ -> _.thunk(() -> '$value'));
+          __.log().trace('$method');
           var method_ref  : haxe.Constraints.Function = std.Reflect.field(value,method);
           __.log().trace(_ -> _.thunk(() -> '$method_ref'));
           Reflect.callMethod(value,method_ref,params);

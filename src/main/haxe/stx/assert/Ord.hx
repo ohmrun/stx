@@ -97,4 +97,7 @@ abstract class OrdCls<T> implements OrdApi<T>{
   @:noUsing static public function Exists():Ord<Dynamic>{
     return new stx.assert.ord.term.Exists();
   }
+  @:noUsing static public function Map<K,V>(k:Ord<K>,v:Ord<V>):Ord<haxe.ds.Map<K,V>>{
+    return new stx.assert.ord.term.Map(k,v);
+  }
 }

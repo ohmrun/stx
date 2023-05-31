@@ -11,7 +11,7 @@ typedef HTFunArgDef = { t : StdMacroType, opt : Bool, name : String };
         HType._.makro(that.t).getIdentity()
       );
   }
-  public function getModule(){
-    return HType.lift(this.t).getModule();
+  public function getMoniker(){
+    return HType.lift(this.t).getMoniker();
   }
 }

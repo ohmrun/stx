@@ -26,7 +26,7 @@ class AtomLift{
     return switch(self){
       case AnSym(s)           : '${s}';
       case B(b)               : Std.string(b);
-      case N(fl)              : Std.string(fl);
+      case N(fl)              : fl.toString();
       case Str(str)           : '$str';
       case Nul                : '';
     }
@@ -43,6 +43,16 @@ class AtomLift{
       case N(KLInt(fl))       : Primate(PSprig(Byteal(NInt(fl))));
       case Str(str)           : Primate(PSprig(Textal(str)));
       case Nul                : Unknown;
+    }
+  }
+  static public function fromPrimitive(self:Primitive){
+    return switch(self){
+      case PSprig(Textal(s))            : AnSym(s);
+      case PBool(b)                     : B(b);
+      case PSprig(Byteal(NFloat(fl)))   : N(KLFloat(fl));
+      case PSprig(Byteal(NInt64(fl)))   : throw "64 bit unhandled here"; Nul;
+      case PSprig(Byteal(NInt(fl)))     : N(KLInt(fl));
+      case PNull                        : Nul;
     }
   }
 }

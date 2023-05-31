@@ -1,7 +1,7 @@
 package stx.makro;
 
 class Context{
-  #if macro
+  #if (neko || eval || display)
   static public inline function here(wildcard:Wildcard){
     return haxe.macro.Context.currentPos();
   }

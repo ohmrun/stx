@@ -1,6 +1,6 @@
 package stx.makro.expr;
 
-abstract HAccessess(Cluster<HAccess>) from Cluster<HAccess> to Cluster<HAccess>{
+@:forward abstract HAccessess(Cluster<HAccess>) from Cluster<HAccess> to Cluster<HAccess>{
   public function new(self) this = self;
   @:noUsing static public function lift(self:Cluster<HAccess>):HAccessess return new HAccessess(self);
 

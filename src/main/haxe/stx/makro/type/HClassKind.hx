@@ -1,7 +1,7 @@
 package stx.makro.type;
 
 @:using(stx.makro.type.HClassKind.HClassKindLift)
-abstract HClassKind(StdClassKind) from StdClassKind to StdClassKind{
+@:forward abstract HClassKind(StdClassKind) from StdClassKind to StdClassKind{
   static public var _(default,never) = HClassKindLift;
   public inline function new(self:StdClassKind) this = self;
   static inline public function lift(self:StdClassKind):HClassKind return new HClassKind(self);

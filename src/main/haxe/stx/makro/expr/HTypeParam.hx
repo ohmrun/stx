@@ -1,6 +1,22 @@
 package stx.makro.expr;
 
-abstract HTypeParam(StdTypeParam) from StdTypeParam to StdTypeParam{
+final _Expr = __.makro().expr;
+
+class HTypeParamCtr extends Clazz{
+  public function CType(type:CTR<HComplexTypeCtr,HComplexType>){
+    return HTypeParam.lift(TPType(type.apply(_Expr.HComplexType)));
+  }
+  public function ComplexType(type:CTR<HComplexTypeCtr,HComplexType>){
+    return HTypeParam.lift(TPType(type.apply(_Expr.HComplexType)));
+  }
+  public function Expr(expr:CTR<HExprCtr,HExpr>){
+    return HTypeParam.lift(TPExpr(expr.apply(_Expr.HExpr).prj()));
+  }
+}
+
+typedef HTypeParamDef = StdTypeParam;
+
+@:forward abstract HTypeParam(StdTypeParam) from StdTypeParam to StdTypeParam{
   public function new(self) this = self;
   @:noUsing static public function lift(self:StdTypeParam):HTypeParam return new HTypeParam(self);
 

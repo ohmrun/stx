@@ -3,6 +3,9 @@ package stx.makro.type;
 @:using(stx.makro.type.HBaseType.HBaseTypeLift)
 @:forward abstract HBaseType(StdBaseType) from StdBaseType to StdBaseType{
   static public var _(default,never) = HBaseTypeLift;
+  static public function lift(self:StdBaseType){
+    return new HBaseType(self);
+  }
   public function new(self){
     this = self;
   }
@@ -11,11 +14,11 @@ class HBaseTypeLift{
   static public function getParamTypes(b:BaseType):Array<Type>{
     return b.params.map((tp)->tp.t);
   }
-  static public function getModule(b:BaseType):Module{
-    return stx.makro.core.Module.lift({
+  static public function getMoniker(b:BaseType):Moniker{
+    return stx.makro.type.core.Moniker.lift({
       name    : b.name,
       pack    : Way.lift(b.pack),
-      module  : None
+      module  : __.option(new haxe.io.Path(b.module))
     });
   }
   static public function hasPack(b:BaseType):Bool{

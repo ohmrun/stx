@@ -1,17 +1,13 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GCatchCtr extends Clazz{
-  static public function unit(){
-    return new GCatchCtr();
-  }
-  private function lift(self:GCatchDef):GCatch{
-    return GCatch.lift(self);
-  }
   public function Make(name:String,expr:CTR<GExprCtr,GExpr>,type:CTR<GComplexTypeCtr,GComplexType>){
     return GCatch.make(
       name,
-      expr(GExpr.__),
-      __.option(type).map(f -> f(GComplexType.__)).defv(null)
+      expr(Expr.GExpr),
+      __.option(type).map(f -> f(Expr.GComplexType)).defv(null)
     );
   }
 }
@@ -23,7 +19,6 @@ typedef GCatchDef = {
 @:using(eu.ohmrun.glot.expr.GCatch.GCatchLift)
 @:forward abstract GCatch(GCatchDef) from GCatchDef to GCatchDef{
   static public var _(default,never) = GCatchLift;
-  static public var __(default,never) = new GCatchCtr();
   public function new(self) this = self;
   @:noUsing static public function lift(self:GCatchDef):GCatch return new GCatch(self);
   @:noUsing static public function make(name:String,expr:GExpr,?type:GComplexType){
@@ -43,7 +38,7 @@ typedef GCatchDef = {
 }
 class GCatchLift{
   #if macro
-  static public function to_macro_at(self:GCatch,pos:Position){
+  static public function to_macro_at(self:GCatch,pos:Position):Catch{
     return {
       name  : self.name,
       expr  : self.expr.to_macro_at(pos),

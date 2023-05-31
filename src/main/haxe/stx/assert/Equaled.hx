@@ -16,6 +16,10 @@ enum abstract EqualedSum(Bool) from Bool{
   public function is_not_equal():Bool{
     return !this;
   }
+  public function are_not_equal():Bool{
+    return !this;
+  }
+  
   @:op(A && B)
   public function and(that:Equaled):Equaled{
     return ((this && that.is_ok()):Equaled);

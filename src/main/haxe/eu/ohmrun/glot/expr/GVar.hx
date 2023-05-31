@@ -1,19 +1,14 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
 
 class GVarCtr extends Clazz{
-	static public function unit(){
-		return new GVarCtr();
-	}
-	private function lift(self:GVarDef):GVar{
-		return GVar.lift(self);
-	}
 	public function Make(name:String,?type:CTR<GComplexTypeCtr,GComplexType>,?expr:CTR<GExprCtr,GExpr>,?meta:CTR<GMetadataEntryCtr,GMetadata>,?isFinal,?isStatic){
 		return GVar.make(
 			name,
-			__.option(type).map(f -> f(GComplexType.__)).defv(null),
-			__.option(expr).map(f -> f(GExpr.__)).defv(null),
-			__.option(meta).map(f -> f(GMetadataEntry.__)).defv(null),
+			__.option(type).map(f -> f(Expr.GComplexType)).defv(null),
+			__.option(expr).map(f -> f(Expr.GExpr)).defv(null),
+			__.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(null),
 			isFinal,
 			isStatic
 		);
@@ -30,8 +25,7 @@ typedef GVarDef = {
 @:using(eu.ohmrun.glot.expr.GVar.GVarLift)
 @:forward abstract GVar(GVarDef) from GVarDef to GVarDef{
 	static public var _(default,never) = GVarLift;
-	static public var __(default,never) = new GVarCtr();
-  public function new(self) this = self;
+	  public function new(self) this = self;
   @:noUsing static public function lift(self:GVarDef):GVar return new GVar(self);
 	@:noUsing static public function make(name:String,?type:GComplexType,?expr,?meta:GMetadata,?isFinal = false,?isStatic = true){
 		return lift({
@@ -53,7 +47,7 @@ typedef GVarDef = {
 }
 class GVarLift{
 	#if macro
-	static public function to_macro_at(self:GVar,pos:Position){
+	static public function to_macro_at(self:GVar,pos:Position):Var{
 		return {
 			name 				: self.name,
 			type 				: __.option(self.type).map(x -> x.to_macro_at(pos)).defv(null),

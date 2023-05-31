@@ -21,7 +21,7 @@ class Equals{
               m.empty();
             case TEnum(t, params):
             var t   = t.get();
-            var idt = type.getModule();
+            var idt = type.getMoniker();
 
             var map = m.empty();
                 map.set(idt,null);
@@ -29,7 +29,7 @@ class Equals{
 
             for (key => val in t.constructs){
               var ts : Type = val.type;
-              var idts      = ts.getModule();
+              var idts      = ts.getMoniker();
               if(!map.exists(idts)){
                 map = ftc(rec)(m,ts);
               }
@@ -66,4 +66,4 @@ class EqualBuilds{
     }
   }
 }
-typedef EqualBuild = haxe.ds.ObjectMap<Module,TypeDefinition>;
+typedef EqualBuild = haxe.ds.ObjectMap<Moniker,TypeDefinition>;

@@ -196,4 +196,13 @@ class EqTagCtr{
   static public function StringMap<T>(tag:TAG,inner:Eq<T>):Eq<haxe.ds.StringMap<T>>{
     return new stx.assert.eq.term.StringMap(inner);
   }
+  /**
+   * `haxe.Map` instance of `stx.assert.Eq`
+   * @param key 
+   * @param val 
+   * @return Eq<haxe.Map<K,V>>
+   */
+  static public function Map<K,V>(tag:TAG,val:Eq<V>):Eq<haxe.ds.Map<K,V>>{
+    return new stx.assert.eq.term.Map(val);
+  }
 }

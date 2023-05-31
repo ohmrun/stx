@@ -1,14 +1,10 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GCaseCtr extends Clazz{
-  static public function unit(){
-    return new GCaseCtr();
-  }
-  private function lift(self:GCaseDef):GCase{
-    return GCase.lift(self);
-  }
   public function Make(values:CTR<GExprCtr,Cluster<GExpr>>,?guard:CTR<GExprCtr,GExpr>,?expr:CTR<GExprCtr,GExpr>){
-    final ctr = GExprCtr.unit();
+    final ctr = Expr.GExpr;
     return GCase.make(
       values(ctr),
       __.option(guard).map(f -> f(ctr)).defv(null),
@@ -23,7 +19,6 @@ typedef GCaseDef = {
 }
 @:using(eu.ohmrun.glot.expr.GCase.GCaseLift)
 @:forward abstract GCase(GCaseDef) from GCaseDef to GCaseDef{
-  static public var __(default,never) = new GCaseCtr();
   public function new(self) this = self;
   @:noUsing static public function lift(self:GCaseDef):GCase return new GCase(self);
   @:noUsing static public function make(values:Cluster<GExpr>,?guard:GExpr,?expr:GExpr){
@@ -43,7 +38,7 @@ typedef GCaseDef = {
 }
 class GCaseLift{
   #if macro
-  static public function to_macro_at(self:GCase,pos:Position){
+  static public function to_macro_at(self:GCase,pos:Position):Case{
     return @:privateAccess {
       values  : __.option(self.values).map(x -> x.map(y -> y.to_macro_at(pos)).prj()).defv([]),
       guard   : __.option(self.guard).map(x -> x.to_macro_at(pos)).defv(null),

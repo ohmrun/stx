@@ -1,41 +1,37 @@
 package eu.ohmrun.glot.expr;
 
+final Expr = __.glot().Expr;
+
 class GTypeDefKindCtr extends Clazz{
-  static public function unit(){
-    return new GTypeDefKindCtr();
-  }
-  private function lift(self:GTypeDefKindSum):GTypeDefKind{
-    return GTypeDefKind.lift(self);
-  }
   public function Enum(){
-    return lift(GTDEnum);
+    return GTypeDefKind.lift(GTDEnum);
   }
   public function Structure(){
-    return lift(GTDStructure);
+    return GTypeDefKind.lift(GTDStructure);
   }
   public function Class(?superClass : CTR<GTypePathCtr,GTypePath>, ?interfaces : CTR<GTypePathCtr,Cluster<GTypePath>>, ?isInterface, ?isFinal, ?isAbstract ){
-    return lift(GTDClass(
-      __.option(superClass).map(f -> f(GTypePath.__)).defv(null),
-      __.option(interfaces).map(f -> f(GTypePath.__)).defv(null),
+    return GTypeDefKind.lift(GTDClass(
+      __.option(superClass).map(f -> f(Expr.GTypePath)).defv(null),
+      __.option(interfaces).map(f -> f(Expr.GTypePath)).defv(null),
       isInterface,
       isFinal,
       isAbstract
     ));
   }
   public function Alias(t:CTR<GComplexTypeCtr,GComplexType>){
-    return lift(GTDAlias(t(GComplexType.__)));
+    return GTypeDefKind.lift(GTDAlias(t(Expr.GComplexType)));
   }
   public function Abstract(tthis:CTR<GComplexTypeCtr,GComplexType>,?from:CTR<GComplexTypeCtr,Cluster<GComplexType>>,?to:CTR<GComplexTypeCtr,Cluster<GComplexType>>){
-    return lift(GTDAbstract(
-      __.option(tthis).map(f -> f(GComplexType.__)).defv(null),
-      __.option(from).map(f -> f(GComplexType.__)).defv(null),
-      __.option(to).map(f -> f(GComplexType.__)).defv(null)
+    return GTypeDefKind.lift(GTDAbstract(
+      __.option(tthis).map(f -> f(Expr.GComplexType)).defv(null),
+      __.option(from).map(f -> f(Expr.GComplexType)).defv(null),
+      __.option(to).map(f -> f(Expr.GComplexType)).defv(null)
     ));
   }
   public function Field(kind:CTR<GFieldTypeCtr,GFieldType>,access:CTR<GAccessCtr,Cluster<GAccess>>){
-    return lift(GTDField(
-      kind(GFieldType.__),
-      access(GAccess.__)
+    return GTypeDefKind.lift(GTDField(
+      kind(Expr.GFieldType),
+      access(Expr.GAccess)
     ));
   }
 }
@@ -49,8 +45,7 @@ enum GTypeDefKindSum {
 }
 @:using(eu.ohmrun.glot.expr.GTypeDefKind.GTypeDefKindLift)
 abstract GTypeDefKind(GTypeDefKindSum) from GTypeDefKindSum to GTypeDefKindSum{
-  static public var __(default,never) = new GTypeDefKindCtr();
-  public function new(self) this = self;
+    public function new(self) this = self;
   @:noUsing static public function lift(self:GTypeDefKindSum):GTypeDefKind return new GTypeDefKind(self);
 
   public function prj():GTypeDefKindSum return this;

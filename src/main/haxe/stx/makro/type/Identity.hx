@@ -5,7 +5,7 @@ enum IdentitySum {
 	TLambda(args:Array<Field<Identity>>,ret:Identity);
 	TAnon(arr:Array<Field<Identity>>);
 	TParametrised(t:Identity, params:Array<Identity>);
-	TIdentity(ident:Module);
+	TIdentity(ident:Moniker);
 	TComposed(first:Identity, other:Identity);
 }
 
@@ -44,7 +44,7 @@ class IdentityLift{
 				var ags = rst.map(f).join("_");
 				'${f(id)}_$ags';
 			case TIdentity(id):
-				stx.makro.core.Module._.toName(id);
+				stx.makro.type.core.Moniker._.toName(id);
 			case TComposed(first,other):
 				'${f(first)}_${f(other)}';
 				
@@ -69,7 +69,7 @@ class IdentityLift{
 			case TParametrised(t, params):
 				'${toString(t)}<${params.map(toString).join(',')}>';
 			case TIdentity(ident):
-				stx.makro.core.Module._.toString(ident);
+				stx.makro.type.core.Moniker._.canonical(ident);
 			case TComposed(first, other):
 				'${toString(first)}${toString(other)}';
 		}
@@ -88,28 +88,28 @@ class IdentityLift{
 		var f = getTypeIdentity;
 		return switch(type){
 			case TInst(t,[]):
-				type.getModule().map(TIdentity).defv(TAwkward);	
+				type.getMoniker().map(TIdentity).defv(TAwkward);	
 			case TInst(t, arr):
-				type.getModule().map(
+				type.getMoniker().map(
 					TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
 				).defv(TAwkward);
 			case TAbstract(t, []):
 				var abs = t.get();
 				if (type == abs.type) {
-					type.getModule().map(TIdentity).defv(TAwkward);
+					type.getMoniker().map(TIdentity).defv(TAwkward);
 				} else {
-					type.getModule().map(
+					type.getMoniker().map(
 						TIdentity.fn().then(TComposed.bind(_,f(abs.type))).prj()
 					).defv(TAwkward);
 				}
 			case TAbstract(t, arr):
 				var abs = t.get();
 				if (type == abs.type) {
-					type.getModule().map(
+					type.getMoniker().map(
 						TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
 					).defv(TAwkward);
 				} else {
-					type.getModule().map(
+					type.getMoniker().map(
 						TIdentity.fn().then(
 							TComposed.bind(_,f(abs.type))
 						).then(
@@ -118,9 +118,9 @@ class IdentityLift{
 					).defv(TAwkward);
 				}
 			case TEnum(t, []):
-				type.getModule().map(TIdentity).defv(TAwkward);
+				type.getMoniker().map(TIdentity).defv(TAwkward);
 			case TEnum(t, arr):
-				type.getModule().map(
+				type.getMoniker().map(
 					TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
 				).defv(TAwkward);
 			case TFun(args, ret):
@@ -151,9 +151,9 @@ class IdentityLift{
 					case a: f(a);
 				}
 			case TType(t, []):
-				type.getModule().map(TIdentity).defv(TAwkward);
+				type.getMoniker().map(TIdentity).defv(TAwkward);
 			case TType(t, arr):
-				type.getModule().map(
+				type.getMoniker().map(
 					TIdentity.fn().then(TParametrised.bind(_,arr.map(f)))
 				).defv(TAwkward);
 		}
@@ -167,9 +167,9 @@ class IdentityLift{
 	// 						return ftc(rec)(__.couple(m, t));
 	// 					return switch (type) {
 	// 						case TInst(t, []):
-	// 							type.getModule().map(TIdentity).defv(TAwkward);
+	// 							type.getMoniker().map(TIdentity).defv(TAwkward);
 	// 						case TInst(t, arr):
-	// 							type.getModule().map(
+	// 							type.getMoniker().map(
 	// 								TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
 	// 							).defv(TAwkward);
 	// 						case TAbstract(t, []):
@@ -177,9 +177,9 @@ class IdentityLift{
 	// 							var abs = t.get();
 	// 							var sigr = Context.signature(abs.type);
 	// 							if (sigl == sigr) {
-	// 								type.getModule().map(TIdentity).defv(TAwkward);
+	// 								type.getMoniker().map(TIdentity).defv(TAwkward);
 	// 							} else {
-	// 								type.getModule().map(
+	// 								type.getMoniker().map(
 	// 									TIdentity.fn().then(TComposed.bind(_,f(abs.type))).prj()
 	// 								).defv(TAwkward);
 	// 							}
@@ -188,11 +188,11 @@ class IdentityLift{
 	// 							var abs = t.get();
 	// 							var sigr = Context.signature(abs.type);
 	// 							if (sigl == sigr) {
-	// 								type.getModule().map(
+	// 								type.getMoniker().map(
 	// 									TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
 	// 								).defv(TAwkward);
 	// 							} else {
-	// 								type.getModule().map(
+	// 								type.getMoniker().map(
 	// 									TIdentity.fn().then(
 	// 										TComposed.bind(_,f(abs.type))
 	// 									).then(
@@ -201,9 +201,9 @@ class IdentityLift{
 	// 								).defv(TAwkward);
 	// 							}
 	// 						case TEnum(t, []):
-	// 							type.getModule().map(TIdentity).defv(TAwkward);
+	// 							type.getMoniker().map(TIdentity).defv(TAwkward);
 	// 						case TEnum(t, arr):
-	// 							type.getModule().map(
+	// 							type.getMoniker().map(
 	// 								TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
 	// 							).defv(TAwkward);
 	// 						case TFun(args, ret):
@@ -241,9 +241,9 @@ class IdentityLift{
 	// 								case a: f(a);
 	// 							}
 	// 						case TType(t, []):
-	// 							type.getModule().map(TIdentity).defv(TAwkward);
+	// 							type.getMoniker().map(TIdentity).defv(TAwkward);
 	// 						case TType(t, arr):
-	// 							type.getModule().map(
+	// 							type.getMoniker().map(
 	// 								TIdentity.fn().then(TParametrised.bind(_,arr.map(f)))
 	// 							).defv(TAwkward);
 	// 					}
@@ -257,7 +257,7 @@ class IdentityLift{
   // }
 
 
-	static public function getModuleIdentity(t:ModuleType):Identity{
-		return TIdentity(HBaseType._.getModule(HModuleType._.getBaseType(t)));
+	static public function getMonikerIdentity(t:ModuleType):Identity{
+		return TIdentity(HBaseType._.getMoniker(HModuleType._.getBaseType(t)));
   }
 }

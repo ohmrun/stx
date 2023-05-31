@@ -14,7 +14,7 @@ class GComplexType extends stx.assert.eq.term.Base<GComplexTypeT> {
         }
         eq;
       case [GTAnonymous(fieldsI),GTAnonymous(fieldsII)]       : 
-        Eq.Cluster(new GField()).comply(fieldsI,fieldsII);
+        Eq.Cluster(new GEField()).comply(fieldsI,fieldsII);
       case [GTParent(tI),GTParent(tII)]                       : 
         comply(tI,tII);
       case [GTExtend(pI,fieldsI) ,GTExtend(pII,fieldsII)]     : 
@@ -24,9 +24,9 @@ class GComplexType extends stx.assert.eq.term.Base<GComplexTypeT> {
             rset = rset.concat(pII);
         var eq   = lset.equals(rset);
         if(eq.is_ok()){
-          var lset = RedBlackSet.make(Comparable.Anon(new GField(),new stx.assert.glot.ord.GField()));
+          var lset = RedBlackSet.make(Comparable.Anon(new GEField(),new stx.assert.glot.ord.GEField()));
             lset = lset.concat(fieldsI);
-          var rset = RedBlackSet.make(Comparable.Anon(new GField(),new stx.assert.glot.ord.GField()));
+          var rset = RedBlackSet.make(Comparable.Anon(new GEField(),new stx.assert.glot.ord.GEField()));
             rset = rset.concat(fieldsII);
           eq = lset.equals(rset);
         }

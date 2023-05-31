@@ -79,4 +79,7 @@ class OrdTagCtr{
   static public inline function Tup2<L,R>(tag:TAG,l:Ord<L>,r:Ord<R>):Ord<Tup2<L,R>>{
     return new stx.assert.ord.term.Tup2(l,r);
   }
+  static public function Map<K,V>(tag:TAG,k:Ord<K>,v:Ord<V>):Ord<haxe.ds.Map<K,V>>{
+    return new stx.assert.ord.term.Map(k,v);
+  }
 }

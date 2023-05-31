@@ -118,5 +118,8 @@ class EqCtr extends Clazz{
   @:noUsing static public function StringMap<T>(inner:Eq<T>):Eq<haxe.ds.StringMap<T>>{
     return new stx.assert.eq.term.StringMap(inner);
   }
+  @:noUsing static public function Map<K,V>(val:Eq<V>):Eq<haxe.ds.Map<K,V>>{
+    return new stx.assert.eq.term.Map(val);
+  }
 }
 

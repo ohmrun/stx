@@ -1,5 +1,13 @@
 package eu.ohmrun.glot.expr;
 
+class GUnopCtr extends Clazz{
+  public function Increment() return GUnop.lift(GOpIncrement);
+  public function Decrement() return GUnop.lift(GOpDecrement);
+  public function Not()       return GUnop.lift(GOpNot);
+  public function Neg()       return GUnop.lift(GOpNeg);
+  public function NegBits()   return GUnop.lift(GOpNegBits);
+  public function Spread()    return GUnop.lift(GOpSpread);
+}
 enum GUnopSum{
   GOpIncrement;//`++`
   GOpDecrement;//`--`

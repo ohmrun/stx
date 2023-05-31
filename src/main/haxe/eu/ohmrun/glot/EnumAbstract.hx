@@ -20,7 +20,7 @@ class EnumAbstract{
     );
     __.log().debug(_ -> _.pure(abstract_ident));
 
-    final abstract_declaration = __.glot().type().Make(
+    final abstract_declaration = __.glot().Expr.GTypeDefinition.Make(
       abstract_ident.name,
       abstract_ident.pack,
       tkind -> tkind.Abstract(
@@ -48,7 +48,7 @@ class EnumAbstract{
     );
     __.log().debug(_ -> _.pure(abstract_declaration));
 
-  //   final clazz_declaration = __.glot().type().Make(
+  //   final clazz_declaration = __.glot().TypeDefinition.Make(
   //     clazz_ident.name,
   //     clazz_ident.pack,
   //     tkind -> tkind.Class(null,null,null,true,true),

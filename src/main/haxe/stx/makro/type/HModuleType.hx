@@ -6,7 +6,7 @@ package stx.makro.type;
   public function new(self) this = self;
   
   public function getIdentity(){
-    return Identity._.getModuleIdentity(this);
+    return Identity._.getMonikerIdentity(this);
   }
 }
 class HModuleTypeLift{

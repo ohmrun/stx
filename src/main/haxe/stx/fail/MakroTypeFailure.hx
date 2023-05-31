@@ -8,6 +8,10 @@ enum MakroTypeFailureSum{
   E_MakroType_UnexpectedTFun;
   E_MakroType_DynamicUnsupported;
   E_MakroType_UnexpectedLazy;
+  /**
+   * If I can't nudge the compiler into resolving a monomorph.
+   */
+  E_MakroType_UnresolvedMonomorph;
 }
 abstract MakroTypeFailure(MakroTypeFailureSum) from MakroTypeFailureSum to MakroTypeFailureSum{
   public function new(self) this = self;

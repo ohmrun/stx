@@ -178,7 +178,7 @@
        case GAOverload: "overload";
      }
  
-   public function printField(field:GField) {
+   public function printField(field:GEField) {
      inline function orderAccess(access: Cluster<GAccess>) {
        // final should always be printed last
        // (does not modify input array)
@@ -311,14 +311,14 @@
      return el.map(printExpr).join(sep);
    }
  
-   function printExtension(tpl:Cluster<GTypePath>, fields:Cluster<GField>) {
+   function printExtension(tpl:Cluster<GTypePath>, fields:Cluster<GEField>) {
      return '{\n$tabs>'
        + tpl.map(printTypePath).join(',\n$tabs>')
        + ","
        + (fields.length > 0 ? ('\n$tabs' + fields.map(printField).join(';\n$tabs') + ";\n}") : ("\n}"));
    }
  
-   function printStructure(fields:Cluster<GField>) {
+   function printStructure(fields:Cluster<GEField>) {
      return fields.length == 0 ? "{ }" : '{\n$tabs' + fields.map(printField).join(';\n$tabs') + ";\n}";
    }
  
@@ -423,7 +423,7 @@
      return str;
    }
  
-   function printFieldWithDelimiter(f:GField):String {
+   function printFieldWithDelimiter(f:GEField):String {
      return printField(f) + @:privateAccess switch (f.kind) {
        case GFVar(_, _), GFProp(_, _, _, _): ";";
        case GFFun({expr: null}): ";";

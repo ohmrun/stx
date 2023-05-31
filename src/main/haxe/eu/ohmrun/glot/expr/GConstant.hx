@@ -1,26 +1,20 @@
 package eu.ohmrun.glot.expr;
 
 class GConstantCtr extends Clazz{
-  static public function unit(){
-    return new GConstantCtr();
-  }
-  private function lift(self:GConstantSum):GConstant{
-    return GConstant.lift(self);
-  }
   public function Int(v:String,?s:String){
-    return lift(GCInt(v,s));
+    return GConstant.lift(GCInt(v,s));
   }
   public function Float(v:String,?s:String){
-    return lift(GCFloat(v,s));
+    return GConstant.lift(GCFloat(v,s));
   }
   public function String(v:String,?s:GStringLiteralKind){
-    return lift(GCString(v,s));
+    return GConstant.lift(GCString(v,s));
   }
   public function Ident(v:String){
-    return lift(GCIdent(v));
+    return GConstant.lift(GCIdent(v));
   }
   public function Regexp(v:String,opt:String){
-    return lift(GCRegexp(v,opt));
+    return GConstant.lift(GCRegexp(v,opt));
   }
 }
 enum GConstantSum{
@@ -32,24 +26,33 @@ enum GConstantSum{
 }
 @:using(eu.ohmrun.glot.expr.GConstant.GConstantLift)
 abstract GConstant(GConstantSum) from GConstantSum to GConstantSum{
-  static public var __(default,never) = new GConstantCtr();
-  public function new(self) this = self;
+    public function new(self) this = self;
   @:noUsing static public function lift(self:GConstantSum):GConstant return new GConstant(self);
 
   public function prj():GConstantSum return this;
   private var self(get,never):GConstant;
-  private function get_self():GConstant return lift(this);
+  private function get_self():GConstant return GConstant.lift(this);
 
 
   public function toSource():GSource{
 		return Printer.ZERO.printConstant(this);
 	}
   public function toGExpr(){
-    return Wildcard.__.glot().expr().Const(_ -> this);
+    return Wildcard.__.glot().Expr.GExpr.Constant(this);
+  }
+  public function canonical():String{
+    return switch(this){
+      case GCInt(v,_)       : v;
+	    case GCFloat(f,_)     : f;
+	    case GCString(s,_)    : s;
+	    case GCIdent(s)       : s;
+	    case GCRegexp(r, opt) : '~/$r/$opt';
+    }
   }
 }
 class GConstantLift{
   #if macro
+
   static public function to_macro_at(self:GConstant,pos:Position){
     return switch(self){
       #if (haxe_ver > 4.205) 
@@ -66,7 +69,7 @@ class GConstantLift{
   }
   #end
   static public function toGComplexType(self:GConstant){
-    final c = __.glot().ctype();
+    final c = __.glot().Expr.GComplexType;
     return switch(self){
       case GCInt(v, s)       : c.string('std.Int');       
       case GCFloat(f, s)     : c.string('std.Float');

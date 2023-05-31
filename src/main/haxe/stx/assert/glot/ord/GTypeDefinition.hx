@@ -13,7 +13,7 @@ class GTypeDefinition extends OrdCls<GTypeDefinitionT> {
       ord = new GTypeDefKind().comply(lhs.kind,rhs.kind);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.Cluster(new GField()).comply(lhs.fields,rhs.fields);
+      ord = Ord.Cluster(new GEField()).comply(lhs.fields,rhs.fields);
     }
     if(ord.is_not_less_than()){
       ord = Ord.NullOr(Ord.Cluster(new GTypeParamDecl())).comply(lhs.params,rhs.params);
