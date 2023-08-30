@@ -1,0 +1,9 @@
+package eu.ohmrun.glot.expr.spell;
+
+final __expr = __.glot().expr();
+
+class GAccess{
+  static public function spell(self:GAccess){
+
+  }
+}

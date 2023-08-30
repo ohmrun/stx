@@ -4,7 +4,7 @@ final Expr = __.makro().expr;
 
 class HExprCtr extends Clazz{
   public function Make(def:CTR<HExprdefCtr,HExprdef>,?pos:Position){
-    return def.apply(new HExprdefCtr());
+    return HExpr.make(def.apply(new HExprdefCtr()),pos);
   }
 }
 

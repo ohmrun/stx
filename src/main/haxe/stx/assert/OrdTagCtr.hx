@@ -82,4 +82,13 @@ class OrdTagCtr{
   static public function Map<K,V>(tag:TAG,k:Ord<K>,v:Ord<V>):Ord<haxe.ds.Map<K,V>>{
     return new stx.assert.ord.term.Map(k,v);
   }
+  /**
+   * `nano.OneOrMany` instance of `stx.assert.Ord`
+   * @param key 
+   * @param val 
+   * @return Eq<haxe.Map<K,V>>
+  */
+  static public function OneOrMany<T>(tag:TAG,val:Ord<T>):Ord<stx.nano.OneOrMany<T>>{
+    return new stx.assert.ord.term.OneOrMany(val);
+  }
 }

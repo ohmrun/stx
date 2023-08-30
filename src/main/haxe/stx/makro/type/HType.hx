@@ -34,8 +34,8 @@ package stx.makro.type;
     }
   }
   #end
-  public var fields(get,never):Array<ClassField>;
-  public function get_fields():Array<ClassField>{
+  public var fields(get,never):HClassFieldCluster;
+  public function get_fields():HClassFieldCluster{
     return _.get_fields(this);
   }
   public function prj(){
@@ -71,7 +71,7 @@ class HTypeLift{
     ).def(()->[]);
   }
   static public function getTypeVars(type:HType):Cluster<{id:HSimpleTypeIdentifier,type:HType}>{
-    var implementations    = get_type_applications(type);
+    var implementations    = get_params_applied(type);
     var params             = getBaseType(type).params;
     var fields             = get_fields(type);
     var out                = [];
@@ -171,7 +171,7 @@ class HTypeLift{
       default                       : null;
     }
   }
-  static public function get_type_applications(t:Type):Array<Type>{
+  static public function get_params_applied(t:Type):Array<Type>{
     return switch (t) {
       case TEnum( t , params )      : params;
       case TInst( t , params )      : params;
@@ -183,13 +183,26 @@ class HTypeLift{
   // static public function is_direct_type(t:Type){
     
   // }
-  static public function get_type_parameters(self:Type):Cluster<HTypeParameter>{
+  static public function get_params(self:Type):Cluster<HTypeParameter>{
     return __.option(getBaseType(self)).map(
       x -> x.params
     ).defv([]);
   }
   #if macro
-  
+  static public function materialize(self:Type){
+    final app     = haxe.macro.TypeTools.applyTypeParameters;
+    final cparams = get_params(self);
+
+    // return switch(self){
+    //   case TEnum( t , params )      : 
+    //   case TInst( t , params )      : params;
+    //   case TType( t , params )      : params;
+    //   case TAbstract( t , params )  : params;     
+    // }
+  }
+  static public function canonical(self:HType){
+    return tink.macro.Types.toString(self.toComplexType());
+  }
   #end
   static public function get_all_fields(self:Type){
     return switch(self){
@@ -202,5 +215,8 @@ class HTypeLift{
         fields;
       default                 : [];
     }
+  }
+  static public function get_construtor(){
+    
   }
 }

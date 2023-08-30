@@ -1,10 +1,54 @@
 package stx.makro.type;
 
+final __type = __.makro().type;
+final __expr = __.makro().expr;
+
+class HBaseTypeCtr extends Clazz{
+  public function Make(
+    pack,
+    name,
+    module,
+    isPrivate,
+    isExtern,
+    params:CTR<HTypeParameterCtr,Cluster<HTypeParameter>>,
+    meta:CTR<HMetaAccessCtr,HMetaAccess>,
+    doc,
+    exclude,
+    pos:CTR<stx.makro.expr.HPosition.HPositionCtr,stx.makro.expr.HPosition>
+  ){
+    return HBaseType.make(
+      pack,
+      name,
+      module,
+      isPrivate,
+      isExtern,
+      params.apply(__type.HTypeParameter).prj(),
+      meta.apply(__type.HMetaAccess).prj(),
+      doc,
+      exclude,
+      pos.apply(__expr.HPosition)
+    );
+  }
+}
 @:using(stx.makro.type.HBaseType.HBaseTypeLift)
 @:forward abstract HBaseType(StdBaseType) from StdBaseType to StdBaseType{
   static public var _(default,never) = HBaseTypeLift;
-  static public function lift(self:StdBaseType){
+  @:noUsing static public function lift(self:StdBaseType){
     return new HBaseType(self);
+  }
+  @:noUsing static public function make(pack,name,module,isPrivate,isExtern,params,meta,doc,exclude,pos){
+    return lift({
+      pack : pack,
+      name : name,
+      module : module,
+      pos : pos,
+      isPrivate : isPrivate,
+      isExtern : isExtern,
+      params : params,
+      meta : meta,
+      doc : doc,
+      exclude : exclude,
+    });
   }
   public function new(self){
     this = self;

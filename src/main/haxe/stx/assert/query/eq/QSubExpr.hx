@@ -16,24 +16,18 @@ class QSubExpr<T> extends EqCls<TQSubExpr<T>>{
       case [QSBinop(oI,lI),QSBinop(oII,lII)] :
         var eq = new stx.assert.query.eq.QBinop().comply(oI,oII);
         if(eq.is_ok()){
-          eq = comply(lI,lII);
+          eq = inner.comply(lI,lII);
         }
         eq;
-      case [QSOf(keyI,restI),QSOf(keyII,restII)] : 
-        var eq = Eq.String().comply(keyI,keyII);
-        if(eq.is_ok()){
-          eq = expr_eq.comply(restI,restII);
-        }
-        eq;
-      case [QSIn(filterI,exprI,sub_exprsI),QSIn(filterII,exprII,sub_exprsII)] : 
-        var eq = new stx.assert.query.eq.QFilter().comply(filterI,filterII);
-        if(eq.is_ok()){
-          eq = new stx.assert.query.eq.QSubExpr(inner).comply(exprI,exprII);
-        }
-        if(eq.is_ok()){
-          eq = new stx.assert.query.eq.QSubExpr(inner).comply(sub_exprsI,sub_exprsII);
-        }
-        eq;
+      // case [QSIn(filterI,exprI,sub_exprsI),QSIn(filterII,exprII,sub_exprsII)] : 
+      //   var eq = new stx.assert.query.eq.QFilter().comply(filterI,filterII);
+      //   if(eq.is_ok()){
+      //     eq = new stx.assert.query.eq.QSubExpr(inner).comply(exprI,exprII);
+      //   }
+      //   if(eq.is_ok()){
+      //     eq = new stx.assert.query.eq.QSubExpr(inner).comply(sub_exprsI,sub_exprsII);
+      //   }
+      //   eq;
       case [QSUnop(opI),QSUnop(opII)]        :
         new stx.assert.query.eq.QUnop().comply(opI,opII);
       default : Eq.EnumValueIndex().comply(lhs,rhs);

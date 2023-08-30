@@ -205,4 +205,13 @@ class EqTagCtr{
   static public function Map<K,V>(tag:TAG,val:Eq<V>):Eq<haxe.ds.Map<K,V>>{
     return new stx.assert.eq.term.Map(val);
   }
+  /**
+   * `nano.OneOrMany` instance of `stx.assert.Eq`
+   * @param key 
+   * @param val 
+   * @return Eq<haxe.Map<K,V>>
+   */
+   static public function OneOrMany<T>(tag:TAG,val:Eq<T>):Eq<stx.nano.OneOrMany<T>>{
+    return new stx.assert.eq.term.OneOrMany(val);
+  }
 }

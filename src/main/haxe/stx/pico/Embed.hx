@@ -1,4 +1,4 @@
-package stx.nano;
+package stx.pico;
 
 typedef EmbedDef<T> = {
   public function pack(v:T):Void->Void;

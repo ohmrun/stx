@@ -108,6 +108,38 @@ enum GBinopSum{
     }
   } 
   #end
+  static public function canonical(self:GBinop){
+    return switch(self){
+      case GOpAdd             : '+';
+      case GOpMult            : '*';
+      case GOpDiv             : '/';
+      case GOpSub             : '-';
+      case GOpAssign          : '=';
+      case GOpEq              : '==';
+      case GOpNotEq           : '!=';
+      case GOpGt              : '>';
+      case GOpGte             : '>=';
+      case GOpLt              : '<';
+      case GOpLte             : '<=';
+      case GOpAnd             : '&';
+      case GOpOr              : '|';
+      case GOpXor             : '^';
+      case GOpBoolAnd         : '&&';
+      case GOpBoolOr          : '||';
+      case GOpShl             : '<<';
+      case GOpShr             : '>>';
+      case GOpUShr            : '>>>';
+      case GOpMod             : '%';
+      case GOpAssignOp(op)    : canonical(op) + "=";
+      case GOpInterval        : '...';
+      case GOpArrow           : '=>';
+      case GOpIn              : 'in';
+    
+      #if (haxe_ver > 4.205) 
+      case GOpNullCoal        : '??';
+      #end
+    }
+  }
   // static public function spell(self:GBinop){
   //   final e = __.glot().expr();
   //   switch(self){

@@ -1,5 +1,5 @@
 package eu.ohmrun.halva;
 
-class Module extends Clazz{
+class Module extends stx.pico.Clazz{
   
 }

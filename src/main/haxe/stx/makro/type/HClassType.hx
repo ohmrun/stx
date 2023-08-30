@@ -1,5 +1,8 @@
 package stx.makro.type;
 
+class HClassTypeCtr extends Clazz{
+
+}
 @:using(stx.makro.type.HClassType.HClassTypeLift)
 @:forward abstract HClassType(ClassType) from ClassType to ClassType{
   static public var _(default,never) = HClassTypeLift;

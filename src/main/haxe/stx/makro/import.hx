@@ -33,8 +33,8 @@ using stx.Log;
 import stx.makro.alias.*;
 
 using stx.makro.Core;
-import stx.Makro;
-import stx.makro.Type;
+using stx.Makro;
+using stx.makro.Type;
 
 #if macro
   import tink.macro.Member;

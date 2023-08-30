@@ -36,7 +36,9 @@ class PosLift{
     #end
   }
 }
+#if tink_core
 @:dox(hide) @:noCompletion typedef Future<T>                      = tink.core.Future<T>;
+#end
 @:dox(hide) @:noCompletion typedef Nada                           = stx.pico.Nada;
 @:dox(hide) @:noCompletion typedef StdArray<T>                    = std.Array<T>;
 @:dox(hide) @:noCompletion typedef StdString                      = std.String;
@@ -54,6 +56,7 @@ class PosLift{
 
 @:dox(hide) @:noCompletion typedef EitherSum<Ti,Tii>              = stx.pico.Either.EitherSum<Ti,Tii>;
 @:dox(hide) @:noCompletion typedef Either<Ti,Tii>                 = stx.pico.Either<Ti,Tii>;
+@:dox(hide) @:noCompletion typedef EitherLift                     = stx.pico.Either.EitherLift;
 
 @:dox(hide) @:noCompletion typedef OutcomeSum<T,E>                = stx.pico.Outcome.OutcomeSum<T,E>;
 @:dox(hide) @:noCompletion typedef Outcome<T,E>                   = stx.pico.Outcome<T,E>;
@@ -81,6 +84,9 @@ class PosLift{
 @:dox(hide) @:noCompletion typedef Reply<R>                       = stx.pico.Reply<R>;
 @:dox(hide) @:noCompletion typedef ReplyCls<R>                    = stx.pico.Reply.ReplyCls<R>;
 @:dox(hide) @:noCompletion typedef ReplyApi<R>                    = stx.pico.Reply.ReplyApi<R>;
+
+typedef Embed<T>                = stx.pico.Embed<T>;
+
 
 @:dox(hide) @:noCompletion typedef ArrayLift                      = stx.lift.ArrayLift;
 @:dox(hide) @:noCompletion typedef IteratorLift                   = stx.lift.IteratorLift;

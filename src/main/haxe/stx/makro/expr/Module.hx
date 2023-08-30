@@ -1,6 +1,10 @@
 package stx.makro.expr;
 
 class Module extends Clazz{
+  @:isVar public var type(get,null):stx.makro.expr.type.Module;
+  private function get_type():stx.makro.expr.type.Module{
+    return __.option(this.type).def(() -> this.type = new stx.makro.expr.type.Module());
+  }
   @:isVar public var HExpr(get,null):HExprCtr;
   private function get_HExpr():HExprCtr{
     return __.option(this.HExpr).def(() -> this.HExpr = new HExprCtr());
