@@ -3,7 +3,12 @@ package stx.makro.expr;
 final Expr = __.makro().expr;
 
 class HTypeParamDeclCtr extends Clazz{
-  public function Make(name:String,?constraints:CTR<HComplexTypeCtr,Array<HComplexType>>,?params:CTR<HTypeParamDeclCtr,Array<HTypeParamDecl>>,meta:CTR<HMetadataEntryCtr,HMetadata>,?defaultType:CTR<HComplexTypeCtr,HComplexType>){
+  public function Make(
+    name:String,
+    ?constraints:Null<CTR<HComplexTypeCtr,Array<HComplexType>>>,
+    ?params:Null<CTR<HTypeParamDeclCtr,Array<HTypeParamDecl>>>,
+    ?meta:Null<CTR<HMetadataEntryCtr,HMetadata>>,
+    ?defaultType:Null<CTR<HComplexTypeCtr,HComplexType>>){
     return HTypeParamDecl.make(
       name,
       __.option(constraints).map(f -> f(Expr.HComplexType)).defv(null),

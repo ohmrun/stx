@@ -525,3 +525,8 @@ class LiftVarToGlot{
 	}
   #end
 }
+class PmlGlotMod{
+  static public function glot(self:eu.ohmrun.pml.Module):eu.ohmrun.pml.term.glot.Module{
+    return new eu.ohmrun.pml.term.glot.Module();
+  }
+}

@@ -19,24 +19,18 @@ class QSubExpr<T> extends OrdCls<TQSubExpr<T>>{
       case [QSBinop(oI,lI),QSBinop(oII,lII)] :
         var ord = new stx.assert.query.ord.QBinop().comply(oI,oII);
         if(ord.is_not_less_than()){
-          ord = comply(lI,lII);
+          ord = inner.comply(lI,lII);
         }
         ord;
-      case [QSOf(keyI,restI),QSOf(keyII,restII)]  : 
-        var ord = Ord.String().comply(keyI,keyII);
-        if(ord.is_ok()){
-          ord = expr_ord.comply(restI,restII);
-        }
-        ord;
-      case [QSIn(filterI,exprI,sub_exprsI),QSIn(filterII,exprII,sub_exprsII)] : 
-        var ord = new stx.assert.query.ord.QFilter().comply(filterI,filterII);
-        if(ord.is_not_less_than()){
-          ord = comply(exprI,exprII);
-        }
-        if(ord.is_not_less_than()){
-          ord = new stx.assert.query.ord.QSubExpr(inner).comply(sub_exprsI,sub_exprsII);
-        }
-        ord;
+      // case [QSIn(filterI,exprI,sub_exprsI),QSIn(filterII,exprII,sub_exprsII)] : 
+      //   var ord = new stx.assert.query.ord.QFilter().comply(filterI,filterII);
+      //   if(ord.is_not_less_than()){
+      //     ord = comply(exprI,exprII);
+      //   }
+      //   if(ord.is_not_less_than()){
+      //     ord = new stx.assert.query.ord.QSubExpr(inner).comply(sub_exprsI,sub_exprsII);
+      //   }
+      //   ord;
       case [QSUnop(opI),QSUnop(opII)]        :
         var ord = new stx.assert.query.ord.QUnop().comply(opI,opII);
         ord;

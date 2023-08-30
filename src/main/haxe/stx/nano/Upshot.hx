@@ -208,4 +208,22 @@ class UpshotLift{
       case null         : Tap; 
     }
   }
+  @:stx.effect
+  static public function value<T,E>(self:UpshotSum<T,E>):T{
+    return fold(
+     self,
+      (ok) -> ok,
+      (no) -> { no.crack(); return null;}
+    );
+  }
+  static public function embed<T,E,EE>(self:Upshot<T,E>,embed:Embed<E>):Upshot<T,EE>{
+    return self.errata(
+      e -> e.embed(embed)
+    );
+  }
+  static public function disembed<T,E,EE>(self:Upshot<T,E>,embed:Embed<EE>):Upshot<T,EE>{
+    return self.errata(
+      e -> e.disembed(embed)
+    );
+  }
 }

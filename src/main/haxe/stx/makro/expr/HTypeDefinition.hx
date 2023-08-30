@@ -28,9 +28,6 @@ typedef HTypeDefinitionDef = StdTypeDefinition;
     @:optional var meta     : Metadata;
     @:optional var doc      : Null<String>;
     
-    
-    
-    
     var pos                 : Position;
   	
   }

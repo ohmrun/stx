@@ -12,9 +12,9 @@ class GObjectFieldCtr extends Clazz{
   }
 }
 typedef GObjectFieldDef = {
-	var field:String;
-	var expr:GExpr;
-	var ?quotes:GQuoteStatus;
+	var field   : String;
+	var expr    : GExpr;
+	var ?quotes : GQuoteStatus;
 }
 @:using(eu.ohmrun.glot.expr.GObjectField.GObjectFieldLift)
 @:forward abstract GObjectField(GObjectFieldDef) from GObjectFieldDef to GObjectFieldDef{

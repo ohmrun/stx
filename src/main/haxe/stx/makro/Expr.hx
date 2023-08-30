@@ -159,6 +159,10 @@ class LiftEBlock {
 }  
 class LiftHTypeToComplexType{
   #if macro
+  /**
+   * This is as confusing as hell
+   * @param self 
+   */
   static public function toComplexType(self:HType){
     return tink.macro.Types.toComplex(self.prj());
   }

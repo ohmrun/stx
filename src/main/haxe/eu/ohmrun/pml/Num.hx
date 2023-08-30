@@ -1,8 +1,8 @@
 package eu.ohmrun.pml;
 
 enum NumSum{
-  KLFloat(fl:Float);
-  KLInt(int:Int);
+  NInt(int:Int);
+  NFloat(fl:Float);
 }
 
 @:using(eu.ohmrun.pml.Num.NumLift)
@@ -17,8 +17,8 @@ abstract Num(NumSum) from NumSum to NumSum{
 
   public function toString(){
     return switch(this){
-      case KLFloat(fl) : '$fl';
-      case KLInt(int)  : '$int';
+      case NFloat(fl) : '$fl';
+      case NInt(int)  : '$int';
     }
   }
 }

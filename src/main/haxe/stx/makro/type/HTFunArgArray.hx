@@ -1,5 +1,8 @@
 package stx.makro.type;
 
+class HTFunArgArrayCtr extends Clazz{
+
+}
 @:forward abstract HTFunArgArray(Array<HTFunArg>) from Array<HTFunArg>{
   @:noUsing static public function lift(self:Array<HTFunArg>){
     return new HTFunArgArray(self);

@@ -17,7 +17,9 @@ using stx.Fail;
 using stx.Nano;
 using stx.Fn;
 using stx.Assert;
-using stx.Log;
 
+#if(stx_test)
+using stx.Log;
+#end
 
 import stx.nano.Couple in StdCouple;

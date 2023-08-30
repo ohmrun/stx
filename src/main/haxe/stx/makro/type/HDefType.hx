@@ -1,5 +1,8 @@
 package stx.makro.type;
 
+class HDefTypeCtr extends Clazz{
+
+}
 @:using(stx.makro.type.HDefType.HDefTypeLift)
 @:forward abstract HDefType(DefType) from DefType to DefType{
   static public var _(default,never) = HDefTypeLift;

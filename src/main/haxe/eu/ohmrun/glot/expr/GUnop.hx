@@ -30,6 +30,16 @@ abstract GUnop(GUnopSum) from GUnopSum to GUnopSum{
 	}
 }
 class GUnopLift{
+  static public function canonical(self:GUnop):String{
+    return switch(self){
+      case GOpIncrement         : '++';
+      case GOpDecrement         : '--';
+      case GOpNot               : '!';
+      case GOpNeg               : '-';
+      case GOpNegBits           : '~';
+      case GOpSpread            : '...';
+    }
+  }
   #if macro
   static public function to_macro_at(self:GUnop,pos:Position):Unop{
     return switch(self){

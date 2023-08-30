@@ -2,7 +2,7 @@ package stx.makro.expr.type;
 
 final Expr = __.makro().expr;
 
-class EnumType{
+class EnumType extends Clazz{
   @:noUsing static public function getSimpleBinaryCases(e0,e1,uses:HTFunArgArray->HTFunArgArray->Option<HExpr>,pos){
     function prep(str:String,p:HTFunArg):HTFunArg return  { name : '${str}${p.name}', opt : p.opt, t : p.t };
     

@@ -8,8 +8,8 @@ class HFieldTypeCtr extends Clazz{
   public function FVar( t : Null<stx.makro.expr.HComplexType>, ?e : Null<stx.makro.expr.HExpr> ){
     return HFieldType.lift(StdFieldType.FVar(__.option(t).map((t:stx.makro.expr.HComplexType) -> t.prj()).defv(null),__.option(e).map(e -> e.prj()).defv(null)));
   }
-	public function FFun( f : stx.makro.expr.HFunction ){
-    return HFieldType.lift(StdFieldType.FFun(f.prj()));
+	public function FFun( f : CTR<HFunctionCtr,stx.makro.expr.HFunction> ){
+    return HFieldType.lift(StdFieldType.FFun(f.apply(Expr.HFunction).prj()));
   }
 	public function FProp( ?get : CTR<HPropAccessCtr,HPropAccess>, ?set : CTR<HPropAccessCtr,HPropAccess>, ?t : Null<stx.makro.expr.HComplexType>, ?e : Null<stx.makro.expr.HExpr> ){
     return HFieldType.lift(

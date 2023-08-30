@@ -41,16 +41,16 @@ class FromGlot extends Clazz{
           Upshot.bind_fold(
             args,
             (next,memo:Array<GlotSpine>) -> {
-              trace(next);
-              // return switch(next){
-              //   case 
-              // }
               return apply(next).map(memo.snoc);
             },
             []
           )
-        ).map((cp) -> Predate(tuple2(cp.fst(),cp.snd())));
-      default                       : __.reject(f -> f.of(E_OM('can\'t decode ${new eu.ohmrun.glot.Printer().printExpr(self)} $self')));
+        ).map(
+          (cp) -> Predate(tuple2(cp.fst(),cp.snd()))
+        );
+      default                       : __.reject(
+        f -> f.of(E_OM('can\'t decode ${new eu.ohmrun.glot.Printer().printExpr(self)} $self'))
+      );
 
     }
   }

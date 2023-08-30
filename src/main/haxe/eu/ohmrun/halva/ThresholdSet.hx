@@ -1,6 +1,6 @@
 package eu.ohmrun.halva;
 
-typedef ThresholdSet<T> = RedBlackSet<LVar<T>>;
+typedef ThresholdSet<T> = stx.ds.RedBlackSet<LVar<T>>;
 
 class ThresholdSets{
   static public function pure<T>(comparable:Comparable<T>){
