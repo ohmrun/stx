@@ -5,13 +5,13 @@ final __expr = __.makro().expr;
 
 class HEnumFieldCtr extends Clazz{
   public function Make(
-    name:String,
-    index:Int,
-    type:CTR<HTypeCtr,HType>,
-    params:CTR<HTypeParameterCtr,Cluster<HTypeParameter>>,
-    doc:Null<String>,
-    meta:CTR<HMetaAccessCtr,HMetaAccess>,
-    pos:CTR<stx.makro.expr.HPosition.HPositionCtr,stx.makro.expr.HPosition>
+    name      : String,
+    index     : Int,
+    type      : CTR<HTypeCtr,HType>,
+    params    : CTR<HTypeParameterCtr,Cluster<HTypeParameter>>,
+    doc       : Null<String>,
+    meta      : CTR<HMetaAccessCtr,HMetaAccess>,
+    pos       : CTR<stx.makro.expr.HPosition.HPositionCtr,stx.makro.expr.HPosition>
   ){
     return HEnumField.make(
       name,
@@ -48,4 +48,16 @@ class HEnumFieldLift{
   static public inline function lift(self:haxe.macro.Type.EnumField):HEnumField{
     return HEnumField.lift(self);
   }
+  // static public function getAnonType(self:HEnumField){
+  //   final fields = Iter.fromIterator(self.constructs.iterator()).toCluster().map(
+  //     f -> {
+  //       final type = switch(f.type){
+  //         case FFun(args,ret)
+  //       }
+  //       return HClassField.make(
+
+  //       )
+  //     }
+  //   );
+  // }
 }

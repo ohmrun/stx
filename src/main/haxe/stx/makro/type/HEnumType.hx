@@ -41,18 +41,18 @@ class HEnumTypeCtr extends Clazz{
   @:noUsing static public function lift(self:StdEnumType) return new HEnumType(self);
   @:noUsing static public function make(pack,name,module,names,constructs,isPrivate,isExtern,params,meta,doc,exclude,pos){
     return lift({
-      pack : pack,
-      name : name,
-      module : module,
-      names : names,
-      constructs : constructs,
-      pos : pos,
-      isPrivate : isPrivate,
-      isExtern : isExtern,
-      params : params,
-      meta : meta,
-      doc : doc,
-      exclude : exclude,
+      pack        : pack,
+      name        : name,
+      module      : module,
+      names       : names,
+      constructs  : constructs,
+      pos         : pos,
+      isPrivate   : isPrivate,
+      isExtern    : isExtern,
+      params      : params,
+      meta        : meta,
+      doc         : doc,
+      exclude     : exclude,
     });
   }
   static public var _(default,never) = HEnumTypeLift;
@@ -64,12 +64,8 @@ class HEnumTypeCtr extends Clazz{
   }
 }
 class HEnumTypeLift{  
-  @:noUsing static public function getMoniker(e:HEnumType):Moniker{
-    return stx.makro.type.core.Moniker.lift({
-      name    : e.name,
-      pack    : Way.lift(e.pack),
-      module  : new haxe.io.Path(e.module)
-    });
+  static public function getMoniker(e:HEnumType):Moniker{
+    return (e.prj():HBaseType).getMoniker();
   }
   static public function toBaseType(self:HEnumType):BaseType{
     return self.prj();

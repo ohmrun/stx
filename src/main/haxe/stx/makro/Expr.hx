@@ -163,8 +163,14 @@ class LiftHTypeToComplexType{
    * This is as confusing as hell
    * @param self 
    */
+  static public function toComplexTypeTink(self:HType,opts){
+    return tink.macro.Types.toComplex(self.prj(),opts);
+  }
   static public function toComplexType(self:HType){
-    return tink.macro.Types.toComplex(self.prj());
+    return haxe.macro.TypeTools.toComplexType(self.prj());
+  }
+  static public function toComplexTypeRuntime(self:HType){
+    return stx.makro.type.ToComplexTypeRuntime.apply(self);
   }
   #end
 }
@@ -187,6 +193,6 @@ class LiftHTFunArgArrayWithMethodCallToExpr{
 }
 class LiftTypeGetMetadata{
   static public function get_meta(self:HType):Cluster<HMetadataEntry>{
-    return __.option(self.getBaseType()).map(x -> x.meta.get()).defv([]);
+    return self.getBaseType().map(x -> x.meta.get()).defv([]);
   }
 }

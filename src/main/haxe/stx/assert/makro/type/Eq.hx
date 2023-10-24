@@ -65,7 +65,7 @@ class Eq extends Clazz{
     return __.option(this.HClassKind).def(() -> this.HClassKind = new HClassKind());
   }
   public function HRef<T>(inner:stx.assert.Eq<T>):stx.assert.Eq<stx.makro.type.HRef<T>>{
-    return HRef(inner);
+    return new stx.assert.makro.type.eq.HRef(inner);
   }
   @:isVar public var HDefType(get,null):HDefType;
   private function get_HDefType():HDefType{

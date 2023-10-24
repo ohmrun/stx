@@ -29,7 +29,7 @@ class OrdTagCtr{
   static public inline function Float(tag:TAG):Ord<StdFloat>{
     return new Float();
   }
-  static public inline function String(tag:TAG):Ord<StdString>{
+  static public inline function String(tag:TAG):Ord<std.String>{
     return new String();
   }
   static public inline function Couple<L,R>(tag:TAG, l,r):Ord<stx.nano.Couple<L,R>>{

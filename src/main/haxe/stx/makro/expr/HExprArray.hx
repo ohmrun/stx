@@ -16,4 +16,8 @@ typedef HExprArrayDef = Array<HExpr>;
   public function prj():HExprArrayDef return this;
   private var self(get,never):HExprArray;
   private function get_self():HExprArray return lift(this);
+
+  @:from static public function fromCluster(self:Cluster<HExpr>){
+    return lift(self.prj());
+  }
 }

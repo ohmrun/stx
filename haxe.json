@@ -1,6 +1,6 @@
 {
   "build" : {
-    "-lib" : ["stx"],
+    "-lib" : ["stx","queues-core"],
     "unit" : {
       "--times" : true,
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],

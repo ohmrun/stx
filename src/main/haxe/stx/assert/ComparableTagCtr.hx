@@ -30,9 +30,9 @@ class ComparableTagCtr{
   /**
    * `std.String` instance of `stx.assert.Comparable`
    * @param tag 
-   * @return Comparable<StdString>
+   * @return Comparable<std.String>
    */
-  static public function String(tag:TAG):Comparable<StdString>{
+  static public function String(tag:TAG):Comparable<std.String>{
     return new String();
   }
   /**

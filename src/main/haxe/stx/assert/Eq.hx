@@ -51,6 +51,9 @@ class EqCtr extends Clazz{
   @:noUsing static public inline function lift<T>(self:EqApi<T>){
     return new Eq(self);
   }
+  @:from static public function fromAnon<T>(fn : (lhs : T, rhs : T) -> stx.assert.Equaled):Eq<T>{
+    return Anon(fn);
+  }
   public function toAssertion(?pos:Pos):Assertion<T,AssertFailure>{
     return new EqAssertion(this,pos);
   } 
@@ -60,7 +63,7 @@ class EqCtr extends Clazz{
   @:noUsing static public function Int64():Eq<haxe.Int64>{
     return new Int64();
   }
-  @:noUsing static public function String():Eq<StdString>{
+  @:noUsing static public function String():Eq<std.String>{
     return new String();
   }
   @:noUsing static public function Couple<L,R>(l:Eq<L>,r:Eq<R>):Eq<StdCouple<L,R>>{

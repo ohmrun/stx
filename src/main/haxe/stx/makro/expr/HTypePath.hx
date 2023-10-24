@@ -3,10 +3,10 @@ package stx.makro.expr;
 final Expr = __.makro().expr;
 
 class HTypePathCtr extends Clazz{
-  public function Make(name:String,?pack,?sub:String,?params:CTR<HTypeParamCtr,Array<HTypeParam>>){
+  public function Make(name:String,?pack:Cluster<String>,?sub:String,?params:CTR<HTypeParamCtr,Array<HTypeParam>>){
     return HTypePath.make(
       name,
-      __.option(pack).defv([]),
+      __.option(pack.prj()).defv([]),
       __.option(params).map(f -> f(Expr.HTypeParam)).defv(null),
       sub
     );

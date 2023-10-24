@@ -44,7 +44,7 @@ class IdentityLift{
 				var ags = rst.map(f).join("_");
 				'${f(id)}_$ags';
 			case TIdentity(id):
-				stx.makro.type.core.Moniker._.toName(id);
+				stx.makro.type.core.Moniker._.to_name(id);
 			case TComposed(first,other):
 				'${f(first)}_${f(other)}';
 				
@@ -86,7 +86,7 @@ class IdentityLift{
 	}
 	static public function getTypeIdentity(type:HType):Identity{
 		var f = getTypeIdentity;
-		return switch(type){
+		final base = switch(type){
 			case TInst(t,[]):
 				type.getMoniker().map(TIdentity).defv(TAwkward);	
 			case TInst(t, arr):
@@ -157,105 +157,9 @@ class IdentityLift{
 					TIdentity.fn().then(TParametrised.bind(_,arr.map(f)))
 				).defv(TAwkward);
 		}
+		//final rest = self.g
+		return base;
 	}
-  // static public function getTypeIdentity(t:Type):Identity{
-  //   function rec(ftc:Y<Couple<Monoid<Identity>, Type>, Identity>):Couple<Monoid<Identity>,Type>->Identity {
-	// 		return function(tp:Couple<Monoid<Identity>,Type>):Identity {
-	// 			return tp.decouple(
-	// 				(m:Monoid<Identity>, type:Type) -> {
-	// 					function f(t:Type):Identity
-	// 						return ftc(rec)(__.couple(m, t));
-	// 					return switch (type) {
-	// 						case TInst(t, []):
-	// 							type.getMoniker().map(TIdentity).defv(TAwkward);
-	// 						case TInst(t, arr):
-	// 							type.getMoniker().map(
-	// 								TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
-	// 							).defv(TAwkward);
-	// 						case TAbstract(t, []):
-	// 							var sigl = Context.signature(type);
-	// 							var abs = t.get();
-	// 							var sigr = Context.signature(abs.type);
-	// 							if (sigl == sigr) {
-	// 								type.getMoniker().map(TIdentity).defv(TAwkward);
-	// 							} else {
-	// 								type.getMoniker().map(
-	// 									TIdentity.fn().then(TComposed.bind(_,f(abs.type))).prj()
-	// 								).defv(TAwkward);
-	// 							}
-	// 						case TAbstract(t, arr):
-	// 							var sigl = Context.signature(type);
-	// 							var abs = t.get();
-	// 							var sigr = Context.signature(abs.type);
-	// 							if (sigl == sigr) {
-	// 								type.getMoniker().map(
-	// 									TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
-	// 								).defv(TAwkward);
-	// 							} else {
-	// 								type.getMoniker().map(
-	// 									TIdentity.fn().then(
-	// 										TComposed.bind(_,f(abs.type))
-	// 									).then(
-	// 										TParametrised.bind(_,arr.map(f))
-	// 									).prj()
-	// 								).defv(TAwkward);
-	// 							}
-	// 						case TEnum(t, []):
-	// 							type.getMoniker().map(TIdentity).defv(TAwkward);
-	// 						case TEnum(t, arr):
-	// 							type.getMoniker().map(
-	// 								TIdentity.fn().then(TParametrised.bind(_,arr.map(f))).prj()
-	// 							).defv(TAwkward);
-	// 						case TFun(args, ret):
-	// 							var arr : Array<Field<Identity>> = 
-	// 								args
-	// 								.map(
-	// 									function (arg):Field<Identity>{
-	// 										return Field.create(arg.name,f(arg.t));
-	// 									}
-	// 								);
-	// 							TLambda(
-	// 								arr, 
-	// 								f(ret)
-	// 							);
-	// 						case TAnonymous(t):
-	// 							var o = t.get();
-	// 							TAnon(o.fields.map((cf) -> __.couple(cf.name, f(cf.type)).toField() ));
-	// 						case TDynamic(null):
-	// 							f(type.follow());
-	// 						case TDynamic(v):
-	// 							f(v);
-	// 						case TLazy(fn):
-	// 							f(fn());
-	// 						case TMono(t):
-	// 							switch (t.get()) {
-	// 								case null:
-	// 									var next = type.follow();
-	// 									var lsig = Context.signature(type);
-	// 									var rsig = Context.signature(next);
-	// 									if(lsig == rsig){
-	// 										m.unit();
-	// 									}else{
-	// 										f(next);
-	// 									}
-	// 								case a: f(a);
-	// 							}
-	// 						case TType(t, []):
-	// 							type.getMoniker().map(TIdentity).defv(TAwkward);
-	// 						case TType(t, arr):
-	// 							type.getMoniker().map(
-	// 								TIdentity.fn().then(TParametrised.bind(_,arr.map(f)))
-	// 							).defv(TAwkward);
-	// 					}
-	// 				}
-	// 			);
-	// 		}
-	// 	};
-	// 	var nxt = rec(rec);
-	// 	var out = nxt(__.couple(Identity._.monoid(), t));
-  //   return out;
-  // }
-
 
 	static public function getMonikerIdentity(t:ModuleType):Identity{
 		return TIdentity(HBaseType._.getMoniker(HModuleType._.getBaseType(t)));

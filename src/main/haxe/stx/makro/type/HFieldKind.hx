@@ -14,4 +14,16 @@ class HFieldKindLift{
   static public inline function lift(self:StdFieldKind):HFieldKind{
     return HFieldKind.lift(self);
   }
+  static public function is_method(self:HFieldKind){
+    return switch(self){
+      case FVar(read, write)  : false;
+	    case FMethod(k)         : true;
+    }
+  }
+  static public function is_var(self:HFieldKind){
+    return switch(self){
+      case FVar(read, write)  : true;
+	    case FMethod(k)         : false;
+    }
+  }
 }

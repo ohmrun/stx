@@ -31,6 +31,12 @@ class HTypeParameterLift{
   static public inline function lift(self:haxe.macro.Type.TypeParameter):HTypeParameter{
     return HTypeParameter.lift(self);
   }
+  // static public function toTypeParamDecl_with(self:HTypeParameter,complex_type:HType->HComplexType){
+  //   return __.makro().type.HTypeParamDecl.Make(
+  //     self.name,
+  //     ct -> complex_type(self)
+  //   );
+  // }
 }
 
 /*

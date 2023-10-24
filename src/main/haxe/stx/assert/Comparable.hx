@@ -30,7 +30,7 @@ abstract class ComparableCls<P> implements ComparableApi<P>{
   @:noUsing static public function Int():Comparable<StdInt>{
     return new Int();
   }
-  @:noUsing static public function String():Comparable<StdString>{
+  @:noUsing static public function String():Comparable<std.String>{
     return new String();
   }
   @:noUsing static public function Couple<L,R>(l,r):Comparable<StdCouple<L,R>>{

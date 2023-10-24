@@ -6,6 +6,6 @@ using stx.Pkg;
 
 class Logging{
   static public function log(wildcard:Wildcard){
-    return stx.Log.pkg(__.pkg());
+    return stx.Log.pkg(__.pkg(),"stx/makro");
   }
 }

@@ -5,13 +5,18 @@ final Expr = __.makro().expr;
  * Constructor Class for HFieldType;
  */
 class HFieldTypeCtr extends Clazz{
-  public function FVar( t : Null<stx.makro.expr.HComplexType>, ?e : Null<stx.makro.expr.HExpr> ){
+  public function FVar( t : Null<CTR<HComplexTypeCtr,stx.makro.expr.HComplexType>>, ?e : Null<CTR<HExprCtr,stx.makro.expr.HExpr>> ){
+    final t = __.option(t).map(x -> x.apply(Expr.HComplexType)).defv(null);
+    final e = __.option(e).map(x -> x.apply(Expr.HExpr)).defv(null);
+
     return HFieldType.lift(StdFieldType.FVar(__.option(t).map((t:stx.makro.expr.HComplexType) -> t.prj()).defv(null),__.option(e).map(e -> e.prj()).defv(null)));
   }
 	public function FFun( f : CTR<HFunctionCtr,stx.makro.expr.HFunction> ){
     return HFieldType.lift(StdFieldType.FFun(f.apply(Expr.HFunction).prj()));
   }
-	public function FProp( ?get : CTR<HPropAccessCtr,HPropAccess>, ?set : CTR<HPropAccessCtr,HPropAccess>, ?t : Null<stx.makro.expr.HComplexType>, ?e : Null<stx.makro.expr.HExpr> ){
+	public function FProp( ?get : CTR<HPropAccessCtr,HPropAccess>, ?set : CTR<HPropAccessCtr,HPropAccess>, ?t : CTR<HComplexTypeCtr,Null<stx.makro.expr.HComplexType>>, ?e : Null<CTR<HExprCtr,stx.makro.expr.HExpr>> ){
+    final t = __.option(t).map(x -> x.apply(Expr.HComplexType)).defv(null);
+    final e = __.option(e).map(x -> x.apply(Expr.HExpr)).defv(null);
     return HFieldType.lift(
       StdFieldType.FProp(
         get.apply(Expr.HPropAccess),

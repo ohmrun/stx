@@ -1,5 +1,8 @@
 package stx.makro.expr;
 
+/**
+ * TODO, most of these should be properties.
+ */
 class HBinopCtr extends Clazz{
   public function Add(){ return OpAdd;}
   public function Mult(){ return OpMult;}

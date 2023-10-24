@@ -1,11 +1,11 @@
 package stx.assert.comparable.term;
 
-class String extends ComparableCls<StdString>{
+class String extends ComparableCls<std.String>{
   public function new(){}
-  public function eq() : Eq<StdString>{
+  public function eq() : Eq<std.String>{
     return Eq.String();
   }
-  public function lt() : Ord<StdString>{
+  public function lt() : Ord<std.String>{
     return Ord.String();
   }
 }

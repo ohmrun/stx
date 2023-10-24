@@ -3,8 +3,11 @@ package stx.makro.expr;
 final Expr = __.makro().expr;
 
 class HExprCtr extends Clazz{
-  public function Make(def:CTR<HExprdefCtr,HExprdef>,?pos:Position){
-    return HExpr.make(def.apply(new HExprdefCtr()),pos);
+  public function Make(def:CTR<HExprdefCtr,HExprdef>,?pos:CTR<HPositionCtr,Position>){
+    return HExpr.make(
+      def.apply(new HExprdefCtr()),
+      __.option(pos).map(x -> x.apply(new HPositionCtr())).def(() -> new HPositionCtr().Make())
+    );
   }
 }
 
@@ -15,7 +18,7 @@ typedef HExprDef = StdExpr;
   static public var ZERO(default,never) : HExpr  = lift( {expr : EBlock([]), pos : null } );
   static public var _(default,never) = HExprLift;
   public function new(self) this = self;
-  @:noUsing static public function lift(self:StdExpr):HExpr return new HExpr(self);
+  @:noUsing static public inline function lift(self:StdExpr):HExpr return new HExpr(self);
   public function prj():StdExpr return this;
   private var self(get,never):HExpr;
   private function get_self():HExpr return lift(this);
@@ -94,7 +97,7 @@ class HExprLift{
                     Expr.HFieldType.FProp(
                       PAccFn,
                       PAccNever,
-                      f.type.toHType().toComplexType(),
+                      f.type.toHType().toComplexTypeRuntime(),
                       Expr.HExprdef.Function(
                         Expr.HFunction.Make([],null,
                           Expr.HExprdef.Return(

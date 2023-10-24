@@ -1,5 +1,9 @@
 package stx.makro.expr;
 
+final __type = __.makro().type;
+final __expr = __.makro().expr;
+
+
 /**
  * Constructor Class for HTypeDefKind
  */
@@ -10,8 +14,10 @@ class HTypeDefKindCtr extends Clazz{
   public function Enum(){
     return HTypeDefKind.lift(TDEnum);
   }
-  public function Class(?super_class:HTypePath,?interfaces:Cluster<HTypePath>,?is_interface:Bool,?is_final:Bool,?is_abstract:Bool){
-    return HTypeDefKind.lift(TDClass(super_class.prj(),__.option(interfaces).defv([].imm()).prj(),is_interface,is_final,is_abstract));
+  public function Class(?super_class:CTR<HTypePathCtr,HTypePath>,?interfaces:CTR<HTypePathCtr,Cluster<HTypePath>>,?is_interface:Bool,?is_final:Bool,?is_abstract:Bool){
+    final interfaces  = __.option(interfaces).map(x -> x.apply(__expr.HTypePath)).defv(null);
+    final super_class = __.option(super_class).map(x -> x.apply(__expr.HTypePath)).defv(null);
+    return HTypeDefKind.lift(TDClass(super_class,__.option(interfaces).defv([].imm()).prj(),is_interface,is_final,is_abstract));
   }
   public function Alias(ct:stx.makro.expr.HComplexType):HTypeDefKind{
     return HTypeDefKind.lift(TDAlias(ct));
