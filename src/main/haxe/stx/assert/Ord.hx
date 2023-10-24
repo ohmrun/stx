@@ -50,7 +50,7 @@ abstract class OrdCls<T> implements OrdApi<T>{
   @:noUsing static public function Float():Ord<StdFloat>{
     return new Float();
   }
-  @:noUsing static public function String():Ord<StdString>{
+  @:noUsing static public function String():Ord<std.String>{
     return new String();
   }
   @:noUsing static public function Couple<L,R>(l,r):Ord<stx.nano.Couple<L,R>>{

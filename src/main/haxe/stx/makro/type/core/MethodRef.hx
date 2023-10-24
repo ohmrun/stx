@@ -24,4 +24,10 @@ typedef MethodRefDef = {
       module  : this.module
     };
   }
+  /**
+   */
+  public function canonical(){
+    final under = Moniker.make(this.name,this.pack,this.module);
+    return '${under.canonical()}.${this.call}';
+  }
 }

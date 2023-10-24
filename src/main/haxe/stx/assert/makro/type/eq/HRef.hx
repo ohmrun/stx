@@ -4,7 +4,7 @@ import stx.makro.type.HRef as TRef;
 
 final Eq = __.assert().Eq();
 
-class Ref<T> extends EqCls<TRef<T>>{
+class HRef<T> extends EqCls<TRef<T>>{
 
   final inner : stx.assert.Eq<T>;
 

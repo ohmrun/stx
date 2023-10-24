@@ -48,7 +48,7 @@ class Plugin{
     // #end
   }
   static function apply(self:ModuleType){
-
+    //TODO apply generics somehow?
     final v = switch(self){
       case TClassDecl(c)     : Some(TInst(c,[]));
       case TEnumDecl(e)      : Some(TEnum(e,[]));
@@ -58,7 +58,7 @@ class Plugin{
     }
     for (t in v){
       final type    = HType._.makro(t);
-      final base    = __.option(type.getBaseType()).force();
+      final base    = type.getBaseType().fudge();
       final entries = base.meta.get().filter(
           (mde) -> mde.name.startsWith(":stx.makro")
       );

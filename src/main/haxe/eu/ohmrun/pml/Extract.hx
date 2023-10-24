@@ -36,7 +36,7 @@ class Extract{
     return Parsers.Anon(
       (input:ParseInput<PExpr<Atom>>) -> handle_head(
         x -> switch((x)){
-          case PValue(AnSym(s)) : input.tail().ok(s);
+          case PValue(Sym(s)) : input.tail().ok(s);
           case PValue(Str(s))   : input.tail().ok(s);
           case PLabel(x)        : input.tail().ok(x);
           default : input.no('not wordish but $x');
@@ -64,8 +64,8 @@ class Extract{
       (input:ParseInput<PExpr<Atom>>) -> {
         return handle_head(
           x -> switch((x)){
-            case PValue(AnSym(s)) if (s == name): input.tail().ok(s);
-            case PValue(AnSym(s))               : input.no('symbol should be $name, but is $s');
+            case PValue(Sym(s)) if (s == name): input.tail().ok(s);
+            case PValue(Sym(s))               : input.no('symbol should be $name, but is $s');
             default                             : input.no('$x not a symbol');
           }
         )(input);
@@ -78,12 +78,12 @@ class Extract{
       (input:ParseInput<PExpr<Atom>>) -> {
         return handle_head(
           x -> switch((x)){
-            case PValue(AnSym(s)) if (s == name): input.tail().ok(s);
+            case PValue(Sym(s)) if (s == name): input.tail().ok(s);
             case PValue(Str(s))   if (s == name): input.tail().ok(s);
             case PValue(Str(s))                 : input.no('text should be $name, but is $s');
             case PLabel(s)        if (s == name): input.tail().ok(s);
             case PLabel(s)                      : input.no('text should be $name, but is $s');
-            case PValue(AnSym(s))               : input.no('text should be $name, but is $s');
+            case PValue(Sym(s))               : input.no('text should be $name, but is $s');
             default                             : input.no('not any type of text');
           }
         )(input);
@@ -95,7 +95,7 @@ class Extract{
     return Parsers.Anon(
       (ipt:ParseInput<PExpr<Atom>>) -> {
         switch(ipt.head()){
-          case Val(PValue(AnSym(s))) | Val(PValue(Str(s))) | Val(PLabel(s)) :
+          case Val(PValue(Sym(s))) | Val(PValue(Str(s))) | Val(PLabel(s)) :
             final result = p.apply(s.reader());
             return if(result.is_ok()){
               result.value.fold( 
@@ -115,7 +115,7 @@ class Extract{
     Unpacks the items in head if its a PGroup, then uses the `nul` created by unpack to determine if a group has been fully parsed.
   **/
   static public function imbibe<T>(p:Parser<PExpr<Atom>,T>,name:String){
-    return unpack()._and(p).and_(nul(name));
+    return Parsers.AndR(unpack(),p).and_(nul(name));
   }
   static public function fmap<T>(f:PExpr<Atom> -> Option<T>,name:String):Parser<PExpr<Atom>,T>{
     return Parsers.Anon(

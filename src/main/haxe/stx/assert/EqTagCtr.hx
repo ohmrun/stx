@@ -39,7 +39,7 @@ class EqTagCtr{
    * @param tag 
    * @return Eq<String>
    */
-  static public function String(tag:TAG):Eq<StdString>{
+  static public function String(tag:TAG):Eq<std.String>{
     return new String();
   }
   /**

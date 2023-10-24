@@ -19,7 +19,7 @@ class HAbstractTypeCtr extends Clazz{
     array:CTR<HClassFieldCtr,Cluster<HClassField>>,
     resolve:Null<CTR<HClassFieldCtr,HClassField>>,
     resolveWrite:Null<CTR<HClassFieldCtr,HClassField>>,
-    impl:Null<CTR<HRefCtr,Ref<HClassType>>>,
+    impl:Null<CTR<HRefCtr,HRef<HClassType>>>,
     meta:CTR<HMetaAccessCtr,HMetaAccess>,
     doc,
     exclude,
@@ -52,7 +52,7 @@ class HAbstractTypeCtr extends Clazz{
     );
   }
 }
-@:using(stx.makro.type.HAbstractType)
+@:using(stx.makro.type.HAbstractType.HAbstractTypeLift)
 @:forward abstract HAbstractType(AbstractType) from AbstractType to AbstractType{
   static public var _(default,never) = HAbstractTypeLift;
   public function new(self) this = self;
@@ -85,5 +85,7 @@ class HAbstractTypeCtr extends Clazz{
   private function get_self():HAbstractType return lift(this);
 }
 class HAbstractTypeLift{
-  
+  static public function getIdent(self:HAbstractType){
+    return Ident.make(self.name,self.pack);
+  } 
 }

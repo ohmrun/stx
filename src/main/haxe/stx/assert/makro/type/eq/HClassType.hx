@@ -1,6 +1,7 @@
 package stx.assert.makro.type.eq;
 
 import stx.makro.type.HClassType as THClassType;
+import stx.makro.type.HRef as THRef;
 
 final Eq : STX<stx.assert.Eq<Dynamic>> = __.assert().Eq();
 
@@ -40,7 +41,7 @@ class HClassType extends EqCls<THClassType>{
     }
     return eq;
   }
-  private function op(a:{t:Ref<ClassType>,params:Array<Type>},b:{t:Ref<ClassType>,params:Array<Type>}):Equaled{
+  private function op(a:{t:THRef<ClassType>,params:Array<Type>},b:{t:THRef<ClassType>,params:Array<Type>}):Equaled{
     var eq = Eq.Makro().Type().HClassType.comply(a.t.get(),b.t.get());
     if(eq.is_ok()){
       eq = Eq.Array(Eq.Makro().Type().Type).comply(a.params,b.params);

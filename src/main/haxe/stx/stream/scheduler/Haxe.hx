@@ -2,57 +2,36 @@ package stx.stream.scheduler;
 
 import haxe.MainLoop;
 
+using stx.stream.scheduler.Logging;
+
 class Haxe{
   static public function apply(self:Cycle,?pos:Pos){
     __.log().trace('Haxe.apply');
-    final ignition  = Future.lazy(Nada);
-    var event       = null;
+    final ignition                      = Future.irreversible((cb) -> cb(Nada));
+    final cycle_ref : Ref<Cycle>        = self; 
+    var ready       = true;
+    var event : MainEvent       = null;
         event       = MainLoop.add(
-          (function start(cycle:Ref<Cycle>){
-            __.log().trace('start ${cycle.value}');
-            switch(cycle.value?.value){
-              case null :
-                __.log().trace('nothing remains');
-                event.stop();
-              case x    : 
-                var local : Null<Cycle> = null;
-                __.log().trace('initialise local');
-                function next(){
-                  x.handle(
-                    (x) -> {
-                      __.log().trace('start');
-                      start(x);
-                    }
-                  );
-                }
-                var cancelled = false;
-                var cbh = x.handle(
-                  (c) -> {
-                    if(!cancelled){
-                      __.log().trace('set local as $c');
-                      local = c;
-                    }else{
-                      __.log().trace('already cancelled');
-                    }
-                  }
-                );
-                __.log().trace('local is set synchronousely as $local');
-                if(local == null){
-                  cbh.cancel();
-                  cancelled = true;
-                  __.log().trace('STOP');
-                  event.stop();
-                  event = MainLoop.add(next);
-                  var t = new haxe.Timer(0);
-                      t.run = t.stop;
-                }else{
-                  __.log().trace('switch out cycle value ${haxe.MainLoop.hasEvents()}');
-                  cycle.value = local;
-                }
-            };
-          }).bind(self)
+          (function start(){
+            switch(ready){
+              case false : 
+              case true  : 
+                switch(cycle_ref.value?.after){
+                  case null :
+                    __.log().trace('${cycle_ref.value}');
+                    event.stop();
+                  case after    : 
+                    ready = false;
+                    after.handle(
+                      (after) -> {
+                        ready = true;
+                        cycle_ref.value = after;
+                      }
+                    );
+                };
+            }
+            
+          })
         );
-        var t     = new haxe.Timer(0);//https://github.com/HaxeFoundation/haxe/issues/11202
-            t.run = t.stop;
   }
 }

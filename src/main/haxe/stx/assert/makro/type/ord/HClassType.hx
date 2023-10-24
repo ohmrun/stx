@@ -1,6 +1,7 @@
 package stx.assert.makro.type.ord;
 
 import stx.makro.type.HClassType as THClassType;
+import stx.makro.type.HRef as THRef;
 
 final Ord : STX<stx.assert.Ord<Dynamic>> = __.assert().Ord();
 
@@ -13,6 +14,7 @@ class HClassType extends OrdCls<THClassType>{
     if(ord.is_not_less_than()){
       ord = Ord.Bool().comply(a.isInterface,b.isInterface);
     }
+
     if(ord.is_not_less_than()){
       ord = Ord.NullOr(Ord.Anon(op)).comply(a.superClass,b.superClass);
     }
@@ -40,7 +42,7 @@ class HClassType extends OrdCls<THClassType>{
     }
     return ord;
   }
-  private function op(a:{t:Ref<ClassType>,params:Array<Type>},b:{t:Ref<ClassType>,params:Array<Type>}):Ordered{
+  private function op(a:{t:THRef<ClassType>,params:Array<Type>},b:{t:THRef<ClassType>,params:Array<Type>}):Ordered{
     var ord = Ord.Makro().Type().HClassType.comply(a.t.get(),b.t.get());
     if(ord.is_not_less_than()){
       ord = Ord.Array(Ord.Makro().Type().Type).comply(a.params,b.params);

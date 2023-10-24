@@ -1,10 +1,10 @@
 package stx.makro.type;
 
 class HRefCtr extends Clazz{
-  public function Make(get,toString){
+  public function Make<T>(get:()->T,toString:()->String){
     return HRef.make(get,toString);
   }
-  public function Lift<T>(self:Ref<T>){
+  public function Lift<T>(self:haxe.macro.Type.Ref<T>){
     return HRef.lift(self);
   }
 }
@@ -21,7 +21,7 @@ typedef HRefDef<T> = haxe.macro.Type.Ref<T>;
       toString  : toString
     });
   }
-  public function prj():HRefDef<T> return this;
+  public function prj():haxe.macro.Type.Ref<T> return this;
   private var self(get,never):HRef<T>;
   private function get_self():HRef<T> return lift(this);
 }

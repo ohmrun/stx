@@ -15,17 +15,17 @@ class StringMap<T> extends EqCls<TStringMap<T>>{
     final lhs_keys = lhs.keys();
     final rhs_keys = rhs.keys();
 
-    final get_str_compare   = function(lstr:StdString,rstr:StdString):Either<Ordered,Equaled>{
+    final get_str_compare   = function(lstr:std.String,rstr:std.String):Either<Ordered,Equaled>{
       return if(lstr.length < rstr.length){
         Left(LessThan);
       }else if(lstr.length == rstr.length){
         Chars._.toIter(lstr).zip(Chars._.toIter(rstr)).lfold(
-          function (next:Couple<StdString,StdString>,memo:Option<Either<Ordered,Equaled>>):Option<Either<Ordered,Equaled>>{
+          function (next:Couple<std.String,std.String>,memo:Option<Either<Ordered,Equaled>>):Option<Either<Ordered,Equaled>>{
             //trace('$next');
             return switch(memo){
               case None | Some(Right(AreEqual)) : 
                 next.decouple(
-                  (l:StdString,r:StdString) -> {
+                  (l:std.String,r:std.String) -> {
                     final lcode = (l:Chars).cca(0);
                     final rcode = (r:Chars).cca(0);
                     return (lcode == rcode).if_else(
@@ -47,9 +47,9 @@ class StringMap<T> extends EqCls<TStringMap<T>>{
         Left(NotLessThan);
       }
     }
-    final set_add  = function(arr:StdArray<StdString>,str:StdString):StdArray<StdString>{
+    final set_add  = function(arr:StdArray<std.String>,str:std.String):StdArray<std.String>{
       final res = arr.length == 0 ? { value : [str], input : None } : arr.lfold(
-        (next:StdString,memo:{value : StdArray<StdString>, input : stx.Option<StdString> }) -> {
+        (next:std.String,memo:{value : StdArray<std.String>, input : stx.Option<std.String> }) -> {
           //trace('$next $memo');
           return switch(memo.input){
             case Some(str) : 

@@ -75,6 +75,12 @@ typedef HAbstractTypeUnop           = stx.makro.type.HAbstractTypeUnop;
 typedef HClassFieldClusterDef       = stx.makro.type.HClassFieldCluster.HClassFieldClusterDef;
 typedef HClassFieldCluster          = stx.makro.type.HClassFieldCluster;
 
+typedef HEdgeSum                    = stx.makro.type.HEdge.HEdgeSum;
+typedef HEdge                       = stx.makro.type.HEdge;
+
+typedef HTypeVariable               = stx.makro.type.HTypeVariable;
+typedef HTypeVariableSum            = stx.makro.type.HTypeVariable.HTypeVariableSum;
+
 class LiftClassType{
   static public function makro(ct:haxe.macro.Type.ClassType):HClassType{
     return ct;

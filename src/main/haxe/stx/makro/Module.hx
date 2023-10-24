@@ -23,4 +23,8 @@ class Module extends Clazz{
   private function get_type():stx.makro.type.Module{
     return __.option(this.type).def(() -> this.type = new stx.makro.type.Module());
   }
+  @:isVar public var context(get,null):stx.makro.context.Module;
+  private function get_context():stx.makro.context.Module{
+    return __.option(this.context).def(() -> this.context = new stx.makro.context.Module());
+  }
 }

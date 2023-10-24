@@ -124,9 +124,9 @@ class EnumType extends Clazz{
     for(key => val in each){
       var case_call_source = val.snd();
       var case_call : HExprArray = HExprArray.lift(case_call_source.map(
-        (v:HTFunArg) -> LiftMakro.toMoniker(v.name).map(x -> LiftMonikerToHExpr.toHExpr(x,pos)).fudge()
+        (v:HTFunArg) -> Moniker.make(v.name,[],None).toHExpr(pos)
       ));
-      var head  = LiftMonikerToHExpr.toHExpr(LiftMakro.toMoniker(key).fudge(),pos);
+      var head  = LiftMonikerToHExpr.toHExpr(Moniker.make(key,[],None),pos);
       var value = !case_call.is_defined() ? head : Expr.HExprdef.Call(head,case_call).to_macro_at(pos);
       var case_ : Case = {
         expr    : val.fst().toExpr(),

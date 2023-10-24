@@ -45,4 +45,16 @@ class Module extends Clazz{
   private function get_HMetaAccess():HMetaAccessCtr{
     return __.option(this.HMetaAccess).def(() -> this.HMetaAccess = new HMetaAccessCtr());
   }
+  @:isVar public var HTFunArg(get,null):HTFunArgCtr;
+  private function get_HTFunArg():HTFunArgCtr{
+    return __.option(this.HTFunArg).def(() -> this.HTFunArg = new HTFunArgCtr());
+  }
+  @:isVar public var HClassType(get,null):HClassTypeCtr;
+  private function get_HClassType():HClassTypeCtr{
+    return __.option(this.HClassType).def(() -> this.HClassType = new HClassTypeCtr());
+  }
+  @:isVar public var HDefType(get,null):HDefTypeCtr;
+  private function get_HDefType():HDefTypeCtr{
+    return __.option(this.HDefType).def(() -> this.HDefType = new HDefTypeCtr());
+  }
 }

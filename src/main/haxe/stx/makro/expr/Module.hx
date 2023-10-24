@@ -93,6 +93,10 @@ class Module extends Clazz{
   private function get_HExprdef():HExprdefCtr{
     return __.option(this.HExprdef).def(() -> this.HExprdef = new HExprdefCtr());
   }
+  @:isVar public var HBinop(get,null):HBinopCtr;
+  private function get_HBinop():HBinopCtr{
+    return __.option(this.HBinop).def(() -> this.HBinop = new HBinopCtr());
+  }
   // @:isVar public var HArrayDecl(get,null):HArrayDeclCtr;
   // private function get_HArrayDecl():HArrayDeclCtr{
   //   return __.option(this.HArrayDecl).def(() -> this.HArrayDecl = new HArrayDeclCtr());

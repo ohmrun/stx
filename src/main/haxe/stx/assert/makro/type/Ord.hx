@@ -65,7 +65,7 @@ class Ord extends Clazz{
     return __.option(this.HClassKind).def(() -> this.HClassKind = new HClassKind());
   }
   public function HRef<T>(inner:stx.assert.Ord<T>):stx.assert.Ord<stx.makro.type.HRef<T>>{
-    return HRef(inner);
+    return new stx.assert.makro.type.ord.HRef(inner);
   }
   @:isVar public var HDefType(get,null):HDefType;
   private function get_HDefType():HDefType{

@@ -1,0 +1,13 @@
+package stx.assert.glot.comparable;
+
+import eu.ohmrun.glot.type.GType as GTypeT;
+
+class GType extends ComparableCls<GTypeT>{
+  public function new(){}
+  public function eq():Eq<GTypeT>{
+    return new stx.assert.glot.eq.GType();
+  }
+  public function lt():Ord<GTypeT>{
+    return new stx.assert.glot.ord.GType();
+  }
+}

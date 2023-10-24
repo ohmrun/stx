@@ -4,7 +4,7 @@ import stx.makro.type.HRef as TRef;
 
 final Ord = __.assert().Ord();
 
-class Ref<T> extends OrdCls<TRef<T>>{
+class HRef<T> extends OrdCls<TRef<T>>{
 
   final inner : stx.assert.Ord<T>;
 

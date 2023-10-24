@@ -9,17 +9,17 @@ class HExprdefCtr extends Clazz{
   public function Constant(c:CTR<HConstantCtr,HConstant>){
     return HExprdef.lift(EConst(c(Expr.HConstant)));
   } 
-  public function Path(string:String,?pos:CTR<HPositionCtr,HPosition>){
+  public function Path(string:String,?pos:CTR<HPositionCtr,HPosition>):HExprdef{
     final pos = __.option(pos).map(x -> x.apply(Expr.HPosition)).defv(new HPositionCtr().Make());
 
     final parts = string.split(".");
-    return parts.tail().lfold(
-        (next:String,memo:Expr) -> this.Field(
+    return HExprdef.lift(parts.tail().lfold(
+        (next:String,memo:HExpr) -> this.Field(
           _ -> memo.toHExpr(),
           next        
-        ).toHExpr(pos.prj()).prj(),
-        this.Const(_ -> _.Ident(parts.head().fudge())).toHExpr(pos.prj()).prj()
-      );
+        ).toHExpr(pos.prj()),
+        this.Const(_ -> _.Ident(parts.head().fudge())).toHExpr(pos.prj())
+      ).expr);
   }
   public function FieldPath(name:String,pack:Array<String>,?pos:CTR<HPositionCtr,HPosition>){
     final pos   = __.option(pos).map(x -> x.apply(Expr.HPosition)).defv(new HPositionCtr().Make());
@@ -39,8 +39,8 @@ class HExprdefCtr extends Clazz{
   public function Array(lhs:CTR<HExprCtr,HExpr>,rhs:CTR<HExprCtr,HExpr>){
     return HExprdef.lift(EArray(lhs(Expr.HExpr).prj(),rhs(Expr.HExpr).prj()));
   }
-  public function Binop(op,l:CTR<HExprCtr,HExpr>,r:CTR<HExprCtr,HExpr>){
-    return HExprdef.lift(EBinop(op,l(Expr.HExpr).prj(),r(Expr.HExpr).prj()));
+  public function Binop(op:CTR<HBinopCtr,HBinop>,l:CTR<HExprCtr,HExpr>,r:CTR<HExprCtr,HExpr>){
+    return HExprdef.lift(EBinop(op(Expr.HBinop),l(Expr.HExpr).prj(),r(Expr.HExpr).prj()));
   }
   #if (haxe_ver > 4.205)
   public function Field(e:CTR<HExprCtr,HExpr>,field:String,?kind){

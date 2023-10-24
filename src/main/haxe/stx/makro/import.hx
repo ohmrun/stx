@@ -51,3 +51,4 @@ using stx.makro.Type;
   using tink.MacroApi;
 
 #end
+using stx.makro.Logging;
