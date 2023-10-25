@@ -1,6 +1,6 @@
 {
   "build" : {
-    "-lib" : ["stx","queues-core"],
+    "-lib" : ["stx","queues-core","rabbitmq"],
     "unit" : {
       "--times" : true,
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],

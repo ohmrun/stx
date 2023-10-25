@@ -10,7 +10,7 @@
         "0b1kn00b"
     ],
     "releasenote": "No build errors, no really",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "url": "https://github.com/ohmrun/stx",
     "dependencies": {
         "bake"              : "",
@@ -25,7 +25,11 @@
         "equals"            : "",
         "spectatory"        : "",
         "coconut.ui"        : "",
-        "http-status"       : ""
+        "http-status"       : "",
+        "queues-core"       : "",
+        "queues-rabbitmq"   : "",
+        "rabbitmq"          : "",
+        "serializers"       : ""
     },
     "classPath": "src/main/haxe"
 }
