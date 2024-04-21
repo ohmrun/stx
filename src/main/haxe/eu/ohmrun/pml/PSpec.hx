@@ -1,16 +1,27 @@
 package eu.ohmrun.pml;
 
 enum PSpecSum<T>{
+  @eu.ohmrun.pml.spec("#sig")
   PSig(sig:PSignature);
+  @eu.ohmrun.pml.spec("#seq")
   PSeq(l:PSpec<T>,r:PSpec<T>);
+  @eu.ohmrun.pml.spec("#alt")
   PAlt(l:PSpec<T>,r:PSpec<T>);
+  @eu.ohmrun.pml.spec("#opt")
   POpt(spec:PSpec<T>);
+  @eu.ohmrun.pml.spec("#not")
   PNot(spec:PSpec<T>);
+  @eu.ohmrun.pml.spec("#any")
   PAny;
+  @eu.ohmrun.pml.spec("#itm")
   PItm;//PLabel,PApply,PValue
+  @eu.ohmrun.pml.spec("#lst")
   PLst;//PGroup,PArray,PSet
+  @eu.ohmrun.pml.spec("#str")
   PStr;//PLabel,PApply
+  @eu.ohmrun.pml.spec("#nil")
   PNil;//PEmpty
+  @eu.ohmrun.pml.spec("#val")
   PVal(v:T);//PValue
 }
 @:using(eu.ohmrun.pml.PSpec.PSpecLift)

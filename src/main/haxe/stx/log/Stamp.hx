@@ -43,7 +43,7 @@ class Stamp{
   }
   public function toLogString(posInfos:Pos){
     var pos   = LogPosition.is_runtime().if_else(
-      () -> Position._.to_vscode_clickable_link(posInfos),
+      () -> PositionLift.to_vscode_clickable_link(posInfos),
       () -> '<unknown>'
     );
     var time  = timestamp.toString();

@@ -21,4 +21,10 @@ class Module extends Clazz{
       }
     }
   }
+  public function decode(self:PExpr<Atom>){
+    return new eu.ohmrun.pml.decode.PExpr().apply(self);
+  } 
+  public function encode(self:Dynamic){
+    return new eu.ohmrun.pml.encode.Dyn().apply(self);
+  }
 }

@@ -44,3 +44,6 @@ typedef PmlFailureSum   = stx.fail.PmlFailure.PmlFailureSum;
 typedef EqCtr           = stx.assert.pml.EqCtr;
 typedef OrdCtr          = stx.assert.pml.OrdCtr;
 typedef ComparableCtr   = stx.assert.pml.ComparableCtr;
+
+typedef PmlSetDef<T>    = eu.ohmrun.pml.PmlSet.PmlSetDef<T>;
+typedef PmlSet<T>       = eu.ohmrun.pml.PmlSet<T>;

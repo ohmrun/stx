@@ -18,7 +18,7 @@ typedef ReceiverDef<R,E> = Cont<ReceiverInput<R,E>,Work>;
 
   private inline function new(self:ReceiverApi<R,E>) this = self;
 
-  @:noUsing static public function issue<R,E>(outcome:Outcome<R,Defect<E>>,?pos:Pos):Receiver<R,E>{
+  @:noUsing static public inline function issue<R,E>(outcome:Outcome<R,Defect<E>>,?pos:Pos):Receiver<R,E>{
     return new Receiver(
       Cont.Anon((fn:Apply<ReceiverInput<R,E>,Work>) -> {
         var t = Future.trigger();

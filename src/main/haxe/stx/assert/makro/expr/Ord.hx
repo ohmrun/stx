@@ -110,4 +110,8 @@ class Ord extends Clazz{
   private function get_HStringLiteralKind():HStringLiteralKind{
     return __.option(this.HStringLiteralKind).def(() -> this.HStringLiteralKind = new HStringLiteralKind());
   }
+  @:isVar public var HAbstractFlag(get,null):HAbstractFlag;
+  private function get_HAbstractFlag():HAbstractFlag{
+    return __.option(this.HAbstractFlag).def(() -> this.HAbstractFlag = new HAbstractFlag());
+  }
 }

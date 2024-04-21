@@ -2,15 +2,20 @@ package eu.ohmrun.pml;
 
 class PItemKindCtr extends Clazz{
   public function Empty() { PItmEmpty; }
-  public function Label() { PItmLabel; }
+  public function Label(?of) { PItmLabel(of); }
   public function Apply() { PItmApply; }
   public function Value() { PItmValue; }
 }
 enum PItemKindSum{
+  @eu.ohmrun.pml.spec("#empty")
   PItmEmpty;
-  PItmLabel;
+  @eu.ohmrun.pml.spec("#label")
+  PItmLabel(?of:Cluster<String>);
+  @eu.ohmrun.pml.spec("#apply")
   PItmApply;
+  @eu.ohmrun.pml.spec("#value")
   PItmValue;
+  
 }
 @:using(eu.ohmrun.pml.PItemKind.PItemKindLift)
 abstract PItemKind(PItemKindSum) from PItemKindSum to PItemKindSum{

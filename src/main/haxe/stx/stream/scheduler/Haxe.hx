@@ -7,12 +7,12 @@ using stx.stream.scheduler.Logging;
 class Haxe{
   static public function apply(self:Cycle,?pos:Pos){
     __.log().trace('Haxe.apply');
-    final ignition                      = Future.irreversible((cb) -> cb(Nada));
     final cycle_ref : Ref<Cycle>        = self; 
     var ready       = true;
     var event : MainEvent       = null;
         event       = MainLoop.add(
           (function start(){
+            __.log().trace('ready: $ready');
             switch(ready){
               case false : 
               case true  : 

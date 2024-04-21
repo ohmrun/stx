@@ -138,7 +138,7 @@ class PureCyclerCls extends CyclerCls{
   }
   public function toString(){
     final type = __.definition(this).identifier();
-    return '$type[${this.uuid}](${this.state:${this.after}})';
+    return '$type[${this.uuid}](${this.state}:${this.after})';
   }
 }
 class CycleLift{
@@ -193,7 +193,11 @@ class CycleLift{
   }
   static public function submit(self:Cycle,?pos:Pos){
     __.log().debug('cycle/submit: $self ${(pos:Position)}');
-    stx.stream.scheduler.Haxe.apply(self,pos);
+    // #if tink_runloop
+    //   stx.stream.scheduler.Tink.apply(self,pos);
+    // #else
+      stx.stream.scheduler.Haxe.apply(self,pos);
+    //#end
   }
   //TODO backoff algo
   static public function crunch(self:Cycle){

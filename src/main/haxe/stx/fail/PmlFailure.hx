@@ -8,6 +8,8 @@ enum PmlFailureSum{
   E_Pml_Nada;
   E_Pml_Empty;
   E_Pml_Parse(f:ParseFailure);
+  E_Pml_Invalid(e:PExpr<Dynamic>);
+  E_Pml_NoPApply(key:String);
 }
 abstract PmlFailure(PmlFailureSum) from PmlFailureSum to PmlFailureSum{
   public function new(self) this = self;

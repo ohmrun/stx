@@ -30,10 +30,10 @@ class Tink{
               return;
             }
             final api = self.toCyclerApi();
-            __.log().trace('task ${api.state} ${api.value}');
+            __.log().trace('task ${api.state} ${api.after}');
             switch(api.state){
               case CYCLE_NEXT :
-                switch(api.value){
+                switch(api.after){
                   case null : throw 'error';
                   case x    : 
                     __.log().trace('x $x bindings $bindings');
@@ -92,7 +92,7 @@ private class CycleTask implements TaskObject{
           case CYCLE_STOP : 
             this.actual_state = Performed;
           case CYCLE_NEXT :
-            switch(cycle.toCyclerApi().value){
+            switch(cycle.toCyclerApi().after){
               case null :
                 throw 'empty value on CYCLE_NEXT';
               case x    :  

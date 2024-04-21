@@ -225,6 +225,7 @@ class IterLift{
     eff();
     return data;
   }
+  
   // static public function lfold<T,Z>(iter:Iter<T>,fn:T->Z->Z,init:Z):Z{
   //   var data      = init;
   //   var iterator  = iter.iterator();
@@ -292,5 +293,20 @@ class IterLift{
       ),
       false
     );
+  }
+  static public function rfold<T, Z>(iter: Iterable<T>, mapper: T -> Z -> Z,seed: Z): Z {
+    final folded    = seed;
+    final iterator  = iter.iterator();
+
+    function handle(folded:Z){
+      final v = iterator.next();
+      if(iterator.hasNext()){
+        folded = handle(
+          mapper(v,handle(folded))
+        );
+      }
+      return folded;
+    }
+    return handle(folded);
   }
 }

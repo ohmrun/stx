@@ -31,7 +31,10 @@ private class NullSignalCls extends SignalCls{
 typedef SignalDef = SignalCls;
 
 @:forward(attach) abstract Signal(SignalDef){
-  static public var ZERO(default,null) : Signal = new Signal();
+  static public var ZERO(get,null) : Signal;
+  static public function get_ZERO(){
+    return ZERO == null ? ZERO = new Signal() : ZERO;
+  }
   static function __init__(){
     //trace('__init__');
     #if (stx.log.debugging)

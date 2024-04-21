@@ -11,10 +11,15 @@ class PSignatureCtr extends Clazz{
   // }
 }
 enum PSignatureSum{
+  @eu.ohmrun.pml.spec("#primate")
   PSigPrimate(p:PItemKind);
+  @eu.ohmrun.pml.spec("#collect")
   PSigCollect(c:PSignature,kind:PChainKind);  
-  PSigCollate(key:PSignature,vals:OneOrMany<PSignature>);
+  @eu.ohmrun.pml.spec("#collate")
+  PSigCollate(key:PSignature,vals:Cluster<PSignature>);
+  @eu.ohmrun.pml.spec("#outline")
   PSigOutline(arr:Cluster<Tup2<PSignature,PSignature>>);
+  @eu.ohmrun.pml.spec("#battery")
   PSigBattery(arr:Cluster<PSignature>,kind:PChainKind);
 }
 @:using(eu.ohmrun.pml.PSignature.PSignatureLift)
@@ -26,8 +31,12 @@ abstract PSignature(PSignatureSum) from PSignatureSum to PSignatureSum{
   public function prj():PSignatureSum return this;
   private var self(get,never):PSignature;
   private function get_self():PSignature return lift(this);
+
 }
 class PSignatureLift{
+  // static public function toPml(self:PSignature){
+  //   return 
+  // }
   static public inline function lift(self:PSignatureSum):PSignature{
     return PSignature.lift(self);
   }

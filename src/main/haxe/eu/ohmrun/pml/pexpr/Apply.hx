@@ -1,9 +1,10 @@
 package eu.ohmrun.pml.pexpr;
 
 abstract class Apply<P> extends Clazz{
-  abstract public function comply(key:String,val:PExpr<P>):PExpr<P>;
+  abstract public function comply(key:String,val:PExpr<P>):Upshot<PExpr<P>,PmlFailure>;
   public function apply<T>(self:PExpr<P>):Upshot<PExpr<P>,PmlFailure>{
-    return switch(self){
+    __.log().trace('${self.toString()}');
+    return (switch(self){
       case PEmpty         : __.accept(PEmpty);
       case PLabel(name)   : __.accept(PLabel(name));
       case PValue(value)  : __.accept(PValue(value));
@@ -22,19 +23,37 @@ abstract class Apply<P> extends Clazz{
                 result = __.reject(f -> f.of(E_Pml('No argument for application $x')));
                 break;
               }else{
-                val   = __.accept(comply(x,nlist.head()));
+                __.log().trace('in group, apply: ${nlist.head().toString()}');
+                val   = apply(nlist.head()).flat_map(
+                  args -> {
+                    __.log().trace('${x}: args: ${args.toString()}');
+                    return comply(x,args).map(
+                      result -> {
+                        __.log().trace('${x}: result: ${result.toString()}');
+                        return result;
+                      }
+                    );
+                  }
+                );
                 nlist = nlist.tail();
               }
             case Accept(x) : 
-              //trace(val);
+              //__.log().trace(val);
               val = val.flat_map(x -> apply(x));
             default : 
           }
-          result = result.flat_map(xs -> val.map(x -> xs.snoc(x)));
+          result = result.flat_map(
+            xs -> {
+              return val.map(x -> {
+                return xs.snoc(x);
+              } );
+            }
+          );
         }
         result.map(PGroup);
 
       case PArray(array):
+        __.log().trace(':apply/array ${array.map(x -> x.toString())}');
         var result  = __.accept(Cluster.unit());
         var nlist   = array;
 
@@ -47,7 +66,7 @@ abstract class Apply<P> extends Clazz{
                 result = __.reject(f -> f.of(E_Pml('No argument for application $x')));
                 break;
               }else{
-                val   = __.accept(comply(x,nlist.head().defv(null)));
+                val   = nlist.head().resolve(f -> f.of(E_Pml(x))).flat_map(apply).flat_map(args -> comply(x,args));
                 nlist = nlist.tail();
               }
             case Accept(x) : val = val.flat_map(x -> apply(x));
@@ -55,7 +74,12 @@ abstract class Apply<P> extends Clazz{
           }
           result = result.flat_map(xs -> val.map(x -> xs.snoc(x)));
         }
-        result.map(PArray);
+        result.map(
+          x -> {
+            __.log().trace('${array.map(x -> x.toString())}');
+            return PArray(x);
+          }
+        );
       case PSet(arr):
         var result  = __.accept(Cluster.unit());
         var nlist   = arr;
@@ -69,7 +93,7 @@ abstract class Apply<P> extends Clazz{
                 result = __.reject(f -> f.of(E_Pml('No argument for application $x')));
                 break;
               }else{
-                val   = __.accept(comply(x,nlist.head().defv(null)));
+                val   = nlist.head().resolve(f -> f.of(E_Pml(x))).flat_map(apply).flat_map(args -> comply(x,args));
                 nlist = nlist.tail();
               }
             case Accept(x) : val = val.flat_map(x -> apply(x));
@@ -89,6 +113,13 @@ abstract class Apply<P> extends Clazz{
           },
           [].imm()
         ).map(PAssoc);
-    }
+    }).flat_map(
+      x -> {
+        //__.log().trace(x.toString());
+        return switch(x){
+          default           : __.accept(x);
+        }
+      }
+    );
   }
 }

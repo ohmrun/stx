@@ -200,6 +200,7 @@ typedef Wildcard                = stx.nano.Wildcard;
 typedef ReportSum<E>            = stx.nano.ReportSum<E>;
 typedef Report<E>               = stx.nano.Report<E>;
 typedef Position                = stx.nano.Position;
+typedef PositionLift            = stx.nano.Position.PositionLift;
 typedef PrimitiveSum            = stx.nano.Primitive.PrimitiveSum;
 typedef Primitive               = stx.nano.Primitive;
 

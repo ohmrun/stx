@@ -1,8 +1,11 @@
 package eu.ohmrun.pml;
 
 enum PChainKindSum{
+  @eu.ohmrun.pml.spec(":pspec/array")
   PCArray;
+  @eu.ohmrun.pml.spec(":pspec/group")
   PCGroup;
+  @eu.ohmrun.pml.spec(":pspec/set")
   PCSet;
 }
 

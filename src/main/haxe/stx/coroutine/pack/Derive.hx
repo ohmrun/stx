@@ -2,9 +2,12 @@ package stx.coroutine.pack;
 
 typedef DeriveDef<R,E> = CoroutineSum<Nada,Nada,R,E>;
 
-@:using(stx.coroutine.pack.Derive.DeriveLift)
+@:using(stx.coroutine.pack.Derive.DeriveUses)
 @:forward abstract Derive<R,E>(DeriveDef<R,E>) from DeriveDef<R,E> to DeriveDef<R,E>{
-  static public var _(default,never) = DeriveLift;
+  
+  @stx.meta.using
+  static public inline function _uses(){ return DeriveUses; }
+
   public function new(self:DeriveDef<R,E>) this = self;
   @:noUsing static public function lift<R,E>(self:DeriveDef<R,E>) return new Derive(self);
   @:from static public function fromCoroutine<I,O,R,E>(spx:Coroutine<Nada,Nada,R,E>):Derive<R,E>{
@@ -36,7 +39,7 @@ typedef DeriveDef<R,E> = CoroutineSum<Nada,Nada,R,E>;
   }*/
 }
 
-class DeriveLift{
+class DeriveUses{
   
   static public function toSource<O,R,E>(self:DeriveDef<R,E>):Source<O,R,E>{
     function recurse(self){
@@ -52,15 +55,15 @@ class DeriveLift{
     }
     return recurse(self);
   }
-  static public function complete<R,E>(self:DeriveDef<R,E>,cb:R->Void):Effect<E>{
+  static public function complete<R,E>(self:DeriveDef<R,E>,cb:Option<R>->Void):Effect<E>{
     function recurse(self){
       //trace(self);
       return switch(self){
         case Halt(Terminated(cause))  : 
-          __.log().error('$cause');
+          cb(None);
           __.term(cause);
         case Halt(Production(ret))    :
-          cb(ret); 
+          cb(Some(ret)); 
           __.stop();
         case Emit(head,rest)          : __.emit(head,complete(rest,cb));
         case Wait(arw)                : __.wait(arw.mod(recurse));
@@ -170,7 +173,7 @@ class DeriveLift{
   ///////////////////////////////////////////////////////////////////////////////
   
   static public function run<R,E>(eff:Derive<R,E>):Future<Outcome<R,Cause<E>>>{
-    __.log().info('run $eff');
+    //__.log().info('run $eff');
     var t     = Future.trigger();
     loop(eff,t);
     return t.asFuture();
@@ -192,6 +195,7 @@ class DeriveLift{
             (x) -> {
               __.log().debug('hold:release');
               loop(x,f);
+              //haxe.Timer.delay(loop.bind(x,f),0);
             }
           );
           break;

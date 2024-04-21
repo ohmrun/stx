@@ -2,7 +2,7 @@ package stx.schema;
 
 enum SchemaSum{
   //SchHole(v:T)
-  //SchAlias(ident:Identity,def:Schema);
+  //SchNamed(ident:Identity,def:Schema);
   SchNative(def:DeclareNativeSchema);
   SchAnon(def:DeclareAnonSchema);
   SchRecord(def:DeclareRecordSchema);

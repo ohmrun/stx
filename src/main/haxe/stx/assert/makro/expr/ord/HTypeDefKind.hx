@@ -27,8 +27,11 @@ class HTypeDefKind extends OrdCls<HTypeDefKindT>{
         ord;
       case [TDAlias(tI),TDAlias(tII)] : 
         Ord.Makro().Expr().HComplexType.comply(tI,tII);
-      case [TDAbstract( tthisI, fromI, toI),TDAbstract( tthisII, fromII, toII)] : 
+      case [TDAbstract( tthisI, flagsI, fromI, toI),TDAbstract( tthisII, flagsII, fromII, toII)] : 
         var ord = Ord.NullOr(Ord.Makro().Expr().HComplexType).comply(tthisI,tthisII);
+        if(ord.is_not_less_than()){
+          ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HAbstractFlag)).comply(flagsI,flagsII);
+        }
         if(ord.is_not_less_than()){
           ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HComplexType)).comply(fromI,fromII);
         }

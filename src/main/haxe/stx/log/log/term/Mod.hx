@@ -3,6 +3,7 @@ package stx.log.log.term;
 abstract class Mod implements LogApi extends Base{
   public final delegate : Log;
   public function new(delegate){
+    __.assert().that().exists(delegate);
     this.delegate = delegate;
   }
   public function apply(value:Value<Dynamic>):Void{

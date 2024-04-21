@@ -6,7 +6,6 @@ package stx.nano;
 @:using(stx.nano.Position.PositionLift)
 @:forward abstract Position(Pos) from Pos to Pos{
   static public var ZERO(default,never) : Pos = make(null,null,null,null);
-  static public var _(default,never) = PositionLift;
 
   
   public function new(self:Pos) this = self;
@@ -33,7 +32,7 @@ package stx.nano;
   }
   #if (!macro)
     public function toString():String{
-      return _.toStringClassMethodLine(this);
+      return PositionLift.toStringClassMethodLine(this);
     }
   #else
     public function toString() {

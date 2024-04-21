@@ -62,6 +62,7 @@ private class NullShow{
 }
 private class EnumShow{
   static public function toString(v:Dynamic):String {
+
     var buf = StdType.enumConstructor(v);
     var params = StdType.enumParameters(v);
     return if(params.length == 0)

@@ -32,7 +32,10 @@ package stx.log;
   @:noUsing static public function make(fn:Value<Dynamic>->Void):Log{
     return new stx.log.log.term.Anon(fn);
   }
-  static public var ZERO(default,null)  : Log     = new stx.log.log.term.Unit();
+  static public var ZERO(get,null)  : Log;
+  static public function get_ZERO(){
+    return ZERO == null ? ZERO = new stx.log.log.term.Unit() : ZERO;
+  }
 
   inline public function new(?self) this = self == null ? new stx.log.log.term.Unit() : self;
   
@@ -56,6 +59,7 @@ package stx.log;
   public inline function fatal<X>(v:Stringify<X>,?pos:Pos) level(FATAL).apply(v(new EntryCtr()).toValue(pos));
 
   public inline function mod(fn:Value<Dynamic>->Value<Dynamic>){
+    __.assert().that().exists(this);
     return new stx.log.log.term.ModAnon(this,fn);
   }
   public inline function tag(tag:String):Log{

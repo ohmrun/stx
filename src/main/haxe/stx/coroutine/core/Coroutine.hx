@@ -65,9 +65,9 @@ class CoroutineLift{
       case Emit(head,rest)            : __.emit(head,f(rest));
       case Wait(arw)                  : arw(Push(i));
       case Hold(h)                    : __.hold(h.mod(f));
-      case Halt(Production(v))        : __.exit(__.fault().explain(_ -> _.e_coroutine_provided_value_to_stopped_coroutine()));
-      case Halt(Terminated(Stop))     : __.exit(__.fault().explain(_ -> _.e_coroutine_provided_value_to_stopped_coroutine()));
-      case Halt(Terminated(Exit(e)))  : __.exit(e.concat(__.fault().explain(_ -> _.e_coroutine_provided_value_to_stopped_coroutine())));
+      case Halt(Production(v))        : __.exit(__.fault().explain(_ -> new stx.coroutine.core.Errors.ECoroutineStop()));
+      case Halt(Terminated(Stop))     : __.exit(__.fault().explain(_ -> new stx.coroutine.core.Errors.ECoroutineStop()));
+      case Halt(Terminated(Exit(e)))  : __.exit(e.concat(__.fault().explain(_ -> new stx.coroutine.core.Errors.ECoroutineStop())));
     }
   }
   static public function map<I,O,Oi,R,E>(self:CoroutineSum<I,O,R,E>,fn:O->Oi):Coroutine<I,Oi,R,E>{

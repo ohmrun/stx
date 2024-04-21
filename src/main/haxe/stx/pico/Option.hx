@@ -13,9 +13,9 @@ abstract Option<T>(OptionSum<T>) from OptionSum<T> to OptionSum<T>{
   /**
    * Applicative functions
    */
+  //static public var tag(default,never) : stx.pico.Option.Tag        = Tag;
   @stx.meta.using
-  static public var __(default,never)                                 = OptionLift;
-  //static public var tag(default,never) : stx.pico.Option.Tag          = Tag;
+  static public inline function _uses(){ return OptionLift; }
 
   public function new(self) {
     this = self;
@@ -35,7 +35,7 @@ abstract Option<T>(OptionSum<T>) from OptionSum<T> to OptionSum<T>{
     return if (t == null) unit(); else pure(t);
   }
   public function toString(){
-    return __.toString(this);
+    return _uses().toString(this);
   }
 }
 @:expose

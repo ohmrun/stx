@@ -33,6 +33,7 @@ enum PExprSum<T>{
 @:using(eu.ohmrun.pml.pexpr.Signature)
 @:using(eu.ohmrun.pml.PExpr.PExprLift)
 abstract PExpr<T>(PExprSum<T>) from PExprSum<T> to PExprSum<T> {
+	
 	static public var _(default, never) = PExprLift;
 
 	public function new(self)
@@ -218,6 +219,14 @@ class PExprLift {
 			case PArray(arrayI) 	: arrayI.head();
 			case PSet(setI)				: setI.head();
 			default 							: __.option();
+		}
+	}
+	static public function tail<T>(self:PExpr<T>) {
+		return switch (self) {
+			case PGroup(Cons(x,xs)) 		: __.option(PGroup(xs));
+			case PArray(arrayI) 				: __.option(PArray(arrayI.tail()));
+			case PSet(setI)							: __.option(PSet(setI.tail()));
+			default 										: __.option();
 		}
 	}
 	static public function size<T>(self:PExpr<T>):Int {

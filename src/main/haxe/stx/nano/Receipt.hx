@@ -43,9 +43,9 @@ typedef ReceiptDef<T,E> = DefectDef<E> & {
   final value : Null<T>;
   public function iterator():Iterator<T>;
 }
-@:using(stx.nano.Receipt.ReceiptLift)
+@:using(stx.nano.Receipt.ReceiptUses)
 @:forward abstract Receipt<T,E>(ReceiptDef<T,E>) from ReceiptDef<T,E> to ReceiptDef<T,E>{
-  static public var _(default,never) = ReceiptLift;
+  static public var _(default,never) = ReceiptUses;
   public function new(self) this = self;
   @:noUsing static public function lift<T,E>(self:ReceiptDef<T,E>):Receipt<T,E> return new Receipt(self);
   static public function unit<T,E>(){
@@ -68,9 +68,9 @@ typedef ReceiptDef<T,E> = DefectDef<E> & {
     return this.error.toError();
   }
 }
-class ReceiptLift extends Clazz{
+class ReceiptUses extends Clazz{
   @:noUsing static public function make(){
-    return new ReceiptLift();
+    return new ReceiptUses();
   }
   @:noUsing static public function lift<T,E>(self:ReceiptDef<T,E>):Receipt<T,E>{
     return Receipt.lift(self);

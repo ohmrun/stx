@@ -20,7 +20,7 @@ class Signature{
 
 		return switch (self) {
 			case PEmpty: PSigPrimate(PItmEmpty);
-			case PLabel(name): PSigPrimate(PItmLabel);
+			case PLabel(name): PSigPrimate(PItmLabel());
 			case PApply(name): PSigPrimate(PItmApply);
 			case PValue(value): PSigPrimate(PItmValue);
 			case PAssoc(list):
@@ -37,9 +37,14 @@ class Signature{
 					.lfold((next:Option<PSignature>, memo:Bool) -> memo.if_else(() -> next.is_defined(), () -> false), true);
 
 				final consistent_val = has_consistent_vals.if_else(() -> types.head().map(x -> x.snd()), () -> None);
-				has_consistent_keys.if_else(() -> has_consistent_vals.if_else(() -> PSigCollate(consistent_key.fudge(), OneOf(consistent_val.fudge())),
-					() -> PSigCollate(consistent_key.fudge(), ManyOf(types.map(x -> x.snd()))),),
-					() -> PSigOutline(types));
+				has_consistent_keys.if_else(
+					() -> has_consistent_vals.if_else(
+						() -> PSigCollate(consistent_key.fudge(), [consistent_val.fudge()].imm()),
+						() -> PSigCollate(consistent_key.fudge(), types.map(x -> x.snd()))
+					),
+					() -> PSigOutline(types)
+				);
+
 			case PArray(array): get_chain_type(array, PCArray);
 			case PSet(arr): get_chain_type(arr, PCSet);
 			case PGroup(list): get_chain_type(list.toCluster(), PCGroup);
