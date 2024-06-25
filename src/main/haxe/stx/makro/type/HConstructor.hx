@@ -19,7 +19,7 @@ class HConstructorCls{
 }
 @:using(stx.makro.type.HConstructor.HConstructorLift)
 abstract HConstructor(HConstructorCls) from HConstructorCls to HConstructorCls{
-  static public var _(default,never) = HConstructorLift;
+  
   public inline function new(self:HConstructorCls) this = self;
   @:noUsing static inline public function lift(self:HConstructorCls):HConstructor return new HConstructor(self);
   @:noUsing static inline public function make(face:HFace,name:Option<String>):HConstructor return new HConstructor(new HConstructorCls(face,name));

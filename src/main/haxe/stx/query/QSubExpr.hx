@@ -25,7 +25,7 @@ enum QSubExprSum<T>{
 }
 @:using(stx.query.QSubExpr.QSubExprLift)
 abstract QSubExpr<T>(QSubExprSum<T>) from QSubExprSum<T> to QSubExprSum<T>{
-  static public var _(default,never) = QSubExprLift;
+
   public function new(self) this = self;
   @:noUsing static public function lift<T>(self:QSubExprSum<T>):QSubExpr<T> return new QSubExpr(self);
 

@@ -30,6 +30,7 @@ typedef TunnelDef<I,O,E>                = stx.coroutine.pack.Tunnel.TunnelDef<I,
 
 typedef CoroutineSum<I,O,R,E>           = stx.coroutine.core.Coroutine.CoroutineSum<I,O,R,E>;         //111
 typedef Coroutine<I,O,R,E>              = stx.coroutine.core.Coroutine<I,O,R,E>;                      //111
+typedef CoroutineLift                   = stx.coroutine.core.Coroutine.CoroutineLift;                     
 
 typedef TransmissionDef<I,O,R,E>        = stx.coroutine.core.Transmission.TransmissionDef<I,O,R,E>;
 typedef Transmission<I,O,R,E>           = stx.coroutine.core.Transmission<I,O,R,E>;

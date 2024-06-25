@@ -1,5 +1,7 @@
 package eu.ohmrun.fletcher.receiver.term;
 
+import eu.ohmrun.fletcher.core.ReceiverInput.ReceiverInputLift;
+
 abstract class Map<R,Ri,E> extends Delegate<Receiver<R,E>,Ri,E>{
   public function new(delegate){
     super(delegate);
@@ -10,7 +12,7 @@ abstract class Map<R,Ri,E> extends Delegate<Receiver<R,E>,Ri,E>{
     return delegate.apply(
       Apply.Anon(
         (input:ReceiverInput<R,E>) -> {
-          final next = ReceiverInput._.map(input,map);
+          final next = ReceiverInputLift.map(input,map);
           return app.apply(next);
         }
       )

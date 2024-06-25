@@ -18,7 +18,7 @@ enum CoroutineSum<I,O,R,E>{
   @:noUsing static public function lift<I,O,R,E>(self:CoroutineSum<I,O,R,E>):Coroutine<I,O,R,E>{
     return new Coroutine(self);
   }
-  static public var _(default,never) = CoroutineLift;
+  
   public function new(self) this = self;
 
   public function is_held(){
@@ -31,7 +31,7 @@ enum CoroutineSum<I,O,R,E>{
     return this;
   }
   public function provide(v:I){
-    return lift(Coroutine._.provide(this,v));
+    return lift(CoroutineLift.provide(this,v));
   }
 }
 class CoroutineLift{

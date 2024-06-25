@@ -36,7 +36,7 @@ abstract class ApplyCls<P,R> implements ApplyApi<P,R>{
  */
 @:using(stx.pico.Apply.ApplyLift)
 @:forward abstract Apply<P,R>(ApplyApi<P,R>) from ApplyApi<P,R> to ApplyApi<P,R>{
-  static public var _(default,never) = ApplyLift;
+  static public var __(default,never) = ApplyLift;
   public function new(self) this = self;
   static public inline function lift<P,R>(self:ApplyApi<P,R>):Apply<P,R> return new Apply(self);
 

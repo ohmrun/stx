@@ -3,7 +3,9 @@
 package-lock.json
 /.VSCodeCounter
 /build
+/src/test
 
 # Entries below this point are managed by Please (DO NOT EDIT)
 plz-out
 .plzconfig.local
+/dist

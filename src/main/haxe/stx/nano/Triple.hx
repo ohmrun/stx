@@ -4,21 +4,21 @@ typedef TripleDef<Ti,Tii,Tiii>   =  (Ti -> Tii -> Tiii -> Void) -> Void;
 
 @:using(stx.nano.Triple.TripleLift)
 @:callable abstract Triple<Ti,Tii,Tiii>(TripleDef<Ti,Tii, Tiii>) from TripleDef<Ti,Tii, Tiii> to TripleDef<Ti,Tii, Tiii>{
-  static public var _(default,never) = TripleLift;
+  
   public function toString(){
     return TripleLift.toString(this);
   }
   public var _0(get,never) : Ti;
   private function get__0(){
-    return _.fst(this);
+    return TripleLift.fst(this);
   }
   public var _1(get,never) : Tii;
   private function get__1(){
-    return _.snd(this);
+    return TripleLift.snd(this);
   }
   public var _2(get,never) : Tiii;
   private function get__2(){
-    return _.thd(this);
+    return TripleLift.thd(this);
   }
 }
 class TripleLift{

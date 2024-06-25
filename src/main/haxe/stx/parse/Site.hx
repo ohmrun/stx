@@ -8,7 +8,7 @@ typedef SiteDef = {
 }
 @:using(stx.parse.Site.SiteLift)
 abstract Site(SiteDef) from SiteDef to SiteDef{
-  static public var _(default,never) = SiteLift;
+  
   public inline function new(self:SiteDef) this = self;
   @:noUsing static inline public function lift(self:SiteDef):Site return new Site(self);
 

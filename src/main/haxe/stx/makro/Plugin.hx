@@ -57,7 +57,7 @@ class Plugin{
       default                : None;
     }
     for (t in v){
-      final type    = HType._.makro(t);
+      final type    = stx.makro.type.HType.HTypeLift.makro(t);
       final base    = type.getBaseType().fudge();
       final entries = base.meta.get().filter(
           (mde) -> mde.name.startsWith(":stx.makro")

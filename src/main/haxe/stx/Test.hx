@@ -38,7 +38,7 @@ typedef TestMethodOne         = stx.test.TestMethodOne;
 typedef TestMethodZero        = stx.test.TestMethodZero;
 typedef TestPhaseSum          = stx.test.TestPhaseSum;
 typedef TestResult            = stx.test.TestResult;
-typedef TestSuite             = stx.test.TestSuite;
+typedef TestResultAccumulator             = stx.test.TestResultAccumulator;
 typedef Util                  = stx.test.Util;
 typedef WithPos<T>            = stx.test.WithPos<T>;
 typedef WrappedFuture<T>      = stx.test.WrappedFuture<T>;
@@ -46,6 +46,7 @@ typedef TestFailure           = stx.fail.TestFailure;
 typedef TestFailureSum        = stx.fail.TestFailure.TestFailureSum;
 typedef TestMethodZeroDef     = Void->Option<Async>;
 typedef TestMethodOneDef      = Async->Void;
+typedef TestSuite             = stx.test.TestSuite;
 
 class Explain<T>{
   var val : T;
@@ -99,6 +100,6 @@ class Explained<T> {
     this.values   = values;
   }
   public function toString(){
-    return Printf.format(sentence,values.map(x -> '$x'));
+    return "";//sprintf(sentence,values.map(x -> '$x'));
   }
 }

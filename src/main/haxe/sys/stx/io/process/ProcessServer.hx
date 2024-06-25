@@ -1,5 +1,6 @@
 package sys.stx.io.process;
 
+import stx.proxy.core.Server.ServerLift;
 #if (sys || nodejs)
 import sys.stx.io.process.server.term.Impl as ProcessServerCls;
 
@@ -14,7 +15,7 @@ class ProcessServerLift{
     return ProcessServer.lift(self);
   }
   static public function provide(self:ProcessServer,req:ProcessRequest):ProcessServer{
-    return lift(Server._.provide(self.prj(),req));
+    return lift(ServerLift.provide(self.prj(),req));
   }
   static public function drain(self:ProcessServerDef,?buffer):ProcessServer{
     var that  = provide(self,PReqInput(IReqTotal(buffer),false));

@@ -6,7 +6,7 @@ typedef KVDef<K,V> = {
 }
 @:using(stx.nano.KV.KVLift)
 @:forward abstract KV<K,V>(KVDef<K,V>) from KVDef<K,V> to KVDef<K,V>{
-  static public var _(default,never) = KVLift;
+  
   public function new(self:KVDef<K,V>) this = self;
   @:noUsing static public function lift<K,V>(self:KVDef<K,V>):KV<K,V>{
     return new KV(self);

@@ -1,5 +1,7 @@
 package stx.query;
 
+import stx.query.QSubExpr.QSubExprLift;
+
 class QExprCtr extends Clazz {
 	@:noUsing static public function lift<T>(self:QExprSum<T>):QExpr<T> return QExpr.lift(self);
 
@@ -34,7 +36,6 @@ enum QExprSum<T = haxe.ds.Option<stx.pico.Nada>> {
 
 @:using(stx.query.QExpr.QExprLift)
 abstract QExpr<T = haxe.ds.Option<stx.pico.Nada>>(QExprSum<T>) from QExprSum<T> to QExprSum<T> {
-	static public var _(default, never) = QExprLift;
 
 	public function new(self)
 		this = self;
@@ -68,7 +69,7 @@ abstract QExpr<T = haxe.ds.Option<stx.pico.Nada>>(QExprSum<T>) from QExprSum<T> 
 class QExprLift {
 	static public function toStringWith<T>(self:QExpr<T>,fn:T->String) {
 		final f 	= toStringWith.bind(_,fn);
-		final fI  = QSubExpr._.toStringWith.bind(_,fn);
+		final fI  = QSubExprLift.toStringWith.bind(_,fn);
 		return switch(self){
 			case QEIdx 																: '_';
 			case QEAnd(l, r) 													: '${f(l)} && ${f(r)}';

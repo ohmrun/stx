@@ -7,7 +7,7 @@ typedef AlertDef<E> = Future<Report<E>>;
   @:noUsing static public function trigger() {
     return new AlertTrigger();
   }
-  static public var _(default,never) = AlertLift;
+  
   static public function unit<E>():Alert<E>{
     return Future.irreversible((cb) -> cb(Report.unit()));
   }

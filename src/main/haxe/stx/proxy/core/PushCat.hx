@@ -4,7 +4,7 @@ typedef PushCatDef<P,A,B,X,Y,R,E> = Unary<P,Proxy<A,B,X,Y,R,E>>;
 
 @:using(stx.proxy.core.PushCat.PushCatLift)
 abstract PushCat<P,A,B,X,Y,R,E>(PushCatDef<P,A,B,X,Y,R,E>) from PushCatDef<P,A,B,X,Y,R,E> to PushCatDef<P,A,B,X,Y,R,E>{
-  static public var _(default,never) = PushCatLift;
+
   public function new(self){
     this = self;
   }
@@ -48,8 +48,8 @@ class PushCatLift{
     __.log().trace('next $prx0 $prx1');
     return switch(prx0){
       case Ended(res)   : Ended(res);
-      case Yield(y,arw) : __.belay(prx1.then(PullCat._.next.bind(arw)).bindI(y));
-      case Await(a,arw) : Await(a,arw.then(PushCat._.next.bind(_,prx1)));
+      case Yield(y,arw) : __.belay(prx1.then(PullCatLift.next.bind(arw)).bindI(y));
+      case Await(a,arw) : Await(a,arw.then(PushCatLift.next.bind(_,prx1)));
       case Defer(ft)    : Defer(ft.mod(next.bind(_,prx1)));
     }
   }

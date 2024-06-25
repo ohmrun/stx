@@ -6,7 +6,7 @@ typedef ProcureAttributeDef = ProcurePropertyDef & {
 }
 @:using(stx.schema.declare.ProcureAttribute.ProcureAttributeLift)
 @:forward abstract ProcureAttribute(ProcureAttributeDef) from ProcureAttributeDef to ProcureAttributeDef{
-   static public var _(default,never) = ProcureAttributeLift;
+   
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcureAttributeDef):ProcureAttribute return new ProcureAttribute(self);
   @:noUsing static public function make(name,type,relation,inverse,?opt,?validation,?meta){

@@ -6,7 +6,7 @@ enum ProcureSum{
 }
 @:using(stx.schema.declare.Procure.ProcureLift)
 @:transitive @:forward abstract Procure(ProcureSum) from ProcureSum to ProcureSum{
-  static public var _(default,never) = ProcureLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcureSum):Procure return new Procure(self);
 
@@ -35,7 +35,7 @@ enum ProcureSum{
     } 
   }
   public function toString(){
-    return _.fold(
+    return ProcureLift.fold(
       this,
       l -> l.toString(),
       r -> r.toString()
@@ -43,7 +43,7 @@ enum ProcureSum{
   }
   public var validation(get,never):Validations;
   private function get_validation():Validations{
-    return _.fold(
+    return ProcureLift.fold(
       this,
       l -> l.validation,
       r -> r.validation

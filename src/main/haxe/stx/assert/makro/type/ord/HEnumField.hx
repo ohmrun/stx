@@ -24,7 +24,7 @@ class HEnumField extends OrdCls<THEnumField>{
       ord = Ord.NullOr(Ord.String()).comply(a.doc,b.doc);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.Array(Ord.Makro().Type().HTypeParameter).comply(a.params,b.params);
+      ord = Ord.ArrayOrd(Ord.Makro().Type().HTypeParameter).comply(a.params,b.params);
     }
     return ord;
   }

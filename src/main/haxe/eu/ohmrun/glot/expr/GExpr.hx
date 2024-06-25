@@ -63,7 +63,7 @@ class GExprCtr extends Clazz{
       () -> this.Const(_ -> _.Ident(head))
     );
   }
-  public function Array(lhs:CTR<GExprCtr,GExpr>,rhs:CTR<GExprCtr,GExpr>){
+  public function ArrayOf(lhs:CTR<GExprCtr,GExpr>,rhs:CTR<GExprCtr,GExpr>){
     return GExpr.lift(GEArray(lhs(this),rhs(this)));
   }
   public function Binop(op,l:CTR<GExprCtr,GExpr>,r:CTR<GExprCtr,GExpr>){

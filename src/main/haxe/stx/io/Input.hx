@@ -8,7 +8,7 @@ typedef InputDef  = CoroutineSum<InputRequest,InputResponse,Nada,IoFailure>;
 @:using(stx.coroutine.pack.Tunnel.TunnelLift)
 @:using(stx.io.Input.InputLift)
 @:callable @:forward abstract Input(InputDef) from InputDef to InputDef{
-  static public var _(default,never) = InputLift;
+
   public inline function new(self:InputDef){
     this = self;
   } 

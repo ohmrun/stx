@@ -18,7 +18,7 @@ class Map<K,V> extends OrdCls<StdMap<K,V>>{
     return if(c != 0){
       c > 0 ? NotLessThan : LessThan;
     }else{
-       ret = Ord.Array(key).comply(l_keys,r_keys);
+       ret = Ord.ArrayOrd(key).comply(l_keys,r_keys);
       if(ret == LessThan){
         LessThan;
       }else{

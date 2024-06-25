@@ -32,7 +32,7 @@ class HBaseTypeCtr extends Clazz{
 }
 @:using(stx.makro.type.HBaseType.HBaseTypeLift)
 @:forward abstract HBaseType(StdBaseType) from StdBaseType to StdBaseType{
-  static public var _(default,never) = HBaseTypeLift;
+  
   @:noUsing static public function lift(self:StdBaseType){
     return new HBaseType(self);
   }

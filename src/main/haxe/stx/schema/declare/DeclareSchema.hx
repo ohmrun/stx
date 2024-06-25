@@ -12,7 +12,7 @@ abstract class DeclareSchemaCls implements DeclareSchemaApi extends WithValidati
 }
 @:using(stx.schema.declare.DeclareSchema.DeclareSchemaLift)
 @:forward abstract DeclareSchema(DeclareSchemaApi) from DeclareSchemaApi to DeclareSchemaApi{
-  static public var _(default,never) = DeclareSchemaLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareSchemaApi):DeclareSchema return new DeclareSchema(self);
 

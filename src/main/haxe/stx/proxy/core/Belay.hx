@@ -1,5 +1,6 @@
 package stx.proxy.core;
 
+import eu.ohmrun.fletcher.Provide.ProvideLift;
 /**
  * @see 
  */
@@ -34,10 +35,10 @@ abstract Belay<A,B,X,Y,R,E>(BelayDef<A,B,X,Y,R,E>) from BelayDef<A,B,X,Y,R,E> to
   private function get_self():Belay<A,B,X,Y,R,E> return lift(this);
 
   public function mod<Ai,Bi,Xi,Yi,Ri,Ei>(fn:Proxy<A,B,X,Y,R,E>->Proxy<Ai,Bi,Xi,Yi,Ri,Ei>,?pos:Pos):Belay<Ai,Bi,Xi,Yi,Ri,Ei>{
-    return lift(Fletcher._.map(this,fn,pos));
+    return lift(FletcherLift.map(this,fn,pos));
   }
   public function and_with<Ai,Aii,Bi,Bii,Xi,Xii,Yi,Yii,Ri,Rii>(that:Belay<Ai,Bi,Xi,Yi,Ri,E>,fn:Proxy<A,B,X,Y,R,E>->Proxy<Ai,Bi,Xi,Yi,Ri,E>->Proxy<Aii,Bii,Xii,Yii,Rii,E>):Belay<Aii,Bii,Xii,Yii,Rii,E>{
-    return Provide._.and(
+    return ProvideLift.and(
       this,
       that
     ).convert(Convert.fromFun1R(__.decouple(fn)));

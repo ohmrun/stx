@@ -27,7 +27,7 @@ enum DeclineSum<E>{
 @:stx.code.meta.projection
 @:using(stx.fail.Decline.DeclineLift)
 abstract Decline<T>(DeclineSum<T>) from DeclineSum<T> to DeclineSum<T>{
-  static public var _(default,never) = DeclineLift;
+  
   public function new(self) this = self;
   @:noUsing static public inline function lift<T>(self:DeclineSum<T>):Decline<T> return new Decline(self);
 

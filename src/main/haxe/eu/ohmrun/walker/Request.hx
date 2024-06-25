@@ -7,7 +7,7 @@ enum RequestSum<T,K>{
 } 
 @:using(eu.ohmrun.walker.Request.RequestLift)
 abstract Request<T,K>(RequestSum<T,K>) from RequestSum<T,K> to RequestSum<T,K>{
-  static public var _(default,never) = RequestLift;
+  
 
   public function new(self) this = self;  
   static public function lift<T,K>(self:RequestSum<T,K>):Request<T,K> return new Request(self);
@@ -25,7 +25,7 @@ abstract Request<T,K>(RequestSum<T,K>) from RequestSum<T,K> to RequestSum<T,K>{
 
   public var message(get,never):Option<Message<T,K>>;
   public function get_message(){
-    return _.fold(
+    return RequestLift.fold(
       this,
       x   -> __.option(x),
       x   -> __.option(x),

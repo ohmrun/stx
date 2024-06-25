@@ -6,7 +6,7 @@ typedef DeclarePropertyDef = {
   public final ?meta        : PExpr<Primitive>;
 }
 @:transitive @:forward abstract DeclareProperty(DeclarePropertyDef) from DeclarePropertyDef to DeclarePropertyDef{
-  //static public var _(default,never) = DeclarePropertyLift;
+  //
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclarePropertyDef):DeclareProperty return new DeclareProperty(self);
   @:noUsing static public function make(type:SchemaRef,validation, meta){

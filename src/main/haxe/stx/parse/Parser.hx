@@ -5,7 +5,7 @@ import stx.parse.Parsers.*;
 @:using(stx.parse.parser.ParserLift)
 @:forward abstract Parser<I,O>(ParserApi<I,O>) to ParserApi<I,O>{
   public inline function new(self:ParserApi<I,O>) this = self;
-  static public var _(default,never) = ParserLift;
+  
    
   @:noUsing static inline public function fromConstructor<I,O>(fn:Void->Parser<I,O>):Parser<I,O>{
     return lift(LAnon(fn));
@@ -31,8 +31,8 @@ import stx.parse.Parsers.*;
   public inline function asParser():Parser<I,O> return self;
 
   /**implicit override issue**/
-  public inline function then<Oi>(f : O -> Oi):Parser<I,Oi>   return _.then(lift(this),f);
+  public inline function then<Oi>(f : O -> Oi):Parser<I,Oi>   return ParserLift.then(lift(this),f);
   /**implicit override issue**/
-  public inline function or(p2 : Parser<I,O>):Parser <I,O>    return _.or(lift(this),p2);
+  public inline function or(p2 : Parser<I,O>):Parser <I,O>    return ParserLift.or(lift(this),p2);
   
 }

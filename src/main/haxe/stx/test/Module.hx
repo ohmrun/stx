@@ -101,7 +101,7 @@ class Module extends Clazz{
       throw e;
     });
   }
-  public function run<T:TestCase>(tests:Array<T>,poke:Array<Dynamic>){
+  public function run(tests:Cluster<TestCase>,poke:Array<Dynamic>){
     final tests =  
       #if sys
         if (Sys.env("POKE").is_defined()){

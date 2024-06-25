@@ -22,7 +22,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
   }
 } 
 @:forward abstract DeclareGenericSchema(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to DeclareGenericSchemaApi{
-  static public var _(default,never) = DeclareGenericSchemaLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareGenericSchemaApi):DeclareGenericSchema return new DeclareGenericSchema(self);
 

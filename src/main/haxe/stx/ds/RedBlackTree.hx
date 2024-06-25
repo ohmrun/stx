@@ -6,7 +6,7 @@ enum RedBlackTreeSum<T> {
 }
 @:using(stx.ds.RedBlackTree.RedBlackTreeLift)
 @:forward abstract RedBlackTree<T>(RedBlackTreeSum<T>) from RedBlackTreeSum<T> to RedBlackTreeSum<T>{
-  static public var _(default,never) = RedBlackTreeLift;
+  
 
   public function new(self){
     this = self;

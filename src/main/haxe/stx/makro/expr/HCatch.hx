@@ -16,7 +16,7 @@ typedef HCatchDef = haxe.macro.Expr.Catch;
 
 @:using(stx.makro.expr.HCatch.HCatchLift)
 @:forward abstract HCatch(HCatchDef) from HCatchDef to HCatchDef{
-  static public var _(default,never) = HCatchLift;
+  
   public inline function new(self:HCatchDef) this = self;
   @:noUsing static inline public function lift(self:HCatchDef):HCatch return new HCatch(self);
 

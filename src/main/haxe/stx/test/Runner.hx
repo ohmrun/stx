@@ -5,13 +5,13 @@ class Runner{
   public function new(?timeout=6000){
     this.timeout = timeout;
   }
-  public function apply<T:TestCase>(cases:Array<T>):Stream<TestPhaseSum,TestFailure>{
-    var test_cases  : Array<TestCaseData> = cases.map(
-      (t:T) -> @:privateAccess t.__stx__tests(timeout) 
+  public function apply(cases:Cluster<TestCase>):Stream<TestPhaseSum,TestFailure>{
+    var test_cases  : Cluster<TestCaseData> = cases.map(
+      (t:TestCase) -> @:privateAccess t.__stx__tests(timeout) 
     );
     return applyI(test_cases);
   } 
-  public function applyI<T:TestCase>(cases:Cluster<TestCaseData>){
+  public function applyI(cases:Cluster<TestCaseData>){
     var sig   = Stream.fromCluster(cases);
     return sig.flat_map(
       val -> {
@@ -20,7 +20,7 @@ class Runner{
           .seq(TestCaseDataRun.apply(val,timeout))
           .seq(Stream.effect(() -> {__.log().debug("After TestCaseDataRun");}));
       }
-    ).seq(Stream.pure(TP_ReportTestSuiteComplete(new TestSuite(cases))));
+    ).seq(Stream.pure(TP_ReportTestSuiteComplete(new TestResultAccumulator(cases))));
   }
 }
 class TestCaseDataRun{

@@ -1,5 +1,7 @@
 package stx.makro.type;
 
+import stx.makro.type.Identity.IdentityLift;
+
 final _e = __.makro().expr;
 final _t = __.makro().type;
 
@@ -19,11 +21,11 @@ class HModuleTypeCtr extends Clazz{
 }
 @:using(stx.makro.type.HModuleType.HModuleTypeLift)
 @:forward abstract HModuleType(StdModuleType) from StdModuleType to StdModuleType{
-  static public var _(default,never) = HModuleTypeLift;
+  
   public function new(self) this = self;
   
   public function getIdentity(){
-    return Identity._.getMonikerIdentity(this);
+    return IdentityLift.getMonikerIdentity(this);
   }
 }
 class HModuleTypeLift{

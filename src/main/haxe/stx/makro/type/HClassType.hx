@@ -5,7 +5,7 @@ class HClassTypeCtr extends Clazz{
 }
 @:using(stx.makro.type.HClassType.HClassTypeLift)
 @:forward abstract HClassType(ClassType) from ClassType to ClassType{
-  static public var _(default,never) = HClassTypeLift;
+  
   public function new(self)this = self;
   @:noUsing static public inline function lift(self:ClassType) return new HClassType(self);
   
@@ -15,7 +15,7 @@ class HClassTypeCtr extends Clazz{
   @:to public function toBaseType():BaseType{
     return this;
   }
-  public function get_interface(?ancestors:Bool):Array<HClassAndParam>{ return _.get_interface(this,ancestors); }
+  public function get_interface(?ancestors:Bool):Array<HClassAndParam>{ return HClassTypeLift.get_interface(this,ancestors); }
 
 /**
  * This aliases weirdly
@@ -32,7 +32,7 @@ class HClassTypeLift{
         ct.prj().interfaces
           .map((x) -> (x:HClassAndParam))
           .concat(
-            HClassType._.get_ancestors(ct)
+            HClassTypeLift.get_ancestors(ct)
               .flat_map(
                 (x) -> {
                   return x.data.get_interface(ancestors).map((x) -> (x:HClassAndParam));

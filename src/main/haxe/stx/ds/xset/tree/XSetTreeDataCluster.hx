@@ -1,5 +1,7 @@
 package stx.ds.xset.tree;
 
+import stx.nano.Cluster.ClusterLift;
+
 typedef XSetTreeDataClusterDef = Cluster<XSetTreeData>;
 
 abstract XSetTreeDataCluster(XSetTreeDataClusterDef) from XSetTreeDataClusterDef to XSetTreeDataClusterDef{
@@ -24,6 +26,6 @@ abstract XSetTreeDataCluster(XSetTreeDataClusterDef) from XSetTreeDataClusterDef
     );
   }
   public function snoc(data:XSetTreeData){
-    return lift(Cluster._.snoc(this,data));
+    return lift(ClusterLift.snoc(this,data));
   }
 }

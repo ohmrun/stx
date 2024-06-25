@@ -1,2 +1,0 @@
-package sys.stx;
-

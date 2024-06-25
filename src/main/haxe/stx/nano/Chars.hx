@@ -7,7 +7,7 @@ import haxe.ds.IntMap;
   @:noUsing static public function lift(self:StdString){
     return new Chars(self);
   }
-  static public var _(default,never) = CharsLift;
+  
   private function new(self) this = self;
 
   @:op(A + A)

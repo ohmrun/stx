@@ -1,6 +1,9 @@
 package stx.test;
 
 @:rtti class TestCase extends Assert{
+  public function new(){
+    super();
+  }
   private function __stx__tests(timeout){
     return TestCaseLift.get_tests(this,timeout);
   }
@@ -22,6 +25,7 @@ package stx.test;
   public function wrap<T>(future:Future<T>,?pos:Pos):WrappedFuture<T>{
     return WrappedFuture.lift(new Future(
       (cb) -> {
+        trace('wrap');
         return try{
           future.handle(
             (v) -> {

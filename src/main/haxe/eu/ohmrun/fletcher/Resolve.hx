@@ -50,7 +50,7 @@ class ResolveLift{
           i.fold(
             (s) -> cont.value(__.accept(s)).serve(),
             (e) -> {
-              var next = Fletcher._.map(self,
+              var next = FletcherLift.map(self,
                 (chk:Chunk<I,E>) -> chk.fold(
                   (i) -> __.accept(i),
                   (e) -> __.reject(e),

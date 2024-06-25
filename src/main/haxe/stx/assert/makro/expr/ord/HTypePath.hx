@@ -12,13 +12,13 @@ class HTypePath extends OrdCls<HTypePathT>{
       if(lhs.name == "DirectType" && lhs.pack[0] == "tink"){
         return NotLessThan;
       }
-      ord = Ord.Array(Ord.String()).comply(lhs.pack,rhs.pack);
+      ord = Ord.ArrayOrd(Ord.String()).comply(lhs.pack,rhs.pack);
     }
     if(ord.is_not_less_than()){
       ord = Ord.NullOr(Ord.String()).comply(lhs.sub,rhs.sub);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HTypeParam)).comply(lhs.params,rhs.params);
+      ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HTypeParam)).comply(lhs.params,rhs.params);
     }
     return ord;
   }

@@ -6,7 +6,7 @@ enum SpurSum<K>{
 }
 @:using(eu.ohmrun.walker.Spur.SpurLift)
 abstract Spur<K>(SpurSum<K>) from SpurSum<K> to SpurSum<K>{
-  static public var _(default,never) = SpurLift;
+  
   public function new(self) this = self;
   static public function lift<K>(self:SpurSum<K>):Spur<K> return new Spur(self);
 

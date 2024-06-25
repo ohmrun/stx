@@ -10,7 +10,7 @@ class HCase extends EqCls<THCase>{
   }
 
   public function comply(a:THCase,b:THCase):Equaled{
-    var eq = Eq.Array(Eq.Makro().Expr().Expr).comply(a.values,b.values);
+    var eq = Eq.ArrayEq(Eq.Makro().Expr().Expr).comply(a.values,b.values);
     if(eq.is_ok()){
       eq =  Eq.NullOr(Eq.Makro().Expr().Expr).comply(a.guard,b.guard);
     }

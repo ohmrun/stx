@@ -1,5 +1,8 @@
 package stx.schema;
 
+import stx.schema.core.Identity.IdentityLift;
+
+
 typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   //used for turning schemas into types
   var ?pop : () -> Schema;
@@ -7,7 +10,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
 
 @:using(stx.schema.SchemaRef.SchemaRefLift)
 @:forward abstract SchemaRef(SchemaRefDef) from SchemaRefDef to SchemaRefDef{
-  static public var _(default,never) = SchemaRefLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
 
@@ -119,7 +122,7 @@ class SchemaRefLift{
     return e.Call(
       e.Path('stx.schema.SchemaRef.make'),
       [
-        Identity._.denote({
+        IdentityLift.denote({
           name  : self.name,
           pack  : self.pack,
           rest  : self.rest

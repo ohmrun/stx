@@ -1,5 +1,7 @@
 package stx.makro.expr.type;
 
+import stx.makro.type.HEnumType.HEnumTypeLift;
+
 final Expr = __.makro().expr;
 
 class EnumType extends Clazz{
@@ -34,10 +36,10 @@ class EnumType extends Clazz{
     );
   }
   @:noUsing static public function getBinaryCases(e0,e1,gen:HEnumValueConstructor->HEnumValueConstructor->Array<Case>,pos){
-    var lparams = HEnumType._.getConstructors(e0);
-    var rparams = HEnumType._.getConstructors(e1);
-    var e0id    = HEnumType._.getMoniker(e0);
-    var e1id    = HEnumType._.getMoniker(e1);
+    var lparams = HEnumTypeLift.getConstructors(e0);
+    var rparams = HEnumTypeLift.getConstructors(e1);
+    var e0id    = HEnumTypeLift.getMoniker(e0);
+    var e1id    = HEnumTypeLift.getMoniker(e1);
 
     var consl = lparams.toIter().map(
       (tp) -> HEnumValueConstructor.make(e0,e0id.call(tp.fst()),tp.snd())
@@ -64,9 +66,9 @@ class EnumType extends Clazz{
     ).to_macro_at(pos);
   }
   @:noUsing static public function getSwitch(e:HEnumType,gen:Unary<HEnumValueConstructor,Array<Case>>,pos):HExpr{
-    var cons  = HEnumType._.getConstructors(e);    
+    var cons  = stx.makro.type.HEnumType.HEnumTypeLift.getConstructors(e);    
     var cases = cons.toIter().map(Field.fromCouple).map(
-          (c:Field<HTFunArgArray>) -> HEnumValueConstructor.make(e,HEnumType._.getMoniker(e).call(c.key),c.val)
+          (c:Field<HTFunArgArray>) -> HEnumValueConstructor.make(e,HEnumTypeLift.getMoniker(e).call(c.key),c.val)
         ).map(gen).fold(
           (next,memo:Array<Case>) ->  memo.concat(next),
           []
@@ -117,7 +119,7 @@ class EnumType extends Clazz{
    * @return StringMap<U>
    */
   @:noUsing static public function switcher<U>(e:StdEnumType,handler:Array<HTFunArg>->HExpr,pos,def):HExpr->HExpr{
-    var each = HEnumType._.constructorHandler(e,
+    var each = HEnumTypeLift.constructorHandler(e,
       handler.fn().split((x)->x)
     );
     var next = [];

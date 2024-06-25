@@ -11,7 +11,6 @@ interface PredicateApi<P,E>{
 
 @:using(stx.assert.Predicate.PredicateLift)
 @:forward abstract Predicate<T,E>(PredicateApi<T,E>) from PredicateApi<T,E> to PredicateApi<T,E>{
-  static public var _(default,null) = PredicateLift;
 
   public function new(v:PredicateApi<T,E>) this = v;
 

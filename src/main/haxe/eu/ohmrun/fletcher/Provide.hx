@@ -5,7 +5,6 @@ typedef ProvideDef<O> = ConvertDef<Nada,O>;
 @:using(eu.ohmrun.fletcher.Provide.ProvideLift)
 @:forward abstract Provide<O>(ProvideDef<O>) from ProvideDef<O> to ProvideDef<O> 
 {
-  static public var _(default,never) = ProvideLift;
   public inline function new(self) this = self;
   static public inline function lift<O>(self:ProvideDef<O>):Provide<O> return new Provide(self);
 
@@ -59,13 +58,13 @@ typedef ProvideDef<O> = ConvertDef<Nada,O>;
   private function get_self():Provide<O> return lift(this);
 
   public inline function fudge(){
-    return _.fudge(this);
+    return ProvideLift.fudge(this);
   }
 }
 
 class ProvideLift{
   static public inline function environment<O>(self:Provide<O>,handler:O->Void,?pos:Pos):Fiber{
-    return Fletcher._.environment(
+    return FletcherLift.environment(
       self,
       Nada,
       (o) -> {
@@ -82,7 +81,7 @@ class ProvideLift{
     return Provide.lift(Fletcher.FlatMap(self.toFletcher(),fn));
   }
   static public function and<Oi,Oii>(lhs:ProvideDef<Oi>,rhs:ProvideDef<Oii>):Provide<Couple<Oi,Oii>>{
-    return Provide.lift(Fletcher._.pinch(
+    return Provide.lift(FletcherLift.pinch(
         lhs,
         rhs
     ));
@@ -109,13 +108,13 @@ class ProvideLift{
     );
   }
   static public inline function fudge<O>(self:Provide<O>):O{
-    return Fletcher._.fudge(self,Nada);
+    return FletcherLift.fudge(self,Nada);
   }
   static public function then<O,Oi>(self:ProvideDef<O>,that:Fletcher<O,Oi,Nada>):Provide<Oi>{
     return Provide.lift(Fletcher.Then(self,that));
   }
   static public function zip<Oi,Oii>(self:ProvideDef<Oi>,that:ProvideDef<Oii>):Provide<Couple<Oi,Oii>>{
-    return Provide.lift(Fletcher._.pinch(self,that));
+    return Provide.lift(FletcherLift.pinch(self,that));
   }
   static public function adjust<O,Oi,E>(self:ProvideDef<O>,fn:O->Upshot<Oi,E>):Produce<Oi,E>{
     return Produce.lift(self.map(fn));

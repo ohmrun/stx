@@ -12,7 +12,7 @@ typedef HAbstractTypeCastDef = {t:Type, field:Null<ClassField>};
 
 @:using(stx.makro.type.HAbstractTypeCast.HAbstractTypeCastLift)
 @:forward abstract HAbstractTypeCast(HAbstractTypeCastDef) from HAbstractTypeCastDef to HAbstractTypeCastDef{
-  static public var _(default,never) = HAbstractTypeCastLift;
+  
   public inline function new(self:HAbstractTypeCastDef) this = self;
   @:noUsing static inline public function lift(self:HAbstractTypeCastDef):HAbstractTypeCast return new HAbstractTypeCast(self);
   @:noUsing static inline public function make(t,field){

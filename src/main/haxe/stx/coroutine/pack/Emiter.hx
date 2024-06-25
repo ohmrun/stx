@@ -1,5 +1,6 @@
 package stx.coroutine.pack;
 
+import stx.coroutine.pack.Source.SourceLift;
 #if tink_streams
 import tink.streams.Stream;
 #end
@@ -10,7 +11,7 @@ typedef EmiterDef<O,E> = SourceDef<O,Nada,E>;
 
 @:using(stx.coroutine.pack.Emiter.EmiterLift)
 @:forward abstract Emiter<O,E>(EmiterDef<O,E>) from EmiterDef<O,E> to EmiterDef<O,E>{
-  static public var _(default,never) = EmiterLift;  
+  
   public function new(self:EmiterDef<O,E>) this = self;
   @:noUsing static public function lift<O,E>(self:EmiterDef<O,E>) return new Emiter(self);
 
@@ -116,7 +117,7 @@ class EmiterLift{
   static public function reduce<T,U,E>(source:Emiter<T,E>,fn:T->U->U,memo:U):Derive<U,E>{
     function f(source:Emiter<T,E>,memo) { return reduce(source,fn,memo); }
     function c(memo){ return __.into(f.bind(_,memo)); } 
-    return Derive.lift(switch(source){
+    return Derive.Uses(switch(source){
       case Emit(head,rest)                      : 
         rest.mod(
           (spx) -> f(spx,fn(head,memo))
@@ -263,7 +264,7 @@ class EmiterLift{
     );
   }
   static public function filter<O,E>(self:Emiter<O,E>,prd:O->Bool):Emiter<O,E>{
-    return Emiter.lift(Source._.filter(Source.lift(self),prd));
+    return Emiter.lift(SourceLift.filter(Source.lift(self),prd));
   }
   static public function secure<O,E>(self:Emiter<O,E>,next:Secure<O,E>):Effect<E>{
     function recurse(self:Coroutine<Nada,O,Nada,E>,next:Coroutine<O,Nada,Nada,E>):Coroutine<Nada,Nada,Nada,E>{

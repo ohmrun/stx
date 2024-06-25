@@ -11,7 +11,7 @@ typedef HAbstractTypeBinopDef = {op:haxe.macro.Expr.Binop, field:HClassField};
 
 @:using(stx.makro.type.HAbstractTypeBinop.HAbstractTypeBinopLift)
 @:forward abstract HAbstractTypeBinop(HAbstractTypeBinopDef) from HAbstractTypeBinopDef to HAbstractTypeBinopDef{
-  static public var _(default,never) = HAbstractTypeBinopLift;
+  
   public inline function new(self:HAbstractTypeBinopDef) this = self;
   @:noUsing static inline public function lift(self:HAbstractTypeBinopDef):HAbstractTypeBinop return new HAbstractTypeBinop(self);
 

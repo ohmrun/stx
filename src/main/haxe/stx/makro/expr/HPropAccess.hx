@@ -26,7 +26,7 @@ enum abstract HPropAccessSum(String) from String{
 }
 @:using(stx.makro.expr.HPropAccess.HPropAccessLift)
 @:forward abstract HPropAccess(HPropAccessSum) from HPropAccessSum to HPropAccessSum{
-  static public var _(default,never) = HPropAccessLift;
+  
   public inline function new(self:HPropAccessSum) this = self;
   @:noUsing static inline public function lift(self:HPropAccessSum):HPropAccess return new HPropAccess(self);
 

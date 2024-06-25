@@ -13,7 +13,7 @@ typedef HTypedExprDef = haxe.macro.Type.TypedExpr;
 @:using(stx.makro.expr.typed.HTypedExpr.HTypedExprLift)
 @:forward abstract HTypedExpr(StdExpr){
   static public var ZERO(default,never) : HTypedExpr  = lift( {expr : EBlock([]), pos : null } );
-  static public var _(default,never) = HTypedExprLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:StdExpr):HTypedExpr return new HTypedExpr(self);
   public function prj():StdExpr return this;

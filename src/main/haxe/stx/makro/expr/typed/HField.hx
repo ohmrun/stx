@@ -14,7 +14,7 @@ typedef HFieldDef = StdField;
 
 @:using(stx.makro.expr.HField.HFieldLift)
 @:forward abstract HField(StdField) from StdField to StdField{
-  static public var _(default,never) = HFieldLift;
+  
   public inline function new(self:StdField) this = self;
   static inline public function lift(self:StdField):HField return new HField(self);
 

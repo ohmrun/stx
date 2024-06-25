@@ -1,7 +1,7 @@
 package stx.schema.declare.term;
 
 abstract SchemaString(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to DeclareNativeSchemaApi{
-  static public var _(default,never) = SchemaStringLift;
+  
   @:noUsing static public function make(){
     return new SchemaString(
       new DeclareNativeSchemaCls(

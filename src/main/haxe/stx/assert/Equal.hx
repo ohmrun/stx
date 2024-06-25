@@ -21,7 +21,7 @@ class Equal{
       case TBool                                                        :   new Bool();
       case TFunction                                                    :   new Function();
       case TClass( c ) if ( c == StringMap  )                           :   new Map(new Deferred());
-      case TClass( c ) if ( c == Array  )                               :   new Array(new Deferred());
+      case TClass( c ) if ( c == Array  )                               :   new ArrayEq(new Deferred());
       case TClass( c ) if ( c == Date   )                               :   new Date();
       case TClass( c ) if ( c == String )                               :   new String();
       case TEnum(_)                                                     :   new Enum();

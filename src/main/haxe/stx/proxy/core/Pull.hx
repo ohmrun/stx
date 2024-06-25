@@ -1,7 +1,7 @@
 package stx.proxy.core;
 
 abstract Pull<A,B,X,Y,R,E>(ProxySum<A,B,X,Y,R,E>) from ProxySum<A,B,X,Y,R,E> to ProxySum<A,B,X,Y,R,E>{
-  static public var _(default,never) = PullLift;
+
   public function new(self) this = self;
 
   @:noUsing static public function pure<A,B,X,Y,R,E>(a:A):Proxy<A,B,A,B,R,E>{

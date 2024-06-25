@@ -12,3 +12,5 @@ root = jsn['root']
 
 for prj in jsn["directories"]:
     shutil.copytree(f'{root}/{prj}/src/main/haxe/','src/main/haxe/',dirs_exist_ok=True)
+for prj in jsn["directories"]:
+    shutil.copytree(f'{root}/{prj}/src/test/haxe/','src/test/haxe/',dirs_exist_ok=True)

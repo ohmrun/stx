@@ -31,7 +31,7 @@ typedef HFieldTypeDef = StdFieldType;
 
 @:using(stx.makro.expr.HFieldType.HFieldTypeLift)
 @:forward abstract HFieldType(StdFieldType) from StdFieldType to StdFieldType{
-  static public var _(default,never) = HFieldTypeLift;
+  
   public inline function new(self:StdFieldType) this = self;
   static inline public function lift(self:StdFieldType):HFieldType return new HFieldType(self);
 

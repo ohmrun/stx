@@ -9,12 +9,12 @@ typedef DeriveDef<R,E> = CoroutineSum<Nada,Nada,R,E>;
   static public inline function _uses(){ return DeriveUses; }
 
   public function new(self:DeriveDef<R,E>) this = self;
-  @:noUsing static public function lift<R,E>(self:DeriveDef<R,E>) return new Derive(self);
+  @:noUsing static public function Uses<R,E>(self:DeriveDef<R,E>) return new Derive(self);
   @:from static public function fromCoroutine<I,O,R,E>(spx:Coroutine<Nada,Nada,R,E>):Derive<R,E>{
     return new Derive(spx);
   }
   @:noUsing static public function fromThunk<R,E>(thk:Thunk<R>):Derive<R,E>{
-    return lift(__.lazy(
+    return Uses(__.lazy(
       () -> __.prod(thk())
     ));
   }
@@ -70,7 +70,7 @@ class DeriveUses{
         case Hold(ft)                 : __.hold(ft.mod(recurse));
       } 
     }
-    return Effect.lift(recurse(self));
+    return Effect.Uses(recurse(self));
   }
   // static public function modulate<R,Ri,E>(self:DeriveDef<R,E>,fn:Modulate<R,Ri,CoroutineFailure<E>>):Derive<Ri,E>{
   //   function f(self:DeriveDef<R,E>):DeriveDef<R,E>{
@@ -99,7 +99,7 @@ class DeriveUses{
   //       default                                     : __.stop();
   //     }
   //   }
-  //   return Derive.lift(self);
+  //   return Derive.Uses(self);
   // }
   static public function zip<R,Ri,E>(self:DeriveDef<R,E>,that:DeriveDef<Ri,E>):Derive<Couple<R,Ri>,E>{
     function f(self,that):DeriveDef<Couple<R,Ri>,E>{
@@ -125,7 +125,7 @@ class DeriveUses{
         case [Halt(l),r]                                              : __.hold(Held.Pause(f.bind(__.halt(l),r)));
       }
     }
-    return Derive.lift(f(self,that));
+    return Derive.Uses(f(self,that));
   }
   // static public function regulate<R,E>(self:DeriveDef<R,E>,fn:Regulate<R,E>):Regulate<R,E>{
   //   return modulate(self,fn);
@@ -140,7 +140,7 @@ class DeriveUses{
         case Halt(Terminated(e))      : __.term(e);
       }
     }
-    return Effect.lift(f(self));
+    return Effect.Uses(f(self));
   }
   static public function map<R,Ri,E>(self:DeriveDef<R,E>,fn:R->Ri):Derive<Ri,E>{
     function f(self:DeriveDef<R,E>):DeriveDef<Ri,E>{
@@ -152,7 +152,7 @@ class DeriveUses{
         case Halt(Terminated(e))      : __.term(e);
       }
     }
-    return Derive.lift(f(self));
+    return Derive.Uses(f(self));
   }
   static public function produce<R,E>(self:DeriveDef<R,E>):Produce<R,E>{
     return Produce.fromPledge(

@@ -11,7 +11,7 @@ enum PChainKindSum{
 
 @:using(eu.ohmrun.pml.PChainKind.PChainKindLift)
 abstract PChainKind(PChainKindSum) from PChainKindSum to PChainKindSum{
-  static public var _(default,never) = PChainKindLift;
+  
   public inline function new(self:PChainKindSum) this = self;
   @:noUsing static inline public function lift(self:PChainKindSum):PChainKind return new PChainKind(self);
 

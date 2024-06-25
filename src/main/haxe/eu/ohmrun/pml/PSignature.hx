@@ -24,7 +24,7 @@ enum PSignatureSum{
 }
 @:using(eu.ohmrun.pml.PSignature.PSignatureLift)
 abstract PSignature(PSignatureSum) from PSignatureSum to PSignatureSum{
-  static public var _(default,never) = PSignatureLift;
+  
   public inline function new(self:PSignatureSum) this = self;
   @:noUsing static inline public function lift(self:PSignatureSum):PSignature return new PSignature(self);
 

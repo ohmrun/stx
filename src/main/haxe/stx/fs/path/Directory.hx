@@ -2,6 +2,7 @@ package stx.fs.path;
 
 using eu.ohmrun.Pml;
 
+import stx.fs.path.Raw.RawLift;
 using stx.fs.path.Directory;
 
 //TODO change `attach` to something else
@@ -16,7 +17,7 @@ typedef DirectoryDef = {
 @:using(stx.fs.path.Directory.DirectoryLift)
 @:forward abstract Directory(DirectoryDef) from DirectoryDef to DirectoryDef{
   public function new(self) this = self;
-  static public var _(default,never) = DirectoryLift;
+
   
   @:noUsing static public function lift(self:DirectoryDef):Directory    return new Directory(self);
   @:noUsing static public function make(drive:Drive,track:Track):Directory{
@@ -24,6 +25,7 @@ typedef DirectoryDef = {
       drive : drive,
       track : track
     });
+
   }
   @:noUsing static public function fromArray(arr:Array<String>):Directory{
     return arr.head().flat_map(
@@ -38,7 +40,7 @@ typedef DirectoryDef = {
     );
   }
   static public function parse(string:String){
-    return Path.parse(string).attempt(Raw._.toDirectory);
+    return Path.parse(string).attempt(RawLift.toDirectory);
   }
 
   public function prj():DirectoryDef return this;

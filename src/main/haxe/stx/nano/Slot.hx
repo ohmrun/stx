@@ -41,7 +41,7 @@ class SlotCls<T>{
 @:noCompletion
 @:using(stx.nano.Slot.SlotLift)
 @:forward abstract Slot<T>(SlotCls<T>) from SlotCls<T> to SlotCls<T>{
-  static public var _(default,never) = SlotLift;
+  
   public function new(self) this = self;
   static public inline function lift<T>(self:SlotCls<T>):Slot<T> return new Slot(self);
   

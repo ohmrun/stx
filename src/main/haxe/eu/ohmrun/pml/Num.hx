@@ -7,7 +7,7 @@ enum NumSum{
 
 @:using(eu.ohmrun.pml.Num.NumLift)
 abstract Num(NumSum) from NumSum to NumSum{
-  static public var _(default,never) = NumLift;
+  
   public inline function new(self:NumSum) this = self;
   @:noUsing static inline public function lift(self:NumSum):Num return new Num(self);
 

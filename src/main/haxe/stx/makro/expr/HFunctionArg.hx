@@ -18,7 +18,7 @@ typedef HFunctionArgDef = StdFunctionArg;
 
 @:using(stx.makro.expr.HFunctionArg.HFunctionArgLift)
 @:forward abstract HFunctionArg(StdFunctionArg) from StdFunctionArg to StdFunctionArg{
-  static public var _(default,never) = HFunctionArgLift;
+  
   public inline function new(self:StdFunctionArg) this = self;
   static inline public function lift(self:StdFunctionArg):HFunctionArg return new HFunctionArg(self);
   static inline public function make(name,type:HComplexType,?opt:Bool,?value:Null<Expr>,?meta){

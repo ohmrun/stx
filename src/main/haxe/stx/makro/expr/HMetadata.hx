@@ -11,7 +11,7 @@ typedef HMetadataDef = haxe.macro.Expr.Metadata;
 
 @:using(stx.makro.expr.HMetadata.HMetadataLift)
 @:forward abstract HMetadata(HMetadataDef) from HMetadataDef to HMetadataDef{
-  static public var _(default,never) = HMetadataLift;
+  
   public inline function new(self:HMetadataDef) this = self;
   @:noUsing static inline public function lift(self:HMetadataDef):HMetadata return new HMetadata(self);
 

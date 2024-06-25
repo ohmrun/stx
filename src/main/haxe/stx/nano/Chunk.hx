@@ -13,7 +13,7 @@ enum ChunkSum<V,E>{
 
 @:using(stx.nano.Chunk.ChunkLift)
 abstract Chunk<T,E>(ChunkSum<T,E>) from ChunkSum<T,E> to ChunkSum<T,E>{
-  static public var _(default,never) = ChunkLift;
+  
   public function new(self:ChunkSum<T,E>) this = self;
 
   @:from @:noUsing static public function fromRefuse<T,E>(e:Refuse<E>):Chunk<T,E>           return End(e);

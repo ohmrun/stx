@@ -22,7 +22,7 @@ typedef ScenarioDef<P,Ri,Rii,E> = FletcherApi<Equity<P,Ri,E>,Equity<P,Rii,E>,Nad
 
 @:using(eu.ohmrun.fletcher.Scenario.ScenarioLift)
 abstract Scenario<P,Ri,Rii,E>(ScenarioDef<P,Ri,Rii,E>) from ScenarioDef<P,Ri,Rii,E> to ScenarioDef<P,Ri,Rii,E>{
-  static public var _(default,never) = ScenarioLift;
+  
   public function new(self) this = self;
   static public function lift<P,Ri,Rii,E>(self:ScenarioDef<P,Ri,Rii,E>):Scenario<P,Ri,Rii,E> return new Scenario(self);
 

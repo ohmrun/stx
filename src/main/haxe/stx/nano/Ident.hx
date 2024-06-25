@@ -1,5 +1,7 @@
 package stx.nano;
 
+import stx.nano.Chars.CharsLift;
+
 typedef IdentDef = {
   final name    : String;
   final ?pack   : Way; 
@@ -59,7 +61,7 @@ typedef IdentDef = {
     return toString_with_sep("_");
   }
   public function into():Way{
-    final next_path = Chars._.uncapitalize_first_letter(this.name);
+    final next_path = CharsLift.uncapitalize_first_letter(this.name);
     return this.pack.snoc(next_path);
   }
 }

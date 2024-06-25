@@ -41,8 +41,9 @@ class Impl{
           case Reject(err)          : 
             this.state = err.data.fold(
               (declination) -> declination.fold(
-                (e) -> this.state.with_stdout(Io_Input_Error(e)),
-                (d) -> this.state.with_stdout(Io_Input_Error(E_Io_Digest(d)))
+                (e)   -> this.state.with_stdout(Io_Input_Error(e)),
+                (d)   -> this.state.with_stdout(Io_Input_Error(E_Io_Digest(d))),
+                (ext) -> this.state.with_stdout(Io_Input_Error(E_Io_Embedded(ext)))
               ),
               ()  -> this.state.with_stdout(Io_Input_Error(E_Io_UnsupportedValue))
             );
@@ -61,7 +62,8 @@ class Impl{
             this.state = err.data.fold(
               (declination) -> declination.fold(
                 (e) -> this.state.with_stderr(Io_Input_Error(e)),
-                (d) -> this.state.with_stderr(Io_Input_Error(E_Io_Digest(d)))
+                (d) -> this.state.with_stderr(Io_Input_Error(E_Io_Digest(d))),
+                (ext) -> this.state.with_stdout(Io_Input_Error(E_Io_Embedded(ext)))
               ),
               ()  -> this.state.with_stderr(Io_Input_Error(E_Io_UnsupportedValue))
             );

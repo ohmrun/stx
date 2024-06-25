@@ -2,7 +2,7 @@ package stx.proxy.core;
 
 @:using(stx.proxy.core.Respond.RespondLift)
 @:forward abstract Respond<A,B,M,N,Y,E>(ProxySum<A,B,M,N,Y,E>) from ProxySum<A,B,M,N,Y,E> to ProxySum<A,B,M,N,Y,E>{
-  static public var _(default,never) = RespondLift;
+
   public function new(self){
     this = self;
   }

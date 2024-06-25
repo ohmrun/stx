@@ -41,7 +41,7 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
 
 @:using(eu.ohmrun.fletcher.Command.CommandLift)
 @:forward abstract Command<I,E>(CommandDef<I,E>) from CommandDef<I,E> to CommandDef<I,E>{
-  static public var _(default,never) = CommandLift;
+  
   public function new(self){
     this = self;
   }
@@ -108,7 +108,7 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
   }
   public function and(that:Command<I,E>):Command<I,E>{
     return lift(
-      Fletcher._.split(
+      FletcherLift.split(
         self,
         that.toFletcher()).map((tp) -> tp.fst().concat(tp.snd()))
     );

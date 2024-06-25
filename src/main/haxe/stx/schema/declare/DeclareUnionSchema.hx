@@ -23,7 +23,7 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNomi
   }
 }
 @:forward abstract DeclareUnionSchema(DeclareUnionSchemaApi) from DeclareUnionSchemaApi to DeclareUnionSchemaApi{
-  static public var _(default,never) = DeclareUnionSchemaLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareUnionSchemaApi):DeclareUnionSchema return new DeclareUnionSchema(self);
 

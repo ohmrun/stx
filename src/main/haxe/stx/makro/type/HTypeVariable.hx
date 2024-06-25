@@ -8,7 +8,7 @@ enum HTypeVariableSum{
 
 @:using(stx.makro.type.HTypeVariable.HTypeVariableLift)
 abstract HTypeVariable(HTypeVariableSum) from HTypeVariableSum to HTypeVariableSum{
-  static public var _(default,never) = HTypeVariableLift;
+  
   public inline function new(self:HTypeVariableSum) this = self;
   @:noUsing static inline public function lift(self:HTypeVariableSum):HTypeVariable return new HTypeVariable(self);
 

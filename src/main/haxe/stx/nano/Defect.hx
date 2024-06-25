@@ -43,7 +43,7 @@ package stx.nano;
 }
 @:using(stx.nano.Defect.DefectLift)
 @:forward abstract Defect<E>(DefectDef<E>) from DefectDef<E> to DefectDef<E>{
-  static public var _(default,never) = DefectLift;
+  
   public function new(self:DefectDef<E>){
     this = self;
   }

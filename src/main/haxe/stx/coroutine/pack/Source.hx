@@ -4,7 +4,7 @@ typedef SourceDef<O,R,E> = CoroutineSum<Nada,O,R,E>;
 
 @:using(stx.coroutine.pack.Source.SourceLift)
 @:forward abstract Source<O,R,E>(SourceDef<O,R,E>) from SourceDef<O,R,E> to SourceDef<O,R,E>{
-  static public var _(default,never) = SourceLift;
+  
   @:noUsing static public function lift<O,R,E>(self:SourceDef<O,R,E>) return new Source(self);
   public function new(self) this = self;
 
@@ -80,6 +80,6 @@ class SourceLift{
         case Halt(h)        : __.halt(h);
       }
     }
-    return Derive.lift(f(self));
+    return Derive.Uses(f(self));
   }
 }

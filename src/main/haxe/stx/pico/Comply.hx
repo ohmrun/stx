@@ -12,7 +12,7 @@ abstract class ComplyCls<Pi,Pii,R> implements ComplyApi<Pi,Pii,R> extends Clazz{
 }
 @:using(stx.pico.Comply.ComplyLift)
 @:forward abstract Comply<Pi,Pii,R>(ComplyApi<Pi,Pii,R>) from ComplyApi<Pi,Pii,R> to ComplyApi<Pi,Pii,R>{
-  static public var _(default,never) = ComplyLift;
+  static public var __(default,never) = ComplyLift;
   public function new(self) this = self;
   static public inline function lift<Pi,Pii,R>(self:ComplyApi<Pi,Pii,R>):Comply<Pi,Pii,R> return new Comply(self);
 

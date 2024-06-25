@@ -21,7 +21,7 @@ abstract class ContCls<P,R> implements ContApi<P,R>{
 }
 @:using(eu.ohmrun.fletcher.core.Cont.ContLift)
 @:forward abstract Cont<P,R>(ContApi<P,R>) from ContApi<P,R> to ContApi<P,R>{
-  static public var _(default,never) = ContLift;
+  
   public inline function new(self) this = self;
   static public function lift<P,R>(self:ContApi<P,R>):Cont<P,R> return new Cont(self);
 

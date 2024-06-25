@@ -106,8 +106,8 @@ class EqTagCtr{
    * @param inner
    * @return Eq<Array<T>>
    */
-  static public function Array<T>(tag:TAG,inner:Eq<T>):Eq<StdArray<T>>{
-    return new Array(inner);
+  static public function ArrayEq<T>(tag:TAG,inner:Eq<T>):Eq<StdArray<T>>{
+    return new ArrayEq(inner);
   }
   /**
    * `stx.nano.Record` instance of `stx.assert.Eq`

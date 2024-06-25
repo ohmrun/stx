@@ -1,8 +1,10 @@
 package stx.makro.type;
 
+import stx.makro.type.Identity.IdentityLift;
+
 @:using(stx.makro.type.HType.HTypeLift)
 @:forward abstract HType(StdMacroType) from StdMacroType to StdMacroType{
-  static public var _(default,never) = HTypeLift;
+  
   public function new(self) this = self;
 
   @:noUsing static public function lift(self:StdMacroType):HType return new HType(self);
@@ -16,13 +18,13 @@ package stx.makro.type;
   }
   #end
   public function getIdentity(){
-    return Identity._.getTypeIdentity(this);
+    return IdentityLift.getTypeIdentity(this);
   }
   public function getMoniker(){
-    return _.getMoniker(this);
+    return HTypeLift.getMoniker(this);
   }
   public function getBaseType(){
-    return _.getBaseType(this);
+    return HTypeLift.getBaseType(this);
   }
   #if macro
   @:noUsing static public function getHType(ident:Ident):Option<HType>{
@@ -36,7 +38,7 @@ package stx.makro.type;
   #end
   public var fields(get,never):HClassFieldCluster;
   public function get_fields():HClassFieldCluster{
-    return _.get_fields(this);
+    return HTypeLift.get_fields(this);
   }
   public function prj(){
     return this;

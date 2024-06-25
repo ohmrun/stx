@@ -45,7 +45,7 @@ typedef ReceiptDef<T,E> = DefectDef<E> & {
 }
 @:using(stx.nano.Receipt.ReceiptUses)
 @:forward abstract Receipt<T,E>(ReceiptDef<T,E>) from ReceiptDef<T,E> to ReceiptDef<T,E>{
-  static public var _(default,never) = ReceiptUses;
+  
   public function new(self) this = self;
   @:noUsing static public function lift<T,E>(self:ReceiptDef<T,E>):Receipt<T,E> return new Receipt(self);
   static public function unit<T,E>(){

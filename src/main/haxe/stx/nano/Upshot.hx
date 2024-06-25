@@ -14,7 +14,7 @@ class UpshotSumLift{
 @:using(stx.nano.Upshot.UpshotLift)
 abstract Upshot<T,E>(UpshotSum<T,E>) from UpshotSum<T,E> to UpshotSum<T,E>{
   public inline function new(self) this = self;
-  static public var _(default,never) = UpshotLift;
+  
 
   private var self(get,never):Upshot<T,E>;
   private function get_self():Upshot<T,E> return lift(this);
@@ -55,7 +55,7 @@ abstract Upshot<T,E>(UpshotSum<T,E>) from UpshotSum<T,E> to UpshotSum<T,E>{
   }
   @:to public function toStringable():Stringable{
     return {
-      toString : _.toString.bind(this)
+      toString : UpshotLift.toString.bind(this)
     }
   }
   @:to public function toIterable():Iterable<T>{

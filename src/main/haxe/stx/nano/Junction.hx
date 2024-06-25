@@ -15,7 +15,7 @@ enum JunctionSum<T>{
 @:transitive
 @:using(stx.nano.Junction.JunctionLift)
 abstract Junction<T>(JunctionSum<T>) from JunctionSum<T> to JunctionSum<T>{
-  static public var _(default,never) = JunctionLift;
+  
   public inline function new(self:JunctionSum<T>) this = self;
   @:noUsing static inline public function lift<T>(self:JunctionSum<T>):Junction<T> return new Junction(self);
 

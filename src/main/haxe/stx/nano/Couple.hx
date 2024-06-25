@@ -20,7 +20,7 @@ typedef CoupleCat<Ti,Tii> = Array<Either<Ti,Tii>>;//[Left(tI),Right(tII)]
  */
 @:using(stx.nano.Couple.CoupleLift)
 @:callable abstract Couple<Ti,Tii>(CoupleDef<Ti,Tii>) from CoupleDef<Ti,Tii> to CoupleDef<Ti,Tii>{
-  static public var _(default,never) = CoupleLift;
+  
   
   @stx.make
   @:noUsing static public function make<Ti,Tii>(lhs:Ti,rhs:Tii):Couple<Ti,Tii>{

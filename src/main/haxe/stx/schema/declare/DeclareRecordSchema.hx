@@ -20,7 +20,7 @@ class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNo
 }
 @:transitive @:forward abstract DeclareRecordSchema(DeclareRecordSchemaApi) from DeclareRecordSchemaApi to DeclareRecordSchemaApi{
   public function new(self) this = self;
-  static public var _(default,never) = DeclareRecordSchemaLift;
+  
   @:noUsing static public function lift(self:DeclareRecordSchemaApi):DeclareRecordSchema return new DeclareRecordSchema(self);
 
   @:noUsing static public function make(ident:Ident,fields:Procurements,?validation:Validations,?meta:PExpr<Primitive>):DeclareRecordSchema{

@@ -34,7 +34,7 @@ enum PrimitiveTypeSum{
 }
 @:using(stx.nano.PrimitiveType.PrimitiveTypeLift)
 abstract PrimitiveType(PrimitiveTypeSum) from PrimitiveTypeSum to PrimitiveTypeSum{
-  static public var _(default,never) = PrimitiveTypeLift;
+  
   public inline function new(self:PrimitiveTypeSum) this = self;
   @:noUsing static inline public function lift(self:PrimitiveTypeSum):PrimitiveType return new PrimitiveType(self);
 

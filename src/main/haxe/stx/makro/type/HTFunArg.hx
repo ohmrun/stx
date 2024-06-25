@@ -1,5 +1,7 @@
 package stx.makro.type;
 
+import stx.makro.type.HType.HTypeLift;
+
 final __type = __.makro().type;
 
 class HTFunArgCtr extends Clazz{
@@ -27,8 +29,8 @@ typedef HTFunArgDef = { t : StdMacroType, opt : Bool, name : String };
     return 
       this.name == that.name && 
       this.opt  == that.opt && 
-      HType._.makro(this.t).getIdentity().equals(
-        HType._.makro(that.t).getIdentity()
+      HTypeLift.makro(this.t).getIdentity().equals(
+        HTypeLift.makro(that.t).getIdentity()
       );
   }
   public function getMoniker(){

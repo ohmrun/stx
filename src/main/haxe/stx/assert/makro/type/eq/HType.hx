@@ -31,7 +31,7 @@ class HType extends EqCls<THType>{
         }
         eq;
       case [TFun(argsI, retI)      ,TFun(argsII, retII)       ]:
-        var eq = Eq.Array(Eq.Anon(args_op)).comply(argsI,argsII);
+        var eq = Eq.ArrayEq(Eq.Anon(args_op)).comply(argsI,argsII);
         if(eq.is_ok()){
           eq = Eq.Makro().Type().Type.comply(retI,retII);
         }
@@ -52,7 +52,7 @@ class HType extends EqCls<THType>{
     }
   }
   private function params_op(){
-    return Eq.Array(Eq.Makro().Type().Type);
+    return Eq.ArrayEq(Eq.Makro().Type().Type);
   }
   private function args_op(a:{name : String,opt: Bool, t:Type},b:{name : String,opt: Bool, t:Type}){
     var eq = Eq.String().comply(a.name,b.name);

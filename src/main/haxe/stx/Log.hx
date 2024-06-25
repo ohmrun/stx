@@ -21,10 +21,7 @@ typedef StringCtrDef<T>   = stx.log.StringCtr.StringCtrDef<T>;
 typedef Logger            = stx.log.Logger;
 
 class LiftLog{
-  static public inline function log(wildcard:Wildcard):Log{
-    return Log.ZERO;
-  }
-  static public inline function logger(wildcard:Wildcard){
+  static public inline function log(wildcard:Wildcard){
     return new stx.log.Module();
   }
   static public inline function scope(stx:Wildcard,pos:Pos,?method:String):stx.Scoping{

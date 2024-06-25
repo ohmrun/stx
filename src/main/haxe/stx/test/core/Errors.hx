@@ -15,6 +15,6 @@ class EDependencyNotFound extends Digest{
 }
 class ESuiteFailed extends Digest{
   public function new(){
-    super("01FRQ8KHEHGBBSTN89XC492A0E","TestSuite failed");
+    super("01FRQ8KHEHGBBSTN89XC492A0E","TestResultAccumulator failed");
   }
 }

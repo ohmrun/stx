@@ -8,7 +8,7 @@ typedef LRDef = {
   public var head: Option<Head>;
 }
 @:forward abstract LR(LRDef) from LRDef{
-  static public var _(default,never) = LRLift;
+  
   public function pos() : ParseInput<Dynamic> return this.seed.pos();
 }
 class LRLift{

@@ -1,5 +1,7 @@
 package stx.ds.graph.pack;
 
+import stx.ds.graph.pack.Vertex.VertexLift;
+
 typedef GraphDef = {
   var vertices    : RedBlackSet<Vertex>;
   var edges       : RedBlackSet<Edge>;
@@ -8,7 +10,7 @@ typedef GraphDef = {
 
 @:using(stx.ds.graph.pack.Graph.GraphLift)
 @:forward abstract Graph(GraphDef) from GraphDef{
-  static public var _(default,never) = GraphLift;
+  
   public function new(?self:GraphDef){
     this = self == null ? def() : self;
   }
@@ -49,7 +51,7 @@ class GraphLift{
     var next_edges      = 
         l.edges.union(r.edges)
          .union(
-           Vertex._.product(l.vertices,r.vertices)
+           VertexLift.product(l.vertices,r.vertices)
          );
         
     return {

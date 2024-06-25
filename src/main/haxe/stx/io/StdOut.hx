@@ -3,7 +3,7 @@ package stx.io;
 //TODO support INT64
 @:using(stx.io.StdOut.StdOutLift)
 abstract StdOut(StdOutput) from StdOutput{
-  static public var _(default,never) = StdOutLift;
+
   @:noUsing static public function lift(self:StdOutput){
     return new StdOut(self);
   }

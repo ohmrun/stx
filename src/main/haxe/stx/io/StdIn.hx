@@ -2,7 +2,7 @@ package stx.io;
  
 @:using(stx.io.StdIn.StdInLift)
 abstract StdIn(StdInput) from StdInput{
-  static public var _(default,never) = StdInLift;
+
   @:noUsing static public function lift(self:StdInput){
     return new StdIn(self);
   }

@@ -44,7 +44,6 @@ typedef FletcherDef<P,Pi,E> = FletcherApi<P,Pi,E>;
   static public function ctx<P,R,E>(wildcard:Wildcard,environment:P,?ok,?no):eu.ohmrun.fletcher.core.Context<P,R,E>{
     return eu.ohmrun.fletcher.core.Context.make(environment,ok,no);
   }
-  static public var _(default,never) = FletcherLift;
   public function new(self) this = self;
   static public function lift<P,Pi,E>(self:FletcherDef<P,Pi,E>):Fletcher<P,Pi,E> return new Fletcher(self);
 
@@ -73,10 +72,10 @@ typedef FletcherDef<P,Pi,E> = FletcherApi<P,Pi,E>;
     return Sync((_:Nada) -> self());
   }
   //?pos:haxe.PosInfos
-  static public function forward<P,Pi,E>(f:FletcherApi<P,Pi,E>,p:P,?pos:Pos):Receiver<Pi,E>{
+  static public function forward<P,Pi,E>(self:FletcherApi<P,Pi,E>,p:P,?pos:Pos):Receiver<Pi,E>{
     #if debug
       //__.log().debug(_ -> _.pure(pos));
-      __.assert().that().exists(f);
+      __.assert().that().exists(self);
       //__.assert().that().exists(p);
     #end
     return Receiver.lift(
@@ -86,7 +85,7 @@ typedef FletcherDef<P,Pi,E> = FletcherApi<P,Pi,E>;
           __.log().trace('forward called $p');
           #end
           var ft : FutureTrigger<ArwOut<Pi,E>> = Future.trigger();
-          var fst = f.defer(
+          var fst = self.defer(
             p,
             Terminal.lift(
               Cont.AnonAnon((t_sink:TerminalSink<Pi,E>) -> {
@@ -95,6 +94,7 @@ typedef FletcherDef<P,Pi,E> = FletcherApi<P,Pi,E>;
                   __.assert().that().exists(t_sink);
                 #end
                 final result =  t_sink(ft);
+                //$type(result);
                 #if debug
                 __.log().trace('FORWARD after t_sink: $result');
                 #end

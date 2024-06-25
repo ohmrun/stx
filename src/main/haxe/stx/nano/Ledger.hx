@@ -4,7 +4,7 @@ typedef LedgerDef<I,O,E> = Future<Equity<I,O,E>>;
 
 @:using(stx.nano.Ledger.LedgerLift)
 abstract Ledger<I,O,E>(LedgerDef<I,O,E>) from LedgerDef<I,O,E> to LedgerDef<I,O,E>{
-  static public var _(default,never) = LedgerLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift<I,O,E>(self:LedgerDef<I,O,E>):Ledger<I,O,E> return new Ledger(self);
 

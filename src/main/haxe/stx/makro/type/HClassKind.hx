@@ -34,7 +34,7 @@ class HClassKindCtr extends Clazz{
 }
 @:using(stx.makro.type.HClassKind.HClassKindLift)
 @:forward abstract HClassKind(StdClassKind) from StdClassKind to StdClassKind{
-  static public var _(default,never) = HClassKindLift;
+  
   public inline function new(self:StdClassKind) this = self;
   static inline public function lift(self:StdClassKind):HClassKind return new HClassKind(self);
 

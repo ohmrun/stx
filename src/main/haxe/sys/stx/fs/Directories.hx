@@ -12,8 +12,8 @@ class Directories{
       return out  = __.accept(
         Cluster.lift(FileSystem.readDirectory(path)).map(
           (str:String) ->  FileSystem.isDirectory(self.into([str]).canonical(sep)).if_else(
-            () -> stx.pico.Either.left(str),
-            () -> stx.pico.Either.right(Entry.parse(str))
+            () -> EitherSum.Left(str),
+            () -> EitherSum.Right(Entry.parse(str))
           )
         )
       );

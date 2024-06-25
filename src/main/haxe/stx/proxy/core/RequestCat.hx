@@ -4,7 +4,7 @@ package stx.proxy.core;
 typedef RequestCatDef<P,A,B,X,Y,R,E> = Unary<P,Proxy<A,B,X,Y,R,E>>;
 
 abstract RequestCat<P,A,B,X,Y,R,E>(RequestCatDef<P,A,B,X,Y,R,E>) from RequestCatDef<P,A,B,X,Y,R,E> to RequestCatDef<P,A,B,X,Y,R,E>{
-  static public var _(default,never) = RequestCatLift;
+
   public function new(self){
     this = self;
   }
@@ -50,7 +50,7 @@ class RequestCatLift{
         go = function(prx2:Proxy<X,Y,M,N,O,E>):Proxy<A,B,M,N,O,E>{
           return switch (prx2){
             case Ended(res)   : Ended(res);
-            case Await(a,arw) : Proxy._.flat_map(__.belay(prx0.bindI(a)),arw.then(go));
+            case Await(a,arw) : ProxyLift.flat_map(__.belay(prx0.bindI(a)),arw.then(go));
             case Yield(y,arw) : Yield(y,arw.then(go));
             case Defer(ft)    : __.belay(ft.mod(next.bind(prx0)));
           }

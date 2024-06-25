@@ -22,7 +22,7 @@ enum PTokenSum<T>{
 @:using(eu.ohmrun.pml.PToken.PTokenLift)
 abstract PToken<T>(PTokenSum<T>) from PTokenSum<T> to PTokenSum<T>{
   @stx.meta.using
-  static public var _(default,never) = PTokenLift;
+  
   public inline function new(self:PTokenSum<T>) this = self;
   @stx.meta.lift
   @:noUsing static inline public function lift<T>(self:PTokenSum<T>):PToken<T> return new PToken(self);

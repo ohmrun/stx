@@ -1,7 +1,7 @@
 package stx.schema.declare.term;
 
 abstract SchemaFloat(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to DeclareNativeSchemaApi{
-  static public var _(default,never) = SchemaFloatLift;
+  
   @:noUsing static public function make(){
     return new SchemaFloat(
       new DeclareNativeSchemaCls(

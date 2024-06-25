@@ -9,6 +9,7 @@ typedef HAccess                     = stx.makro.expr.HAccess;
 typedef HExprCtr                    = stx.makro.expr.HExpr.HExprCtr;
 typedef HExprDef                    = stx.makro.expr.HExpr.HExprDef;
 typedef HExpr                       = stx.makro.expr.HExpr;
+typedef HExprLift                   = stx.makro.expr.HExpr.HExprLift;
 
 typedef HBinopCtr                   = stx.makro.expr.HBinop.HBinopCtr;
 typedef HBinopDef                   = stx.makro.expr.HBinop.HBinopDef;

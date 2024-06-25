@@ -3,7 +3,7 @@ package stx.ds.graph.pack;
 typedef VertexDef = Int;
 
 @:forward abstract Vertex(VertexDef) from VertexDef to VertexDef{
-  static public var _(default,never) = VertexLift;
+  
   static public function set():RedBlackSet<Vertex>{
     return RedBlackSet.make_with(Ord.Int(),Eq.Int());
   }  

@@ -8,7 +8,7 @@ import tink.core.Signal in TinkSignal;
  */
 @:using(stx.nano.Signal.SignalLift)
 @:forward abstract Signal<T>(TinkSignal<T>) from TinkSignal<T> to TinkSignal<T>{
-  static public var _(default,never) = SignalLift;
+  
   public function new(self:TinkSignal<T>) this = self;
   @:noUsing static public function lift<T>(self:TinkSignal<T>){
     return new Signal(self);
@@ -19,10 +19,10 @@ import tink.core.Signal in TinkSignal;
   static public function bind_fold<T,Z,E>(self:Signal<T>,fn:T->Z->Signal<Z>,init:Z):Signal<Z>{
     return lift(new TinkSignal(
       (cb) -> {
-        return _.flat_map(
-          _.lscan(self,
+        return SignalLift.flat_map(
+          SignalLift.lscan(self,
             function(next:T,memo:Signal<Z>):Signal<Z>{
-              return _.flat_map(memo,fn.bind(next));
+              return SignalLift.flat_map(memo,fn.bind(next));
             },
             new TinkSignal(
               cb -> { cb(init); return () -> {}; }

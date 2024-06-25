@@ -19,7 +19,7 @@ enum PItemKindSum{
 }
 @:using(eu.ohmrun.pml.PItemKind.PItemKindLift)
 abstract PItemKind(PItemKindSum) from PItemKindSum to PItemKindSum{
-  static public var _(default,never) = PItemKindLift;
+  
   public inline function new(self:PItemKindSum) this = self;
   @:noUsing static inline public function lift(self:PItemKindSum):PItemKind return new PItemKind(self);
 

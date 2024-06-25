@@ -4,7 +4,7 @@ typedef FileOutputDef = Tunnel<FileOutputRequest,FileOutputResponse,ASysFailure>
 
 @:using(stx.io.FileOutput.FileOutputLift)
 abstract FileOutput(FileOutputDef) from FileOutputDef to FileOutputDef{
-  static public var _(default,never) = FileOutputLift;
+
   public inline function new(self:FileOutputDef) this = self;
   @:noUsing static inline public function lift(self:FileOutputDef):FileOutput return new FileOutput(self);
 

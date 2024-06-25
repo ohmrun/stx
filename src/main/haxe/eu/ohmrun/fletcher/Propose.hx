@@ -1,10 +1,12 @@
 package eu.ohmrun.fletcher;
 
+import stx.nano.Chunk.ChunkLift;
+
 typedef ProposeDef<O,E> = FletcherDef<Nada,Chunk<O,E>,Nada>;
 
 @:using(eu.ohmrun.fletcher.Propose.ProposeLift)
 abstract Propose<O,E>(ProposeDef<O,E>) from ProposeDef<O,E> to ProposeDef<O,E>{
-  static public var _(default,never) = ProposeLift;
+  
   public inline function new(self) this = self;
   @:noUsing static public inline function lift<O,E>(self:ProposeDef<O,E>):Propose<O,E> return new Propose(self);
     
@@ -61,7 +63,7 @@ abstract Propose<O,E>(ProposeDef<O,E>) from ProposeDef<O,E> to ProposeDef<O,E>{
     );
   }
   public function flat_map<Oi>(fn:O->ProposeDef<Oi,E>):Propose<Oi,E>{
-    return _.flat_map(self,fn);
+    return ProposeLift.flat_map(self,fn);
   }
 }
 class ProposeLift{
@@ -125,7 +127,7 @@ class ProposeLift{
   static public function toProduce<O,E>(self:ProposeDef<O,E>):Produce<Option<O>,E>{
     return Produce.lift(
       Fletcher.lift(self).map(
-        Chunk._.fold.bind(_,
+        ChunkLift.fold.bind(_,
           (o) -> __.accept(Some(o)),
           (e) -> __.reject(e),
           ()  -> __.accept(None)
@@ -135,7 +137,7 @@ class ProposeLift{
   }
   static public function materialise<O,E>(self:ProposeDef<O,E>):Propose<Option<O>,E>{
     return Propose.lift(
-      Fletcher._.map(
+      FletcherLift.map(
         Fletcher.lift(self),
         (ipt:Chunk<O,E>) -> ipt.fold(
           (o) -> Val(__.option(o)),
@@ -147,7 +149,7 @@ class ProposeLift{
   }
   static public function produce<O,E>(self:ProposeDef<O,E>):Produce<Option<O>,E>{
     return Produce.lift(
-      Fletcher._.map(
+      FletcherLift.map(
         Fletcher.lift(self),
         (ipt:Chunk<O,E>) -> (ipt).fold(
           (o) -> __.accept(__.option(o)),
@@ -203,7 +205,7 @@ class ProposeLift{
   }
   static public inline function environment<O,E>(self:ProposeDef<O,E>,success:Option<O>->Void,?failure:Refuse<E>->Void){
     failure = failure ?? (e:Refuse<E>) ->  e.crack();
-    return Fletcher._.environment(
+    return FletcherLift.environment(
       Fletcher.lift(self),
       Nada,
       (chunk) -> chunk.fold(
@@ -218,7 +220,7 @@ class ProposeLift{
     return Propose.lift(
       Fletcher.Then(
         self,
-        Fletcher.Sync(Chunk._.fold.bind(_,then.fn().then(Val),End,()->Tap))
+        Fletcher.Sync(ChunkLift.fold.bind(_,then.fn().then(Val),End,()->Tap))
       )
     );
   }

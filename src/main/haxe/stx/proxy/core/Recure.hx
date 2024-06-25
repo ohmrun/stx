@@ -8,7 +8,7 @@ typedef RecureDef<B,Y,R,E>   = ProxySum<Nada,B,Nada,Y,R,E>;
     this = self;
   }
   public function produce(th:Thunk<B>):Producer<Y,R,E>{
-    var a                                   = PullCat._.next.bind(_,this);
+    var a                                   = PullCatLift.next.bind(_,this);
     var b                                   = function rec(_:Nada) return Yield(th(),rec);
     var c : Proxy<Closed,Nada,Nada,Y,R,E> = a(b);
     return new Producer(c);

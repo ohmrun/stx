@@ -26,7 +26,7 @@ class HEnumFieldCtr extends Clazz{
 }
 @:using(stx.makro.type.HEnumField.HEnumFieldLift)
 @:forward abstract HEnumField(haxe.macro.Type.EnumField) from haxe.macro.Type.EnumField to haxe.macro.Type.EnumField{
-  static public var _(default,never) = HEnumFieldLift;
+  
   public inline function new(self:haxe.macro.Type.EnumField) this = self;
   @:noUsing static inline public function lift(self:haxe.macro.Type.EnumField):HEnumField return new HEnumField(self);
   @:noUsing static inline public function make(name,index,type,params,meta,doc,pos){

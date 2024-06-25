@@ -31,7 +31,7 @@ class ParserLift{
   static public inline function and_seq<I,T>(pI:Parser<I,T>,p2 : Parser<I,T>):Parser<I,Cluster<T>>{
     return AnonWith(pI,p2,(l:T,r:T) -> [l,r]).asParser();
   }
-  @:native("__and") // Prevent a bug with hxcpp
+  //@:native("__and") // Prevent a bug with hxcpp
   static public inline function _and<I,T,U>(pI:Parser<I,T>, p2 : Parser<I,U>):Parser<I,U> {
     return AndR(pI,p2).asParser();
   }

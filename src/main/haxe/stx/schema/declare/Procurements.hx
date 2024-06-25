@@ -6,7 +6,7 @@ typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
 
 @:using(stx.schema.declare.Procurements.ProcurementsLift)
 @:transitive @:forward(lfold,map,toIter,toCluster) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
-  static public var _(default,never) = ProcurementsLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcurementsDef):Procurements return new Procurements(self);
 

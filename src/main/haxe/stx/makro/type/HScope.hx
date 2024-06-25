@@ -12,7 +12,7 @@ class HScopeCls{
 
 @:using(stx.makro.type.HScope.HScopeLift)
 abstract HScope(HScopeCls) from HScopeCls to HScopeCls{
-  static public var _(default,never) = HScopeLift;
+  
   public inline function new(self:HScopeCls) this = self;
   @:noUsing static inline public function lift(self:HScopeCls):HScope return new HScope(self);
   @:noUsing static inline public function make(type:HType,?index:Int):HScope return new HScope(new HScopeCls(type,index));

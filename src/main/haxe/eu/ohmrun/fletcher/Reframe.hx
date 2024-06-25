@@ -1,16 +1,18 @@
 package eu.ohmrun.fletcher;
 
+import eu.ohmrun.fletcher.Modulate.ModulateLift;
+
 typedef ReframeDef<I,O,E>               = ModulateDef<I,Couple<O,I>,E>;
 
 @:using(eu.ohmrun.fletcher.Reframe.ReframeLift)
 @:forward abstract Reframe<I,O,E>(ReframeDef<I,O,E>) from ReframeDef<I,O,E> to ReframeDef<I,O,E>{
-  static public var _(default,never) = ReframeLift;
+  
 
   public inline function new(self) this = self;
 
   @:noUsing static public inline function lift<I,O,E>(wml:ReframeDef<I,O,E>):Reframe<I,O,E> return new Reframe(wml);
   @:noUsing static public inline function pure<I,O,E>(o:O):Reframe<I,O,E>{
-    return lift(Fletcher._.map(
+    return lift(FletcherLift.map(
       Modulate.unit(),
       (oc:Upshot<I,E>) -> (oc.map(__.couple.bind(o)):Upshot<Couple<O,I>,E>)
     ));
@@ -44,7 +46,7 @@ class ReframeLift{
       )
     ):Upshot<Couple<Oi,I>,E>);
     var arw =  lift(
-      Fletcher._.map(self.toModulate().convert(
+      FletcherLift.map(self.toModulate().convert(
         Convert.lift(that.toFletcher().first())
       ),fn)
     );
@@ -67,7 +69,7 @@ class ReframeLift{
   }
   static public function arrange<I,O,Oi,E>(self:Reframe<I,O,E>,that:Arrange<O,I,Oi,E>):Reframe<I,Oi,E>{
     var arw = 
-      Fletcher._.map(
+      FletcherLift.map(
         modulate(self,that).broach(),
         (res:Upshot<Couple<I,Oi>,E>) -> {
             return res.map(tp -> tp.swap());
@@ -123,11 +125,11 @@ class ReframeLift{
     )));
   }
   static public function evaluation<I,O,E>(self:Reframe<I,O,E>):Modulate<I,O,E>{
-    return Modulate.lift(Modulate._.map(self,o -> o.fst()));
+    return Modulate.lift(ModulateLift.map(self,o -> o.fst()));
   }
 
   static public function execution<I,O,E>(self:Reframe<I,O,E>):Modulate<I,I,E>{
-    return Modulate.lift(Modulate._.map(self,tp -> tp.snd()));
+    return Modulate.lift(ModulateLift.map(self,tp -> tp.snd()));
   }
   static public function errate<I,O,E,EE>(self:Reframe<I,O,E>,fn:E->EE):Reframe<I,O,EE>{
     return lift(
@@ -144,7 +146,7 @@ class ReframeLift{
     );
   }
   static public inline function environment<I,O,E>(self:Reframe<I,O,E>,i:I,success:Couple<O,I>->Void,failure:Refuse<E>->Void):Fiber{
-    return Modulate._.environment(
+    return ModulateLift.environment(
       self,
       i,
       success,

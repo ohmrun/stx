@@ -19,7 +19,7 @@ typedef HVarDef = haxe.macro.Expr.Var;
 
 @:using(stx.makro.expr.HVar.HVarLift)
 @:forward abstract HVar(HVarDef) from HVarDef to HVarDef{
-  static public var _(default,never) = HVarLift;
+  
   public inline function new(self:HVarDef) this = self;
   @:noUsing static inline public function lift(self:HVarDef):HVar return new HVar(self);
 

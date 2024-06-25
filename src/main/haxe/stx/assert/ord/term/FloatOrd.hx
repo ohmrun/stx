@@ -1,8 +1,8 @@
 package stx.assert.ord.term;
 
-class Float extends OrdCls<StdFloat>{
+class FloatOrd extends OrdCls<Float>{
   public function new(){}
-  public function comply(a:StdFloat,b:StdFloat):Ordered{
+  public function comply(a:Float,b:Float):Ordered{
     return a < b ? LessThan : NotLessThan;
   }
 }

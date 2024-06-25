@@ -39,7 +39,7 @@ class Memoise<I,O> extends Base<I,O,Parser<I,O>>{
       case Some(mEntry):
         switch(mEntry) {
           case  MemoLR(recDetect):
-            LR._.setupLR(delegation, ipt, recDetect);
+            LRLift.setupLR(delegation, ipt, recDetect);
             return cast(recDetect.seed);
           case  MemoParsed(ans):
             return cast(ans);

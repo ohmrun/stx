@@ -29,7 +29,7 @@ enum AtomSum{//Data, Eq, Show, Typeable)
 } 
 @:using(eu.ohmrun.pml.Atom.AtomLift)
 abstract Atom(AtomSum) from AtomSum to AtomSum{
-  static public var _(default,never) = AtomLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:AtomSum):Atom return new Atom(self);
 

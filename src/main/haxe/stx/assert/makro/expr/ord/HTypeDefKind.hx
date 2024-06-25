@@ -13,7 +13,7 @@ class HTypeDefKind extends OrdCls<HTypeDefKindT>{
       case [TDClass(superClassI,interfacesI, isInterfaceI, isFinalI, isAbstractI),TDClass(superClassII,interfacesII, isInterfaceII, isFinalII, isAbstractII)]:
         var ord = Ord.NullOr(Ord.Makro().Expr().HTypePath).comply(superClassI,superClassII);
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HTypePath)).comply(interfacesI,interfacesII);
+          ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HTypePath)).comply(interfacesI,interfacesII);
         }
         if(ord.is_not_less_than()){
           ord = Ord.NullOr(Ord.Bool()).comply(isInterfaceI,isInterfaceII);
@@ -30,19 +30,19 @@ class HTypeDefKind extends OrdCls<HTypeDefKindT>{
       case [TDAbstract( tthisI, flagsI, fromI, toI),TDAbstract( tthisII, flagsII, fromII, toII)] : 
         var ord = Ord.NullOr(Ord.Makro().Expr().HComplexType).comply(tthisI,tthisII);
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HAbstractFlag)).comply(flagsI,flagsII);
+          ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HAbstractFlag)).comply(flagsI,flagsII);
         }
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HComplexType)).comply(fromI,fromII);
+          ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HComplexType)).comply(fromI,fromII);
         }
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HComplexType)).comply(toI,toII);
+          ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HComplexType)).comply(toI,toII);
         }
         ord;
       case [TDField(kindI,accessI),TDField(kindII,accessII)]:
         var ord = Ord.Makro().Expr().HFieldType.comply(kindI,kindII);
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Array(Ord.Makro().Expr().HAccess)).comply(accessI,accessII);
+          ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HAccess)).comply(accessI,accessII);
         }
         ord;
       default :

@@ -88,8 +88,8 @@ class EqCtr extends Clazz{
       (l,r) -> l == r ? AreEqual : NotEqual
     );
   }
-  @:noUsing static public function Array<T>(inner:Eq<T>):Eq<StdArray<T>>{
-    return new Array(inner);
+  @:noUsing static public function ArrayEq<T>(inner:Eq<T>):Eq<StdArray<T>>{
+    return new ArrayEq(inner);
   }
   @:noUsing static public function Record<T>(inner:Eq<T>):Eq<stx.Record<T>>{
     return new stx.assert.eq.term.Record(inner);

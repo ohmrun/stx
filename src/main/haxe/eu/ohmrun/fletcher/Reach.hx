@@ -28,7 +28,7 @@ class PureReach<P,R,E> extends ReachCls<P,R,E>{
 }
 @:using(eu.ohmrun.fletcher.Reach.ReachLift)
 @:forward abstract Reach<P,R,E>(ReachApi<P,R,E>) from ReachApi<P,R,E> to ReachApi<P,R,E>{
-  static public var _(default,never) = ReachLift;
+  
   public inline function new(self:ReachApi<P,R,E>) this = self;
   @:noUsing static inline public function lift<P,R,E>(self:ReachApi<P,R,E>):Reach<P,R,E> return new Reach(self);
 

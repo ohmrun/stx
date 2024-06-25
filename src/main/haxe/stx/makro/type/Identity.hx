@@ -1,5 +1,8 @@
 package stx.makro.type;
 
+import stx.makro.type.HModuleType.HModuleTypeLift;
+import stx.makro.type.HBaseType.HBaseTypeLift;
+
 enum IdentitySum {
 	TAwkward;
 	TLambda(args:Array<Field<Identity>>,ret:Identity);
@@ -11,7 +14,7 @@ enum IdentitySum {
 
 @:using(stx.makro.type.Identity.IdentityLift)
 abstract Identity(IdentitySum) from IdentitySum to IdentitySum{
-	static public var _(default,never) = IdentityLift;
+	
   public function new(self:IdentitySum) this = self;
 
   public function is_anonymous(){
@@ -44,7 +47,7 @@ class IdentityLift{
 				var ags = rst.map(f).join("_");
 				'${f(id)}_$ags';
 			case TIdentity(id):
-				stx.makro.type.core.Moniker._.to_name(id);
+				stx.makro.type.core.Moniker.MonikerLift.to_name(id);
 			case TComposed(first,other):
 				'${f(first)}_${f(other)}';
 				
@@ -69,7 +72,7 @@ class IdentityLift{
 			case TParametrised(t, params):
 				'${toString(t)}<${params.map(toString).join(',')}>';
 			case TIdentity(ident):
-				stx.makro.type.core.Moniker._.canonical(ident);
+				stx.makro.type.core.Moniker.MonikerLift.canonical(ident);
 			case TComposed(first, other):
 				'${toString(first)}${toString(other)}';
 		}
@@ -162,6 +165,6 @@ class IdentityLift{
 	}
 
 	static public function getMonikerIdentity(t:ModuleType):Identity{
-		return TIdentity(HBaseType._.getMoniker(HModuleType._.getBaseType(t)));
+		return TIdentity(HBaseTypeLift.getMoniker(HModuleTypeLift.getBaseType(t)));
   }
 }

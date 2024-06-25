@@ -5,7 +5,7 @@ class HAccessCtr extends Clazz{
 	public function Private() 	return HAccess.lift(APrivate);
 	public function Static() 		return HAccess.lift(AStatic);
 	public function Override() 	return HAccess.lift(AOverride);
-	public function Dynamic() 	return HAccess.lift(ADynamic);
+	public function ADynamic() 	return HAccess.lift(StdAccess.ADynamic);
 	public function Inline() 		return HAccess.lift(AInline);
 	public function Macro() 		return HAccess.lift(AMacro);
 	public function Final() 		return HAccess.lift(AFinal);
@@ -27,7 +27,7 @@ typedef HAccessDef = StdAccess;
   static public function Private():HAccess return lift(StdAccess.APrivate);
   static public function Static():HAccess return lift(StdAccess.AStatic);
   static public function Override():HAccess return lift(StdAccess.AOverride);
-  static public function Dynamic():HAccess return lift(StdAccess.ADynamic);
+  static public function ADynamic():HAccess return lift(StdAccess.ADynamic);
   static public function Inline():HAccess return lift(StdAccess.AInline);
   static public function Macro():HAccess return lift(StdAccess.AMacro);
   static public function Final():HAccess return lift(StdAccess.AFinal);

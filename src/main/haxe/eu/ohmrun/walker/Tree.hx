@@ -1,5 +1,7 @@
 package eu.ohmrun.walker;
 
+import stx.ds.KaryTree.KaryTreeLift;
+
 typedef TreeDef<T,G,K,E> = KaryTree<Node<T,G,K,E>>;
 @:using(eu.ohmrun.walker.Tree.TreeLift)
 @:forward abstract Tree<T,G,K,E>(TreeDef<T,G,K,E>) from TreeDef<T,G,K,E> to TreeDef<T,G,K,E>{
@@ -123,7 +125,7 @@ typedef TreeDef<T,G,K,E> = KaryTree<Node<T,G,K,E>>;
     return value().zip(that.value()).map(__.decouple((l:Node<T,G,K,E>,r:Node<T,G,K,E>) -> l.equals(r)));
   }
   public function toString():String{
-    return KaryTree._.toString(this);
+    return KaryTreeLift.toString(this);
   }
 }
 class TreeLift{

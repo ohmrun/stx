@@ -22,7 +22,7 @@ enum TargetSum{
 
 @:using(stx.asys.Target.TargetLift)
 abstract Target(TargetSum) from TargetSum to TargetSum{
-  static public var _(default,never) = TargetLift;
+
 
   public function new(self) this = self;
   @:noUsing static public function lift(self:TargetSum):Target return new Target(self);

@@ -6,12 +6,11 @@ import stx.assert.ord.term.*;
 import stx.assert.ord.term.Couple;
 import stx.assert.ord.term.KV;
 import stx.assert.ord.term.EnumValueIndex;
-import stx.assert.ord.term.Array;
 import stx.assert.ord.term.Cluster;
 import stx.assert.ord.term.String;
 import stx.assert.ord.term.Int;
 import stx.assert.ord.term.Int64;
-import stx.assert.ord.term.Float;
+import stx.assert.ord.term.FloatOrd as Float;
 import stx.assert.ord.term.Anon;
 import stx.assert.ord.term.Primitive;
 
@@ -70,8 +69,8 @@ abstract class OrdCls<T> implements OrdApi<T>{
   @:noUsing static public function Primitive():Ord<stx.nano.Primitive>{
     return new Primitive();
   }
-  @:noUsing static public function Array<T>(inner:Ord<T>):Ord<StdArray<T>>{
-    return new Array(inner);
+  @:noUsing static public function ArrayOrd<T>(inner:Ord<T>):Ord<StdArray<T>>{
+    return new ArrayOrd(inner);
   }
   @:noUsing static public function Record<T>(inner:Ord<T>):Ord<stx.Record<T>>{
     return new stx.assert.ord.term.Record(inner);

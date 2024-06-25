@@ -4,7 +4,7 @@ typedef TunnelDef<I,O,E> = CoroutineSum<I,O,Nada,E>;
 
 @:using(stx.coroutine.pack.Tunnel.TunnelLift)
 @:forward abstract Tunnel<I,O,E>(TunnelDef<I,O,E>) from TunnelDef<I,O,E> to TunnelDef<I,O,E>{
-  static public var _(default,never) = TunnelLift;
+  
 
   public function new(self) this = self;
   @:noUsing static public function lift<I,O,E>(self:TunnelDef<I,O,E>) return new Tunnel(self);

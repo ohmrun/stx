@@ -12,7 +12,7 @@ enum CoordSum{
  */
 @:using(stx.nano.Coord.CoordLift)
 abstract Coord(CoordSum) from CoordSum to CoordSum{
-  static public var _(default,never) = CoordLift;
+  
   public inline function new(self:CoordSum) this = self;
   @:noUsing static inline public function lift(self:CoordSum):Coord return new Coord(self);
 

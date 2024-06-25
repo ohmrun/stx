@@ -6,7 +6,7 @@ enum SelectorSum{
 }
 @:using(eu.ohmrun.walker.Selector.SelectorLift)
 abstract Selector(SelectorSum) from SelectorSum to SelectorSum{
-  static public var _(default,never) = SelectorLift;
+  
   public function new(self:SelectorSum) this = self;
   @:noUsing static public function lift(self:SelectorSum) return new Selector(self);
   @:from static public function fromPath(self:Path):Selector{

@@ -26,7 +26,7 @@ enum PSpecSum<T>{
 }
 @:using(eu.ohmrun.pml.PSpec.PSpecLift)
 abstract PSpec<T>(PSpecSum<T>) from PSpecSum<T> to PSpecSum<T>{
-  static public var _(default,never) = PSpecLift;
+  
   public inline function new(self:PSpecSum<T>) this = self;
   @:noUsing static inline public function lift<T>(self:PSpecSum<T>):PSpec<T> return new PSpec(self);
 

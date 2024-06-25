@@ -1,5 +1,7 @@
 package eu.ohmrun.fletcher;
 
+import eu.ohmrun.fletcher.Convert.ConvertLift;
+
 enum ProduceArgSum<O,E>{
   ProduceArgPure(o:O);
   ProduceArgSync(res:Upshot<O,E>);
@@ -46,7 +48,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
 
 @:using(eu.ohmrun.fletcher.Produce.ProduceLift)
 @:forward(then) abstract Produce<O,E>(ProduceDef<O,E>) from ProduceDef<O,E> to ProduceDef<O,E>{
-  static public var _(default,never) = ProduceLift;
+  
 
   public inline function new(self:ProduceDef<O,E>) this = self;
 
@@ -184,13 +186,13 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
     ));
   }
   public inline function environment(success:O->Void,?failure:Refuse<E>->Void){
-    return _.environment(this,success,failure);
+    return ProduceLift.environment(this,success,failure);
   }
   @:to public inline function toFletcher():Fletcher<Nada,Upshot<O,E>,Nada>{
     return this;
   }
   @:to public function toPropose():Propose<O,E>{
-    return Propose.lift(Fletcher._.map(this,(res:Upshot<O,E>) -> res.fold(Val,End)));
+    return Propose.lift(FletcherLift.map(this,(res:Upshot<O,E>) -> res.fold(Val,End)));
   }
   private var self(get,never):Produce<O,E>;
   private function get_self():Produce<O,E> return this;
@@ -199,16 +201,16 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
     return this;
   }
   public inline function fudge<O,E>(){
-    return _.fudge(this);
+    return ProduceLift.fudge(this);
   }
   public function flat_map<Oi>(fn:O->Produce<Oi,E>):Produce<Oi,E>{
-    return _.flat_map(this,fn);
+    return ProduceLift.flat_map(this,fn);
   }
 }
 class ProduceLift{
   static public inline function environment<O,E>(self:ProduceDef<O,E>,success:O->Void,?failure:Refuse<E>->Void):Fiber{
     failure = failure ?? (e:Refuse<E>) ->  e.crack();
-    return Fletcher._.environment(
+    return FletcherLift.environment(
       self,
       Nada,
       (res:Upshot<O,E>) -> {
@@ -257,7 +259,7 @@ class ProduceLift{
   }
   static public function provide<O,E>(self:ProduceDef<O,E>):Provide<O>{
     return Provide.lift(
-      Fletcher._.map(self,
+      FletcherLift.map(self,
         res -> res.fold(
           (ok)  -> ok,
           (e)   -> throw(e)
@@ -280,7 +282,7 @@ class ProduceLift{
     );
   }
   static public function convert<O,Oi,E>(self:ProduceDef<O,E>,then:Convert<O,Oi>):Produce<Oi,E>{
-    return lift(Fletcher.Then(self,(Convert._.toModulate(then).toFletcher())));
+    return lift(Fletcher.Then(self,(ConvertLift.toModulate(then).toFletcher())));
   }
   static public function recover<O,E>(self:ProduceDef<O,E>,rec:Recover<O,E>):Provide<O>{
     return Provide.lift(self.then(rec.toReform()));
@@ -334,10 +336,10 @@ class ProduceLift{
     return lift(self.then(that));
   }
   static public inline function fudge<O,E>(self:ProduceDef<O,E>):O{
-    return Fletcher._.fudge(self,Nada).fudge();
+    return FletcherLift.fudge(self,Nada).fudge();
   }
   static public inline function force<O,E>(self:ProduceDef<O,E>):Upshot<O,E>{
-    return Fletcher._.force(self,Nada).fudge();
+    return FletcherLift.force(self,Nada).fudge();
   }
   static public function flat_map<O,Oi,E>(self:ProduceDef<O,E>,that:O->Produce<Oi,E>):Produce<Oi,E>{
     return lift(
@@ -362,21 +364,21 @@ class ProduceLift{
     return Provide.lift(Fletcher.Then(self,that));
   }
   static public function split<O,Oi,E>(self:ProduceDef<O,E>,that:Produce<Oi,E>):Produce<Couple<O,Oi>,E>{
-    return lift(Fletcher._.split(self,that).then(
+    return lift(FletcherLift.split(self,that).then(
       Fletcher.fromFun1R(
         __.decouple((l:Upshot<O,E>,r:Upshot<Oi,E>) -> l.zip(r))
       )
     ));
   }
   static public function adjust<O,Oi,E>(self:ProduceDef<O,E>,fn:O->Upshot<Oi,E>):Produce<Oi,E>{
-    return lift(Fletcher._.then(
+    return lift(FletcherLift.then(
       self,
       Fletcher.fromFun1R((res:Upshot<O,E>) -> res.flat_map(fn))
     ));
   }
   static public function pledge<O,E>(self:ProduceDef<O,E>):Pledge<O,E>{
     return Pledge.lift(
-      (Fletcher._.future(self,Nada)).map(
+      (FletcherLift.future(self,Nada)).map(
         (outcome:Outcome<Upshot<O,E>,Defect<Nada>>) -> (outcome.fold(
           (x:Upshot<O,E>)       -> x,
           (e:Defect<Nada>)      -> __.reject(e.elide().toRefuse())
@@ -393,7 +395,7 @@ class ProduceLift{
   }
   static public function zip<Ri,Rii,E>(self:Produce<Ri,E>,that:Produce<Rii,E>):Produce<Couple<Ri,Rii>,E>{
     return lift(
-      Fletcher._.pinch(self,that).map(
+      FletcherLift.pinch(self,that).map(
         __.decouple(
           (lhs:Upshot<Ri,E>,rhs:Upshot<Rii,E>) -> lhs.zip(rhs)
         )

@@ -1,11 +1,13 @@
 package sys.stx.io.input.term;
 
+import stx.coroutine.pack.Tunnel.TunnelLift;
+
 typedef KeyboardDef = InputDef;
 
 @:using(stx.io.Input.InputLift)
 @:using(sys.stx.io.input.term.Keyboard.KeyboardLift)
 abstract Keyboard(KeyboardDef) from KeyboardDef to KeyboardDef{
-  static public var _(default,never) = KeyboardLift;
+
   public inline function new(self:KeyboardDef) this = self;
   @:noUsing static inline public function lift(self:KeyboardDef):Keyboard return new Keyboard(self);
 
@@ -24,9 +26,9 @@ abstract Keyboard(KeyboardDef) from KeyboardDef to KeyboardDef{
                   x -> __.emit(IResValue(Packet.make(Byteal(NInt(x)),I8)),__.tran(rec))
                 ))
               );
-              default : Tunnel._.mod(stdin.provide(x).prj(),turn).prj();
+              default : TunnelLift.mod(stdin.provide(x).prj(),turn).prj();
             } 
-            case x : Tunnel._.mod(stdin.provide(x),turn).prj();
+            case x : TunnelLift.mod(stdin.provide(x),turn).prj();
           };
         }
       );

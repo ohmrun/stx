@@ -6,8 +6,11 @@ typedef EffectDef<E> = CoroutineSum<Nada,Nada,Nada,E>;
 
 @:using(stx.coroutine.pack.Effect.EffectLift)
 @:forward abstract Effect<E>(EffectDef<E>) from EffectDef<E> to EffectDef<E>{
-  static public var _(default,never) = EffectLift;
+  
 
+  @:noUsing static public function Uses<E>(self:EffectDef<E>):Effect<E>{
+    return new Effect(self);
+  }
   @:noUsing static public function lift<E>(self:EffectDef<E>):Effect<E>{
     return new Effect(self);
   }

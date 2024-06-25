@@ -10,7 +10,7 @@ typedef ProcessClientDef<R> = stx.proxy.core.Client.ClientDef<ProcessRequest,Pro
 @:using(stx.proxy.core.Proxy.ProxyLift)
 @:using(sys.stx.io.process.ProcessClient.ProcessClientLift)
 abstract ProcessClient<R>(ProcessClientDef<R>) from ProcessClientDef<R> to ProcessClientDef<R>{
-  static public var _(default,never) = ProcessClientLift;
+
   public inline function new(self:ProcessClientDef<R>) this = self;
   @:noUsing static inline public function lift<R>(self:ProcessClientDef<R>):ProcessClient<R> return new ProcessClient(self);
 

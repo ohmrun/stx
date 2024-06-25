@@ -7,7 +7,7 @@ typedef ReceiverInputDef<R,E> = Future<ArwOut<R,E>>;
  */
 @:using(eu.ohmrun.fletcher.core.ReceiverInput.ReceiverInputLift)
 @:forward abstract ReceiverInput<R,E>(ReceiverInputDef<R,E>) from ReceiverInputDef<R,E> to ReceiverInputDef<R,E>{
-  static public var _(default,never) = ReceiverInputLift;
+  
   public function new(self) this = self;
   static public function lift<R,E>(self:ReceiverInputDef<R,E>):ReceiverInput<R,E> return new ReceiverInput(self);
 

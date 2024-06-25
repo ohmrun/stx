@@ -32,7 +32,7 @@ abstract ConvertArg<P,R>(ConvertArgSum<P,R>) from ConvertArgSum<P,R> to ConvertA
 @:transitive
 @:using(eu.ohmrun.fletcher.Convert.ConvertLift)
 abstract Convert<I,O>(ConvertDef<I,O>) from ConvertDef<I,O> to ConvertDef<I,O>{
-  static public var _(default,never) = ConvertLift;
+  
   public inline function new(self) this = self;
   @:noUsing static public inline function lift<I,O>(self:ConvertDef<I,O>):Convert<I,O> return new Convert(self);
   @:noUsing static public inline function unit<I>():Convert<I,I> return lift(Fletcher.Sync((i:I)->i));
@@ -71,7 +71,7 @@ abstract Convert<I,O>(ConvertDef<I,O>) from ConvertDef<I,O> to ConvertDef<I,O>{
     return lift(arw);
   }
   public inline function environment(i:I,success:O->Void):Fiber{
-    return Fletcher._.environment(
+    return FletcherLift.environment(
       this,
       i,
       success,
@@ -90,7 +90,7 @@ class ConvertLift{
   }
   static public function then<I,O,Oi>(self:ConvertDef<I,O>,that:Convert<O,Oi>):Convert<I,Oi>{
     //__.log().debug(_ -> _.pure(pos));
-    return Convert.lift(Fletcher._.then(
+    return Convert.lift(FletcherLift.then(
       self,
       that
     ));
@@ -102,14 +102,14 @@ class ConvertLift{
   }
   static public function convert<I,O,Oi>(self:ConvertDef<I,O>,that:ConvertDef<O,Oi>):Convert<I,Oi>{
     return Convert.lift(
-      Fletcher._.then(
+      FletcherLift.then(
         self,
         that
       )
     );
   }
   static public function first<I,Ii,O>(self:Convert<I,O>):Convert<Couple<I,Ii>,Couple<O,Ii>>{
-    return Convert.lift(Fletcher._.first(self));
+    return Convert.lift(FletcherLift.first(self));
   }
   static public function flat_map<P,Ri,Rii>(self:Convert<P,Ri>,fn:Ri->Provide<Rii>):Convert<P,Rii>{
     return Fletcher.Then(

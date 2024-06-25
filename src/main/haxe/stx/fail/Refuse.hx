@@ -1,5 +1,6 @@
 package stx.fail;
 
+import stx.fail.Decline.DeclineLift;
 import haxe.ds.Either;
 /**
   Either an INTERNAL (unhandled) or EXTERNAL (E) Error
@@ -8,7 +9,7 @@ typedef RefuseDef<E> = Error<Decline<E>>;
 
 @:using(stx.fail.Refuse.RefuseLift)
 @:forward abstract Refuse<E>(RefuseDef<E>) from RefuseDef<E> to RefuseDef<E>{
-  static public var _(default,never) = RefuseLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift<E>(self:RefuseDef<E>):Refuse<E> return new Refuse(self);
   static public function unit<E>():Refuse<E> return lift(new stx.fail.term.Unit());
@@ -26,7 +27,7 @@ typedef RefuseDef<E> = Error<Decline<E>>;
     return lift(self);
   }
   public function errate<EE>(fn:E->EE):Refuse<EE>{
-    return new stx.fail.term.MapAnon(this,Decline._.map.bind(_,fn)).toError();
+    return new stx.fail.term.MapAnon(this,DeclineLift.map.bind(_,fn)).toError();
   }
   /**
     For those nooks where `catch` is annoying.

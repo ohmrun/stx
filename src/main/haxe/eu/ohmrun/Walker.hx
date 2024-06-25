@@ -41,12 +41,12 @@ class WalkerLift{
 **/
 class Walker<T,G,K,E>{
   static public function one<T,G,K,E>(id:Id,?call:Call<T,G,K,E>,?rest:ChildrenSpec<T,G,K,E>):NodeSpec<T,G,K,E>{
-    return _.one(id,call,rest);
+    return WalkerLift.one(id,call,rest);
   }
   static public function all<T,G,K,E>(id:Id,?call:Call<T,G,K,E>,?rest:ChildrenSpec<T,G,K,E>):NodeSpec<T,G,K,E>{
-    return _.all(id,call,rest);
+    return WalkerLift.all(id,call,rest);
   }
-  static public var _(default,never) = WalkerLift;
+  
   private var state       : G;
   private final history   : Cluster<TransitionData<T,G,K,E>>;
   private final triggers  : Map<K,Selector>;

@@ -26,7 +26,7 @@ enum ProxySum<A,B,X,Y,R,E>{
 @:transitive
 @:forward abstract Proxy<A,B,X,Y,R,E>(ProxySum<A,B,X,Y,R,E>) from ProxySum<A,B,X,Y,R,E> to ProxySum<A,B,X,Y,R,E>{
 
-  static public var _(default,never) = ProxyLift;
+
   public function new(v) this = v;
   
   @:noUsing static public inline function lift<A,B,X,Y,R,E>(self:ProxySum<A,B,X,Y,R,E>):Proxy<A,B,X,Y,R,E>{

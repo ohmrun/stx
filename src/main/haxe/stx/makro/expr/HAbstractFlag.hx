@@ -4,7 +4,7 @@ typedef HAbstractFlagDef = haxe.macro.Expr.AbstractFlag;
 
 @:using(stx.makro.expr.HAbstractFlag.HAbstractFlagLift)
 abstract HAbstractFlag(HAbstractFlagDef) from HAbstractFlagDef to HAbstractFlagDef{
-  static public var _(default,never) = HAbstractFlagLift;
+  
   public inline function new(self:HAbstractFlagDef) this = self;
   @:noUsing static inline public function lift(self:HAbstractFlagDef):HAbstractFlag return new HAbstractFlag(self);
 

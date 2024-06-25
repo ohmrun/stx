@@ -3,7 +3,7 @@ package stx.proxy.core;
 typedef RespondCatDef<P,A,B,X,Y,R,E> = Unary<P,Proxy<A,B,X,Y,R,E>>;
 
 abstract RespondCat<P,A,B,X,Y,R,E>(RespondCatDef<P,A,B,X,Y,R,E>) from RespondCatDef<P,A,B,X,Y,R,E> to RespondCatDef<P,A,B,X,Y,R,E>{
-  static public var _(default,never) = RespondCatLift;
+
   public function new(self){
     this = self;
   }
@@ -49,7 +49,7 @@ class RespondCatLift{
           return switch (p1) {
             case Ended(res)   : Ended(res);
             case Await(a,arw) : Await(a,arw.then(go));
-            case Yield(y,arw) : Proxy._.flat_map(Defer(Belay.lazy(fn.bindI(y))),arw.then(go));
+            case Yield(y,arw) : ProxyLift.flat_map(Defer(Belay.lazy(fn.bindI(y))),arw.then(go));
             case Defer(ft)    : Defer(ft.mod(next.bind(_,fn)));
           }
         }

@@ -2,7 +2,7 @@ package stx.nano;
 
 @:using(stx.nano.Report.ReportLift)
 abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
-  static public var _(default,never) = ReportLift;
+  
   public function new(self) this = self;
   @:noUsing static public inline function lift<E>(self:ReportSum<E>):Report<E> return new Report(self);
 
@@ -25,7 +25,7 @@ abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
     return option().iterator();
   }
   public function effects(success:Void->Void,failure:Void->Void):Report<E>{
-    return _.fold(
+    return ReportLift.fold(
       this,
       (e) -> {
         failure();
@@ -59,7 +59,7 @@ abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
     return this;
   }
   public function option():Option<Refuse<E>>{
-    return _.fold(
+    return ReportLift.fold(
       this,
       (err) -> Some(err),
       () -> None
@@ -69,7 +69,7 @@ abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
     return this.defv(error);
   }
   public function or(that:Void->Report<E>):Report<E>{
-    return _.fold(
+    return ReportLift.fold(
       this,
       (x) -> Report.pure(x),
       that
@@ -91,7 +91,7 @@ abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
     }
   }
   public function promote():Upshot<Nada,E>{
-    return _.resolve(this,() -> Nada);
+    return ReportLift.resolve(this,() -> Nada);
   }
   public function alert():Alert<E>{
     return Alert.make(this);

@@ -6,7 +6,7 @@ typedef SettleApi<P>      = ContApi<P,Work>;
 @:using(eu.ohmrun.fletcher.core.Settle.SettleLift)
 @:using(eu.ohmrun.fletcher.core.Cont.ContLift)
 @:forward abstract Settle<P>(SettleApi<P>) from SettleApi<P> to SettleApi<P>{
-  static public var _(default,never) = SettleLift;
+  
 
   public function new(self) this = self;
   static public inline function lift<P>(self:SettleApi<P>):Settle<P> return new Settle(self);

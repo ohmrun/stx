@@ -1,7 +1,7 @@
 package stx.parse.parser.term;
 
 class SyncAnon<P,R> extends SyncBase<P,R,ParseInput<P> -> ParseResult<P,R>>{
-  static public var _(default,never) = SyncAnonLift;
+  
   private final method : ParseInput<P> -> ParseResult<P,R>;
   public function new(method:ParseInput<P> -> ParseResult<P,R>,tag:Option<String>,?pos:Pos){
     super(tag,pos);

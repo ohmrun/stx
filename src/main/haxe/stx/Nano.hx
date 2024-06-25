@@ -14,7 +14,7 @@ class Nano{
   static public function stx<T>(wildcard:Wildcard):STX<T>{
     return STX;
   }
-  static public var _(default,never) = LiftNano;
+  
   
 }
 class Maps{

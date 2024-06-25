@@ -1,9 +1,11 @@
 package stx.parse;
 
+import stx.nano.Equity.EquityLift;
+
 @:using(stx.parse.ParseResult.ParseResultLift)
 class ParseResultCls<P,R> extends EquityCls<ParseInput<P>,Option<R>,ParseFailure>{
   public function toString():String{
-    return ParseResult._.toString(this);
+    return ParseResultLift.toString(this);
   }
   public function errate(fn:ParseFailure->ParseFailure):ParseResult<P,R>{
     return errata(x -> x.errate(fn));
@@ -24,7 +26,7 @@ typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & 
 @:using(stx.nano.Equity.EquityLift)
 @:using(stx.parse.ParseResult.ParseResultLift)
 @:forward abstract ParseResult<P,R>(ParseResultDef<P,R>) from ParseResultDef<P,R> to ParseResultDef<P,R>{
-  static public var _(default,never) = ParseResultLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift<P,R>(self:ParseResultDef<P,R>):ParseResult<P,R> return new ParseResult(self);
   @:noUsing static public function make<I,O>(asset:ParseInput<I>,value:Option<O>,error:Refuse<ParseFailure>):ParseResult<I,O>{
@@ -34,7 +36,7 @@ typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & 
     return make(self.asset,self.value,self.error);
   }
   public inline function map<Ri>(fn:R->Ri):ParseResult<P,Ri>{
-    return fromEquity(Equity._.map(this.toEquity(),opt -> opt.map(fn)));
+    return fromEquity(EquityLift.map(this.toEquity(),opt -> opt.map(fn)));
   }
   public inline function is_ok(){
     return this.error.is_defined() == false;
@@ -53,13 +55,13 @@ typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & 
     return this.asset;
   }
   public function toChunk(){
-    return _.toChunk(this);
+    return ParseResultLift.toChunk(this);
   }
   // public function errata(fn:Refuse<ParseFailure>->Refuse<ParseFailure>):ParseResult<P,R>{
   //   return _.errata(this,fn);
   // }
   public function toUpshot(){
-    return _.toUpshot(this);
+    return ParseResultLift.toUpshot(this);
   }
 }
 class ParseResultLift{

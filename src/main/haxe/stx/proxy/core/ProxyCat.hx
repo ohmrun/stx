@@ -4,7 +4,7 @@ typedef ProxyCatDef<P,A,B,X,Y,R,E> = Unary<P,Proxy<A,B,X,Y,R,E>>;
 
 @:using(stx.proxy.core.ProxyCat.ProxyCatLift)
 @:callable abstract ProxyCat<P,A,B,X,Y,R,E>(ProxyCatDef<P,A,B,X,Y,R,E>) from ProxyCatDef<P,A,B,X,Y,R,E> to ProxyCatDef<P,A,B,X,Y,R,E>{
-  static public var _(default,never) = ProxyCatLift;
+
   public function new(self){
     this = self;
   }

@@ -2,7 +2,7 @@ package stx.makro.type;
 
 @:using(stx.makro.type.HFieldKind.HFieldKindLift)
 abstract HFieldKind(StdFieldKind) from StdFieldKind to StdFieldKind{
-  static public var _(default,never) = HFieldKindLift;
+  
   public inline function new(self:StdFieldKind) this = self;
   static inline public function lift(self:StdFieldKind):HFieldKind return new HFieldKind(self);
 

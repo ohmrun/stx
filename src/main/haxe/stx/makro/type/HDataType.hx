@@ -22,7 +22,7 @@ class HDataTypeCls{
 }
 @:using(stx.makro.type.HDataType.HDataTypeLift)
 @:forward abstract HDataType(HDataTypeCls) from HDataTypeCls to HDataTypeCls{
-  static public var _(default,never) = HDataTypeLift;
+  
   public inline function new(self:HDataTypeCls) this = self;
   @:noUsing static inline public function lift(self:HDataTypeCls):HDataType return new HDataType(self);
 

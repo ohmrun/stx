@@ -20,5 +20,5 @@ enum TestPhaseSum{
   TP_ReportTestComplete(method_call:MethodCall);
   TP_ReportTestCaseComplete(test_case_data:TestCaseData);
 
-  TP_ReportTestSuiteComplete(test_suite:TestSuite);
+  TP_ReportTestSuiteComplete(test_suite:TestResultAccumulator);
 }

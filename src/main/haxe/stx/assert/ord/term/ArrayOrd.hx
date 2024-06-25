@@ -3,12 +3,12 @@ package stx.assert.ord.term;
 /**
   shortlex oerrdah!!
 **/
-class Array<T> extends OrdCls<StdArray<T>> {
+class ArrayOrd<T> extends OrdCls<std.Array<T>> {
   var inner : Ord<T>;
-  public function new(inner){
+  public function new(inner:Ord<T>){
     this.inner = inner;
   }
-  public function comply(v1: StdArray<T>, v2: StdArray<T>):Ordered {
+  public function comply(v1: std.Array<T>, v2: std.Array<T>):Ordered {
     var n = v1.length - v2.length;
     return if(n != 0){
       n > 0 ? NotLessThan : LessThan;

@@ -9,7 +9,7 @@ class HBaseType extends OrdCls<THBaseType>{
   public function new(){}
 
   public function comply(a:THBaseType,b:THBaseType):Ordered{
-    var ord = Ord.Array(Ord.String()).comply(a.pack,b.pack);
+    var ord = Ord.ArrayOrd(Ord.String()).comply(a.pack,b.pack);
     if(ord.is_not_less_than()){
       ord = Ord.String().comply(a.name,b.name);
     }
@@ -23,7 +23,7 @@ class HBaseType extends OrdCls<THBaseType>{
       ord = Ord.Bool().comply(a.isExtern,b.isExtern);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.Array(Ord.Makro().Type().HTypeParameter).comply(a.params,b.params);
+      ord = Ord.ArrayOrd(Ord.Makro().Type().HTypeParameter).comply(a.params,b.params);
     }
     if(ord.is_not_less_than()){
       ord = Ord.Makro().Expr().HMetadata.comply(a.meta.get(),b.meta.get());

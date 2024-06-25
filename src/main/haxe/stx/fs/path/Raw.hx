@@ -2,7 +2,7 @@ package stx.fs.path;
 
 @:using(stx.fs.path.Raw.RawLift)
 @:forward(head,tail,length,lfold,last) abstract Raw(RawDef) from RawDef to RawDef{
-  static public var _(default,never) = RawLift;
+
   public function new(self) this = self;
   @:noUsing static public function lift(self:RawDef):Raw return new Raw(self);
 	static public function unit():Raw{

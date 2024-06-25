@@ -1,5 +1,7 @@
 package stx.ds;
 
+import stx.ds.RedBlackTree.RedBlackTreeLift;
+
 typedef RedBlackMapDef<K, V>  = { 
   final data: RedBlackTree<KV<K,V>>;
   final with: Comparable<K>;
@@ -45,8 +47,8 @@ typedef RedBlackMapDef<K, V>  = {
   public function get(k:K):Option<V>                            return _.get(self,k);
   public function has(k:K):Bool                                 return _.get(self,k).is_defined();
   public function rem(k:K):RedBlackMap<K,V>                     return _.rem(self,k);
-  public function iterator():Iterator<V>                        return Iter.make(RedBlackTree._.iterator(this.data)).map((kv) -> kv.val).iterator();
-  public function keyValueIterator(): KeyValueIterator<K,V>     return Iter.make(RedBlackTree._.iterator(this.data)).map((kv) -> { key : kv.key, value : kv.val }).prj().iterator();
+  public function iterator():Iterator<V>                        return Iter.make(RedBlackTreeLift.iterator(this.data)).map((kv) -> kv.val).iterator();
+  public function keyValueIterator(): KeyValueIterator<K,V>     return Iter.make(RedBlackTreeLift.iterator(this.data)).map((kv) -> { key : kv.key, value : kv.val }).prj().iterator();
   public function union(that:RedBlackMap<K,V>):RedBlackMap<K,V> return _.union(self,that);
 
   @:to public function toIter():Iter<V>                         return new Iter({ iterator : iterator });
@@ -81,9 +83,9 @@ class RedBlackMapLift{
           Node(Red, Leaf, { key: key, val: val }, Leaf);
         case Node(color, left, label, right):
             if (comparator.comply(key, label.key).is_ok())
-                RedBlackTree._.balance(Node(color, ins(left, comparator), label, right))
+                RedBlackTreeLift.balance(Node(color, ins(left, comparator), label, right))
             else if (comparator.comply(label.key, key).is_ok())
-                RedBlackTree._.balance(Node(color, left, label, ins(right, comparator)))
+                RedBlackTreeLift.balance(Node(color, left, label, ins(right, comparator)))
             else
                 tree;
       }
@@ -114,7 +116,7 @@ class RedBlackMapLift{
     return __.option(mem(self.data));
   }
   static public inline function rem<K,V>(self:RedBlackMapDef<K,V>,value:K): RedBlackMap<K,V>{
-    var balance = RedBlackTree._.balance;
+    var balance = RedBlackTreeLift.balance;
     var eq      = self.with.eq();
     var lt      = self.with.lt();
 
@@ -122,7 +124,7 @@ class RedBlackMapLift{
       return data;
     }
     function s(v:RedBlackTree<KV<K,V>>){
-      return RedBlackTree._.toString(v);
+      return RedBlackTreeLift.toString(v);
     }
     function merge(l:RedBlackTree<KV<K,V>>,r:RedBlackTree<KV<K,V>>){
       //trace('${s(l)}\n${s(r)}');
@@ -148,7 +150,7 @@ class RedBlackMapLift{
               cons(v);
             case [Node(c0,l0,v0,r0),Node(c1,l1,v1,r1)] :
               var out = merge(l,r);
-              //trace(RedBlackTree._.toString(r));
+              //trace(RedBlackTreeLift.toString(r));
               out;
           }
         }else if(lt.comply(value,v.key).is_ok()){

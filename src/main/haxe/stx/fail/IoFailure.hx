@@ -4,6 +4,7 @@ using stx.Pico;
 using stx.Nano;
 
 enum IoFailureSum{
+  E_Io_Embedded(fn:Void->Void);
   E_Io_CannotStop;
   E_Io_CannotStart;
   E_Io_Exception(e:haxe.Exception);

@@ -1,5 +1,7 @@
 package eu.ohmrun.fletcher;
 
+import eu.ohmrun.fletcher.Modulate.ModulateLift;
+
 
 enum ArrangeArgSum<I,S,O,E>{
   ArrangeArgPure(o:O);
@@ -34,7 +36,6 @@ abstract ArrangeArg<I,S,O,E>(ArrangeArgSum<I,S,O,E>) from ArrangeArgSum<I,S,O,E>
 typedef ArrangeDef<I,S,O,E>             = ModulateDef<Couple<I,S>,O,E>;
 @:using(eu.ohmrun.fletcher.Arrange.ArrangeLift)
 @:forward abstract Arrange<I,S,O,E>(ArrangeDef<I,S,O,E>) from ArrangeDef<I,S,O,E> to ArrangeDef<I,S,O,E>{
-  static public var _(default,never) = ArrangeLift;
 
   public inline function new(self) this = self;
   @:noUsing static public inline function lift<I,S,O,E>(self:ArrangeDef<I,S,O,E>):Arrange<I,S,O,E>                         
@@ -123,7 +124,7 @@ typedef ArrangeDef<I,S,O,E>             = ModulateDef<Couple<I,S>,O,E>;
      .map(fromFun1Modulate)
      .lfold1(
        (next:Arrange<I,S,I,E>,memo:Arrange<I,S,I,E>) ->  {
-         return Arrange.lift(_.state(memo).then(next.toFletcher()));
+         return Arrange.lift(ArrangeLift.state(memo).then(next.toFletcher()));
        }
      );
    }
@@ -142,7 +143,7 @@ typedef ArrangeDef<I,S,O,E>             = ModulateDef<Couple<I,S>,O,E>;
      );
    }
    public function split<Oi>(that:Arrange<I,S,Oi,E>):Arrange<I,S,Couple<O,Oi>,E>{
-    return _.split(this,that);
+    return ArrangeLift.split(this,that);
    }
    @:to public inline function toFletcher():Fletcher<Upshot<Couple<I,S>,E>,Upshot<O,E>,Nada>{
      return this;
@@ -195,7 +196,7 @@ class ArrangeLift{
   }
   static public function convert<I,S,O,Oi,E>(self:Arrange<I,S,O,E>,that:Convert<O,Oi>):Arrange<I,S,Oi,E>{
     return Arrange.lift(
-      Modulate._.convert(self,that)     
+      ModulateLift.convert(self,that)     
     );
   }
   static public function cover<I,S,O,E>(self:Arrange<I,S,O,E>,i:I):Modulate<S,O,E>{
@@ -210,7 +211,7 @@ class ArrangeLift{
   }
   static public function split<I,S,O,Oi,E>(self:Arrange<I,S,O,E>,that:Arrange<I,S,Oi,E>):Arrange<I,S,Couple<O,Oi>,E>{
     //faffing to make sure error propagates properly
-    var a = Fletcher._.broach(self).map(
+    var a = FletcherLift.broach(self).map(
       ((tp:Couple<Upshot<Couple<I,S>,E>,Upshot<O,E>>) -> tp.decouple(
         (resInput:Upshot<Couple<I,S>,E>,resOutput:Upshot<O,E>) -> resOutput.flat_map(
           (o:O) -> resInput.map(
@@ -237,7 +238,7 @@ class ArrangeLift{
     return d;
   }
   static public function map<I,S,O,Oi,E>(self:Arrange<I,S,O,E>,that:O->Oi):Arrange<I,S,Oi,E>{
-    return Arrange.lift(Fletcher._.then(
+    return Arrange.lift(FletcherLift.then(
       self,
       Fletcher.Sync((res:Upshot<O,E>) -> (res.map)(that))
     ));

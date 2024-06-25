@@ -16,7 +16,7 @@ typedef HExprDef = StdExpr;
 @:using(stx.makro.expr.HExpr.HExprLift)
 @:forward abstract HExpr(StdExpr){
   static public var ZERO(default,never) : HExpr  = lift( {expr : EBlock([]), pos : null } );
-  static public var _(default,never) = HExprLift;
+  
   public function new(self) this = self;
   @:noUsing static public inline function lift(self:StdExpr):HExpr return new HExpr(self);
   public function prj():StdExpr return this;
@@ -66,7 +66,7 @@ typedef HExprDef = StdExpr;
 }
 
 class HExprLift{
-  //static public var _(default,never) = new LiftHExpr();
+  //
 
   @:noUsing static function lift(self:haxe.macro.Expr):HExpr return HExpr.lift(self);
 

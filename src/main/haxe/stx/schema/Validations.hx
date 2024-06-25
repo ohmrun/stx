@@ -1,5 +1,7 @@
 package stx.schema;
 
+import stx.nano.Cluster.ClusterLift;
+
 @:using(stx.schema.Validations.ValidationsLift)
 abstract Validations(Cluster<Validation>) from Cluster<Validation> to Cluster<Validation>{
   public function new(self) this = self;
@@ -19,6 +21,6 @@ abstract Validations(Cluster<Validation>) from Cluster<Validation> to Cluster<Va
 }
 class ValidationsLift{
   static public function concat(self:Validations,that:Validations){
-    return Cluster._.concat(self,that);
+    return ClusterLift.concat(self,that);
   }
 }

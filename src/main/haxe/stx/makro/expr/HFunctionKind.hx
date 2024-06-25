@@ -16,7 +16,7 @@ typedef HFunctionKindDef = haxe.macro.Expr.FunctionKind;
 
 @:using(stx.makro.expr.HFunctionKind.HFunctionKindLift)
 @:forward abstract HFunctionKind(HFunctionKindDef) from HFunctionKindDef to HFunctionKindDef{
-  static public var _(default,never) = HFunctionKindLift;
+  
   public inline function new(self:HFunctionKindDef) this = self;
   @:noUsing static inline public function lift(self:HFunctionKindDef):HFunctionKind return new HFunctionKind(self);
 

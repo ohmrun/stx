@@ -8,7 +8,7 @@ class HTypedExprdefCtr extends Clazz{
 typedef HTypedExprdefDef = haxe.macro.Type.TypedExprDef;
 
 @:forward abstract HTypedExprdef(HTypedExprdefDef){
-  static public var _(default,never) = HTypedExprdefLift;
+  
   public function new(self){
     this = self;
   }

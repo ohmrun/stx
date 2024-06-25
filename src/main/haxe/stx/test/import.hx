@@ -20,7 +20,6 @@ using stx.test.Logging;
 using stx.test.Core;
 using stx.test.Logging;
 
-import Printf;
 import haxe.rtti.*;
 
 import haxe.Constraints;

@@ -4,7 +4,7 @@ typedef AccrualDef<T,E> = Future<Receipt<T,E>>;
 
 @:using(stx.nano.Accrual.AccrualLift)
 abstract Accrual<T,E>(AccrualDef<T,E>) from AccrualDef<T,E> to AccrualDef<T,E>{
-  static public var _(default,never) = AccrualLift;
+  
   public inline function new(self) this = self;
   @:noUsing static public inline function unit<T,E>(){
     return Future.irreversible(

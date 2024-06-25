@@ -5,7 +5,7 @@ class GAccessCtr extends Clazz{
 	public function Private() 	return GAccess.lift(GAPrivate);
 	public function Static() 		return GAccess.lift(GAStatic);
 	public function Override() 	return GAccess.lift(GAOverride);
-	public function Dynamic() 	return GAccess.lift(GADynamic);
+	public function GDynamic() 	return GAccess.lift(GAccessSum.GADynamic);
 	public function Inline() 		return GAccess.lift(GAInline);
 	public function Macro() 		return GAccess.lift(GAMacro);
 	public function Final() 		return GAccess.lift(GAFinal);

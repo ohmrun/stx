@@ -7,7 +7,7 @@ typedef PmlSetDef<T> = Cluster<T>;
  */
 @:using(eu.ohmrun.pml.PmlSet.PmlSetLift)
 @:forward abstract PmlSet<T>(PmlSetDef<T>) from PmlSetDef<T> to PmlSetDef<T>{
-  static public var _(default,never) = PmlSetLift;
+  
   public inline function new(self:PmlSetDef<T>) this = self;
   @:noUsing static inline public function lift<T>(self:PmlSetDef<T>):PmlSet<T> return new PmlSet(self);
 

@@ -1,11 +1,13 @@
 package sys.stx.asys;
 
+import stx.fs.path.Raw.RawLift;
+
 class Cwd implements CwdApi extends Clazz{
   public function pop():Attempt<HasDevice,Directory,FsFailure>{
     __.log().debug(Sys.cwd().get());
     return 
       Path.parse(Sys.cwd().get())
-      .attempt(Raw._.toDirectory)
+      .attempt(RawLift.toDirectory)
       .errate(E_Fs_Path);
   }
   public function put(dir:Directory):Command<HasDevice,FsFailure>{

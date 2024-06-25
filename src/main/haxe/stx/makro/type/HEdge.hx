@@ -8,7 +8,7 @@ enum HEdgeSum{
 
 @:using(stx.makro.type.HEdge.HEdgeLift)
 abstract HEdge(HEdgeSum) from HEdgeSum to HEdgeSum{
-  static public var _(default,never) = HEdgeLift;
+  
   public inline function new(self:HEdgeSum) this = self;
   @:noUsing static inline public function lift(self:HEdgeSum):HEdge return new HEdge(self);
 

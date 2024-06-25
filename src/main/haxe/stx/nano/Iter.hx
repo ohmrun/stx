@@ -4,7 +4,7 @@ import haxe.Constraints;
 
 @:using(stx.nano.Iter.IterLift)
 @:forward abstract Iter<T>(Iterable<T>) from Iterable<T> to Iterable<T>{
-  static public var _(default,never) = IterLift;
+  
 
   @:noUsing static public function unit<T>():Iter<T>{
     return lift({

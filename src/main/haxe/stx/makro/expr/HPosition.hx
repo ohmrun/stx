@@ -19,7 +19,7 @@ typedef HPositionDef = haxe.macro.Expr.Position;
 
 @:using(stx.makro.expr.HPosition.HPositionLift)
 abstract HPosition(HPositionDef) from HPositionDef to HPositionDef{
-  static public var _(default,never) = HPositionLift;
+  
   public inline function new(self:HPositionDef) this = self;
   @:noUsing static inline public function lift(self:HPositionDef):HPosition return new HPosition(self);
 

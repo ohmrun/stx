@@ -6,7 +6,7 @@ enum EventSum<T,K>{
 }
 @:using(eu.ohmrun.walker.Event.EventLift)
 abstract Event<T,K>(EventSum<T,K>) from EventSum<T,K> to EventSum<T,K>{
-  static public var _(default,never) = EventLift;
+  
   public function new(self) this = self;
   static public function lift<T,K>(self:EventSum<T,K>):Event<T,K> return new Event(self);
 
@@ -22,7 +22,7 @@ abstract Event<T,K>(EventSum<T,K>) from EventSum<T,K> to EventSum<T,K>{
 
   public var message(get,never):Option<Message<T,K>>;
   public function get_message(){
-    return _.fold(
+    return EventLift.fold(
       this,
       req -> req.message,
       mes -> __.option(mes)

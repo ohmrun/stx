@@ -13,7 +13,7 @@ enum KaryTreeSum<T>{
  */
 @:using(stx.ds.KaryTree.KaryTreeLift)
 abstract KaryTree<T>(KaryTreeSum<T>) from KaryTreeSum<T> to KaryTreeSum<T>{
-  static public var _(default,never) = KaryTreeLift;
+  
   static inline public var ZERO:KaryTree<Dynamic> = Nought;
   @:noUsing inline static public function unit<A>():KaryTree<A>    return Nought;
   @:noUsing inline static public function pure<T>(v:T):KaryTree<T> return Branch(v,Nil);

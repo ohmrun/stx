@@ -37,8 +37,8 @@ class LogicCtr extends Clazz{
   public function always<T>():stx.log.Logic<T>{
     return new stx.log.filter.term.Always().toLogic();
   }
-  public function never<T>():stx.log.Logic<T>{
-    return new stx.log.filter.term.Never().toLogic();
+  public function withhold<T>():stx.log.Logic<T>{
+    return new stx.log.filter.term.Withhold().toLogic();
   }
   public function clear(){
     return unit();
@@ -165,8 +165,8 @@ abstract Logic<T>(LogicSum<T>) from LogicSum<T> to LogicSum<T>{
   public function always():stx.log.Logic<Dynamic>{
     return LogicCtr.unit().always();
   }
-  public function never():stx.log.Logic<Dynamic>{
-    return LogicCtr.unit().never();
+  public function withhold():stx.log.Logic<Dynamic>{
+    return LogicCtr.unit().withhold();
   }
   public function toString(){
     return LogicLift.toString(this);

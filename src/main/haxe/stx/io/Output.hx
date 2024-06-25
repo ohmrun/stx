@@ -13,7 +13,7 @@ typedef OutputDef = Coroutine<OutputRequest,Report<IoFailure>,Nada,IoFailure>;
 @:using(stx.coroutine.core.Coroutine.CoroutineLift)
 @:using(stx.io.Output.OutputLift)
 @:callable @:forward abstract Output(OutputDef) from OutputDef to OutputDef{
-  static public var _(default,never) = OutputLift;
+
   
   @stx.meta.pure
   @:noUsing static public function pure(self:StdOut):Output{
@@ -25,6 +25,6 @@ typedef OutputDef = Coroutine<OutputRequest,Report<IoFailure>,Nada,IoFailure>;
 }
 class OutputLift{
   static public function relate(self:OutputDef):Relate<OutputRequest,Nada,IoFailure>{
-    return Coroutine._.relate(self,x -> x);
+    return CoroutineLift.relate(self,x -> x);
   }
 }

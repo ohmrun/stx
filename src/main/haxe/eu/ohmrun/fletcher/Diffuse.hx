@@ -1,10 +1,12 @@
 package eu.ohmrun.fletcher;
 
+import stx.nano.Upshot.UpshotLift;
+
 typedef DiffuseDef<I,O,E> = FletcherDef<Chunk<I,E>,Chunk<O,E>,Nada>;
 
 @:using(eu.ohmrun.fletcher.Diffuse.DiffuseDef)
 abstract Diffuse<I,O,E>(DiffuseDef<I,O,E>) from DiffuseDef<I,O,E> to DiffuseDef<I,O,E>{
-  static public var _(default,never) = DiffuseLift;
+  
   public inline function new(self) this = self;
   static public inline function lift<I,O,E>(self:DiffuseDef<I,O,E>):Diffuse<I,O,E> return new Diffuse(self);
   static public inline function unit<P,E>():Diffuse<P,P,E>{
@@ -59,7 +61,7 @@ class DiffuseLift{
       Fletcher.Anon(
         (chk:Chunk<Oi,E>,cont:Terminal<Chunk<Oii,E>,Nada>) -> cont.receive(
           chk.fold(
-            ok -> that.toFletcher().map(Upshot._.toChunk).forward(ok),
+            ok -> that.toFletcher().map(UpshotLift.toChunk).forward(ok),
             no -> cont.value(End(no)),
             () -> cont.value(Tap)
           )

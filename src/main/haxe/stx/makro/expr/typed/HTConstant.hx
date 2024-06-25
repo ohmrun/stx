@@ -32,7 +32,7 @@ typedef HTConstantDef = haxe.macro.Type.TConstant;
 
 @:using(stx.makro.expr.typed.HTConstant.HTConstantLift)
 @:forward abstract HTConstant(HTConstantDef) from HTConstantDef to HTConstantDef{
-  static public var _(default,never) = HTConstantLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:HTConstantDef) return new HTConstant(self);
 

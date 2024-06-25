@@ -4,7 +4,7 @@ typedef SchemasDef = Array<Schema>;
 
 @:using(stx.schema.Schemas.SchemasLift)
 @:forward(iterator,concat,push) abstract Schemas(SchemasDef) from SchemasDef to SchemasDef{
-  static public var _(default,never) = SchemasLift;
+  
   public inline function new(self:SchemasDef) this = self;
   @:noUsing static inline public function lift(self:SchemasDef):Schemas return new Schemas(self);
 

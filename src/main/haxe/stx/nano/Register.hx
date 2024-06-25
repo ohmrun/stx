@@ -21,7 +21,7 @@ class RegisterCls{
 }
 @:using(stx.nano.Register.RegisterLift)
 @:forward @:allow(stx) abstract Register(RegisterCls) from RegisterCls to RegisterCls{
-  static public var _(default,never) = RegisterLift;
+  
   public function new(){
     this = @:privateAccess RegisterState.instance.next();
   }

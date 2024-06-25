@@ -1,5 +1,7 @@
 package sys.stx.asys;
 
+import stx.fs.path.Raw.RawLift;
+
 class User implements UserApi extends Clazz{
   public final device : Device;
   public function new(device){
@@ -12,7 +14,7 @@ class User implements UserApi extends Clazz{
       (str) ->  
         stx.fs.Path.parse(str)
           .provide((this:HasDevice))
-          .flat_map(Raw._.toDirectory)
+          .flat_map(RawLift.toDirectory)
           .errate(x -> E_ASys_Fs(E_Fs_Path(x)));
 
     return if (this.device.distro.is_windows()) {

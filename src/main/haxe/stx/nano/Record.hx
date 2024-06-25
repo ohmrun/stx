@@ -9,7 +9,7 @@ import haxe.DynamicAccess;
 typedef RecordDef<T> = Cluster<Field<Void -> T>>;
 
 @:forward(iterator,length,search) abstract Record<T>(RecordDef<T>) from RecordDef<T>{
-  static public var _(default,never) = RecordLift;
+  
 
   @:noUsing static public function unit<T>():Record<T>{
     return new Record([].imm());

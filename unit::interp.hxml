@@ -1,6 +1,8 @@
 -lib stx
+-D no-deprecation-warnings
+-cp src/main/haxe
 -lib tink_chunk
 --macro include('stx',true)
 --macro include('eu.ohmrun',true)
 --interp
---times
+--main Unit

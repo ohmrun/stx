@@ -1,10 +1,12 @@
 package stx.nano;
 
+import stx.nano.Upshot.UpshotLift;
+
 typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
 
 @:using(stx.nano.Pledge.PledgeLift)
 @:forward abstract Pledge<T,E>(PledgeDef<T,E>) from PledgeDef<T,E> to PledgeDef<T,E>{
-  static public var _(default,never) = PledgeLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift<T,E>(self:PledgeDef<T,E>):Pledge<T,E> return new Pledge(self);
 
@@ -100,10 +102,10 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
   private function get_self():Pledge<T,E> return lift(this);
 
   public function map<Ti>(fn:T->Ti):Pledge<Ti,E>{
-    return _.map(this,fn);
+    return PledgeLift.map(this,fn);
   }
   public function flat_map<Ti>(fn:T->Pledge<Ti,E>):Pledge<Ti,E>{
-    return _.flat_map(this,fn);
+    return PledgeLift.flat_map(this,fn);
   }
   static public function trigger<T,E>():PledgeTrigger<T,E>{
     return new PledgeTrigger();
@@ -228,7 +230,7 @@ class PledgeLift{
     );
   }
   static public function fold<T,Ti,E>(self:Pledge<T,E>,val:T->Ti,ers:Null<Refuse<E>>->Ti):Future<Ti>{
-    return self.prj().map(Upshot._.fold.bind(_,val,ers));
+    return self.prj().map(UpshotLift.fold.bind(_,val,ers));
   }
   static public function recover<T,E>(self:Pledge<T,E>,fn:Refuse<E>->Upshot<T,E>):Pledge<T,E>{
     return lift(fold(

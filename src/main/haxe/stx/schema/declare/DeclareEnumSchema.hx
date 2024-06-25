@@ -16,7 +16,7 @@ class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareNomina
 }
 @:using(stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaLift)
 @:forward abstract DeclareEnumSchema(DeclareEnumSchemaApi) from DeclareEnumSchemaApi to DeclareEnumSchemaApi{
-  static public var _(default,never) = DeclareEnumSchemaLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareEnumSchemaApi):DeclareEnumSchema return new DeclareEnumSchema(self);
 

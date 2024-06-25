@@ -54,6 +54,7 @@ class Base extends ParserCls<String,Cluster<Token>>{
 	public var char_and_space
 		= SParse.alphanum.or(SParse.whitespace).with_tag('char_and_space');
 
+	//public var p_special_chars_exceptions = 
 	public var p_special_chars 
 		= alts(
 			["<>:\"\\|?*/"].map(id)

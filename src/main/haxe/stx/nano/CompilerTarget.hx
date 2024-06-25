@@ -23,7 +23,7 @@ enum CompilerTargetSum{
 
 @:using(stx.nano.CompilerTarget.CompilerTargetLift)
 abstract CompilerTarget(CompilerTargetSum) from CompilerTargetSum to CompilerTargetSum{
-  static public var _(default,never) = CompilerTargetLift;
+  
 
   public function new(self) this = self;
   @:noUsing static public function lift(self:CompilerTargetSum):CompilerTarget return new CompilerTarget(self);

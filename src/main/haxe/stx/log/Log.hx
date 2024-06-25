@@ -90,9 +90,6 @@ package stx.log;
       return v;
     }
   }
-  public function logic(){
-    return new stx.log.Logic.LogicCtr();
-  }
   public function prj():LogApi{
     return this;
   }

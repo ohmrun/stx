@@ -16,7 +16,7 @@ typedef HCaseDef = haxe.macro.Expr.Case;
 
 @:using(stx.makro.expr.HCase.HCaseLift)
 @:forward abstract HCase(HCaseDef) from HCaseDef to HCaseDef{
-  static public var _(default,never) = HCaseLift;
+  
   public inline function new(self:HCaseDef) this = self;
   @:noUsing static inline public function lift(self:HCaseDef):HCase return new HCase(self);
 

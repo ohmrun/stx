@@ -4,7 +4,7 @@ typedef FiberDef = Fletcher<Nada,Nada,Nada>;
 
 @:using(eu.ohmrun.fletcher.Fiber.FiberLift)
 @:forward abstract Fiber(FiberDef) from FiberDef{
-  static public var _(default,never) = FiberLift;
+  
   static public inline function lift(self:Fletcher<Nada,Nada,Nada>):Fiber{
     return self;
   }

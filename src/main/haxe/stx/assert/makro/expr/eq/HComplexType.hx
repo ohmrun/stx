@@ -10,13 +10,13 @@ class HComplexType extends stx.assert.eq.term.Base<THComplexType> {
       case [TPath(pI),TPath(pII)]                           : 
         Eq.Makro().Expr().HTypePath.comply(pI,pII);
       case [ComplexType.TFunction(argsI,retI),ComplexType.TFunction(argsII,retII)]  : 
-        var eq = Eq.Array(this).comply(argsI,argsII);
+        var eq = Eq.ArrayEq(this).comply(argsI,argsII);
         if(eq.is_ok()){
           eq = comply(retI,retII);
         }
         eq;
       case [ComplexType.TAnonymous(fieldsI),ComplexType.TAnonymous(fieldsII)]       : 
-        Eq.Array(Eq.Makro().Expr().HField).comply(fieldsI,fieldsII);
+        Eq.ArrayEq(Eq.Makro().Expr().HField).comply(fieldsI,fieldsII);
       case [TParent(tI),TParent(tII)]                       : 
         comply(tI,tII);
       case [TExtend(pI,fieldsI) ,TExtend(pII,fieldsII)]     : 

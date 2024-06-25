@@ -5,7 +5,7 @@ typedef IdentityDef = IdentDef & {
 }
 @:using(stx.schema.core.Identity.IdentityLift)
 @:forward abstract Identity(IdentityDef) from IdentityDef to IdentityDef{
-  static public var _(default,never) = IdentityLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:IdentityDef):Identity return new Identity(self);
 

@@ -6,7 +6,7 @@ enum KnuckleSum{
 }
 @:using(stx.nano.Knuckle.KnuckleLift)
 abstract Knuckle(KnuckleSum) from KnuckleSum to KnuckleSum{
-  static public var _(default,never) = KnuckleLift;
+  
   public inline function new(self:KnuckleSum) this = self;
   @:noUsing static inline public function lift(self:KnuckleSum):Knuckle return new Knuckle(self);
 

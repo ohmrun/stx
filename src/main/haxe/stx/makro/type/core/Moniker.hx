@@ -8,7 +8,7 @@ package stx.makro.type.core;
  */
 @:using(stx.makro.type.core.Moniker.MonikerLift)
 @:forward abstract Moniker(MonikerDef) from MonikerDef{
-  static public var _(default,never) = MonikerLift;
+  
   @:noUsing static public function lift(self:MonikerDef):Moniker{
     return new Moniker(self);
   }
@@ -31,7 +31,7 @@ package stx.makro.type.core;
     return new Moniker({ name : name, pack : pack, module : module });
   }
   public function canonical(){
-    return _.canonical(this);
+    return MonikerLift.canonical(this);
   }
   static public function fromBaseType(self:BaseType){
     final module = __.option(self.module).filter(x -> x!= "").flat_map(x -> x.split(".").last()).filter(

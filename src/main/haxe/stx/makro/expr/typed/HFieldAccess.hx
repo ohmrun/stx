@@ -15,7 +15,7 @@ typedef HFieldAccessDef = haxe.macro.Type.FieldAccess;
 
 @:using(stx.makro.expr.typed.HFieldAccess.HFieldAccessLift)
 abstract HFieldAccess(HFieldAccessDef) from HFieldAccessDef to HFieldAccessDef{
-  static public var _(default,never) = HFieldAccessLift;
+  
   public inline function new(self:HFieldAccessDef) this = self;
   @:noUsing static inline public function lift(self:HFieldAccessDef):HFieldAccess return new HFieldAccess(self);
 

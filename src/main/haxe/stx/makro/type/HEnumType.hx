@@ -55,7 +55,7 @@ class HEnumTypeCtr extends Clazz{
       exclude     : exclude,
     });
   }
-  static public var _(default,never) = HEnumTypeLift;
+  
   public function new(self){
     this = self;
   }

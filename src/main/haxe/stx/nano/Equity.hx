@@ -34,7 +34,7 @@ typedef EquityDef<I,O,E> = ReceiptDef<O,E> & {
  */
 @:using(stx.nano.Equity.EquityLift)
 @:forward abstract Equity<I,O,E>(EquityDef<I,O,E>) from EquityDef<I,O,E> to EquityDef<I,O,E>{
-  static public var _(default,never) = EquityLift;
+  
   public function new(self) this = self;
   /**
    * @see https://github.com/ohmrun/docs/blob/main/conventions.md#lift

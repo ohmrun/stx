@@ -11,7 +11,7 @@ typedef HAbstractTypeUnopDef = {op:haxe.macro.Expr.Unop, postFix: Bool, field:HC
 
 @:using(stx.makro.type.HAbstractTypeUnop.HAbstractTypeUnopLift)
 @:forward abstract HAbstractTypeUnop(HAbstractTypeUnopDef) from HAbstractTypeUnopDef to HAbstractTypeUnopDef{
-  static public var _(default,never) = HAbstractTypeUnopLift;
+  
   public inline function new(self:HAbstractTypeUnopDef) this = self;
   @:noUsing static inline public function lift(self:HAbstractTypeUnopDef):HAbstractTypeUnop return new HAbstractTypeUnop(self);
 

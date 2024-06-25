@@ -5,23 +5,26 @@
       "--times" : true,
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
       "hl" : {
-        "--hl" : "build/hl/unit.hl"
+        "--hl" : "dist/hl/unit.hl"
       },
       "cpp" : {
-        "--cpp" : "build/cpp"
+        "--cpp" : "dist/unit/cpp"
       },
       "php" : {
         "--php" : "build/php"
       },
       "python" : {
-        "--python" : "build/python"
+        "--python" : "dist/unit/python/stx.py"
       },
       "javascript" : {
         "--macro" : "exclude('stx.asys')",
-        "--js"    : "build/javascript/unit.js"
+        "--js"    : "dist/javascript/unit/main.js"
       },
       "neko" : {
-        "--neko" : "build/neko/main.n"
+        "--neko" : "dist/neko/main.n"
+      },
+      "lua" : {
+        "--lua" : "dist/lua/main.lua"
       },
       "interp" : {
         "--interp" : true 
@@ -31,10 +34,31 @@
       "-main" : "Test",
       "interp" : {
         "--interp" : "true"
+      },
+      "cpp"  : {
+        "--cpp" : "dist/test/cpp"
+      },
+      "php"  : {
+        "--php" : "dist/test/php/main.php"
+      },
+      "python"  : {
+        "--python" : "dist/test/python/main.py"
+      },
+      "neko" :  {
+        "--neko" : "dist/test/neko/main.n"
+      },
+      "hl" :  {
+        "--hl" : "dist/test/hl/main.hl"
+      },
+      "jvm" :  {
+        "--jvm" : "dist/test/jvm/"
+      },
+      "lua" :  {
+        "--lua" : "dist/test/lua/main.lua"
       }
     },
     "docs" : {
-      "--macro" : [
+      "--lua" : [
         "include('stx',true,['stx.makro','tink','hre','equals','hscript','httpstatus'])"
       ],
       "-lib" : "stx",

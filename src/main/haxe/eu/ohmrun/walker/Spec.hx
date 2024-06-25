@@ -23,9 +23,9 @@ typedef NodeSpecDef<T,G,K,E> = {
     return self;
   }
   public function toString(){
-    return __.assert().expect().exists().apply(this.rest).is_ok().if_else(
-      () -> this.rest.is_defined().if_else(
-        () -> '${this.id}(${this.rest})',
+    return (this.rest != null).if_else(
+      () -> (this.rest.length > 0).if_else(
+        () -> '${this.id}(${this.rest.join(" ")})',
         ()  -> '${this.id}'
       ),
       () -> this.id.toString()
@@ -51,7 +51,7 @@ typedef ChildrenSpecDef<T,G,K,E> = Cluster<NodeSpec<T,G,K,E>>;
 
 @:forward abstract ChildrenSpec<T,G,K,E>(ChildrenSpecDef<T,G,K,E>) from ChildrenSpecDef<T,G,K,E> to ChildrenSpecDef<T,G,K,E>{
   public function toString(){
-    return this.map( _ -> _.toString() );
+    return this.map( (_:NodeSpec<T,G,K,E>) -> _.toString() );
   }
 
 }

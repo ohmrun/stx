@@ -1,6 +1,10 @@
 package eu.ohmrun.fletcher;
 
+import eu.ohmrun.fletcher.Provide.ProvideLift;
+
+
 typedef ExecuteDef<E>                   = FletcherDef<Nada,Report<E>,Nada>;
+
 
 @:using(eu.ohmrun.fletcher.Execute.ExecuteLift)
 abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
@@ -36,7 +40,7 @@ abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
    */
   @:noUsing static public function bind_fold<T,E>(fn:T->Report<E>->Execute<E>,arr:Iterable<T>):Execute<E>{
     return (arr:Iter<T>).lfold(
-      (next:T,memo:Execute<E>) -> Execute.lift(Provide._.flat_map(
+      (next:T,memo:Execute<E>) -> Execute.lift(ProvideLift.flat_map(
         memo,
         (report) -> lift(fn(next,report))
       )),
@@ -92,7 +96,7 @@ abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
     if(failure == null){
       failure = (e) -> e.report();
     }
-    return Fletcher._.environment(
+    return FletcherLift.environment(
       this,
       Nada,
       (report) -> {

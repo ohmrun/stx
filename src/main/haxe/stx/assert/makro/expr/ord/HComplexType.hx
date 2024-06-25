@@ -12,13 +12,13 @@ class HComplexType extends OrdCls<HComplexTypeT>{
       case [TComplexType.TPath(pI),TComplexType.TPath(pII)]                           : 
         new stx.assert.makro.expr.ord.HTypePath().comply(pI,pII);
       case [TComplexType.TFunction(argsI,retI),TComplexType.TFunction(argsII,retII)]  : 
-        var ord = Ord.Array(this).comply(argsI,argsII);
+        var ord = Ord.ArrayOrd(this).comply(argsI,argsII);
         if(ord.is_not_less_than()){
           ord = comply(retI,retII);
         }
         ord;
       case [TComplexType.TAnonymous(fieldsI),TComplexType.TAnonymous(fieldsII)]       : 
-        Ord.Array(Ord.Makro().Expr().HField).comply(fieldsI,fieldsII);
+        Ord.ArrayOrd(Ord.Makro().Expr().HField).comply(fieldsI,fieldsII);
       case [TComplexType.TParent(tI),TComplexType.TParent(tII)]                       : 
         comply(tI,tII);
       case [TComplexType.TExtend(pI,fieldsI) ,TComplexType.TExtend(pII,fieldsII)]     : 

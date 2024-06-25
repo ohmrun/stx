@@ -19,7 +19,7 @@ class StringMap<T> extends EqCls<TStringMap<T>>{
       return if(lstr.length < rstr.length){
         Left(LessThan);
       }else if(lstr.length == rstr.length){
-        Chars._.toIter(lstr).zip(Chars._.toIter(rstr)).lfold(
+        stx.nano.Chars.CharsLift.toIter(lstr).zip(stx.nano.Chars.CharsLift.toIter(rstr)).lfold(
           function (next:Couple<std.String,std.String>,memo:Option<Either<Ordered,Equaled>>):Option<Either<Ordered,Equaled>>{
             //trace('$next');
             return switch(memo){

@@ -6,12 +6,11 @@ import stx.assert.ord.term.*;
 import stx.assert.ord.term.Couple;
 import stx.assert.ord.term.KV;
 import stx.assert.ord.term.EnumValueIndex;
-import stx.assert.ord.term.Array;
 import stx.assert.ord.term.Cluster;
 import stx.assert.ord.term.String;
 import stx.assert.ord.term.Int;
 import stx.assert.ord.term.Int64;
-import stx.assert.ord.term.Float;
+import stx.assert.ord.term.FloatOrd as Float;
 import stx.assert.ord.term.Anon;
 import stx.assert.ord.term.Primitive;
 
@@ -49,8 +48,8 @@ class OrdTagCtr{
   static public inline function Primitive(tag:TAG):Ord<stx.nano.Primitive>{
     return new Primitive();
   }
-  static public inline function Array<T>(tag:TAG,inner:Ord<T>):Ord<StdArray<T>>{
-    return new Array(inner);
+  static public inline function ArrayOrd<T>(tag:TAG,inner:Ord<T>):Ord<StdArray<T>>{
+    return new ArrayOrd(inner);
   }
   static public inline function Record<T>(tag:TAG, inner:Ord<T>):Ord<stx.Record<T>>{
     return new stx.assert.ord.term.Record(inner);

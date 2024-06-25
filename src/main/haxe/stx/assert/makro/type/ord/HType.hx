@@ -31,7 +31,7 @@ class HType extends OrdCls<THType>{
         }
         ord;
       case [TFun(argsI, retI)      ,TFun(argsII, retII)       ]:
-        var ord = Ord.Array(Ord.Anon(args_op)).comply(argsI,argsII);
+        var ord = Ord.ArrayOrd(Ord.Anon(args_op)).comply(argsI,argsII);
         if(ord.is_not_less_than()){
           ord = Ord.Makro().Type().Type.comply(retI,retII);
         }
@@ -52,7 +52,7 @@ class HType extends OrdCls<THType>{
     }
   }
   private function params_op(){
-    return Ord.Array(Ord.Makro().Type().Type);
+    return Ord.ArrayOrd(Ord.Makro().Type().Type);
   }
   private function args_op(a:{name : String,opt: Bool, t:Type},b:{name : String,opt: Bool, t:Type}){
     var ord = Ord.String().comply(a.name,b.name);

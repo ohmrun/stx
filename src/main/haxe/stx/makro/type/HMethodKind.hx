@@ -4,7 +4,7 @@ typedef HMethodKindDef = haxe.macro.Type.MethodKind;
 
 @:using(stx.makro.type.HMethodKind.HMethodKindLift)
 abstract HMethodKind(HMethodKindDef) from HMethodKindDef to HMethodKindDef{
-  static public var _(default,never) = HMethodKindLift;
+  
   public inline function new(self:HMethodKindDef) this = self;
   @:noUsing static inline public function lift(self:HMethodKindDef):HMethodKind return new HMethodKind(self);
 

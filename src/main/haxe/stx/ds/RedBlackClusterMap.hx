@@ -5,7 +5,7 @@ typedef RedBlackClusterMapDef<K,V> = RedBlackMapDef<K,Cluster<V>>;
 @:using(stx.ds.RedBlackClusterMap.RedBlackClusterMapLift)
 @:using(stx.ds.RedBlackMap.RedBlackMapLift)
 @:forward abstract RedBlackClusterMap<K,V>(RedBlackClusterMapDef<K,V>) from RedBlackClusterMapDef<K,V> to RedBlackClusterMapDef<K,V>{
-  static public var _(default,never) = RedBlackClusterMapLift;
+  
   public inline function new(self:RedBlackClusterMapDef<K,V>) this = self;
   @:noUsing static public function make<K,V>(with:Comparable<K>,?data:RedBlackTree<KV<K,Cluster<V>>>):RedBlackClusterMap<K,V>{
     return new RedBlackClusterMap({

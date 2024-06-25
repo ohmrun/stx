@@ -12,7 +12,7 @@ enum QBinopSum{
 }
 @:using(stx.query.QBinop.QBinopLift)
 abstract QBinop(QBinopSum) from QBinopSum to QBinopSum{
-	static public var _(default,never) = QBinopLift;
+
 	public inline function new(self:QBinopSum) this = self;
 	@:noUsing static inline public function lift(self:QBinopSum):QBinop return new QBinop(self);
 

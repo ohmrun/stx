@@ -1,5 +1,7 @@
 package eu.ohmrun.fletcher.core;
 
+import eu.ohmrun.fletcher.core.Cont.ContLift;
+
 typedef ReceiverCls<R,E> = ContCls<ReceiverInput<R,E>,Work>;
 typedef ReceiverApi<R,E> = ContApi<ReceiverInput<R,E>,Work>;
 typedef ReceiverDef<R,E> = Cont<ReceiverInput<R,E>,Work>;
@@ -10,7 +12,7 @@ typedef ReceiverDef<R,E> = Cont<ReceiverInput<R,E>,Work>;
 //@:using(stx.fp.Continuation.ContinuationLift)
 @:using(eu.ohmrun.fletcher.core.Receiver.ReceiverLift)
 @:forward(apply) abstract Receiver<R,E>(ReceiverApi<R,E>) to ReceiverApi<R,E>{
-  static public var _(default,never) = ReceiverLift;
+  
   public function reply():Work{
     return this.apply(ReceiverSink.unit());
   }
@@ -97,7 +99,7 @@ class ReceiverLift{
     ));
   }
   static public function map<P,Pi,E>(self:ReceiverApi<P,E>,fn:P->Pi):Receiver<Pi,E>{
-    return Receiver.lift(Cont._.map(
+    return Receiver.lift(ContLift.map(
       self,
       out -> out.map(x -> x.map(fn))
     ));

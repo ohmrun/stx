@@ -36,7 +36,7 @@ class HExprdefCtr extends Clazz{
       () -> this.Const(_ -> _.Ident(head)).toHExpr(pos).prj()
     );
   }
-  public function Array(lhs:CTR<HExprCtr,HExpr>,rhs:CTR<HExprCtr,HExpr>){
+  public function ArrayDef(lhs:CTR<HExprCtr,HExpr>,rhs:CTR<HExprCtr,HExpr>){
     return HExprdef.lift(EArray(lhs(Expr.HExpr).prj(),rhs(Expr.HExpr).prj()));
   }
   public function Binop(op:CTR<HBinopCtr,HBinop>,l:CTR<HExprCtr,HExpr>,r:CTR<HExprCtr,HExpr>){
@@ -146,7 +146,7 @@ class HExprdefCtr extends Clazz{
 typedef HExprdefDef = StdExprDef;
 //@:using(stx.makro.expr.HExprdef.HExprdefLift)
 @:forward abstract HExprdef(StdExprDef){
-  static public var _(default,never) = HExprdefLift;
+  
   static public var MARK(default,null) = mark();
   static public var ZERO(default,null) = unit();
   

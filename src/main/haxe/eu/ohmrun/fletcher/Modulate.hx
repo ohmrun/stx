@@ -1,5 +1,6 @@
 package eu.ohmrun.fletcher;
 
+import stx.nano.Upshot.UpshotLift;
 
 enum ModulateArgSum<P,R,E>{
 	ModulateArgFunResRes0(fn:Upshot<P,E>->Upshot<R,E>);
@@ -66,7 +67,6 @@ typedef ModulateDef<I, O, E> = FletcherDef<Upshot<I, E>, Upshot<O, E>, Nada>;
 //@:using(eu.ohmrun.Fletcher.Lift)
 @:using(eu.ohmrun.fletcher.Modulate.ModulateLift)
 @:forward abstract Modulate<I, O, E>(ModulateDef<I, O, E>) from ModulateDef<I, O, E> to ModulateDef<I, O, E> {
-	static public var _(default, never) = ModulateLift;
 
 	public inline function new(self) this = self;
 
@@ -153,22 +153,22 @@ typedef ModulateDef<I, O, E> = FletcherDef<Upshot<I, E>, Upshot<O, E>, Nada>;
 	@:to public function toFletcher():Fletcher<Upshot<I, E>, Upshot<O, E>, Nada> return this;
 
 	public inline function environment(i:I, success:O->Void, ?failure:Refuse<E>->Void):Fiber {
-		return _.environment(this, i, success, failure);
+		return ModulateLift.environment(this, i, success, failure);
 	}
 	public inline function split<Oi>(that:Modulate<I, Oi, E>):Modulate<I, Couple<O, Oi>, E> {
-		return _.split(this, that);
+		return ModulateLift.split(this, that);
 	}
 	public inline function mapi<Ii>(fn:Ii->I):Modulate<Ii, O, E> {
-		return _.mapi(this, fn);
+		return ModulateLift.mapi(this, fn);
   }
   public inline function convert<Oi>(that:Convert<O, Oi>):Modulate<I, Oi, E> {
-		return _.convert(this, that);
+		return ModulateLift.convert(this, that);
   }
   public inline function broach():Modulate<I, Couple<I,O>,E>{ 
-    return _.broach(this);
+    return ModulateLift.broach(this);
 	}
 	public inline function flat_map<Oi>(fn:O->Modulate<I,Oi,E>):Modulate<I,Oi,E>{
-		return _.flat_map(this,fn);
+		return ModulateLift.flat_map(this,fn);
 	}
 	public inline function prj():FletcherDef<Upshot<I,E>,Upshot<O,E>,Nada>{
 		return this;
@@ -200,7 +200,7 @@ class ModulateLift {
 				(i:Upshot<I, EE>,cont:Waypoint<O,EE>) -> i.fold(
 					(i:I) -> 
 						cont.receive(
-							Fletcher._.map(
+							FletcherLift.map(
 								self,
 								o -> o.errata(fn)).forward(__.accept(i)
 							)
@@ -248,7 +248,7 @@ class ModulateLift {
 
 	@:noUsing static public inline function environment<I, O, E>(self:ModulateDef<I, O, E>, i:I, success:O->Void, ?failure:Refuse<E>->Void):Fiber {
 		failure = failure ?? (e:Refuse<E>) ->  e.crack();
-		return Fletcher._.environment(
+		return FletcherLift.environment(
 			self, 
 			__.accept(i), 
 			(res) -> res.fold(success, failure), 
@@ -281,11 +281,11 @@ class ModulateLift {
 	}
 
 	static public function split<I, Oi, Oii, E>(self:ModulateDef<I, Oi, E>, that:Modulate<I, Oii, E>):Modulate<I, Couple<Oi, Oii>, E> {
-		return lift(Fletcher._.split(self, that).map(__.decouple(Upshot._.zip)));
+		return lift(FletcherLift.split(self, that).map(__.decouple(UpshotLift.zip)));
   }
   
   static public function broach<I, O, E>(self:ModulateDef<I, O, E>):Modulate<I, Couple<I,O>,E>{
-    return lift(Fletcher._.broach(
+    return lift(FletcherLift.broach(
       self
     ).then(
       Fletcher.Sync(
@@ -318,7 +318,7 @@ class ModulateLift {
     );
   }
 	static public function adjust<P,R,Ri,E>(self:Modulate<P,R,E>,fn:R->Upshot<Ri,E>):Modulate<P,Ri,E>{
-		return lift(Fletcher._.map(
+		return lift(FletcherLift.map(
 			self,
 			(res:Upshot<R,E>) -> res.flat_map(fn)
 		));

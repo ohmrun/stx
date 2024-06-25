@@ -1,5 +1,7 @@
 package stx.schema;
 
+import stx.schema.core.Identity.IdentityLift;
+
 enum SchemaSum{
   //SchHole(v:T)
   //SchNamed(ident:Identity,def:Schema);
@@ -13,7 +15,7 @@ enum SchemaSum{
 }
 @:using(stx.schema.Schema.SchemaLift)
 abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
-  static public var _(default,never) = SchemaLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:SchemaSum):Schema return new Schema(self);
 
@@ -23,7 +25,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
 
   public var validation(get,never):Validations;
   private function get_validation():Validations{
-    return _.fold(
+    return SchemaLift.fold(
       this,
       x -> x.validation,
       x -> x.validation,
@@ -35,7 +37,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   }
   public var identity(get,never):Identity;
   private function get_identity():Identity{
-    return _.fold(
+    return SchemaLift.fold(
       this,
       x -> x.identity,
       x -> x.identity,
@@ -85,7 +87,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   @:from static public function fromDeclareGenericSchema(self:DeclareGenericSchema):Schema{
     return lift(SchGeneric(self));
   }
-  static public function Array(ref:SchemaRef):Schema{
+  static public function ArrayOf(ref:SchemaRef):Schema{
     return lift(SchGeneric(stx.schema.declare.term.SchemaArray.make(ref)));
   }
   static public function Bool():Schema{
@@ -107,7 +109,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
     return lift(SchNative(stx.schema.declare.term.SchemaDate.make()));
   }
   public function toString(){
-    return _.fold(
+    return SchemaLift.fold(
       this,
       x -> x.toString(),
       x -> x.toString(),

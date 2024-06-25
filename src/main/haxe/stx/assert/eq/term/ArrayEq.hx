@@ -1,9 +1,9 @@
 package stx.assert.eq.term;
 
-class Array<V> extends EqCls<StdArray<V>>{
+class ArrayEq<V> extends EqCls<StdArray<V>>{
   var inner : Eq<V>;
 
-  public function new(inner){
+  public function new(inner:Eq<V>){
     this.inner = inner;
   }
   public function comply(a:StdArray<V>,b:StdArray<V>):Equaled{

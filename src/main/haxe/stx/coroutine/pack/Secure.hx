@@ -1,10 +1,12 @@
 package stx.coroutine.pack;
 
+import stx.coroutine.core.Coroutine.CoroutineLift;
+
 typedef SecureDef<I,E> = CoroutineSum<I,Nada,Nada,E>;
 
 @:using(stx.coroutine.pack.Secure.SecureLift)
 @:forward abstract Secure<I,E>(SecureDef<I,E>) from SecureDef<I,E> to SecureDef<I,E>{
-    static public var _(default,never) = SecureLift;
+    
     @:noUsing static public function lift<I,E>(self:SecureDef<I,E>):Secure<I,E> return new Secure(self);
     public function new(self) this = self;
     
@@ -22,7 +24,7 @@ typedef SecureDef<I,E> = CoroutineSum<I,Nada,Nada,E>;
         return handler((x)-> {});
     }
     public function provide(v:I):Secure<I,E>{
-      return lift(Coroutine._.provide(this,v));
+      return lift(CoroutineLift.provide(this,v));
     }
     @:from static public function fromHandler<I,E>(fn:I->Void):Secure<I,E>{
         return handler(fn);

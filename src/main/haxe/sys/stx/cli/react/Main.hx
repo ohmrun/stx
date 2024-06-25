@@ -9,7 +9,7 @@ class Main{
   }
   static public function main(){
     trace("main");
-    final LC            = __.log().logic();
+    //final LC            = __.log().logic();
     // final logic         = LC.tags([
     //   //'eu/ohmrun/fletcher',
     //   //'stx/stream',

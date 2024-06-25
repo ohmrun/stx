@@ -1,5 +1,6 @@
 package stx.nano;
 
+import stx.nano.Chunk.ChunkLift;
 #if tink_state
   import tink.state.Promised;
 #end
@@ -9,7 +10,7 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
 @stx.lang.has('pure','unit','lift')
 @:using(stx.nano.Contract.ContractLift)
 @:expose abstract Contract<T,E>(ContractDef<T,E>) from ContractDef<T,E> to ContractDef<T,E>{
-  static public var _(default,never) = ContractLift;
+  
 
   public function new(v:Future<Chunk<T,E>>) this = v;
 
@@ -96,7 +97,7 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
   }
 
   @:noUsing public function toTinkSurprise():tink.core.Promise<T>{
-    return _.fold(
+    return ContractLift.fold(
       this,
       tink.core.Outcome.Success,
       e  -> tink.core.Outcome.Failure(tink.core.Error.withData(500,e.toString(),e.data.defv(null),e.pos.defv(null))),
@@ -212,7 +213,7 @@ class ContractLift extends Clazz{
     );
   }
   static public function fold<T,Ti,E>(self:Contract<T,E>,val:T->Ti,ers:Null<Refuse<E>>->Ti,nil:Void->Ti):Future<Ti>{
-    return self.prj().map(Chunk._.fold.bind(_,val,ers,nil));
+    return self.prj().map(ChunkLift.fold.bind(_,val,ers,nil));
   }
   static public function recover<T,E>(self:Contract<T,E>,fn:Refuse<E>->Chunk<T,E>):Contract<T,E>{
     return lift(fold(

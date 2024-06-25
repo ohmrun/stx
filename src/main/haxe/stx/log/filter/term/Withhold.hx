@@ -1,6 +1,6 @@
 package stx.log.filter.term;
 
-class Never<T> extends Filter<T>{
+class Withhold<T> extends Filter<T>{
   public function new(){
     new stx.log.global.config.IsFilteringWithTags().value = true;
     super();
@@ -10,6 +10,6 @@ class Never<T> extends Filter<T>{
     return Report.make(E_Log_Zero);
   }
   public function canonical(){
-    return 'Never';
+    return 'Withhold';
   }
 }

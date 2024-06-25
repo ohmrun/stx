@@ -24,7 +24,7 @@ enum FsFailureSum{
   E_Fs_IsAlreadyRoot;
 }
 @:transitive abstract FsFailure(FsFailureSum) from FsFailureSum to FsFailureSum{
-  static public var _(default,never) = FsFailureLift;
+
   public function new(self) this = self;
   @:noUsing static public function lift(self:FsFailureSum):FsFailure return new FsFailure(self);
 

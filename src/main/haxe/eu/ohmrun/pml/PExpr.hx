@@ -1,16 +1,16 @@
 package eu.ohmrun.pml;
 
 class PExprCtr extends Clazz{
-	public function Empty<T>():PExpr<T>{ return PEmpty; }
+	public function PEmpty<T>():PExpr<T>{ return PExprSum.PEmpty; }
 
-	public function Label<T>(label):PExpr<T>{ return PLabel(label); }
-	public function Apply<T>(apply):PExpr<T>{ return PApply(apply); }
-	public function Value<T>(value):PExpr<T>{ return PValue(value); }
+	public function PLabel<T>(label):PExpr<T>{ return PExprSum.PLabel(label); }
+	public function PApply<T>(apply):PExpr<T>{ return PExprSum.PApply(apply); }
+	public function PValue<T>(value):PExpr<T>{ return PExprSum.PValue(value); }
 
-	public function Group<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PGroup(LinkedList.fromCluster(cls));}
-	public function Array<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PArray(cls);}
-	public function Set<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PSet(cls);}
-	public function Assoc<T>(cls:Map<PExpr<T>,PExpr<T>>):PExpr<T>{ return PAssoc(cls.toIterKV().toCluster().map(x -> tuple2(x.key,x.value)));}
+	public function PGroup<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PExprSum.PGroup(LinkedList.fromCluster(cls));}
+	public function PArray<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PExprSum.PArray(cls);}
+	public function PSet<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PExprSum.PSet(cls);}
+	public function PAssoc<T>(cls:Map<PExpr<T>,PExpr<T>>):PExpr<T>{ return PExprSum.PAssoc(cls.toIterKV().toCluster().map(x -> tuple2(x.key,x.value)));}
 }
 @:using(eu.ohmrun.pml.pexpr.ToString)
 @:using(eu.ohmrun.pml.pexpr.Mod)

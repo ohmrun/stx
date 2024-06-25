@@ -54,7 +54,7 @@ class HAbstractTypeCtr extends Clazz{
 }
 @:using(stx.makro.type.HAbstractType.HAbstractTypeLift)
 @:forward abstract HAbstractType(AbstractType) from AbstractType to AbstractType{
-  static public var _(default,never) = HAbstractTypeLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:AbstractType):HAbstractType return new HAbstractType(self);
   @:noUsing static public function make(pack,name,module,isPrivate,isExtern,params,type,binops,unops,from,to,array,resolve,resolveWrite,impl,meta,doc,exclude,pos){

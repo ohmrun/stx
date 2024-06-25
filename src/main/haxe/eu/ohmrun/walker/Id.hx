@@ -3,7 +3,7 @@ package eu.ohmrun.walker;
 typedef IdDef = Couple<String,Option<String>>;
 @:using(eu.ohmrun.walker.Id.IdLift)
 abstract Id(IdDef){
-  static public var _(default,never) = IdLift;
+  
   public function new(self) this = self;
   @:noUsing static public function lift(self:IdDef):Id{
     return new Id(self);
