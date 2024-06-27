@@ -7,7 +7,7 @@ package stx.log.logger;
       #if (sys || nodejs)
         //ZERO = new stx.log.logger.ConsoleLogger();
         ZERO = new stx.log.logger.Unit();
-        trace("stx.Log.global = stx.log.logger.ConsoleLogger()");
+        sys.Debug.apply("stx.Log.global = stx.log.logger.ConsoleLogger()\n");
         ZERO;
       #else
         ZERO = new stx.log.logger.Unit();

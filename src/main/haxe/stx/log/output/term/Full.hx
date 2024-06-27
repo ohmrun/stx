@@ -1,10 +1,17 @@
 package stx.log.output.term;
 
-
+/**
+ * 
+ * TODO remove redundant code, send js output to console
+ */
 class Full implements OutputApi extends Debugging{
   private function render( v : Dynamic, infos : LogPosition ) : Void {
     note('haxelog $infos');
-		#if flash
+		#if (sys || nodejs)
+			sys.Debug.apply('${infos}');
+			sys.Debug.apply('${v}');
+			sys.Debug.apply('\n');
+		#elseif flash
 			note('flash');
 			#if (fdb || native_trace)
 			note('fdb || native_trace ');

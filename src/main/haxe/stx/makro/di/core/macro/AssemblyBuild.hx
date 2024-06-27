@@ -19,7 +19,7 @@ class AssemblyBuild{
     final curr_fields = Context.getBuildFields();
     final pos         = Context.currentPos();
 
-    __.log().info('build ${btype.pack.join(".")}.${btype.name}');
+    __.log().debug('build ${btype.pack.join(".")}.${btype.name}');
 
     final next_fields = [];
 

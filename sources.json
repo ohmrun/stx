@@ -10,7 +10,6 @@
     "stx_asys",
     "stx_cli",
     "stx_coroutine",
-    "stx_coroutine_queue",
     "stx_data",
     "stx_makro_di",
     "stx_ds",
