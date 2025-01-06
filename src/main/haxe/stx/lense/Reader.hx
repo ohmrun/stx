@@ -3,7 +3,7 @@ package stx.lense;
 final _   : LExprCtr                  = __.lense().LExpr;
 
 class Reader{
-  static function error(name,detail:Dynamic,?pos:Position):CTR<Fault,Refuse<LenseFailure>>{
+  static function error(name,detail:Dynamic,?pos:Position):CTR<Fault,Error<LenseFailure>>{
     return (f) -> f.of(E_Lense('$name $detail'));
   }
   static function k_of(e:PExpr<Atom>){
@@ -28,18 +28,18 @@ class Reader{
               memo.snoc
             );
           },
-          [].imm()
+          Cluster.unit()
         );
       default : __.reject(error('coord',e));
     }
   }
   static public function apply(self:PExpr<Atom>,?rest:String->PExpr<Atom>->Upshot<LExpr<Coord,PExpr<Atom>>,LenseFailure>):Upshot<LExpr<Coord,PExpr<Atom>>,LenseFailure>{
     return switch(self){
-      case PGroup(Cons(PApply(x),xs)) :
+      case PApply(x,xs) :
         switch(x){
           case 'id'     : __.accept(_.Id());
           case 'const'  : switch(xs){
-            case Cons(v,Cons(d,Nil))  : 
+            case PArray([v,d]) | PGroup(Cons(v,Cons(d,Nil)))  : 
               __.accept(_.Constant(v,d));
             default                   : 
               __.reject(f -> f.of(E_Lense('const $xs')));

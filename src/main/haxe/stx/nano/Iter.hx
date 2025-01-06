@@ -11,7 +11,7 @@ import haxe.Constraints;
       iterator : () -> {
         {
           hasNext : () -> false,
-          next    : () -> null//throw __.fault().internal(E_Undefined) 
+          next    : () -> null//throw Fault.make().internal(E_Undefined) 
           //TODO why is this called?
         }
       }
@@ -51,8 +51,20 @@ import haxe.Constraints;
     if(step > 0 && finish < start){
       finish = start;
     }
-    final op    = start <= finish ? (x) -> x + step : (x) -> x - step;
-    final comp  = start <= finish ? (x) -> x < finish : (x) -> x > finish;
+    function op_sub(x:Int){
+      return x - step;
+    }
+    function op_add(x:Int){
+      return x + step;
+    }
+    final op    : Int -> Int  = start <= finish ? op_add : op_sub;
+    function comp_smaller(x:Int){
+      return x < finish;
+    }
+    function comp_larger(x:Int){
+      return x > finish;
+    }
+    final comp  : Int -> Bool = start <= finish ? comp_smaller : comp_larger;
     
     return {
       iterator : () -> {
@@ -86,7 +98,7 @@ class IterLift{
             l_val = l_it.next();
           } 
           return if(r_it.hasNext()){
-            __.couple(l_val,r_it.next());
+            Couple.make(l_val,r_it.next());
           }else{
             if(l_it.hasNext()){
               r_it = that.iterator();
@@ -109,7 +121,7 @@ class IterLift{
 
         return {
           next : function(){
-            return __.couple(lit.next(),rit.next()); 
+            return Couple.make(lit.next(),rit.next()); 
           },
           hasNext : function(){
             return lit.hasNext() && rit.hasNext();
@@ -137,6 +149,12 @@ class IterLift{
     }
     return map;
   }
+  /**
+   * Apply `fn` to each value type `T` in `iter` and produce an `iter` of the results.
+   * @param iter `Iterable<T>`
+   * @param fn `T -> Ti`
+   * @return `Iter<Ti>`
+   */
   static public function map<T,Ti>(iter:Iter<T>,fn:T->Ti):Iter<Ti>{
     return {
       iterator : function(){
@@ -245,10 +263,11 @@ class IterLift{
       iter,
       (next:T,memo:Option<T>) -> memo.fold(
         Some,
-        () -> fn(next).if_else(
-          () -> Some(next),
-          () -> None
-        )
+        () -> if(fn(next)){
+          Some(next);
+        }else{
+          None;
+        }
       ),
       None
     );
@@ -287,10 +306,12 @@ class IterLift{
   static public function any<T>(self:Iter<T>,fn:T->Bool):Bool{
     return foldr(
       self,
-      (next:T,memo:Bool) -> memo.if_else(
-        () -> true,
-        () -> fn(next)
-      ),
+      (next:T,memo:Bool) -> if(memo){
+        true;
+      }else{
+        fn(next);
+      }
+      ,
       false
     );
   }

@@ -55,11 +55,11 @@ class LiftAssert{
    * `stx.nano.Wildcard` entry point for `stx_assert`
    * @param __ 
    * @param pos 
-   * @return return new stx.assert.Module(pos)
+   * @return return new stx.assert.Module()
    */
-  static public function assert(__:Wildcard,?pos:Pos) return new stx.assert.Module(pos);
+  static public inline function assert(__:Wildcard) return stx.assert.Module.instance;
 
-  static public function expect<E>(b:Bool,err:Refuse<E>){
+  static public function expect<E>(b:Bool,err:Error<E>){
     return b ? Report.unit() : Report.pure(err);
   }
 }

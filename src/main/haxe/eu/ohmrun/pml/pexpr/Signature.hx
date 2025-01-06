@@ -20,9 +20,9 @@ class Signature{
 
 		return switch (self) {
 			case PEmpty: PSigPrimate(PItmEmpty);
-			case PLabel(name): PSigPrimate(PItmLabel());
-			case PApply(name): PSigPrimate(PItmApply);
-			case PValue(value): PSigPrimate(PItmValue);
+			case PLabel(_): PSigPrimate(PItmLabel());
+			case PApply(_,_): PSigPrimate(PItmApply);
+			case PValue(_): PSigPrimate(PItmValue);
 			case PAssoc(list):
 				final types:Cluster<Tup2<PSignature, PSignature>> = list.map(__.detuple((l, r) -> tuple2(signature(l), signature(r))));
 				final has_consistent_keys = types.tail()
@@ -39,7 +39,7 @@ class Signature{
 				final consistent_val = has_consistent_vals.if_else(() -> types.head().map(x -> x.snd()), () -> None);
 				has_consistent_keys.if_else(
 					() -> has_consistent_vals.if_else(
-						() -> PSigCollate(consistent_key.fudge(), [consistent_val.fudge()].imm()),
+						() -> PSigCollate(consistent_key.fudge(), Cluster.pure(consistent_val.fudge())),
 						() -> PSigCollate(consistent_key.fudge(), types.map(x -> x.snd()))
 					),
 					() -> PSigOutline(types)

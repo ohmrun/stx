@@ -4,7 +4,7 @@ class PExprCtr extends Clazz{
 	public function PEmpty<T>():PExpr<T>{ return PExprSum.PEmpty; }
 
 	public function PLabel<T>(label):PExpr<T>{ return PExprSum.PLabel(label); }
-	public function PApply<T>(apply):PExpr<T>{ return PExprSum.PApply(apply); }
+	public function PApply<T>(apply,arg):PExpr<T>{ return PExprSum.PApply(apply,arg); }
 	public function PValue<T>(value):PExpr<T>{ return PExprSum.PValue(value); }
 
 	public function PGroup<T>(cls:Cluster<PExpr<T>>):PExpr<T>{ return PExprSum.PGroup(LinkedList.fromCluster(cls));}
@@ -19,12 +19,12 @@ class PExprCtr extends Clazz{
 enum PExprSum<T>{
 	PEmpty;
 	PLabel(name:String);
-	PApply(name:String);
-	PValue(value:T);
+	PApply(name:String,rest:PExpr<T>);
+	PValue(data:T);
 
 	PGroup(list:LinkedList<PExpr<T>>);
 	PArray(array:Cluster<PExpr<T>>);
-	PSet(arr:Cluster<PExpr<T>>);//Cannot enforce Open type Set
+	PSet(arr:Cluster<PExpr<T>>);//Cannot enforce type Set over T
 	PAssoc(map:Cluster<Tup2<PExpr<T>, PExpr<T>>>);
 }
 
@@ -97,7 +97,7 @@ class PExprLift {
 	// static public function fold<T>(self:PExpr<T>)
 	static public function get_string(self:PExpr<Atom>) {
 		return switch (self) {
-			case PLabel(name) | PApply(name) | PValue(Sym(name)) | PValue(Str(name)):
+			case PLabel(name) | PApply(name,_) | PValue(Sym(name)) | PValue(Str(name)):
 				Some(name);
 			default:
 				None;
@@ -106,25 +106,25 @@ class PExprLift {
 	static public function tokenize<T>(self:PExpr<T>):Cluster<PToken<Either<String, T>>> {
 		function rec(self:PExpr<T>):Cluster<PToken<Either<String, T>>> {
 			return switch (self) {
-				case PLabel(name): [PTData(Left(':$name'))].imm();
-				case PApply(name): [PTData(Left('#$name'))].imm();
-				case PGroup(list): [PTLParen].imm().concat(list.lfold((next:PExpr<T>, memo:Cluster<PToken<Either<String, T>>>) -> {
+				case PLabel(name) 			: Cluster.pure(PTData(Left(':$name')));
+				case PApply(name,rest) 	: Cluster.make([PTData(Left('#$name'))]).concat(rec(rest));
+				case PGroup(list): Cluster.pure(PTLParen).concat(list.lfold((next:PExpr<T>, memo:Cluster<PToken<Either<String, T>>>) -> {
 						return memo.concat(rec(next));
-					}, [].imm())).snoc(PTRParen);
+					}, Cluster.unit())).snoc(PTRParen);
 				case PArray(array):
-					[PTLSquareBracket].imm().concat(array.lfold((next:PExpr<T>, memo:Cluster<PToken<Either<String, T>>>) -> {
+					Cluster.pure(PTLSquareBracket).concat(array.lfold((next:PExpr<T>, memo:Cluster<PToken<Either<String, T>>>) -> {
 						return memo.concat(rec(next));
-					}, [].imm())).snoc(PTRSquareBracket);
+					}, Cluster.unit())).snoc(PTRSquareBracket);
 				case PValue(value): [PTData(Right(value))];
 				case PEmpty: [PTLParen, PTRParen];
-				case PAssoc(map): [PTLBracket].imm().concat(map.lfold((next:Tup2<PExpr<T>, PExpr<T>>, memo:Cluster<PToken<Either<String, T>>>) -> {
+				case PAssoc(map): Cluster.pure(PTLBracket).concat(map.lfold((next:Tup2<PExpr<T>, PExpr<T>>, memo:Cluster<PToken<Either<String, T>>>) -> {
 						return switch (next) {
 							case tuple2(l, r): memo.concat(rec(l).concat(rec(r)));
 						}
-					}, [].imm())).snoc(PTRBracket);
-				case PSet(arr): [PTHashLBracket].imm().concat(arr.lfold((next:PExpr<T>, memo:Cluster<PToken<Either<String, T>>>) -> {
+					}, Cluster.unit())).snoc(PTRBracket);
+				case PSet(arr): Cluster.pure(PTHashLBracket).concat(arr.lfold((next:PExpr<T>, memo:Cluster<PToken<Either<String, T>>>) -> {
 						return memo.concat(rec(next));
-					}, [].imm())).snoc(PTRBracket);
+					}, Cluster.unit())).snoc(PTRBracket);
 			}
 		}
 		return rec(self);
@@ -133,8 +133,8 @@ class PExprLift {
 		return switch (self) {
 			case PLabel(name) 			: 
 				[CoIndex(0)];
-			case PApply(name) 			: 
-				[CoIndex(0)];
+			case PApply(name,arg) 			: 
+				[CoField(name,0)];
 			case PGroup(list)				: 
 				list.toCluster().imap((idx, val) -> {
 					return CoIndex(idx);
@@ -203,14 +203,14 @@ class PExprLift {
 	}
 	static public function is_leaf<T>(self:PExpr<T>) {
 		return switch (self) {
-			case PLabel(name) 		: true;
-			case PApply(name) 		: true;
-			case PGroup(list)			: false;
-			case PArray(array)		: false;
-			case PValue(value)		: true;
-			case PEmpty 					: true;
-			case PAssoc(map)			: false;
-			case PSet(arr)				: false;
+			case PLabel(name) 				: true;
+			case PApply(name,rest) 		: false;
+			case PGroup(list)					: false;
+			case PArray(array)				: false;
+			case PValue(value)				: true;
+			case PEmpty 							: true;
+			case PAssoc(map)					: false;
+			case PSet(arr)						: false;
 		}
 	}
 	static public function head<T>(self:PExpr<T>) {
@@ -231,15 +231,15 @@ class PExprLift {
 	}
 	static public function size<T>(self:PExpr<T>):Int {
 		return switch (self) {
-			case PEmpty 					: 0;
-			case PLabel(name)			: 1;
-			case PApply(name)			: 1;
-			case PValue(value)		: 1;
+			case PEmpty 							: 0;
+			case PLabel(name)					: 1;
+			case PApply(name,arg)			: 2;
+			case PValue(value)				: 1;
 
-			case PGroup(list)			: list.size();
-			case PArray(array)		: array.size();
-			case PSet(arr)				: arr.size();
-			case PAssoc(map)			: map.size();
+			case PGroup(list)					: list.size();
+			case PArray(array)				: array.size();
+			case PSet(arr)						: arr.size();
+			case PAssoc(map)					: map.size();
 		}
 	}
 	static public function traverse<T>(self:PExpr<T>,fn:PExpr<T>->Upshot<Option<PExpr<T>>,PmlFailure>){
@@ -399,7 +399,7 @@ class PExprLift {
 					() -> __.reject(f -> f.of(E_Pml('no tuple2 of $next available')))
 				);
 			},
-			[].imm()
+			Cluster.unit()
 		);	
 	}
 	static public function as_assoc<T>(self:Cluster<PExpr<T>>):Upshot<PExpr<T>,PmlFailure>{
@@ -438,7 +438,7 @@ class PExprLift {
 					)
 				);
 			},
-			[].imm()
+			Cluster.unit()
 		).flat_map(
 			xs -> {
 				switch(self){

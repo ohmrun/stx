@@ -30,7 +30,7 @@ class RedBlackClusterMapLift{
     return RedBlackClusterMap.lift(self);
   }
   static public function mod<K,V>(self:RedBlackClusterMapDef<K,V>,key:K,fn:Cluster<V>->Cluster<V>):RedBlackClusterMap<K,V>{
-    final val = RedBlackMap._.get(self,key).map(fn).defv(fn([].imm()));
+    final val = RedBlackMap._.get(self,key).map(fn).defv(fn(Cluster.unit()));
     trace(val);
     return lift(RedBlackMap._.set(self,key,val));
   }

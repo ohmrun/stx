@@ -12,12 +12,12 @@ class Ors<I,T> extends Base<I,T,Array<Parser<I,T>>>{
   public function apply(input:ParseInput<I>):ParseResult<I,T>{
     var idx    = 1;
     final res  = delegation[0].apply(input);
-    var errs  : Defect<ParseFailure> = null;
+    var errs  : Error<ParseFailure> = null;
     function set_error(e){
       if (errs == null){
         errs = e;
       }else{
-        errs = errs.concat(e);
+        errs = e.concat(errs);
       }
     }
     function rec(res:ParseResult<I,T>):ParseResult<I,T>{
@@ -40,7 +40,7 @@ class Ors<I,T> extends Base<I,T,Array<Parser<I,T>>>{
                 if(!resI.is_ok()){
                   ParseResult.make(resI.asset,None,resI.error);
                 }else{
-                  resI.with_errata(errs);
+                  resI.defect(errs);
                 }
               }else{
                 var opts = delegation.map(_ -> _.tag);

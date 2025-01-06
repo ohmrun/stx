@@ -3,6 +3,8 @@ package sys.log.logger;
 import stx.fail.LogFailure;
 import stx.log.logger.Custom;
 
+using stx.Pico;
+using stx.Fail;
 using stx.Nano;
 using stx.Fp;
 using stx.Log;

@@ -18,7 +18,7 @@ class Js implements ClientApi extends FletcherCls<RemotingPayload<Nada>,Remoting
             ),
             no -> state.errata(
               _ -> 
-                Refuse.make(
+                Error.make(
                   Some(EXTERNAL(no.usher(
                     opt -> 
                         opt.fold(

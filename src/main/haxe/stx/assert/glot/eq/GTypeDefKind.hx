@@ -26,14 +26,17 @@ class GTypeDefKind extends stx.assert.eq.term.Base<GTypeDefKindT> {
         }
         eq;
       case [GTDAlias(tI),GTDAlias(tII)] : 
-        new GComplexType().comply(tI,tII);
-      case [GTDAbstract( tthisI, fromI, toI),GTDAbstract( tthisII, fromII, toII)] : 
-        var eq = Eq.NullOr(new GComplexType()).comply(tthisI,tthisII);
+        GComplexType.instance.comply(tI,tII);
+      case [GTDAbstract( tthisI, flagsI, fromI, toI),GTDAbstract( tthisII, flagsII, fromII, toII)] : 
+        var eq = Eq.NullOr(GComplexType.instance).comply(tthisI,tthisII);
         if(eq.is_ok()){
-          eq = Eq.NullOr(Eq.Cluster(new GComplexType())).comply(fromI,fromII);
+          eq = Eq.NullOr(Eq.Cluster(GAbstractFlag.instance)).comply(flagsI,flagsII);
         }
         if(eq.is_ok()){
-          eq = Eq.NullOr(Eq.Cluster(new GComplexType())).comply(toI,toII);
+          eq = Eq.NullOr(Eq.Cluster(GComplexType.instance)).comply(fromI,fromII);
+        }
+        if(eq.is_ok()){
+          eq = Eq.NullOr(Eq.Cluster(GComplexType.instance)).comply(toI,toII);
         }
         eq;
       case [GTDField(kindI,accessI),GTDField(kindII,accessII)]:

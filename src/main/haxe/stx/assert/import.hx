@@ -9,6 +9,8 @@ import haxe.ds.StringMap;
 
 using tink.CoreApi;
 
+import stx.alias.StdDate;
+import stx.alias.StdString;
 import stx.alias.StdType;
 import stx.alias.StdEnumValue;
 
@@ -22,4 +24,4 @@ using stx.Assert;
 using stx.Log;
 #end
 
-import stx.nano.Couple in StdCouple;
+import stx.pico.Couple in StdCouple;

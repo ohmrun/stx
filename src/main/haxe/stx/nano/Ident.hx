@@ -21,10 +21,11 @@ typedef IdentDef = {
   private function get_self():Ident return lift(this);
 
   public function toWay():Way{
-    return (this.pack == null).if_else(
-      () -> Way.unit().snoc(this.name),
-      () -> this.pack.snoc(this.name) 
-    );
+    return if(this.pack == null){
+      Way.unit().snoc(this.name);
+    }else{
+      this.pack.snoc(this.name); 
+    }
   }
   @:from static public function fromObject(self:{ name : String, pack : Array<String> }){
     return lift({

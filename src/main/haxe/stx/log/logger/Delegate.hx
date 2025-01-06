@@ -10,7 +10,7 @@ class Delegate<T> implements LoggerApi<T>{
     return this.delegate.format;
   }
   public function with_format(f : CTR<Format,Format>):LoggerApi<T>{
-    return new Delegate(this.delegate.with_format(f(this.format)));
+    return new Delegate(this.delegate.with_format(f.apply(this.format)));
   }
 
   public var logic(get,null) : stx.log.Logic<T>;
@@ -18,7 +18,7 @@ class Delegate<T> implements LoggerApi<T>{
     return this.delegate.logic;
   }
   public function with_logic(f : CTR<stx.log.Logic<T>,stx.log.Logic<T>>,?pos:Pos):LoggerApi<T>{
-    return new Delegate(this.delegate.with_logic(f(this.logic),pos));
+    return new Delegate(this.delegate.with_logic(f.apply(this.logic),pos));
   }
 
   public function apply(v:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>{
@@ -26,5 +26,17 @@ class Delegate<T> implements LoggerApi<T>{
   }
   private function do_apply(v:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>{
     return delegate.do_apply(v);
+  }
+
+  private var output(get,null) : OutputApi;
+  private function get_output(){
+    return delegate.output;
+  }
+  public function copy(){
+    return new Delegate(this.delegate.copy());
+  }
+  public function with_output(output){
+    final next = this.delegate.with_output(output);
+    return new Delegate(next);
   }
 }

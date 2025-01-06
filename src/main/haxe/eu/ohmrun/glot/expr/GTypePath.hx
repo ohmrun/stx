@@ -6,9 +6,9 @@ class GTypePathCtr extends Clazz{
   public function Make(name:String,?pack,?sub:String,?params:CTR<GTypeParamCtr,Cluster<GTypeParam>>){
     return GTypePath.make(
       name,
-      __.option(pack).defv([].imm()),
+      __.option(pack).defv(Cluster.unit()),
       sub,
-      __.option(params).map(f -> f(Expr.GTypeParam)).defv(null)
+      __.option(params).map(f -> f.apply(Expr.GTypeParam)).defv(null)
     );
   }
   public function Ident(ident:Ident){
@@ -36,7 +36,7 @@ typedef GTypePathDef = {
   @:noUsing static public function make(name,?pack,?sub,?params){
     return lift({
       name      : name,
-      pack      : Wildcard.__.option(pack).defv([].imm()),
+      pack      : Wildcard.__.option(pack).defv(Cluster.unit()),
       params    : params,
       sub       : sub
     });

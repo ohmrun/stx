@@ -28,11 +28,11 @@ class Assert{
   public function fail(reason="force fail",?pos:Pos){
     assert(Assertion.make(false,reason,null,pos));
   }
-  public function refuse(err:Refuse<Dynamic>,?pos:Pos){
-    assert(Assertion.make(false,err.data.toString(),E_Test_Refuse(err),pos));
+  public function refuse(err:Error<Dynamic>,reason='error',?pos:Pos){
+    assert(Assertion.make(false,reason,E_Test_Error(err),pos));
   }
-  public function error(err:Error<Dynamic>,?pos:Pos){
-    assert(Assertion.make(false,err.data.toString(),E_Test_Refuse(err.map(EXTERNAL)),pos));
+  public function error(err:Error<Dynamic>,reason='error',?pos:Pos){
+    assert(Assertion.make(false,reason,E_Test_Error(err),pos));
   }
   public function exception(err:haxe.Exception,?pos:Pos){
     assert(Assertion.make(false,err.details(),E_Test_Exception(err),pos));

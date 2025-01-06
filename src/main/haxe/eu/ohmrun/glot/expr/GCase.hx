@@ -6,9 +6,9 @@ class GCaseCtr extends Clazz{
   public function Make(values:CTR<GExprCtr,Cluster<GExpr>>,?guard:CTR<GExprCtr,GExpr>,?expr:CTR<GExprCtr,GExpr>){
     final ctr = Expr.GExpr;
     return GCase.make(
-      values(ctr),
-      __.option(guard).map(f -> f(ctr)).defv(null),
-      __.option(expr).map(f -> f(ctr)).defv(null)
+      values.apply(ctr),
+      __.option(guard).map(f -> f.apply(ctr)).defv(null),
+      __.option(expr).map(f -> f.apply(ctr)).defv(null)
     );
   }
 }

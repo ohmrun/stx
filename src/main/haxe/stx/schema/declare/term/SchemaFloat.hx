@@ -7,7 +7,7 @@ abstract SchemaFloat(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Decl
       new DeclareNativeSchemaCls(
         Ident.make('Float',['std']),
         null,
-        [].imm()
+        Cluster.unit()
       )
     );
   }

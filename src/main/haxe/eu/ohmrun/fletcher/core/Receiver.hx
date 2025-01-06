@@ -20,7 +20,7 @@ typedef ReceiverDef<R,E> = Cont<ReceiverInput<R,E>,Work>;
 
   private inline function new(self:ReceiverApi<R,E>) this = self;
 
-  @:noUsing static public inline function issue<R,E>(outcome:Outcome<R,Defect<E>>,?pos:Pos):Receiver<R,E>{
+  @:noUsing static public inline function issue<R,E>(outcome:Outcome<R,Error<E>>,?pos:Pos):Receiver<R,E>{
     return new Receiver(
       Cont.Anon((fn:Apply<ReceiverInput<R,E>,Work>) -> {
         var t = Future.trigger();
@@ -35,10 +35,10 @@ typedef ReceiverDef<R,E> = Cont<ReceiverInput<R,E>,Work>;
   @:noUsing static public inline function value<R,E>(r:R,?pos:Pos):Receiver<R,E>{
     return issue(__.success(r));
   }
-  @:noUsing static public inline function error<R,E>(err:Defect<E>,?pos:Pos):Receiver<R,E>{
+  @:noUsing static public inline function error<R,E>(err:Error<E>,?pos:Pos):Receiver<R,E>{
     return issue(__.failure(err));
   }
-  @:noUsing static public inline function later<R,E>(ft:Future<Outcome<R,Defect<E>>>,?pos:Pos):Receiver<R,E>{
+  @:noUsing static public inline function later<R,E>(ft:Future<Outcome<R,Error<E>>>,?pos:Pos):Receiver<R,E>{
     return Receiver.lift(Cont.Anon((fn:ReceiverSinkApi<R,E>) -> fn.apply(ft)));
   }
   public inline function serve():Work{
@@ -73,7 +73,7 @@ class ReceiverLift{
   static function lift<P,E>(self:ReceiverApi<P,E>):Receiver<P,E>{
     return Receiver.lift(self);
   }
-  static public function flat_fold<P,Pi,E>(self:ReceiverApi<P,E>,ok:P->Receiver<Pi,E>,no:Defect<E>->Receiver<Pi,E>):Receiver<Pi,E>{
+  static public function flat_fold<P,Pi,E>(self:ReceiverApi<P,E>,ok:P->Receiver<Pi,E>,no:Error<E>->Receiver<Pi,E>):Receiver<Pi,E>{
     final uuid = __.uuid('xxxx');
     __.log().trace('set up flat_fold: $uuid');
     return Receiver.lift(
@@ -84,7 +84,7 @@ class ReceiverLift{
             (p:ReceiverInput<P,E>) -> {
               __.log().trace('inside flat_fold $uuid');
               return Work.fromFutureWork(p.flatMap(
-                (out:Outcome<P,Defect<E>>) -> {
+                (out:Outcome<P,Error<E>>) -> {
                   __.log().trace('flat_fold:end $uuid');
                   return out.fold(ok,no);
                 }
@@ -112,9 +112,9 @@ class ReceiverLift{
     );
   }
   static public function tap<P,Pi,E>(self:ReceiverApi<P,E>,fn:P->Void):Receiver<P,E>{
-    return map(self,__.nano().command(fn));
+    return map(self,(x:P) -> { fn(x); return x;});
   }
-  static public function fold_bind<P,Pi,E,EE>(self:ReceiverApi<P,E>,ok:P->ReceiverInput<Pi,EE>,no:Defect<E>->ReceiverInput<Pi,EE>):Receiver<Pi,EE>{
+  static public function fold_bind<P,Pi,E,EE>(self:ReceiverApi<P,E>,ok:P->ReceiverInput<Pi,EE>,no:Error<E>->ReceiverInput<Pi,EE>):Receiver<Pi,EE>{
     return Receiver.lift(
       Cont.Anon(
         (cont:Apply<ReceiverInput<Pi,EE>,Work>) -> Receiver.lift(self).apply(
@@ -127,7 +127,7 @@ class ReceiverLift{
         )
     )));
   }
-  static public function fold_mapp<P,Pi,E,EE>(self:ReceiverApi<P,E>,ok:P->ArwOut<Pi,EE>,no:Defect<E>->ArwOut<Pi,EE>):Receiver<Pi,EE>{
+  static public function fold_mapp<P,Pi,E,EE>(self:ReceiverApi<P,E>,ok:P->ArwOut<Pi,EE>,no:Error<E>->ArwOut<Pi,EE>):Receiver<Pi,EE>{
     return Receiver.lift(
       Cont.Anon(
         (cont:Apply<ReceiverInput<Pi,EE>,Work>) -> Receiver.lift(self).apply(
@@ -176,14 +176,11 @@ class ReceiverLift{
       }
     ));
   }
-  static public function errata<P,E,EE>(self:ReceiverApi<P,E>,fn:Defect<E>->Defect<EE>){
+  static public function errata<P,E,EE>(self:ReceiverApi<P,E>,fn:E->EE){
     return fold_mapp(
       self,
       (p) -> __.success(p),
-      (e) -> __.failure(fn(e))      
+      (e) -> __.failure(e.errata(fn))      
     );
-  }
-  static public function errate<P,E,EE>(self:ReceiverApi<P,E>,fn:E->EE){
-    return errata(self,x -> x.errate(fn));
   }
 }

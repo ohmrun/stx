@@ -9,16 +9,16 @@ class HTypeDefinition extends OrdCls<HTypeDefinitionT> {
   public function comply(lhs:HTypeDefinitionT,rhs:HTypeDefinitionT){
     var ord = Ord.String().comply(lhs.name,rhs.name);
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.String()).comply(lhs.pack,rhs.pack);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.String()).comply(lhs.pack,rhs.pack);
     }
     if(ord.is_not_less_than()){
       ord = Ord.Makro().Expr().HTypeDefKind.comply(lhs.kind,rhs.kind);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Makro().Expr().HField).comply(lhs.fields,rhs.fields);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HField).comply(lhs.fields,rhs.fields);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
+      ord = Ord.NullOr(new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
     }
     if(ord.is_not_less_than()){
       ord = Ord.NullOr(Ord.Makro().Expr().HMetadata).comply(lhs.meta,rhs.meta);

@@ -4,7 +4,7 @@ class GMetadataEntryCtr extends Clazz{
   public function Make(name:String,?params:CTR<GExprCtr,Cluster<GExpr>>){
     return GMetadataEntry.lift({
       name    : name,
-      params  : __.option(params).map(f -> f(__.glot().Expr.GExpr)).defv([])
+      params  : __.option(params).map(f -> f.apply(__.glot().Expr.GExpr)).defv([])
     });
   }
 }

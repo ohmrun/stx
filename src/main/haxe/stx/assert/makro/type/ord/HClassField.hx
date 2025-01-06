@@ -26,7 +26,7 @@ class HClassField extends OrdCls<THClassField>{
       ord = Ord.Bool().comply(a.isAbstract,b.isAbstract);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Makro().Type().HTypeParameter).comply(a.params,b.params);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Type().HTypeParameter).comply(a.params,b.params);
     }
     if(ord.is_not_less_than()){
       ord = Ord.Makro().Expr().HMetadata.comply(a.meta.get(),b.meta.get());
@@ -39,7 +39,7 @@ class HClassField extends OrdCls<THClassField>{
     }
     //TODO pos?
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Makro().Type().HClassField).comply(a.overloads.get(),b.overloads.get());
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Type().HClassField).comply(a.overloads.get(),b.overloads.get());
     }
     return ord;
   }

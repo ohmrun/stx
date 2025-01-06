@@ -396,20 +396,33 @@
              case _: printComplexType(ct);
            })
            + ";";
-         case GTDAbstract(tthis, from, to):
-           "abstract "
-           + t.name
-           + ((t.params != null && t.params.length > 0) ? "<" + t.params.map(printTypeParamDecl).join(", ") + ">" : "")
-           + (tthis == null ? "" : "(" + printComplexType(tthis) + ")")
-           + (from == null ? "" : [for (f in from) " from " + printComplexType(f)].join(""))
-           + (to == null ? "" : [for (t in to) " to " + printComplexType(t)].join(""))
-           + " {\n"
-           + [
-             for (f in t.fields) {
-               tabs + printFieldWithDelimiter(f);
-             }
-           ].join("\n")
-           + "\n}";
+         case GTDAbstract(tthis, tflags, from, to):
+          var from = from == null ? [] : from.copy();
+					var to = to == null ? [] : to.copy();
+					var isEnum = false;
+
+					for (flag in tflags) {
+						switch (flag) {
+							case GAbEnum: isEnum = true;
+							case GAbFrom(ct): from = from.snoc(ct);
+							case GAbTo(ct): to = to.snoc(ct);
+						}
+					}
+
+					(isEnum ? "enum " : "")
+					+ "abstract "
+					+ t.name
+					+ ((t.params != null && t.params.length > 0) ? "<" + t.params.map(printTypeParamDecl).join(", ") + ">" : "")
+					+ (tthis == null ? "" : "(" + printComplexType(tthis) + ")")
+					+ [for (f in from) " from " + printComplexType(f)].join("")
+					+ [for (f in to) " to " + printComplexType(f)].join("")
+					+ " {\n"
+					+ [
+						for (f in t.fields) {
+							tabs + printFieldWithDelimiter(f);
+						}
+					].join("\n")
+					+ "\n}";
          case GTDField(kind, access):
            tabs = old;
            (access != null && access.length > 0 ? access.map(printAccess).join(" ") + " " : "")

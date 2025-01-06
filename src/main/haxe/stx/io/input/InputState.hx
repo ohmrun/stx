@@ -4,8 +4,8 @@ enum InputStateSum{
   Io_Input_Unknown;
   Io_Input_Eager;
   Io_Input_Blocked;
-  Io_Input_Closed(error:Option<Error<String>>,external:Bool);
-  Io_Input_Error(f:IoFailure);
+  Io_Input_Closed(error:Option<Error<Nada>>,external:Bool);
+  Io_Input_Error(f:Error<IoFailure>);
 }
 @:forward abstract InputState(InputStateSum) from InputStateSum to InputStateSum{
   public function new(self) this = self;

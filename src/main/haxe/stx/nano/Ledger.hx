@@ -25,16 +25,16 @@ class LedgerLift extends Clazz{
   @:noUsing static public function lift<I,O,E>(self:LedgerDef<I,O,E>):Ledger<I,O,E>{
     return Ledger.lift(self);
   }
-  static public function errata<I,O,E,EE>(self:LedgerDef<I,O,E>,fn:Refuse<E>->Refuse<EE>):Ledger<I,O,EE>{
-    return self.map((x:Equity<I,O,E>) -> x.errata(fn));
+  static public function blame<I,O,E>(self:LedgerDef<I,O,E>,error:Null<Error<E>>):Ledger<I,O,E>{
+    return self.map(x-> x.blame(error));
   }
-  static public function errate<I,O,E,EE>(self:LedgerDef<I,O,E>,fn:E->EE):Ledger<I,O,EE>{
-    return lift(self.map(x -> x.errate(fn)));
+  static public function errata<I,O,E,EE>(self:LedgerDef<I,O,E>,fn:E->EE):Ledger<I,O,EE>{
+    return self.map((x:Equity<I,O,E>) -> x.errata(fn));
   }
   static public function flat_map<I,O,Oi,E>(self:LedgerDef<I,O,E>,fn:O->Ledger<I,Oi,E>):Ledger<I,Oi,E>{
     return self.flatMap(
-      (x:Equity<I,O,E>) -> __.option(x.value).fold(
-        ok -> fn(ok).errata(e -> x.error.toError().concat(e)),
+      (x:Equity<I,O,E>) -> Option.make(x.value).fold(
+        ok -> fn(ok).blame(x.error),
         () -> Ledger.fromEquity(Equity.make(x.asset,null,x.error))
       )
     );

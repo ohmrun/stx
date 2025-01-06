@@ -8,10 +8,10 @@ class HTypeParamDecl extends stx.assert.eq.term.Base<THTypeParamDecl> {
   public function comply(lhs:THTypeParamDecl,rhs:THTypeParamDecl){
     var eq = Eq.String().comply(lhs.name,rhs.name);
     if(eq.is_ok()){
-      eq = Eq.NullOr(Eq.ArrayEq(Eq.Makro().Expr().HComplexType)).comply(lhs.constraints,rhs.constraints);
+      eq = Eq.NullOr(new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HComplexType)).comply(lhs.constraints,rhs.constraints);
     }
     if(eq.is_ok()){
-      eq = Eq.NullOr(Eq.ArrayEq(Eq.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
+      eq = Eq.NullOr(new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
     }
     if(eq.is_ok()){
       eq = Eq.NullOr(Eq.Makro().Expr().HMetadata).comply(lhs.meta,rhs.meta);

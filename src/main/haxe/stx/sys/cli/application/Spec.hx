@@ -4,7 +4,10 @@ import stx.sys.cli.application.spec.term.PropertyDefaultSpec;
 import stx.sys.cli.application.spec.term.FlagDefaultSpec;
 
 class Spec extends SpecSlice{
-  static public var __(default,never) = new SpecCtr();
+  static public var instance(get,null) : SpecCtr;
+  static private function get_instance(){
+    return instance == null ? instance = new SpecCtr() : instance;
+  }
   public function new(config:CliConfig,name:String,doc:String,opts:Cluster<OptionSpecApi>,args:Cluster<ArgumentSpec>,rest){
     super(config,name,doc,opts,args);
     this.rest = rest;

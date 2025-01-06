@@ -12,15 +12,23 @@ class Executor extends Clazz{
           return memo.apply.fn().then(
             (x:Agenda<CliFailure>) -> {
               __.log().debug('${x.error}');
-              return x.error.fold(
-                no -> switch(no.data){
-                  case Some(EXTERNAL(E_Cli_NoImplementation))   : 
-                    __.log().debug(_ -> _.pure(next));
-                    next.apply(res);
-                  default                                 : x;
-                },
-                () -> x  
-              );
+              final is_that_not_implementation = x.error.option().flat_map(e -> e.lapse.first()).map(
+                x -> new EnumValue(x.value).alike(E_Cli_NoImplementation)
+              ).defv(false);
+              return if(is_that_not_implementation){
+                next.apply(res);
+              }else{
+                x;
+              }
+              // return x.error.fold(
+              //   no -> switch(no.data){
+              //     case Some(EXTERNAL(E_Cli_NoImplementation))   : 
+              //       __.log().debug(_ -> _.pure(next));
+              //       next.apply(res);
+              //     default                                 : x;
+              //   },
+              //   () -> x  
+              // );
             }
           );
         },

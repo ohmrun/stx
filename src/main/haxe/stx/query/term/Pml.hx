@@ -1,5 +1,7 @@
 package stx.query.term;
 
+using stx.Fail;
+
 class Pml<T> extends stx.assert.pml.comparable.PExpr<T>{
   public function new(T){
     super(T);
@@ -16,14 +18,14 @@ class Pml<T> extends stx.assert.pml.comparable.PExpr<T>{
       );
       case QENot(e)               : apply(e).map(b -> !b);
       case QEIn(filter, e, sub)   : 
-        final embed = __.nano().embed();
+        final stash = new Stash();
         switch(filter){
           case UNIVERSAL : e.all_bind_layer(
-            e -> apply(sub.express(e)).embed(embed)
-          ).disembed(embed);
+            e -> apply(sub.express(e)).stash(stash)
+          ).unstash(stash);
           case EXISTENTIAL : e.any_bind_layer(
-            e -> apply(sub.express(e)).embed(embed)
-          ).disembed(embed);
+            e -> apply(sub.express(e)).stash(stash)
+          ).unstash(stash);
         }
       case QEBinop(op,l,r)        : 
           switch(op){
@@ -34,7 +36,7 @@ class Pml<T> extends stx.assert.pml.comparable.PExpr<T>{
             case GT     : __.accept(this.lt().comply(r,l).is_ok());
             case GTEQ   : __.accept(this.eq().comply(r,l).is_ok() || this.lt().comply(l,r).is_ok());
           
-            case LIKE   : __.reject(f -> f.explain(d -> d.e_unimplemented()));
+            case LIKE   : __.reject(f -> f.digest((d:Digests) -> d.e_unimplemented("LIKE")));
           }
       case QEUnop(EXISTS,l) : __.accept(l != null);
     }

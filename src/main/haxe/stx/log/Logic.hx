@@ -1,5 +1,7 @@
 package stx.log;
 
+import stx.Fail.ErrorCtr;
+
 class LogicCtr extends Clazz{
   static public function unit(){
     return new LogicCtr();
@@ -122,7 +124,7 @@ abstract Logic<T>(LogicSum<T>) from LogicSum<T> to LogicSum<T>{
         );
       case LNot(v)    : v.apply(value).fold(
         (e) -> Report.unit(),
-        ()  -> Report.make(E_Log_Not)//TODO hmmm
+        ()  -> Report.make(ErrorCtr.instance.Value(E_Log_Not,_ -> _.Known()))//TODO hmmm
       );
       case LV(null)       : throw 'no Filter defined in Logic';
       case LV(v)          : v.apply(value);

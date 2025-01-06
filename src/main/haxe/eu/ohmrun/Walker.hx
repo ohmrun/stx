@@ -3,6 +3,7 @@ package eu.ohmrun;
 using tink.CoreApi;
 
 using stx.Coroutine;
+using stx.Pico;
 using stx.Nano;
 using stx.Log;
 

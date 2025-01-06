@@ -29,7 +29,7 @@ class ToString{
 						() -> '[' + items.join(" ") + ']', 
 						() -> '[\n ${gap}' + items.join(' \n ${gap}') + '\n${gap}]'
 					);
-				case PApply(name): '#$name';
+				case PApply(name,arg): '#$name ${rec(arg)}';
 				case PGroup(array):
 					var items = array.map(rec.bind(_, ind + 1));
 					var length = items.lfold((n, m) -> m + n.length, ind);

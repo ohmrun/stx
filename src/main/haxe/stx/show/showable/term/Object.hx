@@ -1,5 +1,7 @@
 package stx.show.showable.term;
 
+import stx.alias.StdString;
+
 class Object extends ShowableCls<Dynamic>{
   public function show(self:Dynamic,state:State):Upshot<Response,ShowFailure>{
     final fields = 

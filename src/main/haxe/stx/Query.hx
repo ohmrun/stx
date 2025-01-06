@@ -1,6 +1,6 @@
 package stx;
 
-using stx.Nano;
+using stx.Pico;
 
 typedef QBinopSum 					                              = stx.query.QBinop.QBinopSum;
 typedef QBinop 					                                  = stx.query.QBinop;

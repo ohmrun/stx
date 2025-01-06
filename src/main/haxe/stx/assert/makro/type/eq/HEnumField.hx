@@ -24,7 +24,7 @@ class HEnumField extends EqCls<THEnumField>{
       eq = Eq.NullOr(Eq.String()).comply(a.doc,b.doc);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Makro().Type().HTypeParameter).comply(a.params,b.params);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().HTypeParameter).comply(a.params,b.params);
     }
     return eq;
   }

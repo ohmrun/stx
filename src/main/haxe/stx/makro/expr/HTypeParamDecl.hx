@@ -11,10 +11,10 @@ class HTypeParamDeclCtr extends Clazz{
     ?defaultType:Null<CTR<HComplexTypeCtr,HComplexType>>){
     return HTypeParamDecl.make(
       name,
-      __.option(constraints).map(f -> f(Expr.HComplexType)).defv(null),
-      __.option(params).map(f -> f(Expr.HTypeParamDecl)).defv(null),   
-      __.option(meta).map(f -> f(Expr.HMetadataEntry)).defv(null),
-      __.option(defaultType).map(f -> f(Expr.HComplexType)).defv(null)    
+      __.option(constraints).map(f -> f.apply(Expr.HComplexType)).defv(null),
+      __.option(params).map(f -> f.apply(Expr.HTypeParamDecl)).defv(null),   
+      __.option(meta).map(f -> f.apply(Expr.HMetadataEntry)).defv(null),
+      __.option(defaultType).map(f -> f.apply(Expr.HComplexType)).defv(null)    
     );
   }
 }

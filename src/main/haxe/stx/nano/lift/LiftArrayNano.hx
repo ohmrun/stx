@@ -10,9 +10,9 @@ class LiftArrayNano{
     ```
   **/
   static public function cross<T,Ti>(self:StdArray<T>,that:StdArray<Ti>):Array<Couple<T,Ti>>{
-    return self.cross_with(that,__.couple);
+    return self.cross_with(that,Couple.make);
   }
   static public function zip<T,Ti>(self:StdArray<T>,that:StdArray<Ti>):Array<Couple<T,Ti>>{
-    return self.zip_with(that,__.couple);
+    return self.zip_with(that,Couple.make);
   }
 }

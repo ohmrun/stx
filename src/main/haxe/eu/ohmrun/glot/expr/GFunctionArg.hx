@@ -6,10 +6,10 @@ class GFunctionArgCtr extends Clazz{
   public function Make(name:String,type:CTR<GComplexTypeCtr,GComplexType>,?opt:Bool,?value:CTR<GExprCtr,GExpr>,?meta:CTR<GMetadataEntryCtr,GMetadata>){
     return GFunctionArg.lift({
       name  : name,
-      type  : type(Expr.GComplexType),
+      type  : type.apply(Expr.GComplexType),
       opt   : opt,
-      value : __.option(value).map(f -> f(Expr.GExpr)).defv(null),
-      meta  : __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(null)
+      value : __.option(value).map(f -> f.apply(Expr.GExpr)).defv(null),
+      meta  : __.option(meta).map(f -> f.apply(Expr.GMetadataEntry)).defv(null)
     });
   }
 }

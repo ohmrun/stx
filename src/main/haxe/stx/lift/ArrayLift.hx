@@ -9,8 +9,10 @@ using stx.Pico;
  */
 class ArrayLift{
   /**
-    * Produces an Array from an Array of Arrays.
-  **/
+   * Produces an Array from an Array of Arrays.
+   * @param arrs `Array<Array<T>>`
+   * @return `Array<T>`
+   */
   static public function flatten<T>(arrs: Array<Array<T>>): Array<T> {
     var res : StdArray<T> = [];
     for (arr in arrs) {

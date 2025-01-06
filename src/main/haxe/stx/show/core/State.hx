@@ -17,7 +17,7 @@ class State{
     return new State(
       __.option(options).defv(Options.unit()),
       __.option(request).defv(Request.unit()),
-      __.option(cache).defv([].imm())
+      __.option(cache).defv(Cluster.unit())
     );
   }
   public function copy(?Int,?options,?xindex,?request,?cache){

@@ -1,5 +1,7 @@
 package stx.show.showable.term;
 
+import stx.alias.StdEnum;
+
 class Enum extends ShowableCls<Dynamic>{
   final type : StdEnum<Dynamic>;
   public function new(type){

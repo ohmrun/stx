@@ -15,14 +15,14 @@ class String extends ShowableCls<TString>{
     //       //__.accept(LBlock);
     //       final has_horizontal_room = (width_remaining - length) >= 0;
     //       if(true){
-    //         state.respond(length,1,Some(string),None,[].imm(),LBlock);
+    //         state.respond(length,1,Some(string),None,Cluster.unit(),LBlock);
     //       }else{
     //         rec(Some(LEscape(LBlock)));
     //       }
     //     case Some(LEscape(LBlock)) : 
     //       final has_complete_horizontal_room = (state.options.width - length) >= 0;
     //         if(has_complete_horizontal_room){
-    //           state.respond(length,1,Some(string),None,[].imm(),LEscape(LBlock));
+    //           state.respond(length,1,Some(string),None,Cluster.unit(),LEscape(LBlock));
     //         }else{
     //           final lines     = [];
     //           final iterator = (string:Chars).iterator();
@@ -47,7 +47,7 @@ class String extends ShowableCls<TString>{
     //             lines.length,
     //             Some(lines.join("\n")),
     //             None,
-    //             [].imm(),
+    //             Cluster.unit(),
     //             LBlock
     //           );
     //         }

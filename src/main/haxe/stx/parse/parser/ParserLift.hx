@@ -109,7 +109,7 @@ class ParserLift{
     return AndThen(
       p,
       function(o:T){
-        return fn(o) ? Succeed(o) : Failed('filter failed',false); 
+        return fn(o) ? Succeed(o) : Failed(E_Parse_FilterFailed); 
       }
     ).asParser();
   }
@@ -123,9 +123,6 @@ class ParserLift{
 			(arr) -> __.option(arr).defv([]).join("")
 		);
   }
-  static public inline function tag_error<I,T>(p:Parser<I,T>, name : String, ?pos: Pos ):Parser<I,T>
-    return TagRefuse(p,name,pos);
-
   static public inline function with_tag<P,R>(p:Parser<P,R>,tag:String){
     return Named(p,tag);
   }
@@ -139,7 +136,6 @@ class ParserLift{
     return (
       self.apply(input)
           .toUpshot()
-          .errata(_ -> __.fault().explain(_ -> _.e_parse_failure()))
     );
   }
   static public function match<P,R>(self:Parser<P,R>,input:ParseInput<P>):Null<R>{

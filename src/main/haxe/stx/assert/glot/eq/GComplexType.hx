@@ -3,6 +3,10 @@ package stx.assert.glot.eq;
 import eu.ohmrun.glot.expr.GComplexType as GComplexTypeT;
 
 class GComplexType extends stx.assert.eq.term.Base<GComplexTypeT> {
+  static public var instance(get,null) : GComplexType;
+  static private function get_instance(){
+    return instance == null ? instance = new GComplexType() : instance;
+  }
   public function comply(lhs:GComplexTypeT,rhs:GComplexTypeT){
     return switch([lhs,rhs]){
       case [GTPath(pI),GTPath(pII)]                           : 

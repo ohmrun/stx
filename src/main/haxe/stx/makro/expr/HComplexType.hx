@@ -4,31 +4,31 @@ final Expr = __.makro().expr;
 
 class HComplexTypeCtr extends Clazz{
 	public function Path(p:CTR<HTypePathCtr,HTypePath>):HComplexType{
-		return HComplexType.lift(TPath(p(Expr.HTypePath)));
+		return HComplexType.lift(TPath(p.apply(Expr.HTypePath)));
 	}
 	public function Function(args:CTR<HComplexTypeCtr,Array<HComplexType>>, ret : CTR<HComplexTypeCtr,HComplexType>){
-		return HComplexType.lift(TFunction(args(this),ret(this))); 
+		return HComplexType.lift(TFunction(args.apply(this),ret.apply(this))); 
 	}
 	public function Anonymous(fields:CTR<HFieldCtr,Array<HField>>){
-		return HComplexType.lift(TAnonymous(fields(Expr.HField)));
+		return HComplexType.lift(TAnonymous(fields.apply(Expr.HField)));
 	}
 	public function Parent(t:CTR<HComplexTypeCtr,HComplexType>){
-		return HComplexType.lift(TParent(t(this)));
+		return HComplexType.lift(TParent(t.apply(this)));
 	}
 	public function Extend(p:CTR<HTypePathCtr,Array<HTypePath>>,fields:CTR<HFieldCtr,Array<HField>>){
 		return HComplexType.lift(TExtend(
-			p(Expr.HTypePath),
-			fields(Expr.HField)
+			p.apply(Expr.HTypePath),
+			fields.apply(Expr.HField)
 		));
 	}
 	public function Optional(t:CTR<HComplexTypeCtr,HComplexType>){
-		return HComplexType.lift(TOptional(t(this)));
+		return HComplexType.lift(TOptional(t.apply(this)));
 	}
 	public function Named(n:String,t:CTR<HComplexTypeCtr,HComplexType>){
-		return HComplexType.lift(TNamed(n,t(this)));
+		return HComplexType.lift(TNamed(n,t.apply(this)));
 	}
 	public function Intersection(t:CTR<HComplexTypeCtr,Array<HComplexType>>){
-		return HComplexType.lift(TIntersection(t(this)));
+		return HComplexType.lift(TIntersection(t.apply(this)));
 	}
 	public function string(string:String){
 		return Path( p -> p.fromString(string));

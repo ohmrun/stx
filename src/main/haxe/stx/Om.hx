@@ -1,6 +1,6 @@
 package stx;
 
-using stx.Nano;
+using stx.Pico;
 
 class Om{
   static public function om(wildcard:Wildcard){

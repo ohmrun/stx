@@ -18,7 +18,7 @@ class Completion<P,R,E> extends FletcherCls<Nada,Nada,Nada>{
         },
         no -> {
           this.context.on_error(no);
-          return __.failure(Defect.unit());
+          return __.failure(ErrorCtr.instance.Unit());
         }
       )
     );

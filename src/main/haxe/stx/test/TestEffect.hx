@@ -14,7 +14,7 @@ package stx.test;
     return () -> {
       return Util.or_res(fn.fn().returning(Nada).prj(),pos).fold(
         ok -> Cluster.unit(),
-        no -> Cluster.pure(E_Test_Refuse(no))
+        no -> Cluster.pure(E_Test_Error(no))
       );
     }
   }
@@ -25,12 +25,7 @@ package stx.test;
   }
   @:from static public function fromError<T>(err:Error<T>):TestEffect{
     return () -> {
-      return Cluster.pure(E_Test_Refuse(err.except()));
-    } 
-  }
-  @:from static public function fromRefuse<T>(err:Refuse<T>):TestEffect{
-    return () -> {
-      return Cluster.pure(E_Test_Refuse(err));
+      return Cluster.pure(E_Test_Error(err));
     } 
   }
   public function concat(that:TestEffect){

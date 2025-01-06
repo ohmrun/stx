@@ -82,7 +82,7 @@ class HEnumTypeLift{
             memo;
         }
       ),
-      __.nano().Map().String()
+      (new Map():Map<String,HTFunArgArray>)
     );
   } 
   @:noUsing static public function constructorHandler<U>(e:HEnumType,handler:Array<HTFunArg>->U):StringMap<U>{

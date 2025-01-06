@@ -11,7 +11,7 @@ class FromGlot extends Clazz{
                 x -> Field.make(next.field,() -> x)
               ).map(memo.snoc);
           },
-          [].imm()
+          Cluster.unit()
         ).map(x -> Collate(x));
       case GEArrayDecl(values)        : 
           Upshot.bind_fold(
@@ -19,7 +19,7 @@ class FromGlot extends Clazz{
             (next,memo:Cluster<Void->GlotSpine>) -> apply(next).map(
               (x) -> () -> x
             ).map(memo.snoc),
-            [].imm()
+            Cluster.unit()
           ).map(Collect);
       case GEConst(GCInt(v, _))       : __.accept(Primate(PSprig(Byteal(NInt(Std.parseInt(v))))));
       case GEConst(GCFloat(v, _))     : __.accept(Primate(PSprig(Byteal(NFloat(Std.parseFloat(v))))));

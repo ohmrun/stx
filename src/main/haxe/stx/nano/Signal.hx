@@ -114,7 +114,7 @@ class SignalLift{
         return () -> {
           cancelled = true;
           for (link in links){
-            for (fn in __.option(link)){
+            for (fn in Option.make(link)){
               fn.cancel();
             }
           }

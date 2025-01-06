@@ -15,6 +15,6 @@ class Object extends Clazz{
           )
         );
       }
-    ).imm());
+    ));
   }
 }

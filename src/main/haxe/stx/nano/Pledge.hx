@@ -19,21 +19,21 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
     ); 
   }
   @:noUsing static public function pure<T,E>(self:T):Pledge<T,E>{
-    return make(__.accept(self));
+    return make(Upshot.UpshotSum.Accept(self));
   }
-  @:noUsing static public inline function accept<T,E>(ch:T):Pledge<T,E>         return make(__.accept(ch));
-  @:noUsing static public inline function reject<T,E>(e:Error<E>):Pledge<T,E>   return make(__.reject(e.except()));
+  @:noUsing static public inline function accept<T,E>(ch:T):Pledge<T,E>         return make(Upshot.UpshotSum.Accept(ch));
+  @:noUsing static public inline function reject<T,E>(e:Error<E>):Pledge<T,E>   return make(Upshot.UpshotSum.Reject(e));
 
   @:noUsing static public function bind_fold<T,Ti,E>(it:Iter<T>,fm:T->Ti->Pledge<Ti,E>,start:Ti):Pledge<Ti,E>{
-    return new Pledge(__.nano().Ft().bind_fold(
+    return new Pledge(new stx.nano.module.Future().bind_fold(
       it,
       function(next:T,memo:Upshot<Ti,E>):Future<Upshot<Ti,E>>{
         return memo.fold(
           (v) -> fm(next,v).prj(),
-          (e) -> e.reject()
+          (e) -> Upshot.UpshotSum.Reject(e)
         );
       },
-      __.accept(start)
+      Upshot.UpshotSum.Accept(start)
     ));
   }
   @:noUsing static public function seq<T,E>(iter:Array<Pledge<T,E>>):Pledge<Array<T>,E>{
@@ -49,29 +49,29 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
   }
   @:noUsing static public function lazy<T,E>(fn:Void->T):Pledge<T,E>{
     return lift(Future.irreversible(
-      (f) -> f(__.accept(fn()))
+      (f) -> f(Upshot.UpshotSum.Accept(fn()))
     ));
   }
   @:noUsing static public function fromLazyError<T,E>(fn:Void->Error<E>):Pledge<T,E>{
     return fromLazyUpshot(
-      () -> __.reject(fn().except())
+      () -> Upshot.UpshotSum.Reject(fn())
     );
   }
-  #if tink_core
-  @:noUsing static public function fromTinkPromise<T,E>(promise:Promise<T>):Pledge<T,E>{
-    return lift(
-      promise.map(
-        (outcome) -> switch(outcome){
-          case tink.core.Outcome.Success(s) : __.accept(s);
-          case tink.core.Outcome.Failure(f) : __.reject(f.toRefuse());
-        }
-      )
-    );
-  }
-  @:noUsing static public inline function fromTinkFuture<T,E>(future:Future<T>):Pledge<T,E>{
-    return lift(future.map(__.accept));
-  }
-  #end
+  // #if tink_core
+  // @:noUsing static public function fromTinkPromise<T,E>(promise:Promise<T>):Pledge<T,E>{
+  //   return lift(
+  //     promise.map(
+  //       (outcome) -> switch(outcome){
+  //         case tink.core.Outcome.Success(s) : Upshot.UpshotSum.Accept(s);
+  //         case tink.core.Outcome.Failure(f) : Upshot.UpshotSum.Reject(stx.nano.lift.LiftTinkErrorToError.toError(f));
+  //       }
+  //     )
+  //   );
+  // }
+  // @:noUsing static public inline function fromTinkFuture<T,E>(future:Future<T>):Pledge<T,E>{
+  //   return lift(future.map(Upshot.UpshotSum.Accept));
+  // }
+  //#end
   @:noUsing static public function fromLazyUpshot<T,E>(fn:Void->Upshot<T,E>):Pledge<T,E>{
     return Future.irreversible(
       (f) -> f(fn())
@@ -79,7 +79,7 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
   }
 
   @:noUsing static public function err<T,E>(e:Error<E>):Pledge<T,E>{
-    return make(__.reject(e.except()));
+    return make(Upshot.UpshotSum.Reject(e));
   }
   @:noUsing static public function fromUpshot<T,E>(chk:Upshot<T,E>):Pledge<T,E>{
     return Future.irreversible(
@@ -89,7 +89,13 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
     );
   }
   @:noUsing static public function fromOption<T,E>(m:Option<T>):Pledge<T,E>{
-    final val = m.fold((x)->__.accept(x),()->__.reject(__.fault().explain(_ -> _.e_undefined())));
+    final val = m.fold(
+      (x)->Upshot.UpshotSum.Accept(x),
+      ()-> Upshot.UpshotSum.Reject(
+        Fault.make()
+             .digest((_:Digests) -> _.e_undefined())
+      )
+    );
     return fromUpshot(val);
   } 
   #if stx_arw
@@ -116,14 +122,14 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
       (outcome : tink.core.Outcome<T,tink.core.Error>) -> {
         return switch(outcome){
           case tink.core.Outcome.Success(v) : 
-            __.accept(v);
+            Upshot.UpshotSum.Accept(v);
           case tink.core.Outcome.Failure(e) :  
             switch(std.Type.typeof(e.data)){
               case TClass(js.lib.Error) :
                 var er : js.lib.Error = e.data; 
-                __.reject(__.fault(pos).explain(_ -> _.e_js_error(er)));
+                Upshot.UpshotSum.Reject(Fault.make(pos).digest((_:stx.fail.Digests) -> _.e_js_error(er)));
               case x : 
-                __.reject(__.fault(pos).explain(_ -> _.e_js_error(new js.lib.Error('${e.data}'))));
+                Upshot.UpshotSum.Reject(Fault.make(pos).digest((_:stx.fail.Digests) -> _.e_js_error(new js.lib.Error('${e.data}'))));
             }
         }
       }
@@ -155,7 +161,7 @@ typedef PledgeDef<T,E> = Future<Upshot<T,E>>;
 // }
 class PledgeLift{
   #if js
-  static public function toJsPromise<T,E>(self:Pledge<T,E>):js.lib.Promise<Upshot<T,E>>{
+  static public function toJsPromise<T,E>(self:Pledge<T,E>):js.lib.Promise<Upshot<T,Dynamic>>{
     var promise = new js.lib.Promise(
       (resolve,reject) -> {
         try{
@@ -163,21 +169,18 @@ class PledgeLift{
             (res) -> {
               res.fold(
                 (v) -> {
-                  resolve(__.accept(v));
+                  resolve(Upshot.UpshotSum.Accept(v));
                 },
                 (e) -> {
-                  reject(__.reject(e));
+                  reject(Upshot.UpshotSum.Reject(e));
                 }
               );
             }
           );
         }catch(e:Error<Dynamic>){
-          __.reject(switch(Refuse.catcher(e)){
-            case Left(e)  : e.digest_with(x -> Std.string(x));
-            case Right(e) : e;  
-          });
+          reject(e);
         }catch(e:js.lib.Error){
-          reject(__.reject(__.fault().explain(_ -> _.e_js_error(e))));
+          reject(Upshot.UpshotSum.Reject(Fault.make().digest((_:stx.fail.Digests) -> _.e_js_error(e))));
         }
       }
     );
@@ -198,7 +201,7 @@ class PledgeLift{
     return Pledge.lift(self);
   }
   static public function zip<Ti,Tii,E>(self:Pledge<Ti,E>,that:Pledge<Tii,E>):Pledge<Couple<Ti,Tii>,E>{
-    var out = __.nano().Ft().zip(self.prj(),that.prj()).map(
+    var out = new stx.nano.module.Future().zip(self.prj(),that.prj()).map(
       (tp) -> tp.fst().zip(tp.snd())
     );
     return out;
@@ -207,8 +210,8 @@ class PledgeLift{
   static public function map<T,Ti,E>(self:Pledge<T,E>,fn:T->Ti):Pledge<Ti,E>{
     return lift(self.prj().map(
       (x) -> x.fold(
-        (s) -> __.accept(fn(s)),
-        e -> __.reject(e)
+        (s) -> Upshot.UpshotSum.Accept(fn(s)),
+        e -> Upshot.UpshotSum.Reject(e)
       )
     ));
   }
@@ -219,23 +222,23 @@ class PledgeLift{
         // /trace(x);
         return x.fold(
           (v)   -> fn(v).prj(),
-          (err) -> Pledge.fromUpshot(err.reject()).prj()
+          (err) -> Pledge.fromUpshot(Upshot.UpshotSum.Reject(err)).prj()
         );
       }
     );
   }
-  static public function flat_fold<T,Ti,E>(self:PledgeDef<T,E>,val:T->Future<Ti>,ers:Refuse<E>->Future<Ti>):Future<Ti>{
+  static public function flat_fold<T,Ti,E>(self:PledgeDef<T,E>,val:T->Future<Ti>,ers:Error<E>->Future<Ti>):Future<Ti>{
     return self.flatMap(
       (res:Upshot<T,E>) -> res.fold(val,ers)
     );
   }
-  static public function fold<T,Ti,E>(self:Pledge<T,E>,val:T->Ti,ers:Null<Refuse<E>>->Ti):Future<Ti>{
+  static public function fold<T,Ti,E>(self:Pledge<T,E>,val:T->Ti,ers:Null<Error<E>>->Ti):Future<Ti>{
     return self.prj().map(UpshotLift.fold.bind(_,val,ers));
   }
-  static public function recover<T,E>(self:Pledge<T,E>,fn:Refuse<E>->Upshot<T,E>):Pledge<T,E>{
+  static public function recover<T,E>(self:Pledge<T,E>,fn:Error<E>->Upshot<T,E>):Pledge<T,E>{
     return lift(fold(
       self,
-      (x) -> __.accept(x),
+      (x) -> Upshot.UpshotSum.Accept(x),
       (e) -> fn(e)
     ));
   }
@@ -243,22 +246,22 @@ class PledgeLift{
     return lift(fold(
       self,
       (x) -> fn(x),
-      (v) -> __.reject(v)
+      (v) -> Upshot.UpshotSum.Reject(v)
     ));
   }
-  static public function rectify<T,Ti,E,U>(self:Pledge<T,E>,fn:Refuse<E>->Upshot<T,E>):Pledge<T,E>{
+  static public function rectify<T,Ti,E,U>(self:Pledge<T,E>,fn:Error<E>->Upshot<T,E>):Pledge<T,E>{
     return lift(self.prj().map(
       (res:Upshot<T,E>) -> res.rectify(fn)
     ));
   }
-  static public function receive<T,E>(self:Pledge<T,E>,fn:T->Void):Future<Option<Refuse<E>>>{
+  static public function receive<T,E>(self:Pledge<T,E>,fn:T->Void):Future<Option<Error<E>>>{
     return self.prj().map(
       (res) -> res.fold(
         (v) -> {
           fn(v);
           return None;
         },
-        __.option
+        Option.make
       )
     );
   }
@@ -270,7 +273,7 @@ class PledgeLift{
       }
     );
     if(out == null){
-      throw __.fault().explain(_ -> _.e_undefined());
+      Fault.make().digest((_:Digests) -> _.e_undefined()).crack();
     }
     return out;
   }
@@ -279,26 +282,23 @@ class PledgeLift{
       self.map(
         (res:Upshot<T,E>) -> res.fold(
           (x) -> fn(x),
-          (e) -> e.report()
+          (e) -> ReportSum.Reported(e)
       )
     ));
   }
-  static public function errata<T,E,EE>(self:Pledge<T,E>,fn:Refuse<E>->Refuse<EE>):Pledge<T,EE>{
+  static public function errata<T,E,EE>(self:Pledge<T,E>,fn:E->EE):Pledge<T,EE>{
     return self.prj().map(
       (chk) -> chk.errata(fn)
     );
   }
-  static public inline function errate<T,E,EE>(self:Pledge<T,E>,fn:E->EE):Pledge<T,EE>{
-    return errata(self,(x) -> x.errate(fn));
-  }
-  static public function each<T,E>(self:Pledge<T,E>,fn:T->Void,?err:Refuse<E>->Void){
+  static public function each<T,E>(self:Pledge<T,E>,fn:T->Void,?err:Error<E>->Void){
     self.prj().handle(
       (res) -> res.fold(
         fn,
         (e)  -> {
-          __.option(err).fold(
+          Option.make(err).fold(
             (f) -> f(e),
-            ()  ->  __.crack(e)
+            ()  ->  e.crack()
           );
         }
       )
@@ -325,25 +325,25 @@ class PledgeLift{
   static public function anyway<T,E>(self:PledgeDef<T,E>,fn:Report<E>->Alert<E>):Pledge<T,E>{
     return self.flatMap(
       (res) -> res.fold(
-        (ok)  -> fn(__.report()).flat_fold(
-          (err) -> __.reject(err),
-          ()    -> __.accept(ok)
+        (ok)  -> fn(Report.make()).flat_fold(
+          (err) -> Upshot.UpshotSum.Reject(err),
+          ()    -> Upshot.UpshotSum.Accept(ok)
         ),
-        (err) -> fn(err.report()).flat_fold(
-          (err0) -> __.reject(err.concat(err0)),
-          ()     -> __.reject(err)
+        (err) -> fn(ReportSum.Reported(err)).flat_fold(
+          (err0) -> Upshot.UpshotSum.Reject(err.concat(err0)),
+          ()     -> Upshot.UpshotSum.Reject(err)
         ) 
       )
     );
   }
   #if tink_core
-  static public function toTinkPromise<T,E>(self:Pledge<T,E>):tink.core.Promise<T>{
-    return fold(
-      self,
-      ok -> tink.core.Outcome.Success(ok),
-      no -> tink.core.Outcome.Failure(no.toTinkError())
-    );
-  }
+  // static public function toTinkPromise<T,E>(self:Pledge<T,E>):tink.core.Promise<T>{
+  //   return fold(
+  //     self,
+  //     ok -> tink.core.Outcome.Success(ok),
+  //     no -> tink.core.Outcome.Failure(no.toTinkError())
+  //   );
+  // }
   #end 
 }
 typedef PledgeTriggerDef<R,E> = FutureTrigger<Upshot<R,E>>;

@@ -7,7 +7,7 @@ class HTypePathCtr extends Clazz{
     return HTypePath.make(
       name,
       __.option(pack.prj()).defv([]),
-      __.option(params).map(f -> f(Expr.HTypeParam)).defv(null),
+      __.option(params).map(f -> f.apply(Expr.HTypeParam)).defv(null),
       sub
     );
   }

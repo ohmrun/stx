@@ -1,9 +1,6 @@
 package eu.ohmrun.fletcher;
 
-using eu.ohmrun.fletcher.Core;
-
-
-using tink.CoreApi;
+using tink.core.Future;
 
 using stx.Pico;
 using stx.Fail;
@@ -15,5 +12,6 @@ using stx.Stream;
 using stx.Pkg;
 using stx.Assert;
 
+using eu.ohmrun.fletcher.Core;
 using eu.ohmrun.Fletcher;
 using eu.ohmrun.fletcher.Logging;

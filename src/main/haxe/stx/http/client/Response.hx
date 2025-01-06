@@ -29,7 +29,7 @@ typedef ResponseDef = {
           return try{
             __.hold(
                 self.text().toPledge().rectify(
-                  (err:Refuse<stx.fail.HttpClientFailure>) -> switch(err.data){
+                  (err:Error<stx.fail.HttpClientFailure>) -> switch(err.data){
                     case Some(EXTERNAL(E_HttpClient_Error(ee))) :
                       var match = Chars.lift(ee.toString()).starts_with("FetchError:");
                       __.log().debug(_ -> _.pure({ ee : ee, match : match }));
@@ -86,7 +86,7 @@ typedef ResponseDef = {
                 )
               );
             }catch(e:haxe.Exception){
-              __.quit(Error.Caught(None,None,__.option(__.here()),e).toRefuse());
+              __.quit(Error.Caught(None,None,__.option(__.here()),e).toError());
             }
           }
       )),

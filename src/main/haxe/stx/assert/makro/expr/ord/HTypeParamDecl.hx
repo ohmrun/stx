@@ -9,10 +9,10 @@ class HTypeParamDecl extends OrdCls<HTypeParamDeclT>{
   public function comply(lhs:HTypeParamDeclT,rhs:HTypeParamDeclT){
     var ord = Ord.String().comply(lhs.name,rhs.name);
     if(ord.is_not_less_than()){
-      ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HComplexType)).comply(lhs.constraints,rhs.constraints);
+      ord = Ord.NullOr(new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HComplexType)).comply(lhs.constraints,rhs.constraints);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.NullOr(Ord.ArrayOrd(Ord.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
+      ord = Ord.NullOr(new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
     }
     if(ord.is_not_less_than()){
       ord = Ord.NullOr(Ord.Makro().Expr().HMetadata).comply(lhs.meta,rhs.meta);

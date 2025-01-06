@@ -45,7 +45,7 @@ import stx.makro.type.Identity.IdentityLift;
   }
   public var pack(get,never):Cluster<String>;
   private function get_pack():Cluster<String>{
-    return getBaseType().map(x -> Cluster.lift(x.pack)).defv([].imm());
+    return getBaseType().map(x -> Cluster.lift(x.pack)).defv(Cluster.unit());
   }
   public var name(get,never):Option<String>;
   private function get_name():Option<String>{
@@ -99,7 +99,7 @@ class HTypeLift{
         type  : impl
       });
     }
-    return out.imm();
+    return Cluster.make(out);
   }
   static public function get_fields(type:Type):Array<ClassField>{
     return switch(type){

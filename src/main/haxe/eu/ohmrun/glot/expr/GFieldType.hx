@@ -6,18 +6,18 @@ class GFieldTypeCtr extends Clazz{
   public function Var(?t:CTR<GComplexTypeCtr,GComplexType>, ?e:CTR<GExprCtr,GExpr>){
     return GFieldType.lift(
       GFVar(
-        __.option(t).map(f -> f(Expr.GComplexType)).defv(null),
-        __.option(e).map(f -> f(Expr.GExpr)).defv(null)
+        __.option(t).map(f -> f.apply(Expr.GComplexType)).defv(null),
+        __.option(e).map(f -> f.apply(Expr.GExpr)).defv(null)
       )
     );
   }
   public function Fun(f:CTR<GFunctionCtr,GFunction>){
-    return GFieldType.lift(GFFun(f(Expr.GFunction)));
+    return GFieldType.lift(GFFun(f.apply(Expr.GFunction)));
   }
   public function Prop(get:CTR<GPropAccessCtr,GPropAccess>,set:CTR<GPropAccessCtr,GPropAccess>,?t:CTR<GComplexTypeCtr,GComplexType>,?e:CTR<GExprCtr,GExpr>){
-    return GFieldType.lift(GFProp(get(Expr.GPropAccess),set(Expr.GPropAccess),
-      __.option(t).map(f -> f(Expr.GComplexType)).defv(null),
-      __.option(e).map(f -> f(Expr.GExpr)).defv(null)
+    return GFieldType.lift(GFProp(get.apply(Expr.GPropAccess),set.apply(Expr.GPropAccess),
+      __.option(t).map(f -> f.apply(Expr.GComplexType)).defv(null),
+      __.option(e).map(f -> f.apply(Expr.GExpr)).defv(null)
     ));
   }
 }

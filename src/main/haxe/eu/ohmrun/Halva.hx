@@ -1,6 +1,6 @@
 package eu.ohmrun;
 
-using stx.Nano;
+using stx.Pico;
 
 class Halva{
   static public function halva(wildcard:Wildcard){

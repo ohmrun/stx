@@ -35,15 +35,15 @@ abstract Coord(CoordSum) from CoordSum to CoordSum{
   public var index(get,never):Option<Int>;
   private function get_index():Option<Int>{
     return switch(this){
-      case CoField(_,idx) : __.option(idx);
-      default             : __.option();
+      case CoField(_,idx) : Option.make(idx);
+      default             : Option.make();
     }
   }
   public var field(get,never):Option<String>;
   private function get_field():Option<String>{
     return switch(this){
-      case CoField(str,_) : __.option(str);
-      default             : __.option();
+      case CoField(str,_) : Option.make(str);
+      default             : Option.make();
     }
   }
   @:op(A == B)

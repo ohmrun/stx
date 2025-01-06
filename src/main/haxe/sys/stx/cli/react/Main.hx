@@ -37,8 +37,8 @@ class Main{
     react();
   }
   static public function reply(){
-    __.log().debug('reply ${Sys.cwd().get()} ${__.cli().SysArgs().unit()}');
-    final context   = __.cli().CliContext().pull(Sys.cwd().get(),__.cli().SysArgs().unit());
+    __.log().debug('reply ${Sys.getCwd()} ${__.cli().SysArgs().unit()}');
+    final context   = __.cli().CliContext().pull(Sys.getCwd(),__.cli().SysArgs().unit());
     final executor  = 
       Produce.lift(Fletcher.Then(
         context,

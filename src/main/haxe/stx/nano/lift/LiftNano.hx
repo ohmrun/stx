@@ -5,9 +5,9 @@ import stx.pico.Identifier;
 import stx.alias.StdType;
 
 class LiftNano{
-  static public function nano(wildcard:Wildcard):Module{
-    return new stx.nano.Module();
-  }
+  // static public function nano(wildcard:Wildcard):Module{
+  //   return new stx.nano.Module();
+  // }
   /**
     shortcut for creating a variadic array: `Array<Dynamic>`
   **/
@@ -44,13 +44,8 @@ class LiftNano{
   /**
 		Returns a unique identifier, each `x` replaced with a hex character.
 	**/
-  static public function uuid(v:Wildcard, value : String = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') : String {
-    var reg = ~/[xy]/g;
-    return reg.map(value, function(reg) {
-        var r = std.Std.int(Math.random() * 16) | 0;
-        var v = reg.matched(0) == 'x' ? r : (r & 0x3 | 0x8);
-        return StringTools.hex(v);
-    }).toLowerCase();
+  static public function uuid(v:Wildcard, ?value : String) : Uuid {
+    return new Uuid();
   }
   /**
     Best guess at platform filesystem seperator string
@@ -64,25 +59,13 @@ class LiftNano{
     return out;
   }
   /**
-    Most used wildcard, creates an option, often used like: `__.option(value).defv(fallback)`
-  **/
-  static public function option<T>(wildcard:Wildcard,?v:Null<T>):Option<T>{
-    return switch(v){
-      case null : None;
-      default   : Some(v);
-    }
-  }
-  /**
     
   **/
   static public function accept<T,E>(wildcard:Wildcard,t:T):Upshot<T,E>{
     return Upshot.accept(t);
   }
-  static public function reject<T,E>(wildcard:Wildcard,e:CTR<Fault,Refuse<E>>,?pos:Pos):Upshot<T,E>{
+  static public function reject<T,E>(wildcard:Wildcard,e:CTR<Fault,Error<E>>,?pos:Pos):Upshot<T,E>{
     return Upshot.reject(e.apply(pos));
-  }
-  static public function decline<E>(wildcard:Wildcard,except:E):Decline<E>{
-    return EXTERNAL(except);
   }
   static public function success<T,E>(wildcard:Wildcard,t:T):Outcome<T,E>{
     return Outcome.success(t);
@@ -100,18 +83,8 @@ class LiftNano{
   static public function fault(wildcard:Wildcard,?pos:Pos):Fault{
     return new Fault(pos);
   }
-  static public function couple<Ti,Tii>(wildcard:Wildcard,tI:Ti,tII:Tii):Couple<Ti,Tii>{
-    return (fn:Ti->Tii->Void) -> {
-      fn(tI,tII);
-    }
-  }
   static public function pair<Ti,Tii>(wildcard:Wildcard,tI:Ti,tII:Tii):Pair<Ti,Tii>{
     return new tink.core.Pair(tI,tII);
-  }
-  static public function decouple<Ti,Tii,Tiii>(wildcard:Wildcard,fn:Ti->Tii->Tiii):Couple<Ti,Tii> -> Tiii{
-    return (tp:Couple<Ti,Tii>) -> {
-      tp.decouple(fn);
-    } 
   }
   /**
     * create a function from `fn` that can be applied to a value of `Tup<L,R>`
@@ -135,7 +108,7 @@ class LiftNano{
       tp.detriple(fn);
     }
   }
-  static public function toCouple<Ti,Tii>(self:CoupleDef<Ti,Tii>):Couple<Ti,Tii>{
+  static public function toCouple<Ti,Tii>(self:stx.pico.Couple.CoupleDef<Ti,Tii>):stx.pico.Couple<Ti,Tii>{
     return self;
   }
 
@@ -145,7 +118,7 @@ class LiftNano{
   static public function lbump<L,R>(wildcard:Wildcard,tp:Couple<Option<L>,R>):Option<Couple<L,R>>{
     return tp.decouple(
       (lhs,rhs) -> lhs.fold(
-        (l) -> Some(__.couple(l,rhs)),
+        (l) -> Some(Couple.make(l,rhs)),
         ()  -> None
       )
     );
@@ -156,7 +129,7 @@ class LiftNano{
   static public function rbump<L,R>(wildcard:Wildcard,tp:Couple<L,Option<R>>):Option<Couple<L,R>>{
     return tp.decouple(
       (lhs,rhs) -> rhs.fold(
-        r   -> (Some(__.couple(lhs,r))),
+        r   -> (Some(Couple.make(lhs,r))),
         ()  -> None
       )
     );
@@ -168,10 +141,10 @@ class LiftNano{
   static public function future<T>(wildcard:Wildcard):Couple<tink.core.Future.FutureTrigger<T>,tink.core.Future<T>>{
     var trigger = tink.core.Future.trigger();
     var future  = trigger.asFuture();
-    return __.couple(trigger,future);
+    return Couple.make(trigger,future);
   }
   static public function squeeze<T>(self:Future<T>):Option<T>{
-    return new stx.nano.Module().Future().tryAndThenCancelIfNotAvailable(self);
+    return new stx.nano.module.Future().tryAndThenCancelIfNotAvailable(self);
   }
   #end
   static public inline function tracer<T>(v:Wildcard,?pos:haxe.PosInfos):T->T{
@@ -196,10 +169,10 @@ class LiftNano{
       return v;
     }
   }
-  static public function execute<T,E>(__:Wildcard,fn:Void->Option<Refuse<E>>):T->Upshot<T,E>{
+  static public function execute<T,E>(__:Wildcard,fn:Void->Option<Error<E>>):T->Upshot<T,E>{
     return (v:T) -> switch(fn()){
       case Some(e)  : Reject(e);
-      default       : __.accept(v);
+      default       : Accept(v);
     }
   }
   static public function left<Ti,Tii>(__:Wildcard,tI:Ti):Either<Ti,Tii>{
@@ -217,8 +190,8 @@ class LiftNano{
   static public inline function crack<E>(wildcard:Wildcard,e:E){
     throw e;
   }
-  static public inline function report<E>(wildcard:Wildcard,?f:Fault -> Refuse<E>,?pos:Pos):Report<E>{
-    return f == null ? Report.unit() : Report.pure(f(__.fault(pos)));
+  static public inline function report<E>(wildcard:Wildcard,?f:Fault -> Error<E>,?pos:Pos):Report<E>{
+    return f == null ? Report.unit() : Report.pure(f(Fault.make(pos)));
   }
   
   // static public inline function pos<P,R>(fn:Binary<P,Null<Pos>,R>,?pos:Pos):Unary<P,R>{
@@ -266,7 +239,7 @@ class LiftNano{
     return '${id}.${fn}';
   }
   @:note('#0b1kn00b: depends upon `until` actually being part of the hierarchy')
-  @:unsafe
+  @stx.unsafe
   static public function ancestors<A>(type:Class<A>,?until:Class<Dynamic>):Cluster<Class<Dynamic>>{
     var o : Cluster<Class<Dynamic>> = [];
     var t : Class<Dynamic> = type;

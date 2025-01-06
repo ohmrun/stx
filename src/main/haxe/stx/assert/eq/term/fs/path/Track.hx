@@ -1,5 +1,7 @@
 package stx.assert.eq.term.fs.path;
 
+import stx.alias.StdString;
+
 class Track<T> extends stx.assert.eq.term.Base<stx.fs.path.Track>{
   final inner : Eq<StdString>;
   public function new(){

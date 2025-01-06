@@ -7,7 +7,7 @@ package stx.schema.declare.term;
       new DeclareGenericSchemaCls(
         Ident.make('Array',['std']),
         ref,
-        [].imm()
+        Cluster.unit()
       )
     );
   }

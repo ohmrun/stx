@@ -6,9 +6,9 @@ class GEFieldCtr extends Clazz{
   public function Make(name:String,kind:CTR<GFieldTypeCtr,GFieldType>,?access:CTR<GAccessCtr,Cluster<GAccess>>,?meta:CTR<GMetadataEntryCtr,GMetadata>,?doc){
     return eu.ohmrun.glot.expr.GEField.make(
       name,
-      kind(Expr.GFieldType),
-      __.option(access).map(f -> f(Expr.GAccess)).defv(null),
-      __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(null),
+      kind.apply(Expr.GFieldType),
+      __.option(access).map(f -> f.apply(Expr.GAccess)).defv(null),
+      __.option(meta).map(f -> f.apply(Expr.GMetadataEntry)).defv(null),
       doc
     );
   }

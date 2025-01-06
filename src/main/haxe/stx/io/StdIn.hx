@@ -55,7 +55,7 @@ abstract StdIn(StdInput) from StdInput{
     final pull = (un:InputRequest) -> {
       __.log().trace('pulling $un');
       var prim : InputResponse              = null;
-      var err  : Refuse<IoFailure>        = null;
+      var err  : Error<IoFailure>        = null;
       try{
         prim = apply(this,un);
         __.log().trace('pull ok');
@@ -65,10 +65,10 @@ abstract StdIn(StdInput) from StdInput{
         prim  = IResStarved;
       }catch(e:haxe.io.Error){
         __.log().error('pull fail $e');
-        state = Io_Input_Closed(Some(Error.make(Some(Std.string(e)),None,None)),false);
+        state = Io_Input_Closed(Some(ErrorCtr.instance.Label(Std.string(e))),false);
         err  = __.fault().of(E_Io_Subsystem(e));
       }catch(e:Dynamic){
-        state = Io_Input_Closed(Some(Error.make(Some(Std.string(e)),None,None)),false);
+        state = Io_Input_Closed(Some(ErrorCtr.instance.Label(Std.string(e))),false);
         __.log().error('pull fail $e');
         err  = __.fault().of(E_Io_Subsystem(Custom(e)));
        }

@@ -7,7 +7,7 @@ class Materialize<I,O> extends Base<I,O,Parser<I,O>>{
       if(result.is_defined()){
         result;
       }else{
-        result.asset.erration('result of $delegation is not defined ').failure(result.asset);
+        result.asset.no(E_Parse_NoOutput);
       }
   }
 }

@@ -50,7 +50,7 @@ class CliParser{
                   return arr.flat_map(
                     opt -> opt.fold(
                       x -> x,
-                      () -> [].imm()
+                      () -> Cluster.unit()
                     )
                   );
                 }
@@ -64,7 +64,7 @@ class CliParser{
         );
   }
   static public function opt():AbstractParser<String,Cluster<CliToken>>{
-    return double_minus.and(word()).then(__.decouple((x,y) -> [Opt('$x$y')].imm())).or(
+    return double_minus.and(word()).then(__.decouple((x,y) -> Cluster.pure(Opt('$x$y')))).or(
       minus.and(word()).then(
         __.decouple(
           (x:String,y:String) -> {

@@ -1,5 +1,7 @@
 package stx.log.filter.term;
 
+import stx.Fail.ErrorCtr;
+
 class Level<T> extends Filter<T>{
   public var level(default,null):stx.log.Level;
   public function new(level){
@@ -10,7 +12,7 @@ class Level<T> extends Filter<T>{
     note('apply $v $level');
     return (v.stamp.level.asInt() >= level.asInt()).if_else(
       () -> Report.unit(),
-      () -> Report.make(E_Log_UnderLogLevel)
+      () -> Report.make(ErrorCtr.instance.Value(E_Log_UnderLogLevel))
     );
   }
   public function canonical(){

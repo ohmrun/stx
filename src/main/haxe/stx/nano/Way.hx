@@ -36,7 +36,7 @@ package stx.nano;
     return lift(this.concat(that));
   }
   public function toOsString():String{
-    return (Std.downcast(this,Array)).join(__.sep()); 
+    return (Std.downcast(this,Array)).join(Pico.sep()); 
   }
   public function into(name:String):Ident{
     return Ident.make(name,this);

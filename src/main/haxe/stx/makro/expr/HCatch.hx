@@ -6,8 +6,8 @@ class HCatchCtr extends Clazz{
   public function Make(name:String,expr:CTR<HExprCtr,HExpr>,type:CTR<HComplexTypeCtr,HComplexType>){
     return HCatch.make(
       name,
-      expr(Expr.HExpr),
-      __.option(type).map(f -> f(Expr.HComplexType)).defv(null)
+      expr.apply(Expr.HExpr),
+      __.option(type).map(f -> f.apply(Expr.HComplexType)).defv(null)
     );
   }
 }

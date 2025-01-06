@@ -6,7 +6,7 @@ class Delegate<I,O> extends Base<I,O,Parser<I,O>>{
     this.tag = delegation.tag;
   }
   override function check(){
-    __.assert(pos).that().exists(delegation);
+    __.assert().that(pos).exists(delegation);
   }
   public function apply(ipt){
     return this.delegation.apply(ipt);

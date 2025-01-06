@@ -19,11 +19,11 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
             __.log().trace('delegate section: $ok');
             final missing_options = delegate.get_missing_options();
             return missing_options.is_defined().if_else(
-              () -> ipt.no('missing options: $missing_options'),
+              () -> ipt.digest('missing options: $missing_options'),
               () -> {
                 final missing_arguments = delegate.get_missing_arguments();
                 return missing_arguments.is_defined().if_else(
-                  () -> ipt.no('missing arguments: $missing_arguments'),
+                  () -> ipt.digest('missing arguments: $missing_arguments'),
                   () -> {
                     __.log().trace('subsection');
                     final next_spec_parser = SpecParser.makeI(new SpecValue(ok,[],[],None)).asParser();
@@ -51,8 +51,8 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                   ipt.tail().ok(with_arg);
                 }else{
                   delegate.is_args_full().if_else(
-                    () -> ipt.no('extra argument'),
-                    () -> ipt.no('extra argument')
+                    () -> ipt.no(E_Parse_ExtraArgument),
+                    () -> ipt.no(E_Parse_ExtraArgument)
                   );
                 }
               }
@@ -64,7 +64,7 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
           case true  : 
             __.log().trace('${delegate.args}');
             __.log().trace(string);
-            ipt.no("no options should be defined after arguments");
+            ipt.digest("no options should be defined after arguments");
           case false :
             __.log().trace(string);
             delegate.get_opt(string).fold(
@@ -72,7 +72,7 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                 __.log().trace('${opt.kind}');
                 return switch(opt.kind){
                   case PropertyKind(false) : delegate.get_opt_value(opt).fold(
-                    ok -> ipt.no('${opt.name} already defined'),
+                    ok -> ipt.digest('${opt.name} already defined'),
                     () -> {  
                       final opt_val = opt.with(None);
                       return opt_val.is_assignment().if_else(
@@ -84,7 +84,7 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                               ipt.tail().tail().ok(
                                 delegate.with_opt(opt.with(Some(x)))
                               );
-                            default     : ipt.no('$opt requires value');
+                            default     : ipt.digest('$opt requires value');
                           }
                         )
                       );
@@ -101,14 +101,14 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                           case Val(Arg(x)) : ipt.tail().tail().ok(
                             delegate.with_opt(opt.with(Some(x)))
                           );
-                          default     : ipt.no('$opt requires value');
+                          default     : ipt.digest('$opt requires value');
                         }
                       )
                     );
-                  case ArgumentKind : ipt.no('option defined as argument',true);
+                  case ArgumentKind : ipt.except('option defined as argument');
                   case FlagKind     :  
                     delegate.get_opt_value(opt).fold(
-                      ok -> ipt.no('${opt.name} already defined'),
+                      ok -> ipt.digest('${opt.name} already defined'),
                       () -> {
                         final opt_val = opt.with(None);
                         return ipt.tail().ok(delegate.with_opt(opt_val));
@@ -117,7 +117,7 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                 }
               },
               () -> if(is_greedy){
-                final opt_type = switch(ipt.tail().head()){
+                final opt_type : Upshot<OptionKind,CliFailure> = switch(ipt.tail().head()){
                   case Val(Arg(_)) : __.accept(PropertyKind(true));
                   case Val(Opt(_)) :
                     final opt      = new stx.sys.cli.application.spec.term.PropertyWildcard(string,'auto property',PropertyKind(true),false); 
@@ -127,19 +127,28 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                     }else{
                       __.accept(FlagKind);
                     }
-                  case End(e) :
-                    switch(e.data){
-                      case Some(EXTERNAL(stx.fail.ParseFailureCode.ParseFailureCodeSum.E_Parse_Eof)) : 
-                        __.reject(f -> f.of(E_Cli_Parse(
-                          ParseFailure.make(
-                            @:privateAccess ipt.tail().content.index,
-                            stx.fail.ParseFailureCode.ParseFailureCodeSum.E_Parse_Eof,
-                            false
+                  case End(null)  : 
+                    __.reject(
+                      f -> f.of(
+                        E_Cli_ParseError(
+                          ipt.except('empty End chunk',f.toPos()).error
+                        )
+                      )
+                  );
+                  case End(e)     :
+                    e.lapse.toIter().search(
+                      (x:Lapse<ParseFailure>) -> {
+                        return x.value == EOF;
+                      }
+                    ).is_defined().if_else(
+                      () -> __.reject(
+                        f -> f.of(E_Cli_ParseError(
+                          ipt.tail().eof().error
                           )
-                        )));
-                      case x : 
-                        __.reject(f -> f.of(E_Cli('$x')));
-                    }
+                        )
+                      ),
+                      () -> __.reject(f -> e)
+                    );
                   case x : 
                     __.log().error('$x');
                     __.reject(f -> f.of(E_Cli('Incorrect value')));
@@ -155,30 +164,43 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
                           ipt.tail().tail().ok(
                             delegate.with_opt(opt.with(Some(x)))
                           );
-                        default     : ipt.no('$opt requires value');
+                        default     : ipt.except('$opt requires value');
                       }
                     );
                   case Accept(FlagKind) : 
                     final opt      = new stx.sys.cli.application.spec.term.PropertyWildcard(string,'auto property',FlagKind,false); 
                     ipt.tail().ok(delegate.with_opt(opt.with(None)));
                   case Reject(e)        : 
-                    switch(e.data){
-                      case Some(EXTERNAL(E_Cli_Parse(eI))) : 
-                        ParseResult.make(
-                          ipt.tail(),
-                          None,
-                          Refuse.make(Some(EXTERNAL(eI)),None,e.pos)
-                        );
-                      default                   :
-                        __.log().fatal(_ -> _.thunk(() -> '$e'));
-                        ipt.no('weird condition error'); 
-                    }
+                    // $type(e);
+                    final result =  e.lapse.toIter().search(
+                        (l:Lapse<CliFailure>) -> EnumValue.lift(l.value).alike(E_Cli_Parse(null))
+                      ).flat_map(
+                        (x:Lapse<CliFailure>) -> switch(x.value){
+                          case E_Cli_Parse(x) :__.option(x);
+                          default             : None;
+                        }
+                      ).map(
+                          (e:ParseFailure) -> {
+                            return ParseResult.make(
+                              ipt.tail(),
+                              None,
+                              ErrorCtr.instance.Value(
+                                e,
+                                _ -> LocCtr.instance.Available().with_cursor(@:privateAccess ipt.tail().content.index)
+                              )
+                            );
+                          }
+                        ).defv(
+                          ipt.except('weird condition error')
+                        ); 
+                    result;
+                  
                   case x : 
                     __.log().fatal(_ -> _.thunk(() -> '$x'));
-                    ipt.no('weird condition error');
+                    ipt.except('weird condition error');
                 }
               }else{
-                ipt.no('no option "$string" found');
+                ipt.except('no option "$string" found');
               }
             );
         } 

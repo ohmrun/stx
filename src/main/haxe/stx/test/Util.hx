@@ -6,10 +6,13 @@ class Util{
       __.accept(fn());
     }catch(e:Error<Dynamic>){
       __.log().debug('$e');
-      __.reject(e.except().errate(E_Test_Refuse));
+      __.reject(e.errata(E_Test_Error));
     }catch(e:haxe.Exception){
       __.log().debug('$e');
-      __.reject(Refuse.make(Some(EXTERNAL(E_Test_Exception(e))),None,pos));
+      __.reject(ErrorCtr.instance.Make(
+          _ -> _.Value(E_Test_Exception(e),_ -> Loc.fromPos(pos)).enlist()
+        )
+      );
     }
     //return __.accept(fn());
   }

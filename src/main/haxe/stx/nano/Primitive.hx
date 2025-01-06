@@ -1,5 +1,7 @@
 package stx.nano;
 
+import stx.alias.StdString;
+
 enum PrimitiveSum{
   PNull;
   PBool(b:Bool);

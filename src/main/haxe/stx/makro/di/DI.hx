@@ -22,7 +22,7 @@ import stx.makro.di.ResolverDef;
 	}
 
 	public function extend():DI {
-		var next = copy(null, new StringMap(), __.uuid());
+		var next = copy(null, new StringMap(), __.uuid().toString());
 		// next.copy(this.factories,this.instances);
 		// trace('extend: FROM ${this.factories} TO ${next.factories}');
 		return next;
@@ -35,7 +35,7 @@ import stx.makro.di.ResolverDef;
 		for(key=>val in that.factories){
 			factories.set(key,val);
 		}
-		return copy(null,factories,__.uuid());		
+		return copy(null,factories,__.uuid().toString());		
 	}
   public function injector(){
     return new Injector(this);
@@ -62,7 +62,7 @@ import stx.makro.di.ResolverDef;
   }
   public function new(?factories:StringMap<DI->Dynamic>,?instances:StringMap<Dynamic>,?id) {
     //DI.print('new: ${this.id} $factories, $instances');
-    this.id         = __.option(id).def(() -> __.uuid());
+    this.id         = __.option(id).def(() -> __.uuid().toString());
     this.instances  = __.option(instances).defv(new StringMap());
     this.factories  = __.option(factories).defv(new StringMap());
   }

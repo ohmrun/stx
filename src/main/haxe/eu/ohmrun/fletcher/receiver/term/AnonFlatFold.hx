@@ -10,8 +10,8 @@ abstract class AnonFlatFold<P,Pi,E> extends FlatFold<P,Pi,E>{
   public inline function ok(p:P):Receiver<Pi,E>{
     return _ok(p);
   }
-  public final _no : Defect<E> -> Receiver<Pi,E>;
-  public inline function no(d:Defect<E>):Receiver<Pi,E>{
+  public final _no : Error<E> -> Receiver<Pi,E>;
+  public inline function no(d:Error<E>):Receiver<Pi,E>{
     return _no(d);
   }
 }

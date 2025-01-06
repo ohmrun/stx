@@ -18,22 +18,22 @@ abstract AttemptArg<I,O,E>(AttemptArgSum<I,O,E>) from AttemptArgSum<I,O,E> to At
   private var self(get,never):AttemptArg<I,O,E>;
   private function get_self():AttemptArg<I,O,E> return lift(this);
 
-  @:from static public function fromArgFun1Provide<P,R,E>(fn:P->Provide<R>):AttemptArg<P,R,E>{
+  @:noUsing @:from static public function fromArgFun1Provide<P,R,E>(fn:P->Provide<R>):AttemptArg<P,R,E>{
     return AttemptArgFun1Provide(fn);
   }
-  @:from static public function fromArgUnary1Produce<P,R,E>(fn:Unary<P,Produce<R,E>>):AttemptArg<P,R,E>{
+  @:noUsing @:from static public function fromArgUnary1Produce<P,R,E>(fn:Unary<P,Produce<R,E>>):AttemptArg<P,R,E>{
     return AttemptArgUnary1Produce(fn);
   }
-  @:from static public function fromArgFun1Produce<P,R,E>(fn:P->Produce<R,E>):AttemptArg<P,R,E>{
+  @:noUsing @:from static public function fromArgFun1Produce<P,R,E>(fn:P->Produce<R,E>):AttemptArg<P,R,E>{
     return AttemptArgFun1Produce(fn);
   }
-  @:from static public function fromArgFun1Upshot<P,R,E>(fn:P->Upshot<R,E>):AttemptArg<P,R,E>{
+  @:noUsing @:from static public function fromArgFun1Upshot<P,R,E>(fn:P->Upshot<R,E>):AttemptArg<P,R,E>{
     return AttemptArgFun1Upshot(fn);
   }
-  @:from static public function fromArgUpshot<P,R,E>(fn:Upshot<R,E>):AttemptArg<P,R,E>{
+  @:noUsing @:from static public function fromArgUpshot<P,R,E>(fn:Upshot<R,E>):AttemptArg<P,R,E>{
     return AttemptArgUpshot(fn);
   }
-  @:from static public function fromArgPure<P,R,E>(r:R):AttemptArg<P,R,E>{
+  @:noUsing @:from static public function fromArgPure<P,R,E>(r:R):AttemptArg<P,R,E>{
     return AttemptArgPure(r);
   }
 }
@@ -130,7 +130,7 @@ typedef AttemptDef<I,O,E>               = FletcherDef<I,Upshot<O,E>,Nada>;
         )
     ));  
   }
-  public inline function environment(i:I,success:O->Void,?failure:Refuse<E>->Void):Fiber{
+  public inline function environment(i:I,success:O->Void,?failure:Error<E>->Void):Fiber{
     return ModulateLift.environment(toModulate(),i,success,failure);
   }
   public function mapi<Ii>(that:Ii->I):Attempt<Ii,O,E>{
@@ -171,11 +171,8 @@ class AttemptLift{
   static public function convert<I,O,Oi,E>(self:AttemptDef<I,O,E>,next:Convert<O,Oi>):Attempt<I,Oi,E>{
     return then(self,next.toModulate());
   }
-  static public function errata<I,O,E,EE>(self:AttemptDef<I,O,E>,fn:Refuse<E>->Refuse<EE>):Attempt<I,O,EE>{
+  static public function errata<I,O,E,EE>(self:AttemptDef<I,O,E>,fn:E->EE):Attempt<I,O,EE>{
     return lift(FletcherLift.map(self,(oc) -> oc.errata(fn)));
-  }
-  static public function errate<I,O,E,EE>(self:AttemptDef<I,O,E>,fn:E->EE):Attempt<I,O,EE>{
-    return lift(FletcherLift.map(self,(oc) -> oc.errate(fn)));
   }
   static public function attempt<I,O,Oi,E>(self:AttemptDef<I,O,E>,next:Attempt<O,Oi,E>):Attempt<I,Oi,E>{
     return then(self,next.toModulate());

@@ -6,7 +6,7 @@ enum ProduceArgSum<O,E>{
   ProduceArgPure(o:O);
   ProduceArgSync(res:Upshot<O,E>);
   ProduceArgThunk(fn:Thunk<Upshot<O,E>>);
-  ProduceArgRefuse(Refuse:Refuse<E>);
+  ProduceArgError(Error:Error<E>);
   ProduceArgPledge(pledge:Pledge<O,E>);
   ProduceArgFunXProduce(fn:Void->Produce<O,E>);
   ProduceArgFletcher(fletcher:Fletcher<Nada,O,E>);
@@ -19,28 +19,28 @@ abstract ProduceArg<O,E>(ProduceArgSum<O,E>) from ProduceArgSum<O,E> to ProduceA
   private var self(get,never):ProduceArg<O,E>;
   private function get_self():ProduceArg<O,E> return lift(this);
   
-  @:from static public function fromFunXProduce<O,E>(fn:Void->Produce<O,E>):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromFunXProduce<O,E>(fn:Void->Produce<O,E>):ProduceArg<O,E>{
     return ProduceArgFunXProduce(fn);
   }
-  @:from static public function fromFletcher<O,E>(fletcher:Fletcher<Nada,O,E>):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromFletcher<O,E>(fletcher:Fletcher<Nada,O,E>):ProduceArg<O,E>{
     return ProduceArgFletcher(fletcher);
   }
-  @:from static public function fromPledge<O,E>(pledge:Pledge<O,E>):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromPledge<O,E>(pledge:Pledge<O,E>):ProduceArg<O,E>{
     return ProduceArgPledge(pledge);
   }
-  @:from static public function fromFuture<O,E>(self:Future<O>):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromFuture<O,E>(self:Future<O>):ProduceArg<O,E>{
     return ProduceArgPledge(Pledge.lift(self.map(__.accept)));
   }
-  @:from static public function fromRefuse<O,E>(Refuse:Refuse<E>):ProduceArg<O,E>{
-    return ProduceArgRefuse(Refuse);
+  @:noUsing @:from static public function fromError<O,E>(Error:Error<E>):ProduceArg<O,E>{
+    return ProduceArgError(Error);
   }
-  @:from static public function fromThunk<O,E>(fn:Thunk<Upshot<O,E>>):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromThunk<O,E>(fn:Thunk<Upshot<O,E>>):ProduceArg<O,E>{
     return ProduceArgThunk(fn);
   }
-  @:from static public function fromSync<O,E>(res:Upshot<O,E>):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromSync<O,E>(res:Upshot<O,E>):ProduceArg<O,E>{
     return ProduceArgSync(res);
   }
-  @:from static public function fromPure<O,E>(o:O):ProduceArg<O,E>{
+  @:noUsing @:from static public function fromPure<O,E>(o:O):ProduceArg<O,E>{
     return ProduceArgPure(o);
   }
 }
@@ -59,7 +59,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
       case ProduceArgPure(o)              : pure(o);
       case ProduceArgSync(res)            : Sync(res);
       case ProduceArgThunk(fn)            : Thunk(fn);
-      case ProduceArgRefuse(refuse)       : fromRefuse(refuse);
+      case ProduceArgError(refuse)       : fromError(refuse);
       case ProduceArgPledge(pledge)       : fromPledge(pledge);
       case ProduceArgFunXProduce(fn)      : fromFunXProduce(fn);
       case ProduceArgFletcher(fletcher)   : fromFletcher(fletcher);
@@ -80,7 +80,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
       (_:Nada,cont:Terminal<Upshot<O,E>,Nada>) -> cont.receive(self().forward(Nada))
     ));
   }
-  @:noUsing static public function fromRefuse<O,E>(e:Refuse<E>):Produce<O,E>{
+  @:noUsing static public function fromError<O,E>(e:Error<E>):Produce<O,E>{
     return Sync(__.reject(e));
   }
   @:noUsing static public function pure<O,E>(v:O):Produce<O,E>{
@@ -89,7 +89,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
   @:noUsing static public function accept<O,E>(v:O):Produce<O,E>{
     return Sync(__.accept(v));
   }
-  @:noUsing static public function reject<O,E>(e:Refuse<E>):Produce<O,E>{
+  @:noUsing static public function reject<O,E>(e:Error<E>):Produce<O,E>{
     return Sync(__.reject(e));
   }
   @:from @:noUsing static public function fromUpshot<O,E>(res:Upshot<O,E>):Produce<O,E>{
@@ -126,7 +126,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
       Fletcher.Anon((_:Nada,cont:Waypoint<O,E>) -> cont.receive(
           arw.forward(Nada).fold_mapp(
             (ok:O)          -> __.success(__.accept(ok)),
-            (no:Defect<E>)  -> __.success(__.reject(no.toRefuse()))
+            (no:Error<E>)  -> __.success(__.reject(no))
           )
         )
     ));
@@ -145,7 +145,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
     return lift(Fletcher.Anon(
       (_:Nada,cont:Waypoint<R,E>) -> {
         var memo                          = r;
-        var fail    : Null<Refuse<E>>  = null;
+        var fail    : Null<Error<E>>  = null;
         final cell  = Cell.make(
           () -> fail == null ? __.accept(memo) : __.reject(fail)
         );
@@ -185,7 +185,7 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
       (_:Nada,cont:Terminal<Upshot<O,E>,Nada>) -> cont.receive(self.forward(Nada))
     ));
   }
-  public inline function environment(success:O->Void,?failure:Refuse<E>->Void){
+  public inline function environment(success:O->Void,?failure:Error<E>->Void){
     return ProduceLift.environment(this,success,failure);
   }
   @:to public inline function toFletcher():Fletcher<Nada,Upshot<O,E>,Nada>{
@@ -208,8 +208,8 @@ typedef ProduceDef<O,E> = FletcherDef<Nada,Upshot<O,E>,Nada>;
   }
 }
 class ProduceLift{
-  static public inline function environment<O,E>(self:ProduceDef<O,E>,success:O->Void,?failure:Refuse<E>->Void):Fiber{
-    failure = failure ?? (e:Refuse<E>) ->  e.crack();
+  static public inline function environment<O,E>(self:ProduceDef<O,E>,success:O->Void,?failure:Error<E>->Void):Fiber{
+    failure = failure ?? (e:Error<E>) ->  e.crack();
     return FletcherLift.environment(
       self,
       Nada,
@@ -229,15 +229,12 @@ class ProduceLift{
       )
     ));
   }
-  static public function errata<O,E,EE>(self:ProduceDef<O,E>,fn:Refuse<E>->Refuse<EE>):Produce<O,EE>{
+  static public function errata<O,E,EE>(self:ProduceDef<O,E>,fn:E->EE):Produce<O,EE>{
     return lift(self.then(
       Fletcher.fromFun1R(
         (oc:Upshot<O,E>) -> oc.errata(fn)
       )
     ));
-  }
-  static public function errate<O,E,EE>(self:ProduceDef<O,E>,fn:E->EE):Produce<O,EE>{
-    return errata(self,(er) -> er.errate(fn));
   }
   /**
     Use the output to create an Execute.
@@ -379,9 +376,9 @@ class ProduceLift{
   static public function pledge<O,E>(self:ProduceDef<O,E>):Pledge<O,E>{
     return Pledge.lift(
       (FletcherLift.future(self,Nada)).map(
-        (outcome:Outcome<Upshot<O,E>,Defect<Nada>>) -> (outcome.fold(
+        (outcome:Outcome<Upshot<O,E>,Error<Nada>>) -> (outcome.fold(
           (x:Upshot<O,E>)       -> x,
-          (e:Defect<Nada>)      -> __.reject(e.elide().toRefuse())
+          (e:Error<Nada>)      -> __.reject(e.elide())
         ))
       )
     );

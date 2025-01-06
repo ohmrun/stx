@@ -278,7 +278,7 @@ abstract LinkedList<T>(LinkedListSum<T>) from LinkedListSum<T> to LinkedListSum<
   public function toCluster():Cluster<T>{
     return lfold(
       (n,m:Cluster<T>) -> m.snoc(n),
-      [].imm()
+      Cluster.unit()
     );
   }
 }

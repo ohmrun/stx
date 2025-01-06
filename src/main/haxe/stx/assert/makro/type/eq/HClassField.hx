@@ -26,7 +26,7 @@ class HClassField extends EqCls<THClassField>{
       eq = Eq.Bool().comply(a.isAbstract,b.isAbstract);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Makro().Type().HTypeParameter).comply(a.params,b.params);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().HTypeParameter).comply(a.params,b.params);
     }
     if(eq.is_ok()){
       eq = Eq.Makro().Expr().Metadata.comply(a.meta.get(),b.meta.get());
@@ -39,7 +39,7 @@ class HClassField extends EqCls<THClassField>{
     }
     //TODO pos?
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Makro().Type().HClassField).comply(a.overloads.get(),b.overloads.get());
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().HClassField).comply(a.overloads.get(),b.overloads.get());
     }
     return eq;
   }

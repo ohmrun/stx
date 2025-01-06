@@ -48,7 +48,7 @@ class TestCaseLift{
           ).map(
             __.decouple(
               (string,option:Option<MethodCall>) -> {
-                var value = option.resolve(f -> f.explain(_ -> _.e_dependency_not_found('$string'))).fudge();
+                var value = option.resolve(f -> f.digest((_:stx.Digests) -> _.e_dependency_not_found('$string'))).fudge();
                 return __.couple(string,value); 
               }  
             )  

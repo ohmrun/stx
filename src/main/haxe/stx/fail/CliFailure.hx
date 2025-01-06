@@ -39,7 +39,8 @@ enum CliFailureSum{
   E_Cli_Reason(f:CliFailure,reason:String);
   E_Cli_OptionExcludedBy(opt:stx.sys.cli.application.spec.OptionSpec.OptionSpecApi,v:stx.sys.cli.application.spec.OptionValue.OptionValueApi,tk:CliToken);
   E_Cli_NoValueFor(p:stx.sys.cli.application.spec.OptionSpec.OptionSpecApi);
-  E_Cli_Parse(e:ParseFailure);
+  E_Cli_Parse(f:ParseFailure);
+  E_Cli_ParseError(e:Error<ParseFailure>);
   /**
    * To avoid enforcing an explicit generic and passing it about.
    */

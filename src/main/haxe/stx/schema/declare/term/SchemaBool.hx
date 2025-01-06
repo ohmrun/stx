@@ -7,7 +7,7 @@ abstract SchemaBool(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Decla
       new DeclareNativeSchemaCls(
         Ident.make('Bool',['std']),
         null,
-        [].imm()
+        Cluster.unit()
       )
     );
   }

@@ -3,7 +3,7 @@ package sys.stx.asys;
 class Env implements EnvApi extends Clazz{
   public function get(str:String):Produce<Option<String>,ASysFailure>{
     return Produce.fromFunXUpshot(() -> try{
-      __.accept(Sys.env(str));
+      __.accept(__.option(Sys.getEnv(str)));
     }catch(e:Dynamic){
       __.reject(__.fault().of(E_ASys_EnvironmentVariablesInaccessible(str)));
     });

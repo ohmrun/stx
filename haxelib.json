@@ -13,7 +13,7 @@
     "version": "0.10.1",
     "url": "https://github.com/ohmrun/stx",
     "dependencies": {
-        "bake"              : "0.6.2",
+        "bake"              : "0.7.1",
         "console.hx"        : "https://github.com/0b1kn00b/console.hx",
         "tink_core"         : "2.1.1",
         "hscript"           : "2.5.0",

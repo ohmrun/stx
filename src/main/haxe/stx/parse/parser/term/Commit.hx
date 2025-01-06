@@ -10,11 +10,10 @@ class Commit<I,T> extends Base<I,T,Parser<I,T>>{
       //|| result.is_parse_fail()?
       () -> (!result.is_fatal()).if_else(
         () -> result,
-        () -> ParseResult.lift(
-          result.errata(
-            err -> err.concat(ParseFailure.make(@:privateAccess result.asset.content.index,'Cannot Commit',true).toRefuse())
-          )
-        )
+        () -> result.defect(
+          ErrorCtr.instance.Make(_ -> 
+            (new ParseLapse(FATAL,E_Parse_CanNotCommit,result.asset.index):Lapse<ParseFailure>).enlist()
+        ))
       )
     );
   }

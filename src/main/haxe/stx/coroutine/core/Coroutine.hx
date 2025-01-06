@@ -65,9 +65,9 @@ class CoroutineLift{
       case Emit(head,rest)            : __.emit(head,f(rest));
       case Wait(arw)                  : arw(Push(i));
       case Hold(h)                    : __.hold(h.mod(f));
-      case Halt(Production(v))        : __.exit(__.fault().explain(_ -> new stx.coroutine.core.Errors.ECoroutineStop()));
-      case Halt(Terminated(Stop))     : __.exit(__.fault().explain(_ -> new stx.coroutine.core.Errors.ECoroutineStop()));
-      case Halt(Terminated(Exit(e)))  : __.exit(e.concat(__.fault().explain(_ -> new stx.coroutine.core.Errors.ECoroutineStop())));
+      case Halt(Production(v))        : __.exit(__.fault().digest((_:Digests) -> _.e_coroutine_stop()));
+      case Halt(Terminated(Stop))     : __.exit(__.fault().digest((_:Digests) -> _.e_coroutine_stop()));
+      case Halt(Terminated(Exit(e)))  : __.exit(e.concat(__.fault().digest((_:Digests) -> _.e_coroutine_stop())));
     }
   }
   static public function map<I,O,Oi,R,E>(self:CoroutineSum<I,O,R,E>,fn:O->Oi):Coroutine<I,Oi,R,E>{
@@ -87,14 +87,14 @@ class CoroutineLift{
       case Halt(r)      : Halt(r);
     }
   }
-  static public inline function errata<I,O,R,E,EE>(prc:Coroutine<I,O,R,E>,fn:Refuse<E>->Refuse<EE>):Coroutine<I,O,R,EE>{
+  static public inline function errata<I,O,R,E,EE>(prc:Coroutine<I,O,R,E>,fn:Error<E>->Error<EE>):Coroutine<I,O,R,EE>{
     var f : Coroutine<I,O,R,E> -> Coroutine<I,O,R,EE> = errata.bind(_,fn);
     return switch prc {
       case Emit(o, next)    : __.emit(o,f(next));
       case Wait(fn)         : __.wait(
         (ctl:Control<I>) -> ctl.fold(
           (v) -> f(fn(Push(v))),
-          (e) -> Halt(Terminated(Exit(e.toRefuse()))),
+          (e) -> Halt(Terminated(e)),
           ()  -> Halt(Terminated(Stop))
         )
       );
@@ -365,13 +365,13 @@ class CoroutineLift{
         function(ctrl:Control<I>) : Coroutine<I,O,R,EE> {
           return ctrl.fold(
             ok -> f(tran(Push(ok))),
-            no -> __.term(Exit(no.toRefuse())),
+            no -> __.term(no),
             () -> __.stop()
           );
         }
       ));
       case Hold(held)                     : __.hold(held.mod(f));
-      case Halt(Terminated(Exit(r)))      : __.exit(r.errate(fn));
+      case Halt(Terminated(Exit(r)))      : __.exit(r.errata(fn));
       case Halt(Terminated(Stop))         : __.stop();
       case Halt(Production(r))            : __.prod(r);
     }

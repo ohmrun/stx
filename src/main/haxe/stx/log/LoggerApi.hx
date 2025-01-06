@@ -12,5 +12,11 @@ interface LoggerApi<T>{
   public function apply(v:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>;
   private function do_apply(v:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>;
 
+  private var output(get,null) : OutputApi;
+  private function get_output():OutputApi;
+
+  public function with_output(output : OutputApi):LoggerApi<T>;
   //public function configure(logic:APP<stx.log.Logic<T>,stx.log.Logic<T>>,format:APP<Format,Format>):LoggerApi<T>;
+
+  public function copy():LoggerApi<T>;
 }

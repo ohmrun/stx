@@ -11,7 +11,7 @@ class HEnumType extends EqCls<THEnumType>{
   public function comply(a:THEnumType,b:THEnumType):Equaled{
     var eq : Equaled = Eq.Map(Eq.Makro().Type().HEnumField).comply(a.constructs,b.constructs);
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.String()).comply(a.names,b.names);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.String()).comply(a.names,b.names);
     }
     return Eq.Makro().Type().HBaseType.comply(a.toBaseType(),b.toBaseType());
   }

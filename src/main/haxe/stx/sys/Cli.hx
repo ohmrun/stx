@@ -1,6 +1,6 @@
 package stx.sys;
 
-using stx.Nano;
+using stx.Pico;
 
 typedef SysArgs             = stx.sys.cli.SysArgs;
 typedef Arguments           = stx.sys.cli.Arguments;

@@ -1,9 +1,10 @@
 package eu.ohmrun;
 
+import tink.core.Future;
 
-using tink.CoreApi;
 using stx.Pico;
 using stx.Nano;
+using stx.Fail;
 using stx.Stream;
 using stx.Log;
 using stx.Assert;
@@ -11,7 +12,7 @@ using eu.ohmrun.fletcher.Core;
 using eu.ohmrun.Fletcher;
 using eu.ohmrun.fletcher.Logging;
 
-typedef ArwOutDef<R,E>    = Outcome<R,Defect<E>>;
+typedef ArwOutDef<R,E>    = Outcome<R,Error<E>>;
 typedef ArwOut<R,E>       = ArwOutDef<R,E>; 
 
 interface FletcherApi<P,Pi,E> extends StxMemberApi{
@@ -140,7 +141,7 @@ class FletcherLift{
   static public function lift<P,R,E>(self:FletcherDef<P,R,E>):Fletcher<P,R,E>{
     return Fletcher.lift(self);
   }
-  static public function environment<P,Pi,E>(self:Fletcher<P,Pi,E>,p:P,success:Pi->Void,?failure:Defect<E>->Void,?pos:Pos):Fiber{
+  static public function environment<P,Pi,E>(self:Fletcher<P,Pi,E>,p:P,success:Pi->Void,?failure:Error<E>->Void,?pos:Pos):Fiber{
     final context     = __.ctx(p,success,failure);
     final process     = self;
     final completion  = new eu.ohmrun.fletcher.Completion(context,process);
@@ -175,7 +176,7 @@ class FletcherLift{
       },
       (no) -> {
         __.log().debug('fudged:fail');
-        val = __.reject(no.toRefuse());
+        val = __.reject(no);
       }
     ).crunch();
     __.assert().that().exists(val);
@@ -227,7 +228,7 @@ class FletcherLift{
   static public function broach<Oi,Oii,E>(self:FletcherDef<Oi,Oii,E>):Fletcher<Oi,Couple<Oi,Oii>,E>{
     return bound(self,Fletcher.Sync(__.decouple(__.couple)));
   }
-  static public function future<P,O,E>(self:FletcherDef<P,O,E>,p:P):Future<Outcome<O,Defect<E>>>{
+  static public function future<P,O,E>(self:FletcherDef<P,O,E>,p:P):Future<Outcome<O,Error<E>>>{
     return Future.irreversible(
       cb -> environment(
         self,
@@ -244,7 +245,7 @@ class FletcherLift{
           return cont.receive(
             self.forward(i).fold_mapp(
               (ok:R)          -> __.success(__.accept(ok)),
-              (no:Defect<E>)  -> __.success(__.reject(no.toRefuse()))
+              (no:Error<E>)  -> __.success(__.reject(no))
             )
           );
         }
@@ -364,7 +365,7 @@ class LiftProvideLoad{
   static public function load<P,R,E>(self:Context<Nada,R,Nada>,arrowlet:Provide<R>):Fiber{
     return Fiber.lift(new eu.ohmrun.fletcher.Completion(self,arrowlet.toFletcher()));
   }
-  // static public function fly<R,E>(wildcard:Wildcard,arrowlet:Provide<R>,?on_value:R->Void,?on_error:Defect<Nada>->Void):Fiber{
+  // static public function fly<R,E>(wildcard:Wildcard,arrowlet:Provide<R>,?on_value:R->Void,?on_error:Error<Nada>->Void):Fiber{
   //   return Fiber.lift(new eu.ohmrun.fletcher.Completion(Context.make(Nada,on_value,on_error),arrowlet));
   // }
 }

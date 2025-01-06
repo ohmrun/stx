@@ -59,7 +59,7 @@ typedef WithDef<C,D,E> = E -> Triple<C,D,E>;
         }
         switch(type){
           case TType(_,[a,b,c]) :
-            final expr = dive(c,'2').or(dive.bind(b,'1')).or(dive.bind(a,'0')).fudge(__.fault().explain(_ -> _.e_no_field('$name')));
+            final expr = dive(c,'2').or(dive.bind(b,'1')).or(dive.bind(a,'0')).fudge(__.fault().digest((_:Digests) -> _.e_no_field('$name')));
             //trace(p.printExpr(expr));
             expr;
           default : 

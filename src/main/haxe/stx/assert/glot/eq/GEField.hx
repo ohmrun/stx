@@ -11,9 +11,9 @@ class GEField extends stx.assert.eq.term.Base<GEFieldT> {
     if(eq.is_ok()){
       final ctr = () -> RedBlackSet.make(Comparable.Anon(new GAccess(),new stx.assert.glot.ord.GAccess()));
       var lset = ctr();
-          lset = lset.concat(__.option(lhs.access).defv([].imm()));
+          lset = lset.concat(__.option(lhs.access).defv(Cluster.unit()));
       var rset = ctr();
-          rset = rset.concat(__.option(rhs.access).defv([].imm()));
+          rset = rset.concat(__.option(rhs.access).defv(Cluster.unit()));
       eq = lset.equals(rset);
     }
     if(eq.is_ok()){

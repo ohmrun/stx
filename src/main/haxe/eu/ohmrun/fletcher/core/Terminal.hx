@@ -33,7 +33,7 @@ class TerminalLift{
   static function lift<R,E>(self:TerminalApi<R,E>):Terminal<R,E>{
     return Terminal.lift(self);
   }
-  static public inline function error<R,E>(self:Terminal<R,E>,e:Defect<E>):Receiver<R,E>{
+  static public inline function error<R,E>(self:Terminal<R,E>,e:Error<E>):Receiver<R,E>{
     return issue(self,__.failure(e));
   }
   static public inline function value<R,E>(self:Terminal<R,E>,r:R):Receiver<R,E>{
@@ -48,7 +48,7 @@ class TerminalLift{
       }
     ).prj());
   } 
-  static public inline function later<R,E>(self:Terminal<R,E>,ft:Future<Outcome<R,Defect<E>>>,?pos:Pos):Receiver<R,E>{
+  static public inline function later<R,E>(self:Terminal<R,E>,ft:Future<Outcome<R,Error<E>>>,?pos:Pos):Receiver<R,E>{
     __.log().debug('later $self');
     return Receiver.lift(
       Cont.Anon((r_ipt:ReceiverSinkApi<R,E>) -> {

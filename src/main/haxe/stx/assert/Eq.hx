@@ -1,6 +1,6 @@
 package stx.assert;
 
-import stx.nano.Couple as StdCouple;
+import stx.pico.Couple as StdCouple;
 
 
 import stx.assert.eq.term.Primitive; 

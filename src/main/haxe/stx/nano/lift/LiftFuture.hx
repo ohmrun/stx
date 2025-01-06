@@ -28,7 +28,7 @@ class LiftFuture{
     var trigger = Future.trigger();
     var on_done = function(){
       switch([left,right]){
-        case [Some(l),Some(r)]  : trigger.trigger(__.couple(l,r));
+        case [Some(l),Some(r)]  : trigger.trigger(Couple.make(l,r));
         default                 :
       }
     }

@@ -1,6 +1,6 @@
 package stx.assert;
 
-import stx.nano.Couple as StdCouple;
+import stx.pico.Couple as StdCouple;
 
 import stx.assert.comparable.term.Primitive;
 import stx.assert.comparable.term.Int;
@@ -48,8 +48,8 @@ abstract class ComparableCls<P> implements ComparableApi<P>{
   @:noUsing static public function Lazy<T>(?eq:Eq<T>,?lt:Ord<T>):Comparable<T>{
     return new stx.assert.comparable.term.Lazy(eq,lt);
   }
-  @:noUsing static public function KV<K,V>(K:Comparable<K>,V:Comparable<V>):Comparable<stx.nano.KV<K,V>>{
-    return new stx.assert.comparable.term.KV(K,V);
+  @:noUsing static public function KV<K,V>(_K:Comparable<K>,_V:Comparable<V>):Comparable<stx.nano.KV<K,V>>{
+    return new stx.assert.comparable.term.KV(_K,_V);
   }
   public function copy(?eq:Eq<T>,?lt:Ord<T>):Comparable<T>{
     return Anon(

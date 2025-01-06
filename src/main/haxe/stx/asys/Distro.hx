@@ -13,7 +13,7 @@ enum abstract Distro(String){
       case "Linux"    : "Linux";
       case "BSD"      : "BSD";
       case "Mac"      : "Mac";
-      case x          :  throw __.fault().explain(_ -> _.e_unknown_distro(x));
+      case x          :  throw __.fault().digest((_:stx.Digests) -> _.e_unknown_distro(x));
     }
   }
   public function is_windows(){

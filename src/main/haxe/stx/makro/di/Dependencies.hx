@@ -34,7 +34,7 @@ using stx.makro.di.DI;
       initialized   = true;
       var registry  = new stx.makro.di.Registry();
       //trace(registry.length);
-      var queue     = new tink.priority.Queue();
+      var queue     = [];
       for (clazz in registry){
         //trace(clazz);
         var configurator  = std.Type.createEmptyInstance(clazz);
@@ -43,7 +43,7 @@ using stx.makro.di.DI;
       for(app in queue){
         var def = __.definition(app);
         //trace('app: $app');
-        app.react(instance.deferred);
+        app.data.react(instance.deferred);
       }
       var overrides = std.Type.createEmptyInstance(stx.makro.di.Overrides);
           overrides.react(@:privateAccess instance.deferred);

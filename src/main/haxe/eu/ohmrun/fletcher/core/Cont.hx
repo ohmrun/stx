@@ -8,7 +8,7 @@ interface ContApi<P,R>{
 }
 abstract class ContCls<P,R> implements ContApi<P,R>{
   public function new(){
-    this.uuid = __.uuid("xxxxx");
+    this.uuid = __.uuid("xxxxx").toString();
   }
   abstract public function apply(p:Apply<P,R>):R;
   public inline function toCont():Cont<P,R>{

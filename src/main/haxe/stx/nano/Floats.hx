@@ -1,5 +1,8 @@
 package stx.nano;
 
+import stx.alias.StdMath;
+using stx.nano.Floats;
+
 class Floats {
 	//static public inline function pow(n0:)
 	/**

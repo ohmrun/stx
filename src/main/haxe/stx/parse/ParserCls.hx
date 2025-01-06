@@ -1,6 +1,6 @@
 package stx.parse;
 
-abstract class ParserCls<I,O> implements ParserApi<I,O> extends Clazz{
+abstract class ParserCls<P,R> implements ParserApi<P,R> extends Clazz{
   public function new(?tag:Option<String>,?pos:Pos){
     super();
     this.pos    = pos;
@@ -10,9 +10,9 @@ abstract class ParserCls<I,O> implements ParserApi<I,O> extends Clazz{
   
   public var tag                                : Option<String>;
  
-  abstract public function apply(p:ParseInput<I>):ParseResult<I,O>;
+  abstract public function apply(p:ParseInput<P>):ParseResult<P,R>;
   
-  public inline function asParser():Parser<I,O>{
+  public inline function asParser():Parser<P,R>{
     return new Parser(this);
   }
   public function toString(){

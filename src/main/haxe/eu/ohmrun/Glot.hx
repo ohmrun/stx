@@ -4,6 +4,7 @@ import haxe.macro.Expr;
 
 import stx.fail.OMFailure;
 
+using stx.Pico;
 using stx.Nano;
 using stx.Log;
 using stx.om.Spine;
@@ -18,6 +19,9 @@ class Lang{
 
 typedef GlotFailure                 = stx.fail.GlotFailure;
 typedef GSource                     = eu.ohmrun.glot.GSource;
+
+typedef GAbstractFlag               = eu.ohmrun.glot.expr.GAbstractFlag;
+typedef GAbstractFlagCtr            = eu.ohmrun.glot.expr.GAbstractFlag.GAbstractFlagCtr;
 
 typedef GAccessCtr                  = eu.ohmrun.glot.expr.GAccess.GAccessCtr;
 typedef GAccessSum                  = eu.ohmrun.glot.expr.GAccess.GAccessSum;
@@ -123,6 +127,18 @@ typedef GVarCtr                     = eu.ohmrun.glot.expr.GVar.GVarCtr;
 typedef GVarDef                     = eu.ohmrun.glot.expr.GVar.GVarDef;
 typedef GVar                        = eu.ohmrun.glot.expr.GVar;
 
+typedef GType                       = eu.ohmrun.glot.type.GType;
+// typedef GTypeSum                    = eu.ohmrun.glot.type.GTypeSum;
+
+
+// typedef GClassTypeCtr               = eu.ohmrun.glot.type.GClassType.GClassTypeCtr;
+// typedef GClassTypeDef               = eu.ohmrun.glot.type.GClassType.GClassTypeDef;
+typedef GClassType                  = eu.ohmrun.glot.type.GClassType;
+
+// typedef GTypedExprDefCtr            = eu.ohmrun.glot.type.GTypedExprDef.GTypedExprDefCtr;
+// typedef GTypedExprdefDef            = eu.ohmrun.glot.type.GTypedExprdef.GTypedExprdefDef;
+typedef GTypedExprdef               = eu.ohmrun.glot.type.GTypedExprdef;
+
 class LiftAccessToGlot{
   #if macro
   static public function toGlot(self:Access):GAccess{
@@ -212,7 +228,7 @@ class SpineToGlot{
     return new stx.om.spine.glot.ToGlot().apply(self);
   }
 }
-class LiftComplextTypeToGlot{
+class LiftComplexTypeToGlot{
   #if macro
   static public function toGlot(self:ComplexType):GComplexType{
 		return @:privateAccess switch(self){
@@ -448,9 +464,10 @@ class LiftTypeDefKindToGlot{
           isAbstract
         );
       case TDAlias( t ) : GTDAlias(t.toGlot());
-      case TDAbstract( tthis , from , to ) :
+      case TDAbstract( tthis , flags, from , to ) :
           GTDAbstract(
             __.option(tthis).map(x -> x.toGlot()).defv(null),
+            __.option(flags).map( x -> x.map(x -> x.toGlot())).defv([]),
             __.option(from).map(x -> x.map(y -> y.toGlot())).defv([]),
             __.option(to).map(x -> x.map(y -> y.toGlot())).defv([])
           );
@@ -529,4 +546,15 @@ class PmlGlotMod{
   static public function glot(self:eu.ohmrun.pml.Module):eu.ohmrun.pml.term.glot.Module{
     return new eu.ohmrun.pml.term.glot.Module();
   }
+}
+class LiftAbstractFlagToGlot{
+  #if macro
+  static public function toGlot(self:AbstractFlag):GAbstractFlag{
+    return switch(self){
+      case AbEnum     : GAbEnum;
+      case AbFrom(ct) : GAbFrom(LiftComplexTypeToGlot.toGlot(ct));
+      case AbTo(ct)   : GAbTo(LiftComplexTypeToGlot.toGlot(ct));
+    }
+  }
+  #end
 }

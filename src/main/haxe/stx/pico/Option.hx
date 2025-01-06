@@ -31,7 +31,7 @@ abstract Option<T>(OptionSum<T>) from OptionSum<T> to OptionSum<T>{
   /**
 	 * Produces Option.Some(t) if `t` is not null, Option.None otherwise.
 	**/
-  @:noUsing static public function make<T>(t: T): Option<T> {
+  @:noUsing static public function make<T>(?t: T): Option<T> {
     return if (t == null) unit(); else pure(t);
   }
   public function toString(){
@@ -78,8 +78,10 @@ class OptionLift{
     return flat_map(self,(v) -> fn(v) ? Some(v) : None);
   }
   /**
-	 * Produces the value of `self` if not `None`, the result of `thunk` otherwise.
-	**/
+   * Produces the value of `self` if not `None`, the result of `thunk` otherwise.
+   * @param self 
+   * @return Iterator<T>
+   */
   static public inline function def<T>(self: OptionSum<T>, thunk: Void->T): T {
     return switch(self){
       case Some(v)  : v;
@@ -88,7 +90,11 @@ class OptionLift{
   }
   /**
    * Returns the inner value of `self` or the value `v` if `self ` is `None`
-  **/
+   * @param self 
+   * @param that 
+   * @param fn 
+   * @return OptionSum<T>
+   */
   static public inline function defv<T>(self:OptionSum<T>,v:T):T
     return switch(self){
       case Some(v)  : v;
@@ -96,8 +102,12 @@ class OptionLift{
     }
   
   /**
-    returns `true` if self is `Some(v)`, `false` otherwise.
-  **/
+   * returns `true` if self is `Some(v)`, `false` otherwise.
+   * @param self 
+   * @param that 
+   * @param fn 
+   * @return OptionSum<T>
+   */
   static public function is_defined<T>(self:OptionSum<T>){
     return fold(self,(x) -> true,() -> false);
   }

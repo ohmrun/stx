@@ -1,27 +1,9 @@
 package stx.parse;
 
+import haxe.Exception;
 import stx.nano.Equity.EquityLift;
 
-@:using(stx.parse.ParseResult.ParseResultLift)
-class ParseResultCls<P,R> extends EquityCls<ParseInput<P>,Option<R>,ParseFailure>{
-  public function toString():String{
-    return ParseResultLift.toString(this);
-  }
-  public function errate(fn:ParseFailure->ParseFailure):ParseResult<P,R>{
-    return errata(x -> x.errate(fn));
-  }
-  public function errata(fn:Refuse<ParseFailure>->Refuse<ParseFailure>):ParseResult<P,R>{
-    return ParseResult.make(this.asset,this.value,this.error.errata(fn));
-  }
-  public function with_errata(error:Refuse<ParseFailure>):ParseResult<P,R>{
-    return this.errata(e -> e.concat(error));
-  }
-}
-typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & {
-  public function errate(fn:ParseFailure->ParseFailure):ParseResult<P,R>;
-  public function errata(fn:Refuse<ParseFailure>->Refuse<ParseFailure>):ParseResult<P,R>;
-  public function with_errata(error:Refuse<ParseFailure>):ParseResult<P,R>;
-}
+typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure>;
 
 @:using(stx.nano.Equity.EquityLift)
 @:using(stx.parse.ParseResult.ParseResultLift)
@@ -29,14 +11,15 @@ typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & 
   
   public function new(self) this = self;
   @:noUsing static public function lift<P,R>(self:ParseResultDef<P,R>):ParseResult<P,R> return new ParseResult(self);
-  @:noUsing static public function make<I,O>(asset:ParseInput<I>,value:Option<O>,error:Refuse<ParseFailure>):ParseResult<I,O>{
-    return lift(new ParseResultCls(error,value,asset));
+  @:noUsing static public function make<I,O>(asset:ParseInput<I>,value:Option<O>,error:Error<ParseFailure>):ParseResult<I,O>{
+    final def : ParseResultDef<I,O> = new EquityCls(error,value,asset);
+    return lift(def);
   }
   @:from static public function fromEquity<P,R>(self:Equity<ParseInput<P>,Option<R>,ParseFailure>):ParseResult<P,R>{
     return make(self.asset,self.value,self.error);
   }
   public inline function map<Ri>(fn:R->Ri):ParseResult<P,Ri>{
-    return fromEquity(EquityLift.map(this.toEquity(),opt -> opt.map(fn)));
+    return fromEquity(EquityLift.map(this,opt -> opt.map(fn)));
   }
   public inline function is_ok(){
     return this.error.is_defined() == false;
@@ -44,8 +27,15 @@ typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & 
   public inline function fails<Ri>():ParseResult<P,Ri>{
     return make(this.asset,None,this.error);
   }
+  /**
+   * Pretend error type `E` is `Dynamic`
+   * @return ParseResult<P,Dynamic>
+   */
   public function elide():ParseResult<P,Dynamic>{
     return this;
+  }
+  public function defect(next:Error<ParseFailure>):ParseResult<P,R>{
+    return EquityLift.defect(this,next);
   }
   public function prj():ParseResultDef<P,R> return this;
   private var self(get,never):ParseResult<P,R>;
@@ -57,11 +47,24 @@ typedef ParseResultDef<P,R> = EquityDef<ParseInput<P>,Option<R>,ParseFailure> & 
   public function toChunk(){
     return ParseResultLift.toChunk(this);
   }
-  // public function errata(fn:Refuse<ParseFailure>->Refuse<ParseFailure>):ParseResult<P,R>{
+  // public function errata(fn:Error<ParseFailure>->Error<ParseFailure>):ParseResult<P,R>{
   //   return _.errata(this,fn);
   // }
   public function toUpshot(){
     return ParseResultLift.toUpshot(this);
+  }
+  /**
+   * Error is fatal if any of the Lapses contains a crack.
+   * @return `Bool`
+   */
+  public function is_fatal():Bool{
+    return this.error.lapse.toIter().lfold(
+      (n:Lapse<ParseFailure>,m:Bool) -> m.if_else(
+        () -> true,
+        () -> n.crack != null
+      ),
+      false
+    );
   }
 }
 class ParseResultLift{
@@ -94,7 +97,7 @@ class ParseResultLift{
   static public inline function toUpshot<P,R>(self:ParseResult<P,R>):Upshot<Option<R>,ParseFailure>{
     return switch(self.is_ok()){
       case true   : __.accept(self.value);
-      case false  : __.reject(self.toDefect().toRefuse());
+      case false  : __.reject(self.toDefect().error);
     };
   }
   static public inline function toChunk<P,R>(self:ParseResult<P,R>):Chunk<R,ParseFailure>{
@@ -108,7 +111,10 @@ class ParseResultLift{
         End(self.error);
     }
   }
-  // static public function errata<I,O>(self:ParseResultDef<I,O>,fn:Refuse<ParseFailure>->Refuse<ParseFailure>):ParseResult<I,O>{
+  static public function errata<P,R>(self:ParseResultDef<P,R>,fn:ParseFailure->ParseFailure):ParseResult<P,R>{
+    return ParseResult.make(self.asset,self.value,self.error.errata(fn));
+  }
+  // static public function errata<I,O>(self:ParseResultDef<I,O>,fn:Error<ParseFailure>->Error<ParseFailure>):ParseResult<I,O>{
   //   return ParseResult.make(self.asset,self.value,self.error.errata(fn));
   // }
 }

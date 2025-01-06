@@ -1,5 +1,6 @@
 package stx;
 
+using stx.Pico;
 using stx.Nano;
 using stx.Assert;
 
@@ -8,7 +9,7 @@ class Fp{
    * Type Ninja.
    * @param opt 
    */
-  @:allow(stx)static private dynamic function handle<T>(opt:T):Void{
+  @:noUsing @:allow(stx)static private dynamic function handle<T>(opt:T):Void{
 
   }
   static public function with<A,B,C>(wildcard:Wildcard,a:A,b:B):With<A,B,C>{

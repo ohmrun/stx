@@ -43,9 +43,9 @@ class LinkedList<T> extends EnumerableCls<StxLinkedList<T>,T>{
     }
     return new LinkedList(x,index+n);
   }
-  public function head():Chunk<T,ParseFailureCode>{
+  public function head():Chunk<T,ParseFailure>{
     return if(index >= this.data.size()){
-      End(__.fault().of(E_Parse_Eof));
+      End(__.fault().of(EOF));
     }else{
       Val(this.data.head());
     }

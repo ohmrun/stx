@@ -32,7 +32,7 @@ package stx.test;
               cb(__.triple(pos,this,AsyncResult.pure(v)));
             }
           );
-        }catch(e:Error<Dyn>){
+        }catch(e:Error<Dynamic>){
           __.log().debug('$e');
           this.error(e,pos);
           cb(__.triple(pos,this,AsyncResult.unit()));

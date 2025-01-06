@@ -1,8 +1,9 @@
 package stx.nano;
 
-
 import haxe.Json;
 import haxe.io.Bytes;
+
+import stx.alias.StdString;
 
 // #if stx_log
 //   using stx.Log;
@@ -22,7 +23,7 @@ abstract Resource(StdString){
       if(pos == null){
         throw('E_ResourceNotFound($str)');
       }else{
-        var error = __.fault(pos).explain(_ -> _.e_resource_not_found(str));
+        var error = Fault.make(pos).digest((_:Digests) -> _.e_resource_not_found(str));
         // #if stx_log
         // __.log().info('resource "$str" not found.');
         // #end
@@ -49,9 +50,9 @@ abstract Resource(StdString){
    * Produces a `Dynamic` value by parsing the resource as json.
    * @return Dyn
    */
-  public function json():Dyn{
+public function json():Dynamic{
     return try{
-      Json.parse(string());
+      haxe.Json.parse(string());
     }catch(e:Dynamic){
       throw('ERROR parsing $this: $e');
     }

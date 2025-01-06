@@ -8,7 +8,7 @@ class Always<I> extends Sync<I,I>{
         #if debug __.log().trace('$i'); #end
         input.nil();
       case End(e):
-        e.toParseResult_with(input,false);
+        ParseResult.make(input,None,e);
       case Tap:
         #if debug trace("nil"); #end
         input.nil();

@@ -117,10 +117,10 @@ class SlotLift{
   }
   static public function zip<T,Ti>(self:Slot<T>,that:Slot<Ti>):Slot<Couple<T,Ti>>{
     return switch([self.ready,that.ready]){
-      case [true,true]    : Slot.Ready(__.couple(self.data,that.data));
-      case [true,false]   : that.map(rhs -> __.couple(self.data,rhs));
-      case [false,true]   : self.map(lhs -> __.couple(lhs,that.data));
-      case [false,false]  : Slot.Guard(self.guard.merge(that.guard,__.couple));
+      case [true,true]    : Slot.Ready(Couple.make(self.data,that.data));
+      case [true,false]   : that.map(rhs -> Couple.make(self.data,rhs));
+      case [false,true]   : self.map(lhs -> Couple.make(lhs,that.data));
+      case [false,false]  : Slot.Guard(self.guard.merge(that.guard,Couple.make));
     }
   }
 }

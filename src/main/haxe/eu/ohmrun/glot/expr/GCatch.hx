@@ -6,8 +6,8 @@ class GCatchCtr extends Clazz{
   public function Make(name:String,expr:CTR<GExprCtr,GExpr>,type:CTR<GComplexTypeCtr,GComplexType>){
     return GCatch.make(
       name,
-      expr(Expr.GExpr),
-      __.option(type).map(f -> f(Expr.GComplexType)).defv(null)
+      expr.apply(Expr.GExpr),
+      __.option(type).map(f -> f.apply(Expr.GComplexType)).defv(null)
     );
   }
 }

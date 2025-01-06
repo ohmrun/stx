@@ -6,7 +6,7 @@ final Eq = __.assert().Eq();
 
 class HFunction extends stx.assert.eq.term.Base<THFunction> {
   public function comply(lhs:THFunction,rhs:THFunction){
-    var eq = Eq.ArrayEq(Eq.Makro().Expr().HFunctionArg).comply(lhs.args,rhs.args);
+    var eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HFunctionArg).comply(lhs.args,rhs.args);
     if(eq.is_ok()){
       eq = Eq.NullOr(Eq.Makro().Expr().HComplexType).comply(lhs.ret,rhs.ret);
     }
@@ -14,7 +14,7 @@ class HFunction extends stx.assert.eq.term.Base<THFunction> {
       eq = Eq.NullOr(Eq.Makro().Expr().Expr).comply(lhs.expr,rhs.expr);
     }
     if(eq.is_ok()){
-      eq = Eq.NullOr(Eq.ArrayEq(Eq.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
+      eq = Eq.NullOr(new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HTypeParamDecl)).comply(lhs.params,rhs.params);
     }
     return eq;
   }

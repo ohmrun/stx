@@ -1,5 +1,7 @@
 package stx.assert.eq.term;
 
+import stx.nano.Iter.IterLift;
+import stx.nano.Chars.CharsLift;
 import haxe.ds.StringMap in TStringMap;
 
 /**
@@ -69,7 +71,7 @@ class StringMap<T> extends EqCls<TStringMap<T>>{
       //trace(res);
       return res.value; 
     }
-    return if(lhs.size() == rhs.size()){
+    return if(IterLift.size(lhs) == IterLift.size(rhs)){
       var set   = [];
       for(x in lhs.keys()){
         set = set_add(set,x);

@@ -31,7 +31,7 @@ class OrdTagCtr{
   static public inline function String(tag:TAG):Ord<std.String>{
     return new String();
   }
-  static public inline function Couple<L,R>(tag:TAG, l,r):Ord<stx.nano.Couple<L,R>>{
+  static public inline function Couple<L,R>(tag:TAG, l,r):Ord<stx.pico.Couple<L,R>>{
     return new Couple(l,r);
   }
   static public inline function KV<L,R>(tag:TAG, l,r):Ord<stx.nano.KV<L,R>>{

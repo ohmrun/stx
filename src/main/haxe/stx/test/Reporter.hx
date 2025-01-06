@@ -8,7 +8,7 @@ class Reporter extends Clazz{
     this.stream   = stream;
     this.printing = #if macro new sys.stx.test.reporter.MacroReporting() #else new stx.test.reporter.RuntimeReporting() #end; 
   }
-  private function close(err:Refuse<Dynamic>):Void{
+  private function close(err:Error<Dynamic>):Void{
     if(err != null){
       __.log().error(err.toString());
     }
@@ -34,7 +34,7 @@ class Reporter extends Clazz{
     // __.log().debug(_ -> _.show(std.Sys.getEnv('HOME')));
     // __.log().debug(_ -> _.show(std.Sys.getEnv('STX_TEST__VERBOSE')));
     #if (sys || nodejs)
-      final is_verbose = Sys.env('STX_TEST__VERBOS E').is_defined();
+      final is_verbose = __.option(Sys.getEnv('STX_TEST__VERBOSE')).is_defined();
       __.log().info('STX_TEST__VERBOSE = $is_verbose');
     #end
 
@@ -58,7 +58,7 @@ class Reporter extends Clazz{
           }
         case TP_ReportFatal(err)                  : 
           p.println('<red>${err.toString()}</red>');
-          p.println('${err.stack}');
+          // p.println('${err.stack}');
         case TP_Setup(err)
            | TP_Before(err)
            | TP_After(err) 
@@ -103,7 +103,7 @@ class Reporter extends Clazz{
                   #if debug
                     true;
                   #elseif (sys || nodejs)
-                    Sys.env('STX_TEST_VERBOSE').is_defined();
+                   __.option(Sys.getEnv('STX_TEST_VERBOSE')).is_defined();
                   #else
                     false;
                   #end
@@ -129,7 +129,7 @@ class Reporter extends Clazz{
             }
           }
           if(!test_suite.is_clean()){
-            close(__.fault().explain(_ -> _.e_suite_failed()));
+            close(__.fault().digest((_:stx.Digests) -> _.e_suite_failed()));
           }else{
             close(null);
           }

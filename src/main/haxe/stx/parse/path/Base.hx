@@ -66,7 +66,7 @@ class Base extends ParserCls<String,Cluster<Token>>{
 
 
 	public function p_path_chars(){
-		final not_sep = p_sep().not().tag_error('p_path_chars.p_sep');
+		final not_sep = p_sep().not().with_tag('p_path_chars.p_sep');
 		final char 		= char_and_space.or(p_special_chars); 
 		return 
 			not_sep._and(char.or(".".id()))
@@ -170,12 +170,12 @@ class Base extends ParserCls<String,Cluster<Token>>{
 			(tp) -> tp.decouple(
 				(tp,c:StdOption<Cluster<Token>>) -> tp.decouple(
 					(a:Null<Token>,b:Option<Token>) -> switch([a,b,c]){
-						case [null,None,None]							: [FPTRel].imm();
-						case [null,None,Some(v)] 	 				: [FPTRel].imm().concat(v);
-						case [head,None,Some(v)]  				: [head].imm().concat(v);
-						case [head,Some(tail),Some(v)]  	: [head,tail].imm().concat(v);
-						case [head,Some(tail),None]  			: [head,tail].imm();
-						case [head,None,None]  						: [head].imm();
+						case [null,None,None]							: Cluster.pure(FPTRel);
+						case [null,None,Some(v)] 	 				: Cluster.pure(FPTRel).concat(v);
+						case [head,None,Some(v)]  				: Cluster.pure(head).concat(v);
+						case [head,Some(tail),Some(v)]  	: Cluster.make([head,tail]).concat(v);
+						case [head,Some(tail),None]  			: Cluster.make([head,tail]);
+						case [head,None,None]  						: Cluster.pure(head);
 					}
 				)
 			)

@@ -1,15 +1,18 @@
 package stx.parse.parser.term;
 
+/**
+ * Parser that produces a single value from the input if one exists.
+ */
 class Something<I> extends Sync<I,I>{
   inline public function apply(input:ParseInput<I>):ParseResult<I,I>{
     return if(input.is_end()){
-      input.erration('EOF').failure(input);
+      input.eof();
     }else{
       __.log().trace('${input.head().def(null)}');
       input.head().fold(
         v 	-> input.tail().ok(v),
-        e 	-> e.toParseFailure_with(input).failure(input),
-        () 	-> input.tail().erration('Something').failure(input)
+        e 	-> ParseResult.make(input,None,e),
+        () 	-> input.tail().no()
       );
     }
   }

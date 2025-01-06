@@ -3,8 +3,18 @@ package stx;
 import haxe.CallStack;
 import haxe.Exception;
 
-enum Pico{
-  Pico;
+class Pico{
+  /**
+    Best guess at platform filesystem seperator string
+  **/
+  static public function sep():String{
+    #if sys
+      var out = new haxe.io.Path(std.Sys.getCwd()).backslash ? "\\" : "/";
+    #else
+      var out = "/";
+    #end
+    return out;
+  }
 }
 interface StxMemberApi{
   public var stx_tag(get,null) : Int;
@@ -35,19 +45,23 @@ class PosLift{
       return '$pos';
     #end
   }
+  static public function toLoc(self:Pos,index=0){
+    return #if macro Loc.make(index,self); #else Loc.make(index,null,self); #end
+  }
 }
+typedef LocDef  = stx.pico.Loc.LocDef;
+typedef LocCtr  = stx.pico.Loc.LocCtr;
+typedef Loc     = stx.pico.Loc;
+
 #if tink_core
 @:dox(hide) @:noCompletion typedef Future<T>                      = tink.core.Future<T>;
 #end
 @:dox(hide) @:noCompletion typedef Nada                           = stx.pico.Nada;
 @:dox(hide) @:noCompletion typedef StdArray<T>                    = std.Array<T>;
-@:dox(hide) @:noCompletion typedef StdString                      = std.String;
 @:dox(hide) @:noCompletion typedef StdInt                         = Int;
 @:dox(hide) @:noCompletion typedef StdFloat                       = Float;
 @:dox(hide) @:noCompletion typedef StdBool                        = Bool;
-@:dox(hide) @:noCompletion typedef StdDate                        = Date;
 @:dox(hide) @:noCompletion typedef StdOption<T>                   = haxe.ds.Option<T>;
-@:dox(hide) @:noCompletion typedef StdEnum<T>                     = Enum<T>;
 @:dox(hide) @:noCompletion typedef StdDynamic                     = Dynamic;
 
 @:dox(hide) @:noCompletion typedef OptionSum<T>                   = stx.pico.Option.OptionSum<T>;//Publish Constructors.
@@ -92,11 +106,18 @@ typedef Embed<T>                = stx.pico.Embed<T>;
 @:dox(hide) @:noCompletion typedef IteratorLift                   = stx.lift.IteratorLift;
 @:dox(hide) @:noCompletion typedef IterableLift                   = stx.lift.IterableLift;
 
+typedef Uuid = stx.pico.Uuid;
+typedef Stash<T> = stx.pico.Stash<T>;
+
 enum abstract Tag(Null<Dynamic>){
   var Tag = null;
   @:from static function ofAny<T>(t:Null<T>):Tag
     return Tag;
 }
+
+// typedef EdictDef              = stx.pico.Edict.EdictDef;
+// typedef EdictApi              = stx.pico.Edict.EdictApi;
+// typedef PoireDef<P,O,I,R,E>   = stx.pico.Poire.PoireDef<P,O,I,R,E>;
 
 typedef ExceptionDef            = {
   public var message(get,never):String;
@@ -112,3 +133,40 @@ interface ExceptionApi {
 	public var native(get,never):Any;
   function details():String;
 }
+
+
+typedef CTRDef<P,R>         = stx.pico.CTR.CTRDef<P,R>;
+typedef CTR<P,R>            = stx.pico.CTR<P,R>;
+typedef Wildcard            = stx.pico.Wildcard;
+typedef Couple<L,R>         = stx.pico.Couple<L,R>;
+typedef Twin<T>             = Couple<T,T>;
+
+typedef CoupleDef<L,R>      = stx.pico.Couple.CoupleDef<L,R>;
+class LiftPico {
+  static public function couple<Ti,Tii>(wildcard:Wildcard,tI:Ti,tII:Tii):Couple<Ti,Tii>{
+    return (fn:Ti->Tii->Void) -> {
+      fn(tI,tII);
+    }
+  }
+  static public function decouple<Ti,Tii,Tiii>(wildcard:Wildcard,fn:Ti->Tii->Tiii):Couple<Ti,Tii> -> Tiii{
+    return (tp:Couple<Ti,Tii>) -> {
+      tp.decouple(fn);
+    } 
+  }
+  /**
+    Most used wildcard, creates an option, often used like: `Option.make(value).defv(fallback)`
+  **/
+  static public function option<T>(wildcard:Wildcard,?v:Null<T>):Option<T>{
+    return switch(v){
+      case null : None;
+      default   : Some(v);
+    }
+  } 
+  static public function debug(wildcard:Wildcard,str:String){
+    #if sys
+      sys.Debug.apply('$str\n');
+    #else
+      haxe.Log.trace(str,null);
+    #end
+  }
+}        

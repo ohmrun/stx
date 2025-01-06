@@ -1,6 +1,10 @@
 package stx.nano;
 
 class PrimitiveTypeCtr extends Clazz{
+  static public var instance(get,null) : PrimitiveTypeCtr;
+  static private function get_instance(){
+    return instance == null ? instance = new PrimitiveTypeCtr() : instance;
+  }
   public function blob(){ 
     return PTBlob;
   }

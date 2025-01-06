@@ -6,9 +6,9 @@ class HCaseCtr extends Clazz{
   public function Make(values:CTR<HExprCtr,Array<HExpr>>,?guard:CTR<HExprCtr,HExpr>,?expr:CTR<HExprCtr,HExpr>){
     final ctr = Expr.HExpr;
     return HCase.make(
-      values(ctr),
-      __.option(guard).map(f -> f(ctr)).defv(null),
-      __.option(expr).map(f -> f(ctr)).defv(null)
+      values.apply(ctr),
+      __.option(guard).map(f -> f.apply(ctr)).defv(null),
+      __.option(expr).map(f -> f.apply(ctr)).defv(null)
     );
   }
 }

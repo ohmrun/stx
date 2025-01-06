@@ -1,5 +1,7 @@
 package stx.nano;
 
+import stx.alias.StdString;
+
 
 abstract Char(StdString){
   public function new(self) this = self;

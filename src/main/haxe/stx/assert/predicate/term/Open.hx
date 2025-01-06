@@ -11,7 +11,7 @@ class Open<T,E> implements PredicateApi<T,E>{
   public function apply(v:T):Report<E>{
     return Report.unit();
   }
-  public function error():Refuse<E>{
-    return __.fault(pos).explain(_ -> _.e_undefined());
+  public function error():Error<E>{
+    return __.fault(pos).digest((_:Digests) -> _.e_undefined());
   }
 }

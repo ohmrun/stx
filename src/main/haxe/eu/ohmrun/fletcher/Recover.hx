@@ -1,12 +1,12 @@
 package eu.ohmrun.fletcher;
         
-typedef RecoverDef<I,E>                 = FletcherDef<Refuse<E>,I,Nada>;
+typedef RecoverDef<I,E>                 = FletcherDef<Error<E>,I,Nada>;
 
 @:forward abstract Recover<I,E>(RecoverDef<I,E>) from RecoverDef<I,E> to RecoverDef<I,E>{
   public inline function new(self) this = self;
   @:noUsing static public inline function lift<I,E>(self:RecoverDef<I,E>) return new Recover(self);
 
-  @:from static public function fromFunErrR<I,E>(fn:Refuse<E>->I):Recover<I,E>{
+  @:from static public function fromFunErrR<I,E>(fn:Error<E>->I):Recover<I,E>{
     return lift(Fletcher.Sync(fn));
   }
   public function toModulate():Modulate<I,I,E> return Modulate.lift(
@@ -29,7 +29,7 @@ typedef RecoverDef<I,E>                 = FletcherDef<Refuse<E>,I,Nada>;
   public inline function prj():RecoverDef<I,E>{
     return this;
   }
-  public inline function toFletcher():Fletcher<Refuse<E>,I,Nada>{
+  public inline function toFletcher():Fletcher<Error<E>,I,Nada>{
     return Fletcher.lift(this);
   }
 } 

@@ -40,7 +40,7 @@ class Json{
   static var comma_p          = spaced(Identifier(","));
 
   static function spaced<I,T>(p : Parser<String,T>) 
-      return SParse.whitespace.many()._and(p).tagged('spaced: (${p.tag.defv('')})');
+      return SParse.whitespace.many()._and(p);//.tagged('spaced: (${p.tag.defv('')})');
 
   static var ident_p          = spaced(SParse.literal);
   //Parse.valid.or('-'.id().one_many().token())
@@ -60,7 +60,7 @@ class Json{
     return l_brkt_p._and(value_p.cache().repsep(comma_p).option()).and_(r_brkt_p).then(
       (opt) -> opt.fold(
         ok -> JsArray(ok),
-        () -> JsArray([].imm())
+        () -> JsArray(Cluster.unit())
       )
     );
 

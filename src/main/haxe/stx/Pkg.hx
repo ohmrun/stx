@@ -2,6 +2,7 @@ package stx;
 
 import haxe.PosInfos;
 
+using stx.Pico;
 using stx.Nano;
 
 typedef Pkg         = stx.pkg.Pkg;

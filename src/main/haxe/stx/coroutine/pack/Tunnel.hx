@@ -151,7 +151,7 @@ class TunnelLift{
           __.hold(held.mod(f));
         case Halt(Production(_))    : 
           if(!done){
-            final err =__.fault().explain(_ -> _.e_undefined());
+            final err =__.fault().digest((_:Digests) -> _.e_undefined());
             fn(__.reject(err));
             __.term(err);
           }else{
@@ -270,7 +270,7 @@ class TunnelLift{
     }
   }
   /**
-   Reorders the outputs such that the first `true` from `fn` is produced first. `Refuse` if the stream
+   Reorders the outputs such that the first `true` from `fn` is produced first. `Error` if the stream
    terminates without ever returning `true`. Infinite `Tunnel` unaffected.
   **/
   // static public function require<I,O,Z,E>(self:TunnelDef<I,O,E>,fn:Arrange<O,Tunnel<I,O,E>>->Option<Tunnel<I,O,E>>):Tunnel<I,O,E>{

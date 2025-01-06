@@ -49,19 +49,19 @@ class HExprdef extends OrdCls<THExprdef>{
       case [TExprDef.EParenthesis(eI),TExprDef.EParenthesis(eII)] :
         Ord.Makro().Expr().Expr.comply(eI,eII);
       case [TExprDef.EObjectDecl(fieldsI),TExprDef.EObjectDecl(fieldsII)] :
-        Ord.ArrayOrd(Ord.Makro().Expr().HObjectField).comply(fieldsI,fieldsII);
+        new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HObjectField).comply(fieldsI,fieldsII);
       case [TExprDef.EArrayDecl(valuesI),TExprDef.EArrayDecl(valuesII)] :
-        Ord.ArrayOrd(Ord.Makro().Expr().Expr).comply(valuesI,valuesII);
+        new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().Expr).comply(valuesI,valuesII);
       case [TExprDef.ECall(eI,paramsI),TExprDef.ECall(eII,paramsII)] :
         var ord = Ord.Makro().Expr().Expr.comply(eI,eII);
         if(ord.is_not_less_than()){
-          ord = Ord.ArrayOrd(Ord.Makro().Expr().Expr).comply(paramsI,paramsII);
+          ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().Expr).comply(paramsI,paramsII);
         }
         ord;
       case [TExprDef.ENew(tI,paramsI),TExprDef.ENew(tII,paramsII)] :
         var ord = Ord.Makro().Expr().HTypePath.comply(tI,tII);
         if(ord.is_not_less_than()){
-          ord = Ord.ArrayOrd(Ord.Makro().Expr().Expr).comply(paramsI,paramsII);
+          ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().Expr).comply(paramsI,paramsII);
         }
         ord;
       case [TExprDef.EUnop(opI,postFixI,eI),TExprDef.EUnop(opII,postFixII,eII)] :
@@ -74,7 +74,7 @@ class HExprdef extends OrdCls<THExprdef>{
         }
         ord;
       case [TExprDef.EVars(varsI),TExprDef.EVars(varsII)] :
-        Ord.ArrayOrd(Ord.Makro().Expr().HVar).comply(varsI,varsII);
+        new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HVar).comply(varsI,varsII);
       case [EFunction(kindI,fI),EFunction(kindII,fII)] :
         var ord = Ord.NullOr(Ord.Makro().Expr().HFunctionKind).comply(kindI,kindII);
         if(ord.is_not_less_than()){
@@ -82,7 +82,7 @@ class HExprdef extends OrdCls<THExprdef>{
         }
         ord;
       case [TExprDef.EBlock(exprsI),TExprDef.EBlock(exprsII)] :
-        Ord.ArrayOrd(Ord.Makro().Expr().Expr).comply(exprsI,exprsII);
+        new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().Expr).comply(exprsI,exprsII);
       case [EFor(iI,eexprI),EFor(iII,eexprII)] :
         var ord = Ord.Makro().Expr().Expr.comply(iI,iII);
         if(ord.is_not_less_than()){
@@ -110,7 +110,7 @@ class HExprdef extends OrdCls<THExprdef>{
       case [TExprDef.ESwitch(eI,casesI,edefI),TExprDef.ESwitch(eII,casesII,edefII) ] :
         var ord = Ord.Makro().Expr().Expr.comply(eI,eII);
         if(ord.is_not_less_than()){
-          ord = Ord.ArrayOrd(Ord.Makro().Expr().HCase).comply(casesI,casesII);
+          ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HCase).comply(casesI,casesII);
         }
         if(ord.is_not_less_than()){
           ord = Ord.NullOr(Ord.Makro().Expr().Expr).comply(edefI,edefII);
@@ -119,7 +119,7 @@ class HExprdef extends OrdCls<THExprdef>{
       case [TExprDef.ETry(eI,catchesI),TExprDef.ETry(eII,catchesII)] :
         var ord = Ord.Makro().Expr().Expr.comply(eI,eII);
         if(ord.is_not_less_than()){
-          ord = Ord.ArrayOrd(Ord.Makro().Expr().HCatch).comply(catchesI,catchesII);
+          ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HCatch).comply(catchesI,catchesII);
         }
         ord;
       case [TExprDef.EReturn(eI),TExprDef.EReturn(eII)] :

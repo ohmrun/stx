@@ -1,7 +1,7 @@
 package eu.ohmrun.fletcher.receiver.term;
 
 class Issue<P,E> extends eu.ohmrun.fletcher.core.cont.term.Map<TerminalInput<P,E>,ReceiverInput<P,E>,Work>{
-  final outcome : Outcome<P,Defect<E>>;
+  final outcome : Outcome<P,Error<E>>;
   public function new(delegate,outcome){
     super(delegate);
     this.outcome = outcome;

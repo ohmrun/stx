@@ -31,13 +31,15 @@ class Or<P,R> extends ParserCls<P,R>{
         __.assert().that().exists(rhs);
         final resI = rhs.apply(input);
 
-        if(!resI.is_ok()){
-          resI.with_errata(result.error);
-        }
         #if debug
-          __.log().trace(_ -> _.pure('result $resI at ${resI.asset.position()} $lhs = ${resI.is_ok()}'));
-        #end
-        resI;
+        __.log().trace(_ -> _.pure('result $resI at ${resI.asset.position()} $lhs = ${resI.is_ok()}'));
+      #end
+        if(!resI.is_ok()){
+          resI.defect(result.error);
+        }else{
+          resI;
+        }
+        
     }
   }
   override public function toString(){

@@ -14,19 +14,19 @@ abstract ArrangeArg<I,S,O,E>(ArrangeArgSum<I,S,O,E>) from ArrangeArgSum<I,S,O,E>
   public function new(self) this = self;
   static public function lift<I,S,O,E>(self:ArrangeArgSum<I,S,O,E>):ArrangeArg<I,S,O,E> return new ArrangeArg(self);
 
-  @:from static public function fromArgFun1Modulate<I,S,O,E>(f:I->Modulate<S,O,E>):ArrangeArg<I,S,O,E>{
+  @:noUsing @:from static public function fromArgFun1Modulate<I,S,O,E>(f:I->Modulate<S,O,E>):ArrangeArg<I,S,O,E>{
     return ArrangeArgFun1Modulate(f);
   }
-  @:from static public function fromArgFun1Attempt<I,S,O,E>(f:I->Attempt<S,O,E>):ArrangeArg<I,S,O,E>{
+  @:noUsing @:from static public function fromArgFun1Attempt<I,S,O,E>(f:I->Attempt<S,O,E>):ArrangeArg<I,S,O,E>{
     return ArrangeArgFun1Attempt(f);
   }
-  @:from static public function fromArrangeArgFun1Convert<I,S,O,E>(f:I->Convert<S,O>):ArrangeArg<I,S,O,E>{
+  @:noUsing @:from static public function fromArrangeArgFun1Convert<I,S,O,E>(f:I->Convert<S,O>):ArrangeArg<I,S,O,E>{
     return ArrangeArgFun1Convert(f);
   }
-  @:from static public function fromArgUpshot<I,S,O,E>(res:Upshot<O,E>):ArrangeArg<I,S,O,E>{
+  @:noUsing @:from static public function fromArgUpshot<I,S,O,E>(res:Upshot<O,E>):ArrangeArg<I,S,O,E>{
     return ArrangeArgUpshot(res);
   }
-  @:from static public function fromArgPure<I,S,O,E>(o:O):ArrangeArg<I,S,O,E>{
+  @:noUsing @:from static public function fromArgPure<I,S,O,E>(o:O):ArrangeArg<I,S,O,E>{
     return ArrangeArgPure(o);
   }
   public function prj():ArrangeArgSum<I,S,O,E> return this;
@@ -171,7 +171,7 @@ class ArrangeLift{
       )
     );
   }
-  static public function errata<I,S,O,E,EE>(self:Arrange<I,S,O,E>,fn:Refuse<E>->Refuse<EE>):Arrange<I,S,O,EE>{
+  static public function errata<I,S,O,E,EE>(self:Arrange<I,S,O,E>,fn:E->EE):Arrange<I,S,O,EE>{
     return Arrange.lift(
       Fletcher.Anon(
         (res:Upshot<Couple<I,S>,EE>,cont:Terminal<Upshot<O,EE>,Nada>) -> res.fold(
@@ -190,9 +190,6 @@ class ArrangeLift{
         )
       )
     );
-  }
-  static public function errate<I,S,O,E,EE>(self:Arrange<I,S,O,E>,fn:E->EE):Arrange<I,S,O,EE>{
-    return Arrange.lift(errata(self,(oc) -> oc.errate(fn)));
   }
   static public function convert<I,S,O,Oi,E>(self:Arrange<I,S,O,E>,that:Convert<O,Oi>):Arrange<I,S,Oi,E>{
     return Arrange.lift(

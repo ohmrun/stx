@@ -1,15 +1,16 @@
 package stx.parse.parser.term;
 
 class Failed<P,R> extends Sync<P,R>{
-  var msg       : String;
-  var is_fatal  : Bool;
+  final reason    : ParseFailure;
+  final message   : ParseFailureMessage;
 
-  public function new(msg,is_fatal = false,?id:Pos){
-    super(id);
-    this.msg        = msg;
-    this.is_fatal   = is_fatal;
+  public function new(reason,?message,?pos:Pos){
+    super(pos);
+    this.reason     = reason;
+    this.message    = message;
   }
   public inline function apply(ipt:ParseInput<P>):ParseResult<P,R>{
-    return ipt.erration(msg,is_fatal).failure(ipt);
+    final result = Parse.refuse(ipt,reason,message,pos);
+    return result;
   }
 }

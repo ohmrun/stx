@@ -1,6 +1,8 @@
 package stx.nano;
 
 import haxe.ds.IntMap;
+import stx.alias.StdString;
+import stx.alias.StdMath;
 
 @:using(stx.nano.Chars.CharsLift)
 @:forward abstract Chars(StdString) from StdString to StdString{
@@ -38,12 +40,12 @@ class CharsLift{
 
   static public function parse_int(self: Chars):Option<Int> {
     return 
-      __.option(std.Std.parseInt(self))
+      Option.make(std.Std.parseInt(self))
         .filter(function(i) return !Math.isNaN(i));
   }
   static public function parse_float(self: Chars):Option<Float> {
     return 
-      __.option(std.Std.parseFloat(self))
+      Option.make(std.Std.parseFloat(self))
     .filter(function(i) return !Math.isNaN(i));
   }
   /**
@@ -191,7 +193,7 @@ class CharsLift{
             return if (index < self.length) {
                 self.substr(index++, 1);
             } else {
-              throw __.fault().explain(_ -> _.e_undefined());
+              throw Fault.make().digest((_:Digests) -> _.e_undefined());
             }
         }
     });

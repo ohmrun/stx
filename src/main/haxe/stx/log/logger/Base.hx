@@ -1,13 +1,22 @@
 package stx.log.logger;
 
-class Base<T> implements LoggerApi<T> extends stx.log.output.term.Full{
+class Base<T> implements LoggerApi<T> extends Debugging{
   
-  public function new(?logic:Logic<T>,?format:Format){
+  public function new(?logic:Logic<T>,?format:Format,?output:OutputApi){
     note(logic);
     this.logic  = __.option(logic).defv(new stx.log.logic.term.Default());
     this.format = __.option(format).defv(Format.unit());
+    this.output = __.option(output).defv(new stx.log.output.term.Full());
   }
-
+  private var output(get,null) : OutputApi;
+  private function get_output(){
+    return this.output;
+  }
+  public function with_output(output){
+    final next = this.copy();
+    @:privateAccess next.output = output;
+    return next;
+  }
   public var logic(get,null)  : stx.log.Logic<T>;
   public function get_logic():stx.log.Logic<T>{
     return this.logic;
@@ -25,7 +34,7 @@ class Base<T> implements LoggerApi<T> extends stx.log.output.term.Full{
     return new Base(logic,f.apply(this.format));
   }
 
-  final public function apply(value:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>{
+  public function apply(value:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>{
     note('apply: ${value.source}');
     return do_apply(value).mod(
       (res) -> {
@@ -36,11 +45,11 @@ class Base<T> implements LoggerApi<T> extends stx.log.output.term.Full{
               note('about to render: ${value.stamp}');
               if(!value.stamp.hidden){
                 #if macro
-                  render(string,value.source);
+                  output.render(string,value.source,value.stamp);
                   // if(value.stamp.level != BLANK){
                   // }
                 #else
-                  render(string,value.source);
+                  output.render(string,value.source,value.stamp);
                 #end
               }
             }
@@ -63,5 +72,7 @@ class Base<T> implements LoggerApi<T> extends stx.log.output.term.Full{
       }
     );
   }
-
+  public function copy(){
+    return new Base(logic,format,output);  
+  }
 } 

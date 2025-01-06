@@ -1,6 +1,10 @@
 package eu.ohmrun.glot.expr;
 
 class GBinopCtr extends Clazz{
+  static public var instance(get,null) : GBinopCtr;
+  static private function get_instance(){
+    return instance == null ? instance = new GBinopCtr() : instance;
+  }
   public function Add(){ return GOpAdd;}
   public function Mult(){ return GOpMult;}
   public function Div(){ return GOpDiv;}

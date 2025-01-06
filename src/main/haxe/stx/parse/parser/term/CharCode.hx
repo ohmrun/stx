@@ -8,9 +8,9 @@ class CharCode extends Sync<String,String>{
   }
   public function apply(ipt:ParseInput<String>):ParseResult<String,String>{
     return ipt.head().fold(
-      ok -> ok.charCodeAt(0) == code ? ipt.tail().ok(ok) : ipt.no('charcode not #$code'),
-      e   -> ipt.erration('code failed').concat(e.toParseFailure_with(ipt,false)).failure(ipt),
-      ()  -> ipt.no('code failed')
+      ok -> ok.charCodeAt(0) == code ? ipt.tail().value(ok) : ipt.error(),
+      e   -> ipt.error().defect(e),
+      ()  -> ipt.error()
     );
   }
   override public function toString(){

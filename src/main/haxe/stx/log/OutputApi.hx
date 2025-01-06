@@ -1,5 +1,5 @@
 package stx.log;
 
 interface OutputApi{
-  private function render( v : Dynamic, infos : LogPosition ) : Void;
+  public function render( v : Dynamic, infos : LogPosition, stamp : Stamp ) : Void;
 }

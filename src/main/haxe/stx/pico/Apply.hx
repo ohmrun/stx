@@ -1,7 +1,7 @@
 package stx.pico;
 
 /**
- * Class oriented function application type
+ * Interface oriented function application type
  * @see [suffixes](https://github.com/ohmrun/docs/blob/main/conventions.md#suffixes)
  * @see [naming](https://github.com/ohmrun/docs/blob/main/conventions.md#function-naming-conventions)
  */
@@ -32,7 +32,7 @@ abstract class ApplyCls<P,R> implements ApplyApi<P,R>{
   }
 }
 /**
- * Abstract wrapper for `Apply`
+ * Abstract wrapper for `ApplyApi`
  */
 @:using(stx.pico.Apply.ApplyLift)
 @:forward abstract Apply<P,R>(ApplyApi<P,R>) from ApplyApi<P,R> to ApplyApi<P,R>{

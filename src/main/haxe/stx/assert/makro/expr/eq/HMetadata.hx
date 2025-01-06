@@ -6,6 +6,6 @@ final Eq = __.assert().Eq();
 
 class HMetadata extends stx.assert.eq.term.Base<THMetadata> {
   public function comply(lhs:THMetadata,rhs:THMetadata){
-    return Eq.ArrayEq(Eq.Makro().Expr().HMetadataEntry).comply(lhs,rhs);
+    return new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HMetadataEntry).comply(lhs,rhs);
   }
 }

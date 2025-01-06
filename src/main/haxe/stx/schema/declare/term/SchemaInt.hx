@@ -7,7 +7,7 @@ abstract SchemaInt(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Declar
       new DeclareNativeSchemaCls(
         Ident.make('Int',['std']),
         null,
-        [].imm()
+        Cluster.unit()
       )
     );
   }

@@ -1,5 +1,6 @@
 package stx.parse.core;
 
+import haxe.Exception;
 import stx.parse.parser.term.Memoise;
 
 typedef LRDef = {
@@ -14,7 +15,7 @@ typedef LRDef = {
 class LRLift{
   static public function lrAnswer<I,T>(p: Parser<I,T>, genKey : Int -> String, input: ParseInput<I>, growable: LR): ParseResult<I,T> {
     return switch (growable.head) {
-      case None         : input.erration("E_NoRecursionHead",true).failure(input);
+      case None         : input.fatal(E_NoRecursionHead);
       case Some(head)   :
         if (head.getHead() != p) /*not head rule, so not growing*/{
           (cast growable.seed);
@@ -35,7 +36,7 @@ class LRLift{
         if (cached == None && !(head.involvedSet.cons(head.headParser).has(p.elide()))) {
           Some(
             MemoParsed(
-              input.erration('dummy').failure(input)
+              input.no()
             )
           );
         }else if (head.evalSet.has(p)) {

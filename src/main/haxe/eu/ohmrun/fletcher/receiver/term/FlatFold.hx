@@ -7,7 +7,7 @@ abstract class FlatFold<P,Pi,E> extends ReceiverCls<Pi,E>{
     this.self = self;
   }
   abstract public function ok(p:P):Receiver<Pi,E>;
-  abstract public function no(d:Defect<E>):Receiver<Pi,E>;
+  abstract public function no(d:Error<E>):Receiver<Pi,E>;
 
   public function apply(app:Apply<ReceiverInput<Pi,E>,Work>):Work{
     return self.apply(

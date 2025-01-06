@@ -1,6 +1,7 @@
 package stx.fs;
 
 using stx.Nano;
+using stx.Fail;
 using stx.Pico;
 using stx.Assert;
 using stx.Parse;

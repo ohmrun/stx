@@ -12,7 +12,7 @@ class RepeatedOnlyUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
     //__.assert(this.number).gt_eq(1);
 
     #if debug
-    __.assert(id).that().exists(delegation);
+    __.assert().that(id).exists(delegation);
     #end
     super(delegation,id);
     this.tag = switch (delegation.tag){
@@ -22,7 +22,7 @@ class RepeatedOnlyUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
   }
   override public function check(){
     #if debug
-    __.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
+    //__.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
     #end
   }
   public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
@@ -52,13 +52,14 @@ class RepeatedOnlyUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
           }
         case false : 
           if(res.is_fatal()){
-            inputI.erration('failed many ${delegation}',true).concat(res.error).failure(inputI);
+            inputI.no().defect(res.error);
           }else{
             #if debug __.log().trace(_ -> _.thunk( () -> arr)); #end
             if(count <= number){
               inputII.ok(arr); 
             }else{
-              inputI.no('Should repeat $number times, but repeated $count times');
+              __.log().debug('Should repeat $number times, but repeated $count times');
+              inputI.no();
             }
           }
       }

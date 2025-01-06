@@ -17,7 +17,7 @@ class HTypeDefKindCtr extends Clazz{
   public function Class(?super_class:CTR<HTypePathCtr,HTypePath>,?interfaces:CTR<HTypePathCtr,Cluster<HTypePath>>,?is_interface:Bool,?is_final:Bool,?is_abstract:Bool){
     final interfaces  = __.option(interfaces).map(x -> x.apply(__expr.HTypePath)).defv(null);
     final super_class = __.option(super_class).map(x -> x.apply(__expr.HTypePath)).defv(null);
-    return HTypeDefKind.lift(TDClass(super_class,__.option(interfaces).defv([].imm()).prj(),is_interface,is_final,is_abstract));
+    return HTypeDefKind.lift(TDClass(super_class,__.option(interfaces).defv(Cluster.unit()).prj(),is_interface,is_final,is_abstract));
   }
   public function Alias(ct:stx.makro.expr.HComplexType):HTypeDefKind{
     return HTypeDefKind.lift(TDAlias(ct));

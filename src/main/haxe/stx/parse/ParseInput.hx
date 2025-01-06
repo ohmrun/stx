@@ -15,10 +15,10 @@ class ParseInputCls<I>{
   public function toString(){
     return 'path: $cursor at ${this.content.index}:#(${head()})';
   }
-  inline public function head() : Chunk<I,ParseFailureCode> {
+  inline public function head() : Chunk<I,ParseFailure> {
     return this.content.head();
   }
-  public function copy(?content,?memo,?tag,?cursor,?tree):ParseInputCls<I>{
+  public function copy(?content:Enumerable<Dynamic,I>,?memo:Memo,?tag:String,?cursor:Array<String>,?tree:Lung):ParseInputCls<I>{
     return make(
       __.option(content).defv(this.content),
       __.option(memo).defv(this.memo),

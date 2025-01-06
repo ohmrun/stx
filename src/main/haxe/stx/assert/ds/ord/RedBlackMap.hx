@@ -3,11 +3,11 @@ package stx.assert.ds.ord;
 import stx.ds.RedBlackMap in TRedBlackMap;
 
 class RedBlackMap<K,V> extends OrdCls<TRedBlackMap<K,V>>{
-  final K : Ord<K>;
-  final V : Ord<V>;
+  final _K : Ord<K>;
+  final _V : Ord<V>;
   public function new(K,V){
-    this.K = K;
-    this.V = V;
+    this._K = K;
+    this._V = V;
   }
   public function comply(lhs:TRedBlackMap<K,V>,rhs:TRedBlackMap<K,V>){
     var ord     = NotLessThan;
@@ -48,7 +48,7 @@ class RedBlackMap<K,V> extends OrdCls<TRedBlackMap<K,V>>{
           case [None,Some(_)] : 
             ord = LessThan;
           case [Some(a),Some(b)] : 
-            ord = V.comply(a,b);
+            ord = _V.comply(a,b);
           default : 
         }
         if(ord.is_less_than()){

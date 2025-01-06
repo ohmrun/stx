@@ -26,7 +26,7 @@ class Bag<I,O> extends Base<I,Array<O>,Array<Parser<I,O>>>{
           }
           rec(res.asset,arr);
         }else{
-          input.no('Bag failed');
+          input.no();
         }
       }
     }

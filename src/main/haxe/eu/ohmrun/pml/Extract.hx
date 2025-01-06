@@ -10,8 +10,8 @@ class Extract{
     return (input:ParseInput<PExpr<T>>) -> {
       input.head().fold(
         f,
-        (e) -> e.toParseResult_with(input),
-        ()  -> input.no('empty input')
+        (e) -> ParseResult.make(input,None,e),
+        ()  -> input.no(E_Parse_EmptyInput)
       );
     } 
   }
@@ -26,7 +26,7 @@ class Extract{
              ,input.tail().prepend(PValue(Nul))
             );
             n.nil();
-          default         : input.no('Head not a group, but $x');
+          default         : input.no();
         }
       )(input),
       Some('unpack')
@@ -39,7 +39,7 @@ class Extract{
           case PValue(Sym(s)) : input.tail().ok(s);
           case PValue(Str(s))   : input.tail().ok(s);
           case PLabel(x)        : input.tail().ok(x);
-          default : input.no('not wordish but $x');
+          default : input.no();
         }
       )(input),
       Some('wordish')
@@ -51,7 +51,7 @@ class Extract{
         return handle_head(
           x -> switch((x)){
             case PValue(Nul)  : input.tail().nil();
-            default           : input.no('not Nul $name');
+            default           : input.no();
           }
         )(input);
       },
@@ -65,8 +65,8 @@ class Extract{
         return handle_head(
           x -> switch((x)){
             case PValue(Sym(s)) if (s == name): input.tail().ok(s);
-            case PValue(Sym(s))               : input.no('symbol should be $name, but is $s');
-            default                             : input.no('$x not a symbol');
+            case PValue(Sym(s))               : input.no();
+            default                           : input.no();
           }
         )(input);
       },
@@ -80,11 +80,11 @@ class Extract{
           x -> switch((x)){
             case PValue(Sym(s)) if (s == name): input.tail().ok(s);
             case PValue(Str(s))   if (s == name): input.tail().ok(s);
-            case PValue(Str(s))                 : input.no('text should be $name, but is $s');
+            case PValue(Str(s))                 : input.no();
             case PLabel(s)        if (s == name): input.tail().ok(s);
-            case PLabel(s)                      : input.no('text should be $name, but is $s');
-            case PValue(Sym(s))               : input.no('text should be $name, but is $s');
-            default                             : input.no('not any type of text');
+            case PLabel(s)                      : input.no();
+            case PValue(Sym(s))                 : input.no();
+            default                             : input.no(E_Parse_NoOutput);
           }
         )(input);
       },
@@ -105,7 +105,7 @@ class Extract{
             }else{
               ParseResult.make(ipt,None,result.error);
             }
-          default                                 : ipt.no('not any type of text');
+          default                                 : ipt.no(E_Parse_EmptyInput);
         }
       },
       Some('matches')
@@ -122,7 +122,7 @@ class Extract{
       (input:ParseInput<PExpr<Atom>>) -> handle_head(
         (x) -> switch(f(x)){
           case Some(x)  : input.tail().ok(x);
-          case None     : input.no('failed $name');
+          case None     : input.no();
         }
       )(input),
       name

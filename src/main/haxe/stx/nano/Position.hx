@@ -48,7 +48,7 @@ package stx.nano;
     return #if macro [] #else this.customParams #end;
   }
   public function toIdent():Ident{
-    return Ident.fromIdentifier((this:Pos).toIdentifier());
+    return Ident.fromIdentifier(Identifier.lift(Position.lift(this).className));
   }
   public var className(get,never):String;
   private function get_className():String{
@@ -66,7 +66,6 @@ package stx.nano;
   private function get_methodName():String{
     return #if macro 'unknown' #else this.methodName #end;
   }
-
   public function toPos():Pos{
     return this;
   }
@@ -120,7 +119,7 @@ class PositionLift {
   }
   static public function toString_name_method_line(pos:Pos){
     #if !macro
-      var name    = pos.lift().toIdentifier().name;
+      var name    = Identifier.lift(Position.lift(pos).className).name;
       var method  = pos.methodName;
       var line     = pos.lineNumber;
       return '$name.$method@$line';
@@ -140,11 +139,11 @@ class PositionLift {
   }
   @:deprecated
   static public function identifier(self:Pos):Identifier{
-    var valid   = self.toPosition().fileName.split(".").get(0).split(__.sep()).join(".");
+    var valid   = Position.lift(self).fileName.split(".").get(0).split(Pico.sep()).join(".");
     return new Identifier(valid);
   }
   static public inline function toIdentfier(self:Pos):Identifier{
-    var valid   = self.toPosition().fileName.split(".").get(0).split(__.sep()).join(".");
+    var valid   = Position.lift(self).fileName.split(".").get(0).split(Pico.sep()).join(".");
     return new Identifier(valid);
   }
 }

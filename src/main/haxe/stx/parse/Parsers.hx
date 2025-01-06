@@ -16,8 +16,14 @@ class Parsers{
   @:noUsing static inline public function TaggedAnon<P,R>(fn:ParseInput<P> -> ParseResult<P,R>,tag,?pos:Pos):Parser<P,R>{
     return new stx.parse.parser.term.TaggedAnon(fn,tag,pos).asParser();
   }
-  @:noUsing static inline public function Failed<P,R>(msg,is_fatal = false,?id:Pos):Parser<P,R>{
-    return new stx.parse.parser.term.Failed(msg,is_fatal,id).asParser();
+  @:noUsing static inline public function TaggedDelegate<P,R>(self:Parser<P,R>,tag,?pos:Pos):Parser<P,R>{
+    return new stx.parse.parser.term.TaggedDelegate(self,tag,pos).asParser();
+  }
+  @:noUsing static inline public function Failed<P,R>(?msg,?pos:Pos):Parser<P,R>{
+    return new stx.parse.parser.term.Failed(ParseFailure.FATAL,msg,pos).asParser();
+  }
+  @:noUsing static inline public function Fatal<P,R>(msg,?pos:Pos):Parser<P,R>{
+    return new stx.parse.parser.term.Failed(ParseFailure.FATAL,msg,pos).asParser();
   }
   @:noUsing static inline public function Succeed<P,R>(value:R,?pos:Pos):Parser<P,R>{
     return new stx.parse.parser.term.Succeed(value,pos).asParser();
@@ -67,7 +73,7 @@ class Parsers{
   @:noUsing static inline public function RepeatedOnly<I,T>(p: Parser<I,T>,n):Parser<I,Array<T>>{
     return new stx.parse.parser.term.RepeatedOnly(p,n).asParser();
   }
-  @:noUsing static inline public function Eof<I,O>():Parser<I,O>{
+  @:noUsing static inline public function Eof<I,O>(?pos:Pos):Parser<I,O>{
     return new stx.parse.parser.term.Eof().asParser();
   }
   @:noUsing static inline public function Lookahead<I,O>(parser:Parser<I,O>):Parser<I,O>{
@@ -79,6 +85,13 @@ class Parsers{
   @:noUsing static inline public function Option<I,O>(p:Parser<I,O>): Parser<I,Option<O>>{
     return new stx.parse.parser.term.Option(p).asParser();
   }
+  /**
+   * @constructs stx.parse.parser.term.Choose
+   * @param parser `Parser<I,O>`
+   * @param name `String`
+   * @param ?pos `Pos`
+   * @return `Parser<I,O>`
+   */
   @:noUsing static inline public function Choose<I,O>(fn:I->Option<O>,?tag:Option<String>,?pos:Pos): Parser<I,O>{
     return new stx.parse.parser.term.Choose(fn,tag,pos).asParser();
   }
@@ -91,12 +104,18 @@ class Parsers{
   @:noUsing static inline public function Inspect<I,O>(parser:Parser<I,O>,?prefix:ParseInput<I>->Void,?postfix:ParseResult<I,O>->Void,?pos:Pos):Parser<I,O>{
     return new stx.parse.parser.term.Inspect(parser,prefix,postfix,pos).asParser();
   }
-  @:noUsing static inline public function TagRefuse<I,O>(parser:Parser<I,O>,name:String,?pos:Pos):Parser<I,O>{
-    return new stx.parse.parser.term.TagRefuse(parser,name,pos).asParser();
-  }
+  // @:noUsing static inline public function TagError<I,O>(parser:Parser<I,O>,name:String,?pos:Pos):Parser<I,O>{
+  //   return new stx.parse.parser.term.TagError(parser,name,pos).asParser();
+  // }
   // @:noUsing static inline public function Debug<P,R>(parser:Parser<P,R>):Parser<P,R>{
   //   return new stx.parse.parser.term.Debug(parser).asParser();
   // }
+  /**
+   * @constructs `stx.parse.parser.term.Something`
+   * @param l `Parser<P,Ri>`
+   * @param r `Parser<P,Rii>`
+   * @return `Parser<P,Ri>`
+   */
   @:noUsing static inline public function Something<P>():Parser<P,P>{
     return new stx.parse.parser.term.Something().asParser();
   }
@@ -136,17 +155,20 @@ class Parsers{
   static public inline function Not<I,O>(p:Parser<I,O>,?pos:Pos):Parser<I,O>{
 		return new stx.parse.parser.term.Not(p,pos).asParser();
 	}
-  static public inline function While<I,O>(p:Parser<I,O>,?pos:Pos):Parser<I,Cluster<O>>{
+  @:noUsing static public inline function While<I,O>(p:Parser<I,O>,?pos:Pos):Parser<I,Cluster<O>>{
 		return new stx.parse.parser.term.While(p,pos).asParser();
 	}
-  static public inline function Position<O>(p:Parser<String,O>,?pos:Pos):Parser<String,O>{
-		return new stx.parse.parser.term.Position(p,pos).asParser();
-	}
+  // static public inline function Position<O>(p:Parser<String,O>,?pos:Pos):Parser<String,O>{
+	// 	return new stx.parse.parser.term.Position(p,pos).asParser();
+	// }
   static public function CharCode(i:Int):Parser<String,String>{
 		return new stx.parse.parser.term.CharCode(i).asParser();
 	}	
   @:noUsing static inline public function Bag<I,O>(choices:Array<Parser<I,O>>):Parser<I,Cluster<O>>{
     return new stx.parse.parser.term.Bag(choices).asParser();
+  }
+  @:noUsing static public function FlatMap<P,Ri,Rii>(self:Parser<P,Ri>,fn:Ri->Parser<P,Rii>,?pos:Pos):Parser<P,Rii>{
+    return new stx.parse.parser.term.AnonFlatMap(self,fn,pos).asParser();
   }
 }
 

@@ -11,27 +11,28 @@ class GTypeDefKindCtr extends Clazz{
   }
   public function Class(?superClass : CTR<GTypePathCtr,GTypePath>, ?interfaces : CTR<GTypePathCtr,Cluster<GTypePath>>, ?isInterface, ?isFinal, ?isAbstract ){
     return GTypeDefKind.lift(GTDClass(
-      __.option(superClass).map(f -> f(Expr.GTypePath)).defv(null),
-      __.option(interfaces).map(f -> f(Expr.GTypePath)).defv(null),
+      __.option(superClass).map(f -> f.apply(Expr.GTypePath)).defv(null),
+      __.option(interfaces).map(f -> f.apply(Expr.GTypePath)).defv(null),
       isInterface,
       isFinal,
       isAbstract
     ));
   }
   public function Alias(t:CTR<GComplexTypeCtr,GComplexType>){
-    return GTypeDefKind.lift(GTDAlias(t(Expr.GComplexType)));
+    return GTypeDefKind.lift(GTDAlias(t.apply(GComplexTypeCtr.instance)));
   }
-  public function Abstract(tthis:CTR<GComplexTypeCtr,GComplexType>,?from:CTR<GComplexTypeCtr,Cluster<GComplexType>>,?to:CTR<GComplexTypeCtr,Cluster<GComplexType>>){
+  public function Abstract(tthis:CTR<GComplexTypeCtr,GComplexType>,?flags:CTR<GAbstractFlagCtr,Cluster<GAbstractFlag>>,?from:CTR<GComplexTypeCtr,Cluster<GComplexType>>,?to:CTR<GComplexTypeCtr,Cluster<GComplexType>>){
     return GTypeDefKind.lift(GTDAbstract(
-      __.option(tthis).map(f -> f(Expr.GComplexType)).defv(null),
-      __.option(from).map(f -> f(Expr.GComplexType)).defv(null),
-      __.option(to).map(f -> f(Expr.GComplexType)).defv(null)
+    __.option(tthis).map(f -> f.apply(GComplexTypeCtr.instance)).defv(null),
+      __.option(flags).map(f -> f.apply(GAbstractFlagCtr.instance)).defv(null),
+      __.option(from).map(f -> f.apply(GComplexTypeCtr.instance)).defv(null),
+      __.option(to).map(f -> f.apply(GComplexTypeCtr.instance)).defv(null)
     ));
   }
   public function Field(kind:CTR<GFieldTypeCtr,GFieldType>,access:CTR<GAccessCtr,Cluster<GAccess>>){
     return GTypeDefKind.lift(GTDField(
-      kind(Expr.GFieldType),
-      access(Expr.GAccess)
+      kind.apply(Expr.GFieldType),
+      access.apply(Expr.GAccess)
     ));
   }
 }
@@ -40,7 +41,7 @@ enum GTypeDefKindSum {
 	GTDStructure;
 	GTDClass( ?superClass : GTypePath, ?interfaces : Cluster<GTypePath>, ?isInterface : Bool, ?isFinal : Bool, ?isAbstract:Bool );
 	GTDAlias( t : GComplexType ); // ignore TypeDefinition.fields
-	GTDAbstract( tthis : Null<GComplexType>, ?from : Cluster<GComplexType>, ?to: Cluster<GComplexType> );
+	GTDAbstract( tthis : Null<GComplexType>, ?flags: Cluster<GAbstractFlag>, ?from : Cluster<GComplexType>, ?to: Cluster<GComplexType> );
   GTDField(kind:GFieldType, ?access:Cluster<GAccess>);
 }
 @:using(eu.ohmrun.glot.expr.GTypeDefKind.GTypeDefKindLift)

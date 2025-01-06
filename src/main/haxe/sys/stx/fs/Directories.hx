@@ -88,7 +88,7 @@ class Directories{
           __.log().trace('inject');
           var path = Directory.fromArray(next);
           return memo.fold(
-            (v:Refuse<FsFailure>) -> Execute.pure(v),
+            (v:Error<FsFailure>) -> Execute.pure(v),
             ()  -> exists(path).provide(env).point(
               (b) -> b.if_else(
                 () -> Execute.unit(),//TODO wtf

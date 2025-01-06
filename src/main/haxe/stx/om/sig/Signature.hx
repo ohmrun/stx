@@ -5,13 +5,13 @@ class SignatureCtr extends Clazz{
     return SigUnknown;
   }
   public function Primate<T>(fn:CTR<PrimitiveTypeCtr,PrimitiveType>):Signature<T>{
-    return SigPrimate(fn(new PrimitiveTypeCtr()));
+    return SigPrimate(fn.apply(PrimitiveTypeCtr.instance));
   }
   public function Collect<T>(fn:CTR<SignatureCtr,Signature<T>>):Signature<T>{
-    return SigCollect(() -> fn(this));
+    return SigCollect(() -> fn.apply(this));
   }
   public function Collate<T>(fn:CTR<SignatureCtr,Map<String,Signature<T>>>):Signature<T>{
-    return SigCollate(Record.fromMap(fn(this)));
+    return SigCollate(Record.fromMap(fn.apply(this)));
   }
   public function Predate<T>(self:T):Signature<T>{
     return SigPredate(self);

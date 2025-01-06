@@ -21,7 +21,7 @@ class EnumValue extends Clazz{
             });
         }
       },
-      [].imm()
+      Cluster.unit()
     );
     return params.map(
       params -> {

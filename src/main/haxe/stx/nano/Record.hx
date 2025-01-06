@@ -1,10 +1,11 @@
 package stx.nano;
 
+import haxe.DynamicAccess;
+
 #if (stx_assert || stx)
   using stx.Assert;
 #end
 
-import haxe.DynamicAccess;
 
 typedef RecordDef<T> = Cluster<Field<Void -> T>>;
 
@@ -12,7 +13,7 @@ typedef RecordDef<T> = Cluster<Field<Void -> T>>;
   
 
   @:noUsing static public function unit<T>():Record<T>{
-    return new Record([].imm());
+    return new Record(Cluster.unit());
   }
   @stx.meta.lift
   @:noUsing static inline public function lift<T>(self:RecordDef<T>):Record<T>{
@@ -103,7 +104,7 @@ typedef RecordDef<T> = Cluster<Field<Void -> T>>;
   @:from static public function fromMap<T>(self:Map<String,T>){
     var arr = [];
     for(key => val in self){
-      arr.push(stx.Field.make(key,() -> val));
+      arr.push(Field.make(key,() -> val));
     }
     return new Record(Cluster.lift(arr));
   }

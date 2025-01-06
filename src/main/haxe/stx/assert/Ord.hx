@@ -1,6 +1,7 @@
 package stx.assert;
 
-import stx.nano.Couple as StdCouple;
+import stx.alias.StdString;
+import stx.pico.Couple as StdCouple;
 
 import stx.assert.ord.term.*;
 import stx.assert.ord.term.Couple;
@@ -52,7 +53,7 @@ abstract class OrdCls<T> implements OrdApi<T>{
   @:noUsing static public function String():Ord<std.String>{
     return new String();
   }
-  @:noUsing static public function Couple<L,R>(l,r):Ord<stx.nano.Couple<L,R>>{
+  @:noUsing static public function Couple<L,R>(l,r):Ord<stx.pico.Couple<L,R>>{
     return new Couple(l,r);
   }
   @:noUsing static public function KV<L,R>(l,r):Ord<stx.nano.KV<L,R>>{

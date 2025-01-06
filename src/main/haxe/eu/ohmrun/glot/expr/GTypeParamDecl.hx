@@ -6,10 +6,10 @@ class GTypeParamDeclCtr extends Clazz{
   public function Make(name:String,?constraints:CTR<GComplexTypeCtr,Cluster<GComplexType>>,?params:CTR<GTypeParamDeclCtr,Cluster<GTypeParamDecl>>,meta:CTR<GMetadataEntryCtr,GMetadata>,?defaultType:CTR<GComplexTypeCtr,GComplexType>){
     return GTypeParamDecl.make(
       name,
-      __.option(constraints).map(f -> f(Expr.GComplexType)).defv(null),
-      __.option(params).map(f -> f(Expr.GTypeParamDecl)).defv(null),   
-      __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(null),
-      __.option(defaultType).map(f -> f(Expr.GComplexType)).defv(null)    
+      __.option(constraints).map(f -> f.apply(Expr.GComplexType)).defv(null),
+      __.option(params).map(f -> f.apply(Expr.GTypeParamDecl)).defv(null),   
+      __.option(meta).map(f -> f.apply(Expr.GMetadataEntry)).defv(null),
+      __.option(defaultType).map(f -> f.apply(Expr.GComplexType)).defv(null)    
     );
   }
 }

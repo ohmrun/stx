@@ -1,5 +1,7 @@
 package sys.stx.data.store;
 
+using stx.Pico;
+using stx.Nano;
 using stx.ASys;
 import stx.data.store.block_chain.Hash;
 import stx.fail.DataFailure;

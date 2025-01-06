@@ -8,9 +8,9 @@ class Equals<I> extends ParserCls<I,I>{
   }
   public function apply(input:ParseInput<I>):ParseResult<I,I>{
     return input.head().fold(
-      (vI) 	-> value == vI ? input.tail().ok(vI) : input.erration('eq').failure(input),
-      (e) 	-> e.toParseFailure_with(input,false).failure(input),
-      () 		-> input.erration(E_Parse_ParseFailed('eq')).failure(input)
+      (vI) 	-> value == vI ? input.tail().ok(vI) : input.no(),
+      (e) 	-> ParseResult.make(input,None,e),
+      () 		-> input.no()
     );
   }
 }

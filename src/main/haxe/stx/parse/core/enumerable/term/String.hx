@@ -4,7 +4,7 @@ import String in StdString;
 
 class String extends EnumerableCls<StdString,StdString>{
 	public function new(v, ?i) {
-		__.assert().that().exists(v);
+		//__.assert().that().exists(v);
 		super(v, i);
 	}
 	public function is_end() {
@@ -32,9 +32,9 @@ class String extends EnumerableCls<StdString,StdString>{
 	public function drop(i:Int):Enumerable<StdString,StdString>{
 		return new String(this.data,this.index+i);
 	}
-	public function head():Chunk<StdString,ParseFailureCode>{
+	public function head():Chunk<StdString,ParseFailure>{
 		return if(index >= this.data.length){
-			End(__.fault().of(E_Parse_Eof));
+			End(__.fault().of(EOF));
 		}else{
 			Val(this.data.charAt(index));
 		}

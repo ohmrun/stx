@@ -266,12 +266,12 @@ class RawLift {
 		final a = if(!kind.absolute){
 			toTrack(self).map(
 				track -> base.into(track)
-			).errate(e -> (e:FsFailure)
+			).errata(e -> (e:FsFailure)
 			).map(
 				(dir) -> dir.toAddress()
 			);
 		}else{
-			toAddress(self).errate(e -> e.toFsFailure());
+			toAddress(self).errata(e -> e.toFsFailure());
 		}
 		return a;
 	}

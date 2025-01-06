@@ -1,5 +1,6 @@
 package stx.nano;
 
+import stx.nano.Primitive;
 /**
   Intending to group Haxe's byte-like types. 
 **/

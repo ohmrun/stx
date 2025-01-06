@@ -29,14 +29,30 @@ class Parser{
   public function r_square_bracket_p(){
     return Parsers.Equals(PTRSquareBracket).tagged('rbracket');
   }
+  // public function app(input:ParseInput<Token>){
+  //   final head = input.head();
+  //   final next = input.tail().head();
+  //   final data = next.map(
+  //     (x) -> switch(x){
+  //       case PTLParen | PTHashLBracket | PTLSquareBracket | PTData(_) :
+  //         expr_p().apply(input.tail());
+  //       default : input.no();
+  //     }
+  //   );
+  //   $type(data);
+  // }
   public function val(){
-    return stx.parse.Parsers.Choose(
-      (t:Token) -> switch(t){
-        case PTData(Sym(s)) if (s.startsWith("#"))  : Some(PApply(s.substr(1)));
-        case PTData(Sym(s)) if (s.startsWith(":"))  : Some(PLabel(s.substr(1)));
-        case PTData(atm)                              : Some(PValue(atm));
-        case null                                     : None;
-        default                                       : None;
+    return Parsers.AndThen(
+      Parsers.Something(),
+        (t:Token) -> switch(t){
+          case PTData(Sym(s)) if (s.startsWith("#"))    : 
+              expr_p().then(
+                (x) -> PApply(s,x)
+              );
+          case PTData(Sym(s)) if (s.startsWith(":"))    : Parsers.Succeed(PLabel(s.substr(1)));
+          case PTData(atm)                              : Parsers.Succeed(PValue(atm));
+          case null                                     : Parsers.Failed();
+          default                                       : Parsers.Failed();          
       }
     ).tagged('val');
   }

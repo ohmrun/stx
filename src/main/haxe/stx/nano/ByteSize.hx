@@ -1,5 +1,7 @@
 package stx.nano;
 
+import stx.alias.StdString;
+
 enum abstract ByteSize(StdString) from StdString to StdString{
   var I8      = 'i8';
 
@@ -25,8 +27,8 @@ enum abstract ByteSize(StdString) from StdString to StdString{
 
   public function endianness():Option<Endianness>{
     return switch(this){
-      case I16BE | UI16BE | I24BE | UI24BE | I32BE | FBE | DBE : Some(BIG_ENDIAN);
-      case I16LE | UI16LE | I24LE | UI24LE | I32LE | FLE | DLE : Some(LITTLE_ENDIAN);
+      case I16BE | UI16BE | I24BE | UI24BE | I32BE | FBE | DBE : Some(Endianness.BIG_ENDIAN);
+      case I16LE | UI16LE | I24LE | UI24LE | I32LE | FLE | DLE : Some(Endianness.LITTLE_ENDIAN);
       default : None;
     }
   }

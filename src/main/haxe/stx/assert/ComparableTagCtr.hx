@@ -1,6 +1,6 @@
 package stx.assert;
 
-import stx.nano.Couple as StdCouple;
+import stx.pico.Couple as StdCouple;
 
 
 import stx.assert.comparable.term.Primitive;
@@ -89,7 +89,7 @@ class ComparableTagCtr{
    * @param V 
    * @return Comparable<stx.nano.KV<K,V>>
    */
-  static public function KV<K,V>(tag:TAG,K:Comparable<K>,V:Comparable<V>):Comparable<stx.nano.KV<K,V>>{
-    return new stx.assert.comparable.term.KV(K,V);
+  static public function KV<K,V>(tag:TAG,_K:Comparable<K>,_V:Comparable<V>):Comparable<stx.nano.KV<K,V>>{
+    return new stx.assert.comparable.term.KV(_K,_V);
   }
 }

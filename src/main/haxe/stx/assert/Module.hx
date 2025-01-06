@@ -1,15 +1,17 @@
 package stx.assert;
 
 class Module extends Clazz{
-  var pos   : Pos;
-  public function new(pos){
-    super();
-    this.pos = pos;
+  static public var instance(get,null) : Module;
+  static private function get_instance(){
+    return instance == null ? instance = new Module() : instance;
   }
-  public function that(){
+  public function new(){
+    super();
+  }
+  public function that(?pos:Pos){
     return new stx.assert.module.Effect(pos);
   }
-  public function expect(){
+  public function expect(?pos:Pos){
     return new stx.assert.module.Expect(pos);
   }
   /**

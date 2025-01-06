@@ -8,7 +8,7 @@ class Filter<I,O> extends Base<I,O,Parser<I,O>>{
     super(delegation,id);
     this.predicate = predicate;
     super(
-      AndThen(delegation,(o:O) -> this.predicate(o) ? Succeed(o) : Failed("predicate failed") )
+      AndThen(delegation,(o:O) -> this.predicate(o) ? Succeed(o) : Failed(E_Parse_PredicateFailed) )
       ,id
     );
   }

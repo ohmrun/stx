@@ -16,17 +16,17 @@ class Module extends Clazz{
           o,
           o.specs
             #if (sys || nodejs)
-            .search(o -> o.name == env)
+              .search(o -> o.name == env)
             #else
-            .head()//TODO use 
+              .head()//TODO use 
             #end
-            .defv(
-              {
-                name : "main",
-                specs : [],
-                op : Exclude
-              }
-            )
+              .defv(
+                {
+                  name : "main",
+                  specs : [],
+                  op : Exclude
+                }
+              )
         )
       ).adjust(
         __.decouple(
@@ -104,7 +104,7 @@ class Module extends Clazz{
   public function run(tests:Cluster<TestCase>,poke:Array<Dynamic>){
     final tests =  
       #if sys
-        if (Sys.env("POKE").is_defined()){
+        if (__.option(Sys.getEnv("POKE")).is_defined()){
           tests.filter(stx.Test.poke(__,poke));
         }else{
           tests;

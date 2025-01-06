@@ -19,14 +19,14 @@ typedef DeclarePropertyDef = {
   @:from static public function fromDeclareNativeSchemaApi(self:DeclareNativeSchemaApi){
     return make(
       SchemaRef.fromDeclareNativeSchema(self),
-      [].imm(),
+      Cluster.unit(),
       PEmpty
     );
   }
   @:from static public function fromSchema(self:stx.schema.Schema){
     return make(
       SchemaRef.fromSchema(self),
-      [].imm(),
+      Cluster.unit(),
       PEmpty 
     );
   }

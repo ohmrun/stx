@@ -23,17 +23,32 @@ class Path{
               ).asParser().apply(s.reader())).toUpshot().adjust(
                 opt -> opt.fold(
                   ok -> __.accept(ok),
-                  () -> __.reject(ParseFailure.make(0,'no output',true).toRefuse())
+                  () -> __.reject(
+                    f -> f.except(
+                      CTR.make((_:Excepts<ParseFailure>) -> 
+                        (_.e_fatal(
+                          'no output',
+                          LocCtr.instance.Indexed(0)
+                        ):Lapse<ParseFailure>)
+                      ))
+                    )
+                  )
                 )
-              )
           ).def(
             () -> {
               __.log().trace("default");
               final reader = "".reader();
-              return reader.no('no input').toUpshot().adjust(
+              return reader.no(E_Parse_NoInput).toUpshot().adjust(
                 opt -> opt.fold(
                   ok -> __.accept(ok),
-                  () -> __.reject(ParseFailure.make(0,'no output',true).toRefuse())
+                  () -> __.reject(
+                    f -> f.except(
+                      CTR.make((_:Excepts<ParseFailure>) -> _.e_fatal(
+                        'no output',
+                        LocCtr.instance.Indexed(0)
+                      ))
+                    )
+                  )
                 )
               );
             }
@@ -41,7 +56,7 @@ class Path{
           __.log().debug(_ -> _.pure(result));
           return result;
       }
-    ).errate( (e) -> e.toPathParseFailure().toPathFailure() );
+    ).errata( (e) -> e.toPathParseFailure().toPathFailure() );
   }
 }
 

@@ -6,10 +6,10 @@ class HFunctionArgCtr extends Clazz{
   public function Make(name:String,type:CTR<HComplexTypeCtr,HComplexType>,?opt:Bool,?value:CTR<HExprCtr,HExpr>,?meta:CTR<HMetadataEntryCtr,HMetadata>){
     return HFunctionArg.lift({
       name  : name,
-      type  : type(Expr.HComplexType),
+      type  : type.apply(Expr.HComplexType),
       opt   : opt,
-      value : __.option(value).map(f -> f(Expr.HExpr).prj()).defv(null),
-      meta  : __.option(meta).map(f -> f(Expr.HMetadataEntry)).defv(null)
+      value : __.option(value).map(f -> f.apply(Expr.HExpr).prj()).defv(null),
+      meta  : __.option(meta).map(f -> f.apply(Expr.HMetadataEntry)).defv(null)
     });
   }
 }

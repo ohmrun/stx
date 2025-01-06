@@ -13,7 +13,7 @@ class Cli{
   }
   static public function apply(self:stx.sys.cli.Module,spec:Spec):Upshot<Option<SpecValue>,CliFailure>{
     return (stx.sys.cli.SysCliParser.apply(Sys.args()).flat_map(
-      x -> spec.reply().apply(x.reader()).toUpshot().errate(
+      x -> spec.reply().apply(x.reader()).toUpshot().errata(
         x -> E_Cli_Parse(x)
       )
     ));

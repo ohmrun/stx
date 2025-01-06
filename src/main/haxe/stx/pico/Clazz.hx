@@ -1,7 +1,10 @@
 package stx.pico;
 
+/**
+ * Base class 
+ */
 @:expose("stx.Clazz")
-class Clazz{
+class Clazz implements IFaze{
   public function new(){}
   /**
    * Get the `Class` for `stx.pico.Clazz`

@@ -36,7 +36,7 @@ class MethodCall{
         async -> async.asFuture().first(Timeout.make(get_timeout())),
         ()    -> TestResult.unit()
       ),
-      no -> TestEffect.fromRefuse(no)
+      no -> TestEffect.fromError(no)
     )).tap(
       (x) -> {
         final after_assertions_length   = all_assertions.length;

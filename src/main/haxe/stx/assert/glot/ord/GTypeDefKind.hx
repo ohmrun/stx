@@ -24,14 +24,17 @@ class GTypeDefKind extends OrdCls<GTypeDefKindT>{
         }
         ord;
       case [GTDAlias(tI),GTDAlias(tII)] : 
-        new GComplexType().comply(tI,tII);
-      case [GTDAbstract( tthisI, fromI, toI),GTDAbstract( tthisII, fromII, toII)] : 
-        var ord = Ord.NullOr(new GComplexType()).comply(tthisI,tthisII);
+        GComplexType.instance.comply(tI,tII);
+      case [GTDAbstract( tthisI, flagsI, fromI, toI),GTDAbstract( tthisII, flagsII, fromII, toII)] : 
+        var ord = Ord.NullOr(GComplexType.instance).comply(tthisI,tthisII);
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Cluster(new GComplexType())).comply(fromI,fromII);
+          ord = Ord.NullOr(Ord.Cluster(stx.assert.glot.ord.GAbstractFlag.instance)).comply(flagsI,flagsII);
         }
         if(ord.is_not_less_than()){
-          ord = Ord.NullOr(Ord.Cluster(new GComplexType())).comply(toI,toII);
+          ord = Ord.NullOr(Ord.Cluster(GComplexType.instance)).comply(fromI,fromII);
+        }
+        if(ord.is_not_less_than()){
+          ord = Ord.NullOr(Ord.Cluster(GComplexType.instance)).comply(toI,toII);
         }
         ord;
       case [GTDField(kindI,accessI),GTDField(kindII,accessII)]:

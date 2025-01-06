@@ -1,7 +1,7 @@
 package stx.parse.parser.term;
 
-class RefuseTransformer<I,O> extends Base<I,O,Parser<I,O>>{
-  var transformer : Refuse<ParseFailure> -> Refuse<ParseFailure>;
+class ErrorTransformer<I,O> extends Base<I,O,Parser<I,O>>{
+  var transformer : Error<ParseFailure> -> Error<ParseFailure>;
   public function new(delegation,transformer,?pos:Pos){
     super(delegation,pos);
     this.transformer = transformer;
@@ -13,7 +13,7 @@ class RefuseTransformer<I,O> extends Base<I,O,Parser<I,O>>{
   private function mod(result:ParseResult<I,O>):ParseResult<I,O>{
     //__.log().trace(_ -> _.thunk(() -> delegation));
     //__.log().trace(result.is_ok());
-    final out = result.errata(transformer);
+    final out = ParseResult.make(result.asset,result.value,transformer(result.error));
     //__.log().trace(out.is_ok());
     return ParseResult.lift(out);
   }

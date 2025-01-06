@@ -4,6 +4,6 @@ using stx.Parse;
 
 class Module extends Clazz{
   public function spec(){
-    return Spec.__;
+    return Spec.instance;
   }
 }

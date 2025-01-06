@@ -24,7 +24,8 @@ class Regex extends Sync<String,String>{
       @:privateAccess __.log().debug('length ${match.length} data $data index: ${next.content.index}');
       next.ok(data);
     }else{
-      ipt.erration('$stamp not matched to |||${ipt.take()}|||',false).failure(ipt);
+      __.log().debug('$stamp not matched to |||${ipt.take()}|||');
+      ipt.no();
     }
   }
   override public function toString(){

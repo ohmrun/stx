@@ -161,7 +161,7 @@ class DeriveUses{
           outcome -> outcome.fold(
             ok -> __.accept(ok),
             no -> switch(no) {
-              case Stop     : __.reject(__.fault().explain(_ -> _.e_coroutine_stop()));
+              case Stop     : __.reject(__.fault().digest((_:Digests) -> _.e_coroutine_stop()));
               case Exit(e)  : __.reject(e);
             }
           )

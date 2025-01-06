@@ -131,13 +131,13 @@ class ReframeLift{
   static public function execution<I,O,E>(self:Reframe<I,O,E>):Modulate<I,I,E>{
     return Modulate.lift(ModulateLift.map(self,tp -> tp.snd()));
   }
-  static public function errate<I,O,E,EE>(self:Reframe<I,O,E>,fn:E->EE):Reframe<I,O,EE>{
+  static public function errata<I,O,E,EE>(self:Reframe<I,O,E>,fn:E->EE):Reframe<I,O,EE>{
     return lift(
       Fletcher.Anon(
         (i:Upshot<I,EE>,cont:Terminal<Upshot<Couple<O,I>,EE>,Nada>) -> i.fold(
           (i) -> cont.receive(
             self.forward(__.accept(i)).map(
-              x -> x.errate(fn)  
+              x -> x.errata(fn)  
             )
           ),
           (e) -> cont.value(__.reject(e)).serve()
@@ -145,7 +145,7 @@ class ReframeLift{
       )
     );
   }
-  static public inline function environment<I,O,E>(self:Reframe<I,O,E>,i:I,success:Couple<O,I>->Void,failure:Refuse<E>->Void):Fiber{
+  static public inline function environment<I,O,E>(self:Reframe<I,O,E>,i:I,success:Couple<O,I>->Void,failure:Error<E>->Void):Fiber{
     return ModulateLift.environment(
       self,
       i,

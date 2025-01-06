@@ -12,7 +12,7 @@ class EnumValue extends Clazz{
           (next:PExpr<Atom>,memo:Cluster<Dynamic>) -> {
             return decode.PExpr.apply(next).map(memo.snoc);
           },
-          [].imm()
+          Cluster.unit()
         );
         return params.map(
           params -> std.Type.createEnum(_enum,name,@:privateAccess params.prj())

@@ -13,13 +13,13 @@ abstract Return<T,E>(ReturnSum<T,E>) from ReturnSum<T,E> to ReturnSum<T,E>{
     return new Return(self);
   }
   public function new(self) this = self;
-  @:from static public function fromRefuse<T,E>(e:Refuse<E>):Return<T,E>{
+  @:noUsing @:from static public function fromError<T,E>(e:Error<E>):Return<T,E>{
     return Terminated(Exit(e));
   }
-  @:from static public function fromCause<T,E>(c:Cause<E>):Return<T,E>{
+  @:noUsing @:from static public function fromCause<T,E>(c:Cause<E>):Return<T,E>{
     return Terminated(c);
   }
-  @:from static public function fromT<T,E>(v:T):Return<T,E>{
+  @:noUsing @:from static public function fromT<T,E>(v:T):Return<T,E>{
     return Production(v);
   }
   @:to public function toCoroutine<I,O>():Coroutine<I,O,T,E>{

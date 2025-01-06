@@ -17,6 +17,7 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
     __.assert().expect().exists().crunch(delegation);
   }
   inline public function apply(input:ParseInput<I>):ParseResult<I,V>{  
+    // trace("with apply");
     var res = delegation.fst().apply(input);
     #if debug
     __.log().trace(_ -> _.thunk(
@@ -28,7 +29,8 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
     ));
     #end
     return switch(res.is_ok()){
-      case true: 
+      case true:
+        // trace("fst ok"); 
         __.assert().that().exists(delegation);
         __.assert().that().exists(delegation.snd());
         final resI = delegation.snd().apply(res.asset);
@@ -57,11 +59,13 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
           case false : 
             switch(resI.is_fatal()){
               case true   : resI.fails(); 
-              case false  : resI.error.concat(input.erration(E_Parse_ParseFailed('With lhs'))).failure(resI.asset);
+              case false  : 
+                input.defect(resI.error);
             }
         }
       case false : 
-        input.erration(E_Parse_ParseFailed('With')).concat(res.error).failure(res.asset);
+        // trace("fst not ok"); 
+        input.defect(res.error);
     }  
   }
   override public function toString(){

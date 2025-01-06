@@ -5,7 +5,7 @@ class ContextCls<P,R,E>{
   public function new(environment){
     this.environment = environment;
   }
-  public dynamic function on_error(e:Defect<E>):Void{
+  public dynamic function on_error(e:Error<E>):Void{
     __.crack(e);
   }
   public dynamic function on_value(r:R):Void{

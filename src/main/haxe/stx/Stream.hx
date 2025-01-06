@@ -133,7 +133,7 @@ class StreamLift{
                           if(!ended){
                             cb(Val(val));
                           }else{
-                            cb(End(__.fault().explain(_ -> _.e_end_called_twice())));
+                            cb(End(__.fault().digest((_:stx.fail.Digests) -> _.e_end_called_twice())));
                           }
                         },
                         (end) -> {
@@ -220,14 +220,9 @@ class StreamLift{
   static public function next<T,E>(self:Stream<T,E>):Future<Chunk<T,E>>{
     return self.prj().nextTime();
   }
-  static public function errata<T,E,EE>(self:Stream<T,E>,fn:Refuse<E>->Refuse<EE>):Stream<T,EE>{
+  static public function errata<T,E,EE>(self:Stream<T,E>,fn:E->EE):Stream<T,EE>{
     return lift(self.prj().map(
       chk -> chk.errata(fn)
-    ));
-  }
-  static public function errate<T,E,EE>(self:Stream<T,E>,fn:E->EE):Stream<T,EE>{
-    return lift(self.prj().map(
-      chk -> chk.errate(fn)
     ));
   }
 }

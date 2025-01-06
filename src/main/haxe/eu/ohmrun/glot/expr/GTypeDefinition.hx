@@ -7,10 +7,10 @@ class GTypeDefinitionCtr extends Clazz{
     return GTypeDefinition.make(
       name,
       pack,
-      kind(Expr.GTypeDefKind),
-      fields(Expr.GEField),
-      __.option(params).map(f -> f(Expr.GTypeParamDecl)).defv([]),
-      __.option(meta).map(f -> f(Expr.GMetadataEntry)).defv(GMetadata.unit()),
+      kind.apply(Expr.GTypeDefKind),
+      fields.apply(Expr.GEField),
+      __.option(params).map(f -> f.apply(Expr.GTypeParamDecl)).defv([]),
+      __.option(meta).map(f -> f.apply(Expr.GMetadataEntry)).defv(GMetadata.unit()),
       isExtern,
       doc
     );
@@ -35,7 +35,7 @@ typedef GTypeDefinitionDef = {
   @:noUsing static public function make(name,pack,kind,fields,?params,?meta,?isExtern,?doc){
     return lift({
       name        : name,
-      pack        : __.option(pack).defv([].imm()),
+      pack        : __.option(pack).defv(Cluster.unit()),
       kind        : kind,
       fields      : fields,
       params      : params,

@@ -25,8 +25,8 @@ class EnumAbstract{
       abstract_ident.pack,
       tkind -> tkind.Abstract(
         _ -> self.type,
-        _ -> [self.type].imm(),
-        _ -> [self.type].imm()
+        _ -> Cluster.pure(self.type),
+        _ -> Cluster.pure(self.type)
       ),
       field -> self.constructors.map(
         ctr -> field.Make(
@@ -40,11 +40,11 @@ class EnumAbstract{
         )
       ),
       _ -> [],
-      meta -> [
+      meta -> Cluster.make([
         meta.Make(
           'enum'
         )
-      ].imm()
+      ])
     );
     __.log().debug(_ -> _.pure(abstract_declaration));
 

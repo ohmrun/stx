@@ -22,28 +22,28 @@ abstract ModulateArg<P,R,E>(ModulateArgSum<P,R,E>) from ModulateArgSum<P,R,E> to
 	private var self(get,never):ModulateArg<P,R,E>;
 	private function get_self():ModulateArg<P,R,E> return lift(this);
 
-	@:from static public function fromModulateArgFunResRes0<P,R,E>(self:Upshot<P,E>->Upshot<R,E>){
+	@:noUsing @:from static public function fromModulateArgFunResRes0<P,R,E>(self:Upshot<P,E>->Upshot<R,E>){
 		return lift(ModulateArgFunResRes0(self));
 	}
-	@:from static public function fromModulateArgFun1Produce<P,R,E>(self:P->Produce<R, E>){
+	@:noUsing @:from static public function fromModulateArgFun1Produce<P,R,E>(self:P->Produce<R, E>){
 		return lift(ModulateArgFun1Produce(self));
 	}
-	@:from static public function fromModulateArgAttempt<P,R,E>(self:Attempt<P,R,E>){
+	@:noUsing @:from static public function fromModulateArgAttempt<P,R,E>(self:Attempt<P,R,E>){
 		return lift(ModulateArgAttempt(self));
 	}
-	@:from static public function fromModulateArgFletcher<P,R,E>(self:Fletcher<P, R, E>){
+	@:noUsing @:from static public function fromModulateArgFletcher<P,R,E>(self:Fletcher<P, R, E>){
 		return lift(ModulateArgFletcher(self));
 	}
-	@:from static public function fromModulateArgFun1Upshot<P,R,E>(self:P -> Upshot<R, E>){
+	@:noUsing @:from static public function fromModulateArgFun1Upshot<P,R,E>(self:P -> Upshot<R, E>){
 		return lift(ModulateArgFun1Upshot(self));
 	}
-	@:from static public function fromModulateArgFun1R<P,R,E>(self:P -> R ){
+	@:noUsing @:from static public function fromModulateArgFun1R<P,R,E>(self:P -> R ){
 		return lift(ModulateArgFun1R(self));
 	}
-	@:from static public function fromModulateArgUpshot<P,R,E>(self:Upshot<R, E>){
+	@:noUsing @:from static public function fromModulateArgUpshot<P,R,E>(self:Upshot<R, E>){
 		return lift(ModulateArgUpshot(self));
 	}
-	@:from static public function fromModulateArgPure<P,R,E>(o:R){
+	@:noUsing @:from static public function fromModulateArgPure<P,R,E>(o:R){
 		return lift(ModulateArgPure(o));
 	}
 	@:to public function toModulate(){
@@ -91,13 +91,13 @@ typedef ModulateDef<I, O, E> = FletcherDef<Upshot<I, E>, Upshot<O, E>, Nada>;
 		return fromFun1R(fn);
 	}
   @:noUsing static inline public function fromFun1Upshot<I, O, E>(fn:I -> Upshot<O, E>):Modulate<I, O, E> {
-		return lift(Fletcher.fromFun1R((ocI:Upshot<I, E>) -> ocI.fold((i : I) -> fn(i), (e:Refuse<E>) -> __.reject(e))));
+		return lift(Fletcher.fromFun1R((ocI:Upshot<I, E>) -> ocI.fold((i : I) -> fn(i), (e:Error<E>) -> __.reject(e))));
   }
   @:noUsing static public function fromFun1R<I, O, E>(fn:I -> O ):Modulate<I, O, E> {
-		return lift(Fletcher.fromFun1R((ocI:Upshot<I, E>) -> ocI.fold((i : I) -> __.accept(fn(i)), (e:Refuse<E>) -> __.reject(e))));
+		return lift(Fletcher.fromFun1R((ocI:Upshot<I, E>) -> ocI.fold((i : I) -> __.accept(fn(i)), (e:Error<E>) -> __.reject(e))));
 	}
 	@:noUsing static public function fromUpshot<I, O, E>(ocO:Upshot<O, E>):Modulate<I, O, E> {
-		return lift(Fletcher.fromFun1R((ocI:Upshot<I, E>) -> ocI.fold((i : I) -> ocO, (e:Refuse<E>) -> __.reject(e))));
+		return lift(Fletcher.fromFun1R((ocI:Upshot<I, E>) -> ocI.fold((i : I) -> ocO, (e:Error<E>) -> __.reject(e))));
 	}
 	@:from @:noUsing static public function fromFunResRes0<I,O,E>(fn:Upshot<I,E>->Upshot<O,E>):Modulate<I,O,E>{
 		return lift(Fletcher.Sync(
@@ -121,7 +121,7 @@ typedef ModulateDef<I, O, E> = FletcherDef<Upshot<I, E>, Upshot<O, E>, Nada>;
 				p.fold(
 					ok -> self.forward(ok).fold_mapp(
 						ok -> __.success(__.accept(ok)),
-						no -> __.success(__.reject(no.toRefuse())) 
+						no -> __.success(__.reject(no)) 
 					),
 					no -> Receiver.value(__.reject(no))
 				)
@@ -152,7 +152,7 @@ typedef ModulateDef<I, O, E> = FletcherDef<Upshot<I, E>, Upshot<O, E>, Nada>;
 
 	@:to public function toFletcher():Fletcher<Upshot<I, E>, Upshot<O, E>, Nada> return this;
 
-	public inline function environment(i:I, success:O->Void, ?failure:Refuse<E>->Void):Fiber {
+	public inline function environment(i:I, success:O->Void, ?failure:Error<E>->Void):Fiber {
 		return ModulateLift.environment(this, i, success, failure);
 	}
 	public inline function split<Oi>(that:Modulate<I, Oi, E>):Modulate<I, Couple<O, Oi>, E> {
@@ -194,7 +194,7 @@ class ModulateLift {
 			)
 		);
 	}
-	static public function errata<I, O, E, EE>(self:ModulateDef<I, O, E>, fn:Refuse<E>->Refuse<EE>):Modulate<I, O, EE> {
+	static public function errata<I, O, E, EE>(self:ModulateDef<I, O, E>, fn:E->EE):Modulate<I, O, EE> {
 		return lift(
 			Fletcher.Anon(
 				(i:Upshot<I, EE>,cont:Waypoint<O,EE>) -> i.fold(
@@ -209,10 +209,6 @@ class ModulateLift {
 				)
 			)
 		);
-	}
-
-	static public function errate<I, O, E, EE>(self:ModulateDef<I, O, E>, fn:E->EE):Modulate<I, O, EE> {
-		return errata(self, (e) -> e.errate(fn));
 	}
 
 	static public function reframe<I, O, E>(self:ModulateDef<I, O, E>):Reframe<I, O, E> {
@@ -246,8 +242,8 @@ class ModulateLift {
 		return lift(Modulate.fromFletcher(Fletcher.fromFun1R(fn)).then(self));
 	}
 
-	@:noUsing static public inline function environment<I, O, E>(self:ModulateDef<I, O, E>, i:I, success:O->Void, ?failure:Refuse<E>->Void):Fiber {
-		failure = failure ?? (e:Refuse<E>) ->  e.crack();
+	@:noUsing static public inline function environment<I, O, E>(self:ModulateDef<I, O, E>, i:I, success:O->Void, ?failure:Error<E>->Void):Fiber {
+		failure = failure ?? (e:Error<E>) ->  e.crack();
 		return FletcherLift.environment(
 			self, 
 			__.accept(i), 

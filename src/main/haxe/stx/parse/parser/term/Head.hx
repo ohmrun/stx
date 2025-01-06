@@ -16,10 +16,10 @@ inline public function apply(ipt:ParseInput<I>){
               ()  -> ipt
             ).ok(o)
           ),
-          () ->  ipt.no('no head')
+          () ->  ipt.no(E_Parse_NoHead)
         ),
-      (e) -> e.toParseResult_with(ipt),
-      ()  -> ipt.no('no head')
+      (e) -> ParseResult.make(ipt,None,e),
+      ()  -> ipt.no(E_Parse_NoHead)
     );
   }
 }

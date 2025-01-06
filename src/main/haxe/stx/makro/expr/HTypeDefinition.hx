@@ -6,11 +6,11 @@ class HTypeDefinitionCtr extends Clazz{
   public function Make(name,pack,kind:CTR<HTypeDefKindCtr,HTypeDefKind>,fields:CTR<HFieldCtr,Array<HField>>,?params:CTR<HTypeParamDeclCtr,Array<HTypeParamDecl>>,?meta:CTR<HMetadataEntryCtr,HMetadata>,?isExtern,?doc:Null<String>,?pos:CTR<HPositionCtr,HPosition>){
     return HTypeDefinition.make(
       Ident.make(name,pack),
-      fields(Expr.HField).map(x -> x.prj()),
-      kind(Expr.HTypeDefKind),
+      fields.apply(Expr.HField).map(x -> x.prj()),
+      kind.apply(Expr.HTypeDefKind),
       isExtern,
-      __.option(params).map(f -> f(Expr.HTypeParamDecl)).defv([]),
-      __.option(meta).map(f -> f(Expr.HMetadataEntry)).defv([]),
+      __.option(params).map(f -> f.apply(Expr.HTypeParamDecl)).defv([]),
+      __.option(meta).map(f -> f.apply(Expr.HMetadataEntry)).defv([]),
       doc,
       __.option(pos).map(f -> f.apply(Expr.HPosition)).defv(new HPositionCtr().Make())
     );

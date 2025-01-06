@@ -3,13 +3,13 @@ package stx.nano;
 /**
  * Part of the ambiguous state type tree. 
  */
-interface ReceiptApi<T,E> extends DefectApi<E>{
+interface ReceiptApi<T,E> extends stx.nano.Defect.DefectApi<E>{
   final value : Null<T>;
   public function iterator():Iterator<T>;
 }
-class ReceiptCls<T,E> extends DefectCls<E> implements ReceiptApi<T,E>{
+class ReceiptCls<T,E> extends stx.nano.Defect.DefectCls<E> implements ReceiptApi<T,E>{
   public final value : Null<T>;
-  public function new(error,value:Null<T>){
+  public function new(error:Error<E>,value:Null<T>){
     super(error);
     this.value = value;
   }
@@ -39,20 +39,36 @@ class ReceiptCls<T,E> extends DefectCls<E> implements ReceiptApi<T,E>{
     }
   }
 }
-typedef ReceiptDef<T,E> = DefectDef<E> & {
+typedef ReceiptDef<T,E> = {
+  /**
+   * Possible error related to this object.
+   */
+  public var error(get,null):Error<E>;
+  /**
+   * accessor for `error`
+   */
+  public function get_error():Error<E>;
+
+  public function toDefect():Defect<E>;
+
+  /**
+   * The value, if exists.
+   */
   final value : Null<T>;
   public function iterator():Iterator<T>;
-}
+  
+} 
+
 @:using(stx.nano.Receipt.ReceiptUses)
 @:forward abstract Receipt<T,E>(ReceiptDef<T,E>) from ReceiptDef<T,E> to ReceiptDef<T,E>{
   
   public function new(self) this = self;
   @:noUsing static public function lift<T,E>(self:ReceiptDef<T,E>):Receipt<T,E> return new Receipt(self);
   static public function unit<T,E>(){
-    return make(null,Refuse.unit());
+    return make(null,ErrorCtr.instance.Unit());
   }
-  @:noUsing static public function make<T,E>(value:Null<T>,?error:Refuse<E>){
-    return lift(new ReceiptCls(__.option(error).defv(Refuse.unit()),value));
+  @:noUsing static public function make<T,E>(value:Null<T>,?error:Error<E>){
+    return lift(new ReceiptCls(Option.make(error).defv(ErrorCtr.instance.Unit()),value));
   }
   public function prj():ReceiptDef<T,E> return this;
   private var self(get,never):Receipt<T,E>;
@@ -62,10 +78,7 @@ typedef ReceiptDef<T,E> = DefectDef<E> & {
     return make(null,self.error);
   }
   @:noUsing static public function pure<T,E>(self:T):Receipt<T,E>{
-    return make(self,Refuse.unit());
-  }
-  @:to public function toError(){
-    return this.error.toError();
+    return make(self,ErrorCtr.instance.Unit());
   }
 }
 class ReceiptUses extends Clazz{
@@ -75,24 +88,27 @@ class ReceiptUses extends Clazz{
   @:noUsing static public function lift<T,E>(self:ReceiptDef<T,E>):Receipt<T,E>{
     return Receipt.lift(self);
   }
-  static public function errate<T,E,EE>(self:ReceiptDef<T,E>,fn:E->EE):Receipt<T,EE>{
-    return errata(self,x -> x.errate(fn));
+  static public function blame<T,E>(self:ReceiptDef<T,E>,error:Null<Error<E>>){
+    return Receipt.make(
+      self.value,
+      self.error == null ? error : self.error.concat(error)
+    );
   }
-  static public function errata<T,E,EE>(self:ReceiptDef<T,E>,fn:Refuse<E>->Refuse<EE>){
+  static public function errata<T,E,EE>(self:ReceiptDef<T,E>,fn:E->EE){
     return Receipt.make(
       self.value,
       self.error.errata(fn)
     );
   }
-  static public function copy<T,E>(self:ReceiptDef<T,E>,?value:T,?error:Refuse<E>){
+  static public function copy<T,E>(self:ReceiptDef<T,E>,?value:T,?error:Error<E>){
     return Receipt.make(
-      __.option(value).defv(self.value),
-      __.option(error).defv(self.error)
+      Option.make(value).defv(self.value),
+      Option.make(error).defv(self.error)
     );
   }
   static public function map<T,Ti,E>(self:ReceiptDef<T,E>,fn:T->Ti):Receipt<Ti,E>{
     return Receipt.make(
-      __.option(self.value).fold(
+      Option.make(self.value).fold(
         ok -> fn(ok),
         () -> null
       ),
@@ -113,8 +129,8 @@ class ReceiptUses extends Clazz{
   }
   static public function toUpshot<T,E>(self:Receipt<T,E>):Upshot<T,E>{
     return switch(self.has_errors()){
-      case true   : __.reject(self.toDefect().toRefuse());
-      case false  : __.accept(self.value); 
+      case true   : Upshot.UpshotSum.Reject(self.error);
+      case false  : Upshot.UpshotSum.Accept(self.value); 
     }
   }
 }

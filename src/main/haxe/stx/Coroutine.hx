@@ -1,5 +1,6 @@
 package stx;
 
+using stx.Pico;
 using stx.Nano;
 using stx.Fail;
 using stx.coroutine.Core;
@@ -36,8 +37,8 @@ typedef TransmissionDef<I,O,R,E>        = stx.coroutine.core.Transmission.Transm
 typedef Transmission<I,O,R,E>           = stx.coroutine.core.Transmission<I,O,R,E>;
 
 class LiftCoroutine{
-  static public function e_coroutine(digests:Digests,note:CoroutineFailureNote){
-    return new stx.coroutine.core.Digest(note);
+  static public function e_coroutine(digests:Digests,note:CoroutineFailureNote,detail,pos){
+    return new stx.coroutine.core.Digest(note,detail,pos);
   }
   static public inline function upcast<I,O,R,E>(wildcard:Wildcard,spx:CoroutineSum<I,O,R,E>):Coroutine<I,O,R,E>{
     return spx;
@@ -48,10 +49,10 @@ class LiftCoroutine{
   // static public function asTunnel<I,O>(wildcard:Wildcard,spx:Coroutine<I,O,Nada>):Tunnel<I,O>{
   //   return new Tunnel(spx);
   // }
-  static public inline function quit<I,O,R,E>(wildcard:Wildcard,er:Refuse<E>):Coroutine<I,O,R,E>{
+  static public inline function quit<I,O,R,E>(wildcard:Wildcard,er:Error<E>):Coroutine<I,O,R,E>{
     return term(__,Exit(er));
   }
-  static public inline function exit<I,O,R,E>(wildcard:Wildcard,er:Refuse<E>):Coroutine<I,O,R,E>{
+  static public inline function exit<I,O,R,E>(wildcard:Wildcard,er:Error<E>):Coroutine<I,O,R,E>{
     return term(__,Exit(er));
   }
   static public inline function halt<I,O,R,E>(wildcard:Wildcard,ret:Return<R,E>):Coroutine<I,O,R,E>{

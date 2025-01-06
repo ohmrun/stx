@@ -36,7 +36,7 @@ class Auto{
                       }));
                       default : __.reject(f -> f.of(E_Test_BadSpec));
                     },
-                    [].imm()
+                    Cluster.unit()
                   ).map(
                     (x:Cluster<ClassSpecDef>) -> {
                       name  : name,
@@ -58,7 +58,7 @@ class Auto{
                       memo.concat
                     );
                   },
-                  [].imm()
+                  Cluster.unit()
                 ).map(
                   cases -> ({
                     cases : cases,
@@ -81,9 +81,9 @@ class Auto{
           o   -> __.accept(o),
           ()  -> __.reject(f -> f.of(E_Test_BadSpec))
         ),
-        e -> __.reject(e.errate(eI -> TestFailure.fromParseFailure(eI)))
+        e -> __.reject(e.errata(eI -> TestFailure.fromParseFailure(eI)))
       ),
-      e   -> __.reject(e.errate(eI -> TestFailure.fromParseFailure(eI))),
+      e   -> __.reject(e.errata(eI -> TestFailure.fromParseFailure(eI))),
       ()  -> __.reject(f -> f.of(E_Test_BadSpec)) 
     ).flat_map(x -> x);
   }
@@ -143,7 +143,7 @@ class Auto{
           __.accept(tests);
         }catch(e:haxe.Exception){
           __.log().debug('$e');
-          __.reject(__.fault().explain(e.explain()));
+          __.reject(__.fault().to(_ -> ErrorCtr.instance.Label(e.toString())));
         }
       )
     );

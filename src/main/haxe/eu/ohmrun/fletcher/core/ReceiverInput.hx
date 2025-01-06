@@ -14,7 +14,16 @@ typedef ReceiverInputDef<R,E> = Future<ArwOut<R,E>>;
 
   public function zip<Ri>(that:ReceiverInput<Ri,E>):ReceiverInput<Couple<R,Ri>,E>{
     return this.merge(that.prj(),
-      (l,r) -> l.zip(r)
+      (l,r) -> l.fold(
+        l -> r.fold(
+          r   -> __.success(__.couple(l,r)),
+          (e) -> __.failure(e)
+        ),
+        eI -> r.fold(
+          _     -> __.failure(eI),
+          eII   -> __.failure(eI.concat(eII))
+        )
+      )
     );
   }
   public function prj():ReceiverInputDef<R,E> return this;
@@ -22,12 +31,12 @@ typedef ReceiverInputDef<R,E> = Future<ArwOut<R,E>>;
   private function get_self():ReceiverInput<R,E> return lift(this);
 }
 class ReceiverInputLift{
-  static public function fold_bind<R,Z,E,EE>(self:ReceiverInput<R,E>,ok:R->ReceiverInput<Z,EE>,no:Defect<E>->ReceiverInput<Z,EE>):ReceiverInput<Z,EE>{
+  static public function fold_bind<R,Z,E,EE>(self:ReceiverInput<R,E>,ok:R->ReceiverInput<Z,EE>,no:Error<E>->ReceiverInput<Z,EE>):ReceiverInput<Z,EE>{
     return self.flatMap(
       (oc) -> oc.fold(ok,no)
     );
   }
-  static public function fold_mapp<R,Z,E,EE>(self:ReceiverInput<R,E>,ok:R->ArwOut<Z,EE>,no:Defect<E>->ArwOut<Z,EE>):ReceiverInput<Z,EE>{
+  static public function fold_mapp<R,Z,E,EE>(self:ReceiverInput<R,E>,ok:R->ArwOut<Z,EE>,no:Error<E>->ArwOut<Z,EE>):ReceiverInput<Z,EE>{
     return self.map(
       (oc) -> oc.fold(ok,no)
     );

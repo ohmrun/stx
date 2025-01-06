@@ -12,7 +12,7 @@ class Repeated<I,O> extends Base<I,Array<O>,Parser<I,O>>{
     //__.assert(this.number).gt_eq(1);
 
     #if debug
-    __.assert(id).that().exists(delegation);
+    __.assert().that(id).exists(delegation);
     #end
     super(delegation,id);
     this.tag = switch (delegation.tag){
@@ -22,12 +22,12 @@ class Repeated<I,O> extends Base<I,Array<O>,Parser<I,O>>{
   }
   override public function check(){
     #if debug
-    __.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
+    //__.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
     #end
   }
   public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
     var count = 0;
-    function rec(inputII:ParseInput<I>,arr:Array<O>){
+    function rec(inputII:ParseInput<I>,arr:Array<O>):ParseResult<I,Array<O>>{
       final res = delegation.apply(inputII);
       #if debug
       __.log().trace('$delegation');
@@ -39,7 +39,8 @@ class Repeated<I,O> extends Base<I,Array<O>,Parser<I,O>>{
       return switch(res.is_ok()){
         case true : 
           if (count > number){
-            inputI.no('Should repeat $number times, but repeated $count times');
+            __.log().debug('Should repeat $number times, but repeated $count times');
+            inputI.no(E_Parse_OutOfBounds);
           }else{
             count++;
             #if debug __.log().trace('${res.value}'); #end 
@@ -52,13 +53,15 @@ class Repeated<I,O> extends Base<I,Array<O>,Parser<I,O>>{
           }
         case false : 
           if(res.is_fatal()){
-            inputI.erration('failed many ${delegation}',true).concat(res.error).failure(inputI);
+            __.log().debug('failed many ${delegation}');
+            inputI.fatal(E_Parse_OutOfBounds).defect(res.error);
           }else{
             #if debug __.log().trace(_ -> _.thunk( () -> arr)); #end
             if(count == number){
               res.asset.ok(arr); 
             }else{
-              inputI.no('Should repeat $number times, but repeated $count times');
+              __.log().debug('Should repeat $number times, but repeated $count times');
+              inputI.no();
             }
           }
       }

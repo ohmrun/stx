@@ -8,7 +8,7 @@ class Module extends Clazz{
 	}
 	public inline function alts<I,O>(arr:Cluster<Parser<I,O>>){
     return arr.lfold1((next,memo:Parser<I,O>) -> Or(memo,next).asParser()).defv(
-			Parsers.Failed('not one alternative specified').asParser()
+			Parsers.Failed().asParser()
 		);
 	}
 	public inline function when<I>(fn:I->Bool):Parser<I,I>{

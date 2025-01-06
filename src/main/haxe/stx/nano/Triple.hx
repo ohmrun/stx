@@ -55,7 +55,7 @@ class TripleLift{
     return out;
   }
   static public function tup<Ti,Tii, Tiii>(self:TripleDef<Ti,Tii,Tiii>):Tup3<Ti,Tii,Tiii>{
-    return detriple(self,tuple3);
+    return detriple(self,Tup3.tuple3);
   }
   static public function toString<Ti,Tii, Tiii>(self:TripleDef<Ti,Tii,Tiii>):String{
     return detriple(self,

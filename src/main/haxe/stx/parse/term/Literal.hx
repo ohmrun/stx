@@ -54,11 +54,11 @@ import stx.parse.Parsers.*;
       failed = true;
     }
     return if(failed){
-      input.erration("Literal encountered null").failure(input);
+      input.no(E_Parse_EmptyInput);
     }else{
       var out : String = input.take(idx);
         out = out.substr(1,out.length-2);
-      idx > 1 ? input.drop(idx).ok(out) : input.erration('Literal').failure(input); 
+      idx > 1 ? input.drop(idx).ok(out) : input.no(E_Parse_Failed); 
     }
   }
 }

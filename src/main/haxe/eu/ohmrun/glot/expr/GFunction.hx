@@ -5,10 +5,10 @@ final Expr = __.glot().Expr;
 class GFunctionCtr extends Clazz{
   public function Make(args:CTR<GFunctionArgCtr,Cluster<GFunctionArg>>,?ret:CTR<GComplexTypeCtr,GComplexType>,?expr:CTR<GExprCtr,GExpr>,?params:CTR<GTypeParamDeclCtr,Cluster<GTypeParamDecl>>){
     return GFunction.make(
-      args(Expr.GFunctionArg),
-      __.option(ret).map(f -> f(Expr.GComplexType)).defv(null),
-      __.option(expr).map(f -> f(Expr.GExpr)).defv(null),
-      __.option(params).map(f -> f(Expr.GTypeParamDecl)).defv(null)
+      args.apply(Expr.GFunctionArg),
+      __.option(ret).map(f -> f.apply(Expr.GComplexType)).defv(null),
+      __.option(expr).map(f -> f.apply(Expr.GExpr)).defv(null),
+      __.option(params).map(f -> f.apply(Expr.GTypeParamDecl)).defv(null)
     );
   }
 }

@@ -10,18 +10,20 @@ abstract FPath(Chars){
     return new FPath(str);
   }
   public function into(str:String):FPath{
-    return new FPath(LiftNano.if_else(
-      has_end_slash(),
-      () -> '$this$str',
-      () -> '$this/$str'
-    ));
+    return new FPath(
+      if(has_end_slash()){
+        '$this$str';
+      }else{
+        '$this/$str';
+      } 
+    );
   }
   public function trim_end_slash(){
-    return LiftNano.if_else(
-      has_end_slash(),
-      () -> lift(this.rdropn(1)),
-      () -> lift(this)
-    );
+    return if(has_end_slash()){
+      lift(this.rdropn(1));
+    }else{
+      lift(this);
+    }
   }
   public function has_end_slash(){
     return StringTools.endsWith(this,'/');   

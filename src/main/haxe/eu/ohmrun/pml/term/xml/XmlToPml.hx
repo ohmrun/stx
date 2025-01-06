@@ -21,7 +21,7 @@ class XmlToPml{
               trace(val);
               return memo.snoc(tuple2(PLabel(next),PLabel(val)));
             },
-            [].imm()
+            Cluster.unit()
           );
           final assoc = PAssoc(assoc_data);
           final rest = xml.iterator().toIter().lfold(
@@ -38,7 +38,7 @@ class XmlToPml{
                   { count : memo.count, rest : memo.rest.snoc(tuple2(Some(name),data)) };
               }
             },
-            { count : 0 , rest : [].imm() }
+            { count : 0 , rest : Cluster.unit() }
           );
           final rhs = switch(rest.count){
             case 0 : 
@@ -92,7 +92,7 @@ class XmlToPml{
               trace(next);
               return memo.snoc(rec(next));
             },
-            [].imm()
+            Cluster.unit()
           ));
         case PCData:
           PValue(XPCData(xml.toString()));

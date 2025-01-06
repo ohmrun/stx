@@ -1,10 +1,11 @@
 package stx.nano;
 
+
 @:using(stx.nano.Upshot.UpshotLift)
 @:using(stx.nano.Upshot.UpshotSumLift)
 enum UpshotSum<T,E>{
   Accept(t:T);
-  Reject(e:Refuse<E>);
+  Reject(e:Error<E>);
 }
 class UpshotSumLift{
   static public function toString<T,E>(self:UpshotSum<T,E>):String{
@@ -21,24 +22,24 @@ abstract Upshot<T,E>(UpshotSum<T,E>) from UpshotSum<T,E> to UpshotSum<T,E>{
   
   @:noUsing static public inline function lift<T,E>(self:UpshotSum<T,E>):Upshot<T,E> return new Upshot(self);
   @:noUsing static public function accept<T,E>(t:T):Upshot<T,E>                    return lift(Accept(t));
-  @:noUsing static public function reject<T,E>(e:Refuse<E>):Upshot<T,E>               return lift(Reject(e));
+  @:noUsing static public function reject<T,E>(e:Error<E>):Upshot<T,E>               return lift(Reject(e));
 
   @:noUsing static public function fromReport<E>(self:Report<E>):Upshot<Nada,E>{
     return lift(self.fold(
-      (ok:Refuse<E>)   -> reject(ok),
+      (ok:Error<E>)   -> reject(ok),
       ()              -> accept(Nada)
     ));
   }
   public function prj():UpshotSum<T,E> return this;
 
-  @:from static public function fromOutcome<T,E>(self:Outcome<T,Refuse<E>>):Upshot<T,E>{
+  @:from static public function fromOutcome<T,E>(self:Outcome<T,Error<E>>):Upshot<T,E>{
     var ocd : UpshotSum<T,E> = switch(self){
       case Success(ok) : Accept(ok);
       case Failure(no) : Reject(no);
     }
     return lift(ocd);
   }
-  @:to public function toOutcome():Outcome<T,Refuse<E>>{
+  @:to public function toOutcome():Outcome<T,Error<E>>{
     return switch(this){
       case Accept(ok) : Success(ok);
       case Reject(no) : Failure(no);
@@ -53,11 +54,11 @@ abstract Upshot<T,E>(UpshotSum<T,E>) from UpshotSum<T,E> to UpshotSum<T,E>{
       accept(init)
     );
   }
-  @:to public function toStringable():Stringable{
-    return {
-      toString : UpshotLift.toString.bind(this)
-    }
-  }
+  // @:to public function toStringable():Stringable{
+  //   return {
+  //     toString : UpshotLift.toString.bind(this)
+  //   }
+  // }
   @:to public function toIterable():Iterable<T>{
     return {
       iterator : iterator
@@ -90,17 +91,12 @@ class UpshotLift{
       (e) -> 'Reject(${e.toString()})'
     );
   }
-  static public inline function errata<T,E,EE>(self:Upshot<T,E>,fn:Refuse<E>->Refuse<EE>):Upshot<T,EE>{
+  static public inline function errata<T,E,EE>(self:Upshot<T,E>,fn:E->EE):Upshot<T,EE>{
     return Upshot.lift(
       self.fold(
         (t) -> Upshot.accept(t),
-        (e) -> Upshot.reject(fn(e))
+        (e) -> Upshot.reject(e.errata(fn))
       )
-    );
-  }
-  static public inline function errate<T,E,EE>(self:Upshot<T,E>,fn:E->EE):Upshot<T,EE>{
-    return errata(self,
-      (e) -> e.errate(fn)
     );
   }
   static public inline function zip<T,TT,E>(self:UpshotSum<T,E>,that:UpshotSum<TT,E>):Upshot<Couple<T,TT>,E>{
@@ -123,7 +119,7 @@ class UpshotLift{
   static public inline function adjust<T,E,TT>(self:UpshotSum<T,E>,fn:T->UpshotSum<TT,E>):Upshot<TT,E>{
     return flat_map(self,fn);
   }
-  static public inline function fold<T,E,TT>(self:UpshotSum<T,E>,fn:T->TT,er:Refuse<E>->TT):TT{
+  static public inline function fold<T,E,TT>(self:UpshotSum<T,E>,fn:T->TT,er:Error<E>->TT):TT{
     return switch(self){
       case Accept(t) : fn(t);
       case Reject(e) : er(e);
@@ -150,24 +146,24 @@ class UpshotLift{
       (er) -> Report.pure(er)
     );
   }
-  static public inline function usher<T,E,Z>(self:UpshotSum<T,E>,fn:Option<Decline<E>>->Z):Z{
+  static public inline function usher<T,E,Z>(self:UpshotSum<T,E>,fn:List<Lapse<E>>->Z):Z{
     return report(self).usher(fn);
   }
-  static public inline function rectify<T,E>(self:UpshotSum<T,E>,fn:Refuse<E>->UpshotSum<T,E>):UpshotSum<T,E>{
+  static public inline function rectify<T,E>(self:UpshotSum<T,E>,fn:Error<E>->UpshotSum<T,E>):UpshotSum<T,E>{
     return fold(
       self,
       (ok)  -> Upshot.accept(ok),
       (no)  -> fn(no)
     );
   }
-  static public inline function recover<T,E>(self:UpshotSum<T,E>,fn:Refuse<E>->T):T{
+  static public inline function recover<T,E>(self:UpshotSum<T,E>,fn:Error<E>->T):T{
     return fold(
       self,
       (v) -> v,
       (e) -> fn(e)
     );
   }
-  static public function effects<T,E>(self:UpshotSum<T,E>,success:T->Void,failure:Refuse<E>->Void):Upshot<T,E>{
+  static public function effects<T,E>(self:UpshotSum<T,E>,success:T->Void,failure:Error<E>->Void):Upshot<T,E>{
     return fold(
       self,
       (ok) -> {
@@ -197,15 +193,15 @@ class UpshotLift{
     return fold(
       self,
       (ok)  -> fn(ok),
-      e     -> e.report()
+      e     -> ReportSum.Reported(e)
     );
   }
   static public function toChunk<T,E>(self:UpshotSum<T,E>):Chunk<T,E>{
     return switch(self){
-      case Accept(null) : Tap;
-      case Accept(v)    : Val(v);
-      case Reject(e)    : End(e);
-      case null         : Tap; 
+      case Accept(null) : Chunk.ChunkSum.Tap;
+      case Accept(v)    : Chunk.ChunkSum.Val(v);
+      case Reject(e)    : Chunk.ChunkSum.End(e);
+      case null         : Chunk.ChunkSum.Tap; 
     }
   }
   @:stx.effect
@@ -216,14 +212,27 @@ class UpshotLift{
       (no) -> { no.crack(); return null;}
     );
   }
-  static public function embed<T,E,EE>(self:Upshot<T,E>,embed:Embed<E>):Upshot<T,EE>{
-    return self.errata(
-      e -> e.embed(embed)
+  static public function stash<T,E,EE>(self:Upshot<T,E>,stash:Stash<Lapse<E>>):Upshot<T,EE>{
+    return self.fold(
+      ok -> Accept(ok),
+      er -> Reject(ErrorCtr.instance.Stash(er,stash))
     );
   }
-  static public function disembed<T,E,EE>(self:Upshot<T,E>,embed:Embed<EE>):Upshot<T,EE>{
-    return self.errata(
-      e -> e.disembed(embed)
+  static public function unstash<T,E,EE>(self:Upshot<T,E>,stash:Stash<Lapse<EE>>):Upshot<T,EE>{
+    return self.fold(
+      ok -> Accept(ok),
+      no -> Reject(
+        ErrorCtr.instance.Make(
+          _ -> no.lapse.map(
+            lapse -> 
+              if(stash.has(lapse.label)){
+                stash.get(lapse.label);
+              }else{
+                new LapseCtr().StashEmptyFor(lapse.label);
+              }
+          )
+        )
+      )
     );
   }
 }

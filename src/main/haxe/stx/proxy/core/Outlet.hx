@@ -51,7 +51,7 @@ class OutletLift{
           __.ended(Tap);
         case Ended(End(x))  : Ended(End(x));
         case Ended(Tap)     : Ended(Tap);
-        case null           : Ended(__.fault().explain(_ -> _.e_undefined()));
+        case null           : Ended(__.fault().digest((_:stx.fail.Digests) -> _.e_undefined()));
       }
     }
     return Agenda.lift(f(self));

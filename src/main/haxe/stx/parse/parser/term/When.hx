@@ -8,10 +8,10 @@ class When<I> extends SyncBase<I,I,I->Bool>{
     final result = input.head().fold(
      (x) -> delegation(x).if_else(
        () -> input.tail().ok(x),
-       () -> input.erration('When').failure(input)
+       () -> input.no()
      ),
-     (e) -> e.toParseResult_with(input),
-     ()   -> input.erration('When').failure(input)
+     (e) -> ParseResult.make(input,None,e),
+     ()   -> input.no()
     );
     return result;
   }

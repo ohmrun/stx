@@ -1,6 +1,6 @@
 package stx;
 
-using stx.Nano;
+using stx.Pico;
 
 typedef LenseFailureSum   = stx.fail.LenseFailure.LenseFailureSum;
 typedef LenseFailure      = stx.fail.LenseFailure;

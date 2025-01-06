@@ -1,7 +1,7 @@
 package eu.ohmrun.fletcher.receiver.term;
 
 class Later<R,E> extends Delegate<Terminal<R,E>,R,E>{
-  final future : Future<Outcome<R,Defect<E>>>;
+  final future : Future<Outcome<R,Error<E>>>;
   public function new(delegate,future){
     super(delegate);
     this.future = future;
@@ -10,7 +10,7 @@ class Later<R,E> extends Delegate<Terminal<R,E>,R,E>{
     return this.delegate.apply(
       Apply.Anon((trig:TerminalInput<R,E>) -> {
         future.handle(
-          (x:Outcome<R,Defect<E>>) -> trig.trigger(x)
+          (x:Outcome<R,Error<E>>) -> trig.trigger(x)
         );
         return app.apply(trig.toReceiverInput());
       })

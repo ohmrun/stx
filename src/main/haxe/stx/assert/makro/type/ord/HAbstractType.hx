@@ -17,19 +17,19 @@ class HAbstractType extends OrdCls<THAbstractType>{
       ord = Ord.NullOr(Ord.Makro().Type().HRef(Ord.Makro().Type().HClassType)).comply(a.impl,b.impl);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Anon(binop_op)).comply(a.binops,b.binops);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Anon(binop_op)).comply(a.binops,b.binops);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Anon(unop_op)).comply(a.unops,b.unops);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Anon(unop_op)).comply(a.unops,b.unops);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Anon(from_and_to_op)).comply(a.from,b.from);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Anon(from_and_to_op)).comply(a.from,b.from);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Anon(from_and_to_op)).comply(a.to,b.to);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Anon(from_and_to_op)).comply(a.to,b.to);
     }
     if(ord.is_not_less_than()){
-      ord = Ord.ArrayOrd(Ord.Makro().Type().HClassField).comply(a.array,b.array);
+      ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Type().HClassField).comply(a.array,b.array);
     }
     if(ord.is_not_less_than()){
       ord = Ord.NullOr(Ord.Makro().Type().HClassField).comply(a.resolve,b.resolve);

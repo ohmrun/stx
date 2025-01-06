@@ -27,7 +27,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 					.resolve(f -> f.of(E_Lense('no $next on $self')))
 					.map(memo.snoc);
 			}, 
-			[].imm()
+			Cluster.unit()
 		).map((rest) -> switch (self) {
 			case PGroup(list) 	: Some(PGroup(LinkedList.fromCluster(rest)));
 			case PArray(array)	: Some(PArray(rest));
@@ -62,7 +62,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 											(next:Int, memo:Cluster<Tup2<PExpr<V>, PExpr<V>>>) -> {
 													return memo.cons(tuple2(PExpr.lift(PEmpty), PExpr.lift(PEmpty)));
 											}, 
-											[].imm().cons(tuple2(PLabel(key), a))
+											Cluster.unit().cons(tuple2(PLabel(key), a))
 										)
 								)
 						);
@@ -134,7 +134,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 						.resolve(f -> f.of(E_Lense("no value")))
 						.flat_map(__.decouple((a, c) -> put(p, a, c).map(tuple2.bind(next))))
 						.map(memo.snoc);
-				}, [].imm()).flat_map((xs) -> {
+				}, Cluster.unit()).flat_map((xs) -> {
 					return switch (a) {
 						case PGroup(list) 	: __.accept(PGroup(xs.map(x -> x.snd()).toLinkedList()));
 						case PArray(array) 	: __.accept(PArray(xs.map(x -> x.snd())));
@@ -145,7 +145,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 									.fold(ok -> __.accept(tuple2(PLabel(fld), next.snd())), () -> __.reject(f -> f.of(E_Lense('no value at ${next.fst()}'))))
 									.map(memo.snoc),
 									() -> __.reject(f -> f.of(E_Lense('no value at ${next.fst()}'))));
-							}, [].imm()).map(PAssoc);
+							}, Cluster.unit()).map(PAssoc);
 						case PSet(arr): __.accept(PArray(xs.map(x -> x.snd())));
 						default: __.reject(f -> f.of(E_Lense('abstract view $a is a leaf')));
 					}
@@ -178,9 +178,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 						x 	-> x,
 						() 	-> PEmpty
 					)
-				).errate(
-					E_Lense_Pml
-				);
+				).errata(E_Lense_Pml);
 			case LsMerge(m, n):
 				final c_m = this.access(m, c).resolve(f -> f.of(E_Lense('no value $m on $c')));
 				final c_n = this.access(n, c).resolve(f -> f.of(E_Lense('no value $n on $c')));
@@ -246,7 +244,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 		              //trace('ZSsas');
 		              return memo.cons(tuple2(PExpr.lift(PEmpty),PExpr.lift(PEmpty)));
 		            },
-		            [].imm().cons(tuple2(PLabel(key),c))
+		            Cluster.unit().cons(tuple2(PLabel(key),c))
 		          )
 		        )));
 						case CoIndex(-1)      :
@@ -338,7 +336,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 		          }
 		        );
 		      },
-		      [].imm()
+		      Cluster.unit()
 		    ).flat_map(
 		      (xs) -> {
 		        trace(xs);
@@ -357,7 +355,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 		                  () -> __.reject(f->f.of(E_Lense('no value at ${next.fst()}')))
 		                );
 		              },
-		              [].imm()
+		              Cluster.unit()
 		            ).map(PAssoc);
 		          case PSet(arr)      : __.accept(PArray(xs.map(x -> x.snd())));
 		          default             : __.reject(f -> f.of(E_Lense('concrete view $c is a leaf')));
@@ -458,19 +456,19 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 				listI 	= listI.rpad(max,PEmpty);
 				listII 	= listII.rpad(max,PEmpty);
 
-				Upshot.bind_fold(listI.zip(listII), joiner, [].imm()).map(xs -> xs.toLinkedList()).map(PGroup);
+				Upshot.bind_fold(listI.zip(listII), joiner, Cluster.unit()).map(xs -> xs.toLinkedList()).map(PGroup);
 			case [PGroup(arrayI), PArray(arrayII)]:
 				final max = Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.rpad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
-				Upshot.bind_fold(arrayI.zip(arrayII), joiner, [].imm()).map(xs -> xs.toLinkedList()).map(PGroup);
+				Upshot.bind_fold(arrayI.zip(arrayII), joiner, Cluster.unit()).map(xs -> xs.toLinkedList()).map(PGroup);
 			case [PGroup(arrayI), PSet(arrayII)]:
 				final max = Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.rpad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
-				Upshot.bind_fold(arrayI.zip(arrayII), joiner, [].imm()).map(xs -> xs.toLinkedList()).map(PGroup);
+				Upshot.bind_fold(arrayI.zip(arrayII), joiner, Cluster.unit()).map(xs -> xs.toLinkedList()).map(PGroup);
 			case [PSet(setI), PSet(setII)]:
 				final set 	= RedBlackSet.make(this.V).concat(setI).concat(setII);
 				__.accept(PSet(set.toCluster()));
@@ -485,19 +483,19 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 				arrayI 		= arrayI.pad(max,PEmpty);
 				final arrayIII 	= arrayII.toCluster().pad(max,PEmpty);
 
-				Upshot.bind_fold(arrayI.zip(arrayIII), joiner, [].imm()).map(PArray);
+				Upshot.bind_fold(arrayI.zip(arrayIII), joiner, Cluster.unit()).map(PArray);
 			case [PArray(arrayI), PSet(arrayII)]:
 				final max = Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.pad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
-				Upshot.bind_fold(arrayI.zip(arrayII), joiner, [].imm()).map(PArray);
+				Upshot.bind_fold(arrayI.zip(arrayII), joiner, Cluster.unit()).map(PArray);
 			case [PArray(arrayI), PArray(arrayII)]:
 				final max = Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.pad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
-				Upshot.bind_fold(arrayI.zip(arrayII), joiner, [].imm()).map(PArray);
+				Upshot.bind_fold(arrayI.zip(arrayII), joiner, Cluster.unit()).map(PArray);
 			case [PAssoc(mapI), PAssoc(mapII)]:
 				var keys 	: RedBlackSet<PExpr<V>> = RedBlackSet.make(this.V);
 				
@@ -517,7 +515,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 						final res = this.adjoin(lhs.defv(PEmpty),rhs.defv(PEmpty));
 						return res.map(tuple2.bind(next)).map(memo.snoc);
 					},
-					[].imm()
+					Cluster.unit()
 				).map(PAssoc);
 				// final max 	= Math.max(mapI.size(),mapII.size()).floor();
 				// mapI 	= mapI.pad(max,tuple2(PEmpty,PEmpty));
@@ -528,12 +526,12 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 				// 		case [tuple2(lI, rI), tuple2(lII, rII)]:
 				// 			adjoin(lI, lII).zip(adjoin(rI, rII));
 				// 	}).map(__.decouple(tuple2)).map(x -> memo.snoc((x)));
-				// }, [].imm()).map(PAssoc);
+				// }, Cluster.unit()).map(PAssoc);
 			case [PValue(l),PValue(r)] if (V.is_greater_or_equal(PValue(r),PValue(l))) : __.accept(PValue(r));
 			case [PLabel(l),PLabel(r)] if (V.is_greater_or_equal(PLabel(r),PLabel(l))) : __.accept(PLabel(r));
 			case [PApply(l),PApply(r)] if (V.is_greater_or_equal(PApply(r),PApply(l))) : __.accept(PApply(r));
 			default:
-				__.reject(__.fault().of(stx.fail.PmlFailure.PmlFailureSum.E_Pml_CannotMix(lhs, rhs))).errate(E_Lense_Pml);
+				__.reject(__.fault().of(stx.fail.PmlFailure.PmlFailureSum.E_Pml_CannotMix(lhs, rhs))).errata(E_Lense_Pml);
 		}
 	}
 	public function member(self:PExpr<V>,that:PExpr<V>){
@@ -615,7 +613,7 @@ private class PmlLift {
 				Some(Left(Iter.range(0, length).map(_ -> PEmpty).toCluster()));
 			case PSigCollate(_, _) 	| PSigOutline(_) : 
 				//Some(Right(Iter.range(0, length).map(_ -> tuple2(PEmpty, PEmpty)).toCluster()));
-				Some(Right([].imm()));
+				Some(Right(Cluster.unit()));
 		}
 		trace('$chain $signature $rhs');
 		final rhsI = switch ([signature, rhs]) {
@@ -715,7 +713,7 @@ private class PmlLift {
 					() -> __.reject(f -> f.of(E_Pml('update returned None')))
 				);
 			}
-		).errate(E_Lense_Pml);
+		).errata(E_Lense_Pml);
   }
   static public function upsert<K,V>(self:Pml<V>,lhs:PExpr<V>,rhs:PExpr<V>,at:Coord){
     final is_update = self.labels(lhs).any(
@@ -740,7 +738,7 @@ private class PmlLift {
 		return switch(lhs){
 			case PAssoc(map) : PExpr._.as_assoc_cluster(rhs).map(
 				x -> PAssoc(map.concat(x))
-			).errate(E_Lense_Pml);
+			).errata(E_Lense_Pml);
 			case PArray(arr) 	: __.accept(PArray(arr.concat(rhs)));
 			case PSet(arr) 		: 
 				final set = RedBlackSet.make(self.V).concat(arr).concat(rhs);

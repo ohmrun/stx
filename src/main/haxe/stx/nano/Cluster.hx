@@ -13,6 +13,9 @@ typedef ClusterDef<T> = Array<T>;
 @:allow(stx)
 @:using(stx.nano.Cluster.ClusterLift)
 @:pure @:forward(fmap,accs,iterator,join) abstract Cluster<T>(ClusterDef<T>) from ClusterDef<T>{
+  /**
+   * @zero For equality via identity.
+   */
   static public var ZERO(get,null) : Cluster<Dynamic>;
   static public function get_ZERO(){
     return ZERO == null ? ZERO = new Cluster([]) : ZERO;
@@ -20,8 +23,9 @@ typedef ClusterDef<T> = Array<T>;
   @:op([]) static public function array_access<T>(self:Cluster<T>, idx:Int):T;
   
   
-  public function new(?self:Array<T>) this = __.option(self).defv([]);
-  
+  public function new(?self:Array<T>) this = Option.make(self).defv([]);
+
+  @:noUsing static public function make<T>(self:ClusterDef<T>):Cluster<T> return new Cluster(self);
   @:noUsing static public function lift<T>(self:ClusterDef<T>):Cluster<T> return new Cluster(self);
 
   static public function unit<T>():Cluster<T>{
@@ -100,7 +104,7 @@ class ClusterLift{
   static public function all<T>(self:Cluster<T>,fn:T->Bool):Bool                                                          return accs(self,stx.lift.ArrayLift.all.bind(_,fn));
   static public function any<T>(self:Cluster<T>,fn:T->Bool): Bool                                                         return accs(self,stx.lift.ArrayLift.any.bind(_,fn));
   static public function zip_with<T,Ti,TT>(self:Cluster<T>,that:Cluster<Ti>,fn:T->Ti->TT):Cluster<TT>                     return fmap(self,stx.lift.ArrayLift.zip_with.bind(_,that.prj(),fn));
-  static public function zip<T,Ti>(self:Cluster<T>,that:Cluster<Ti>):Cluster<Couple<T,Ti>>                                return fmap(self,stx.lift.ArrayLift.zip_with.bind(_,that.prj(),__.couple));
+  static public function zip<T,Ti>(self:Cluster<T>,that:Cluster<Ti>):Cluster<Couple<T,Ti>>                                return fmap(self,stx.lift.ArrayLift.zip_with.bind(_,that.prj(),Couple.make));
   static public function cross_with<T,Ti,TT>(self :Array<T>, that:Array<Ti>,fn : T -> Ti -> TT):Cluster<TT>               return fmap(self,stx.lift.ArrayLift.cross_with.bind(_,that,fn));
   static public function difference_with<T>(self:Cluster<T>, that:Array<T>,eq:T->T->Bool)                                 return fmap(self,stx.lift.ArrayLift.difference_with.bind(_,that,eq));
   static public inline function union_with<T>(self:Cluster<T>, that:Array<T>,eq:T->T->Bool)                               return fmap(self,stx.lift.ArrayLift.union_with.bind(_,that,eq));

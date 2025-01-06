@@ -22,10 +22,10 @@ class While<P,R> extends Base<P,Cluster<R>,Parser<P,R>>{
           for (v in res.value){
             result.push(v);
           }
-          rec(res.asset);
+          rec(res.asset);//Uh-Oh
         case false : 
           switch(result.length == 0){
-            case true  : res.asset.erration("While coming up empty").failure(res.asset);
+            case true  : res.asset.no(E_Parse_NoOutput);
             case false : res.asset.ok(Cluster.lift(result));
           }
       }

@@ -13,7 +13,7 @@ class Many<I,O> extends Base<I,Array<O>,Parser<I,O>>{
   }
   override public function check(){
     #if debug
-    __.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
+    // __.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
     #end
   }
   public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
@@ -38,7 +38,7 @@ class Many<I,O> extends Base<I,Array<O>,Parser<I,O>>{
           ipt = res.asset;
         case false : 
           if(res.is_fatal()){
-            out = Some(inputI.erration('failed many ${delegation}',true).concat(res.error).failure(inputI));
+            out = Some(inputI.no().defect(res.error));
           }else{
             #if debug __.log().trace(_ -> _.thunk( () -> arr)); #end
             out = Some(ipt.ok(arr)); 
@@ -48,7 +48,7 @@ class Many<I,O> extends Base<I,Array<O>,Parser<I,O>>{
     while(!out.is_defined()){
       step();
     }
-    return out.defv(inputI.no('FAIL'));
+    return out.defv(inputI.no());
   }
   override public function toString(){
     return 'Many($delegation)';

@@ -111,7 +111,7 @@ abstract class Apply<P> extends Clazz{
               (l) -> apply(n.snd()).map( r -> tuple2(l,r))
             ).map(x -> m.snoc(x));
           },
-          [].imm()
+          Cluster.unit()
         ).map(PAssoc);
     }).flat_map(
       x -> {

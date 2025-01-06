@@ -121,7 +121,7 @@ class DirectoryLift{
     return that.track.lfold(
       (next:Move,memo:Upshot<Track,FsFailure>) -> switch([next,memo]){
           case [Into(name),Accept(dir)] : __.accept(dir.concat([name]));
-          case [From,Accept(dir)]       : dir.up().errate(e -> (e:FsFailure));
+          case [From,Accept(dir)]       : dir.up().errata(e -> (e:FsFailure));
           case [_,Reject(_)]            : memo;
       },
       __.accept(self.track)
@@ -139,7 +139,7 @@ class DirectoryLift{
   }
   // static public function up(self:Directory){
   //   return is_root(self).if_else(
-  //     () -> __.reject(__.fault().of(E_Path_ReachedRoot).errate(e -> (e:FsFailure))),
+  //     () -> __.reject(__.fault().of(E_Path_ReachedRoot).errata(e -> (e:FsFailure))),
   //     () -> self.track.up().map(track -> Dir.make(dir.drive,track))
   //   );
   // }

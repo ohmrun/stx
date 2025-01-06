@@ -6,7 +6,7 @@ class HObjectFieldCtr extends Clazz{
   public function Make(field:String,?expr:CTR<HExprCtr,HExpr>,?quotes){
     return HObjectField.make(
       field,
-      __.option(expr).map(f -> f(Expr.HExpr)).defv(null),
+      __.option(expr).map(f -> f.apply(Expr.HExpr)).defv(null),
       quotes
     );
   }

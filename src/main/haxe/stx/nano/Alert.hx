@@ -11,7 +11,7 @@ typedef AlertDef<E> = Future<Report<E>>;
   static public function unit<E>():Alert<E>{
     return Future.irreversible((cb) -> cb(Report.unit()));
   }
-  @:noUsing static public function pure<E>(e:Refuse<E>):Alert<E>{
+  @:noUsing static public function pure<E>(e:Error<E>):Alert<E>{
     return Future.irreversible((cb) -> cb(Report.pure(e)));
   }
   @:noUsing static public function make<E>(self:Report<E>):Alert<E>{
@@ -19,7 +19,7 @@ typedef AlertDef<E> = Future<Report<E>>;
   }
   //TODO not sure about this
   static public function any<E>(arr:Cluster<Alert<E>>):Alert<E>{
-    return lift(__.nano().Ft().bind_fold(
+    return lift(new stx.nano.module.Future().bind_fold(
       arr,
       (next:Alert<E>,memo:Report<E>) -> next.prj().map(
         (report:Report<E>) -> memo.concat(report)
@@ -29,10 +29,10 @@ typedef AlertDef<E> = Future<Report<E>>;
   }
   static public function seq<T,E>(arr:Cluster<T>,fn:T->Alert<E>):Alert<E>{
     return lift(
-      __.nano().Ft().bind_fold(
+      new stx.nano.module.Future().bind_fold(
         arr,
         (next:T,memo:Report<E>) -> memo.fold(
-          (err) -> err.report().alert(),
+          (err) -> Alert.pure(err),
           ()    -> fn(next)
         ),
         Report.unit()
@@ -46,18 +46,15 @@ typedef AlertDef<E> = Future<Report<E>>;
   private var self(get,never):Alert<E>;
   private function get_self():Alert<E> return lift(this);
 
-  public function errata<EE>(fn:Refuse<E>->Refuse<EE>):Alert<EE>{
-    return this.map(report -> report.errata(fn));
-  }
-  public function errate<EE>(fn:E->EE):Alert<EE>{
-    return errata((err) -> err.errate(fn));
+  public function errata<EE>(fn:E->EE):Alert<EE>{
+    return AlertLift.flat_fold(this,(err) -> Alert.pure(err.errata(fn)),() -> Alert.unit());
   }
   public function handle(fn:Report<E>->Void):CallbackLink{
     return this.handle(fn);
   }
 }
 class AlertLift{
-  static public function fold<E,Z>(self:AlertDef<E>,pure:Refuse<E>->Z,unit:Void->Z):Future<Z>{
+  static public function fold<E,Z>(self:AlertDef<E>,pure:Error<E>->Z,unit:Void->Z):Future<Z>{
     return self.map(
       report -> report.fold(pure,unit)
     );
@@ -85,7 +82,7 @@ class AlertLift{
       }
     ));
   }
-  static public function flat_fold<E,T>(self:AlertDef<E>,ers:Refuse<E>->Future<T>,nil:Void->Future<T>):Future<T>{
+  static public function flat_fold<E,T>(self:AlertDef<E>,ers:Error<E>->Future<T>,nil:Void->Future<T>):Future<T>{
     return self.flatMap(
       (report) -> report.fold(
         ers,
@@ -94,9 +91,9 @@ class AlertLift{
     );
   }
   static public function resolve<E,T>(self:AlertDef<E>,val:T):Pledge<T,E>{
-    return Pledge.lift(fold(self,(e) -> __.reject(e),() -> __.accept(val)));
+    return Pledge.lift(fold(self,(e) -> Upshot.UpshotSum.Reject(e),() -> Accept(val)));
   }
-  static public function ignore<E>(self:AlertDef<E>,?fn:Decline<E>->Bool):Alert<E>{
+  static public function ignore<E>(self:AlertDef<E>,?fn:Lapse<E>->Bool):Alert<E>{
     return Alert.lift(self.map(
       (report:Report<E>) -> report.ignore(fn)
     ));
@@ -106,15 +103,15 @@ class AlertLift{
       (report) -> fn(report).prj()
     );
   }
-  static public function toTinkPromise<E>(self:AlertDef<E>):tink.core.Promise<Nada>{
-    return fold(
-      self,
-      er -> tink.core.Outcome.Failure(er.toTinkError()),
-      () -> tink.core.Outcome.Success(Nada)
-    );
-  }
+  // static public function toTinkPromise<E>(self:AlertDef<E>):tink.core.Promise<Nada>{
+  //   return fold(
+  //     self,
+  //     er -> tink.core.Outcome.Failure(er.toTinkError()),
+  //     () -> tink.core.Outcome.Success(Nada)
+  //   );
+  // }
   static public function zip<E>(self:AlertDef<E>,that:Alert<E>):Alert<E>{
-    var out = __.nano().Ft().zip(self,that.prj()).map(
+    var out = new stx.nano.module.Future().zip(self,that.prj()).map(
       (tp) -> tp.fst().concat(tp.snd())
     );
     return out;
@@ -124,4 +121,5 @@ class AlertLift{
   public function new(){
     this = Future.trigger();
   }  
+
 }

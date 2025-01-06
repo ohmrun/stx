@@ -2,6 +2,7 @@ package stx.log;
 
 using Bake;
 
+
 import tink.core.Signal               in TinkSignal;
 import tink.core.Signal.SignalTrigger in TinkSignalTrigger;
 
@@ -61,7 +62,7 @@ typedef SignalDef = SignalCls;
   static private function get_instance(){ 
     //trace('getting instance ${instance == null}');
     #if sys
-      var do_logging = std.Sys.env("STX_LOG");
+      var do_logging = __.option(Sys.getEnv("STX_LOG"));
       return (instance == null).if_else(
         () -> {
           return instance = do_logging.fold(

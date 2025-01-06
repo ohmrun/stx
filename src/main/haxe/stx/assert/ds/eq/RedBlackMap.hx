@@ -3,12 +3,12 @@ package stx.assert.ds.eq;
 import stx.ds.RedBlackMap in TRedBlackMap;
 
 class RedBlackMap<K,V> extends EqCls<TRedBlackMap<K,V>>{
-  final K : Eq<K>;
-  final V : Eq<V>;
+  final _K : Eq<K>;
+  final _V : Eq<V>;
 
   public function new(K,V){
-    this.K = K;
-    this.V = V;
+    this._K = K;
+    this._V = V;
   }
   public function comply(lhs:TRedBlackMap<K,V>,rhs:TRedBlackMap<K,V>){
     var eq      = AreEqual;
@@ -47,7 +47,7 @@ class RedBlackMap<K,V> extends EqCls<TRedBlackMap<K,V>>{
         final r = rhs.get(key);
         switch([l,r]){
           case [Some(a),Some(b)] : 
-            eq = V.comply(a,b);
+            eq = _V.comply(a,b);
           default : 
             eq = NotEqual;
         }

@@ -25,7 +25,7 @@ interface CyclerApi{
 abstract class CyclerCls implements CyclerApi{
   public final uuid : String;
   public function new(){
-    this.uuid = __.uuid("xxxxx");
+    this.uuid = __.uuid("xxxxx").toString();
   }
   
   public var state(get,null)            : CycleState;

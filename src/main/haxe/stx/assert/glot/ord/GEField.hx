@@ -12,9 +12,9 @@ class GEField extends OrdCls<GEFieldT>{
     if(ord.is_not_less_than()){
       final ctr = () -> RedBlackSet.make(Comparable.Anon(new stx.assert.glot.eq.GAccess(),new GAccess()));
       var lset = ctr();
-          lset = lset.concat(__.option(lhs.access).defv([].imm()));
+          lset = lset.concat(__.option(lhs.access).defv(Cluster.unit()));
       var rset = ctr();
-          rset = rset.concat(__.option(rhs.access).defv([].imm()));
+          rset = rset.concat(__.option(rhs.access).defv(Cluster.unit()));
       ord = lset.less_than(rset);
     }
     if(ord.is_not_less_than()){

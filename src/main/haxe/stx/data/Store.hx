@@ -60,14 +60,14 @@ class SettableStoreLift{
               (chk) -> (chk).fold(
                 opt -> opt.fold(
                   ok -> Propose.pure(cl.snoc(ok)),
-                  () -> Propose.fromRefuse(__.fault().of(E_Data_KeyNotFound(k)))
+                  () -> Propose.fromError(__.fault().of(E_Data_KeyNotFound(k)))
                 ),
-                no -> Propose.fromRefuse(no)
+                no -> Propose.fromError(no)
               )
             );
           },
           keys,
-          [].imm()
+          Cluster.unit()
         ).toFletcher()
       ).toFletcher().map(
         (opt:Chunk<Cluster<V>,DataFailure>) -> (opt).fold(

@@ -1,7 +1,7 @@
 package stx.sys.cli;
 
 @:forward(length)abstract Arguments(Cluster<CliToken>) from Cluster<CliToken> to Cluster<CliToken>{
-  public function new(self:Cluster<CliToken>) this = __.option(self).defv([].imm());
+  public function new(self:Cluster<CliToken>) this = __.option(self).defv(Cluster.unit());
   @:arrayAccess
   public function get(int:Int):CliToken{
     return this[int];

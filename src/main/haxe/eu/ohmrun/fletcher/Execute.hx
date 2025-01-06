@@ -10,7 +10,7 @@ typedef ExecuteDef<E>                   = FletcherDef<Nada,Report<E>,Nada>;
 abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
   public inline function new(self) this = self;
   @:noUsing static public inline function lift<E>(self:ExecuteDef<E>):Execute<E> return new Execute(self);
-  @:noUsing static public inline function pure<E>(e:Refuse<E>):Execute<E> return lift(Fletcher.pure(Report.pure(e)));
+  @:noUsing static public inline function pure<E>(e:Error<E>):Execute<E> return lift(Fletcher.pure(Report.pure(e)));
   @:noUsing static public inline function unit<E>():Execute<E> return lift(Fletcher.pure(Report.unit()));
 
   static public function context<E>(stream:Stream<Execute<E>,E>):Execute<E>{
@@ -28,7 +28,7 @@ abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
         final window = buffer.copy();
         buffer = [];
         return report.fold(
-          e   -> Execute.fromRefuse(e),
+          e   -> Execute.fromError(e),
           ()  -> Execute.sequence(x -> x,window)
         );
       }
@@ -82,13 +82,13 @@ abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
   private var self(get,never):Execute<E>;
   private function get_self():Execute<E> return lift(this);
 
-  @:noUsing static public function fromOption<E>(err:Option<Refuse<E>>):Execute<E>{
+  @:noUsing static public function fromOption<E>(err:Option<Error<E>>):Execute<E>{
     return fromFunXR(() -> Report.fromOption(err));
   }
-  @:noUsing static public function fromRefuse<E>(err:Refuse<E>):Execute<E>{
+  @:noUsing static public function fromError<E>(err:Error<E>):Execute<E>{
     return fromFunXR(() -> Report.pure(err));
   }
-  public function environment(?success:Void->Void,?failure:Refuse<E>->Void,?pos:Pos){
+  public function environment(?success:Void->Void,?failure:Error<E>->Void,?pos:Pos){
     __.log().trace('execute environment ${(pos:Position)}');
     if(success == null){
       success = () -> __.log().info('execute complete');
@@ -112,16 +112,9 @@ abstract Execute<E>(ExecuteDef<E>) from ExecuteDef<E> to ExecuteDef<E>{
   }
 }
 class ExecuteLift{
-  static public function errata<E,EE>(self:Execute<E>,fn:Refuse<E>->Refuse<EE>):Execute<EE>{
+  static public function errata<E,EE>(self:Execute<E>,fn:E->EE):Execute<EE>{
     return Execute.lift(self.toFletcher().then(
       Fletcher.Sync((report:Report<E>) -> report.errata(fn))
-    ));
-  }
-  static public function errate<E,EE>(self:Execute<E>,fn:E->EE):Execute<EE>{
-    return Execute.lift(self.toFletcher().then(
-      Fletcher.Sync((report:Report<E>) -> report.errata(
-        (e:Refuse<E>) -> e.errate(fn)
-      ))
     ));
 
   }

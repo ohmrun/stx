@@ -63,24 +63,37 @@ class Mod{
 				Upshot.bind_fold(
 					map,
 					function(next:Tup2<PExpr<T>,PExpr<T>>,memo:Option<Cluster<Tup2<PExpr<T>,PExpr<T>>>>){
-						trace('$next $memo');
-						return 
-							__.tracer()(fn(PGroup(Cons(next.fst(),Cons(next.snd(),Nil)))))
+						//trace('$next $memo');
+						return (fn(PGroup(Cons(next.fst(),Cons(next.snd(),Nil)))))
 							.flat_map(
-								(r:Option<PExpr<T>>) -> __.tracer()(r.fold(
+								(r:Option<PExpr<T>>) -> (r.fold(
 									ok -> switch(ok){
 										case PGroup(Cons(x,Cons(y,Nil))) : 
 											__.accept(Some(tuple2(x,y)));
 										default : 
-											__.reject(f -> f.explain(d -> stx.fail.Digest.Foreign('must return PGroup(Cons(x,Cons(y,Nil))) but have $ok')));
+											__.reject(
+												(f:Fault) -> f.to(
+													pos -> 
+													ErrorCtr.instance.Make(
+														l -> l.Digest(
+															'7c4af36c-7fd7-4acb-9382-155989d794e2',
+															'must return PGroup(Cons(x,Cons(y,Nil))) but have $ok',
+															null,
+															_ -> Loc.fromPos(pos.toPos())
+														).enlist()
+													)
+												)
+											);
 									},
 									() -> __.accept(None)
 								))
 							).map(
-								opt -> __.tracer()(memo).fold(
-									okI -> opt.map( ok -> okI.snoc(ok)).or(() -> Some(okI)),
-									() 	-> opt.map( ok -> Cluster.unit().snoc(ok))
-								)
+								opt -> {
+									return memo.fold(
+										okI -> opt.map( ok -> okI.snoc(ok)).or(() -> Some(okI)),
+										() 	-> opt.map( ok -> Cluster.unit().snoc(ok))
+									);
+								}
 							);
 					},
 					None

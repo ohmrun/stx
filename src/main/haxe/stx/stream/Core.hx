@@ -1,3 +1,3 @@
 package stx.stream;
 
-typedef Errors = stx.stream.core.Errors;
+typedef Digests = stx.stream.core.Digests;

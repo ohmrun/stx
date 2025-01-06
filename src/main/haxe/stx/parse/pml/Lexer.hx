@@ -48,7 +48,7 @@ class Lexer{
       }
     ).tagged('bool');
       
-  static public var k_atom        = "[^ {}\\[\\],\r\t\n\\(\\)]+".reg()
+  static public var k_atom        = "#?[^ {}\\[\\],\r\t\n\\(\\)]+".reg()
     .then(
       (x:String) -> PTData(Sym((x:Symbol)))
     ).tagged('atom');

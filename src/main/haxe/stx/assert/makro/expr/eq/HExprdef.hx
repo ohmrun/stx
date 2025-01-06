@@ -58,17 +58,17 @@ class HExprdef extends stx.assert.eq.term.Base<THExprdef> {
             rset = rset.concat(fieldsII);
         lset.equals(rset);
       case [TExprdef.EArrayDecl(valuesI),TExprdef.EArrayDecl(valuesII)] :
-        Eq.ArrayEq(Eq.Makro().Expr().Expr).comply(valuesI,valuesII);
+        new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().Expr).comply(valuesI,valuesII);
       case [TExprdef.ECall(eI,paramsI),TExprdef.ECall(eII,paramsII)] :
         var eq = Eq.Makro().Expr().Expr.comply(eI,eII);
         if(eq.is_ok()){
-          eq = Eq.ArrayEq(Eq.Makro().Expr().Expr).comply(paramsI,paramsII);
+          eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().Expr).comply(paramsI,paramsII);
         }
         eq;
       case [TExprdef.ENew(tI,paramsI),TExprdef.ENew(tII,paramsII)] :
         var eq = Eq.Makro().Expr().HTypePath.comply(tI,tII);
         if(eq.is_ok()){
-          eq = Eq.ArrayEq(Eq.Makro().Expr().Expr).comply(paramsI,paramsII);
+          eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().Expr).comply(paramsI,paramsII);
         }
         eq;
       case [TExprdef.EUnop(opI,postFixI,eI),TExprdef.EUnop(opII,postFixII,eII)] :
@@ -81,7 +81,7 @@ class HExprdef extends stx.assert.eq.term.Base<THExprdef> {
         }
         eq;
       case [TExprdef.EVars(varsI),TExprdef.EVars(varsII)] :
-        Eq.ArrayEq(Eq.Makro().Expr().HVar).comply(varsI,varsII);
+        new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HVar).comply(varsI,varsII);
       case [TExprdef.EFunction(kindI,fI),TExprdef.EFunction(kindII,fII)] :
         var eq = Eq.NullOr(Eq.Makro().Expr().HFunctionKind).comply(kindI,kindII);
         if(eq.is_ok()){
@@ -89,7 +89,7 @@ class HExprdef extends stx.assert.eq.term.Base<THExprdef> {
         }
         eq;
       case [TExprdef.EBlock(exprsI),TExprdef.EBlock(exprsII)] :
-        Eq.ArrayEq(Eq.Makro().Expr().Expr).comply(exprsI,exprsII);
+        new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().Expr).comply(exprsI,exprsII);
       case [TExprdef.EFor(iI,eexprI),TExprdef.EFor(iII,eexprII)] :
         var eq = Eq.Makro().Expr().Expr.comply(iI,iII);
         if(eq.is_ok()){
@@ -117,7 +117,7 @@ class HExprdef extends stx.assert.eq.term.Base<THExprdef> {
       case [TExprdef.ESwitch(eI,casesI,edefI),TExprdef.ESwitch(eII,casesII,edefII) ] :
         var eq = Eq.Makro().Expr().Expr.comply(eI,eII);
         if(eq.is_ok()){
-          eq = Eq.ArrayEq(Eq.Makro().Expr().HCase).comply(casesI,casesII);
+          eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HCase).comply(casesI,casesII);
         }
         if(eq.is_ok()){
           eq = Eq.NullOr(Eq.Makro().Expr().Expr).comply(edefI,edefII);
@@ -126,7 +126,7 @@ class HExprdef extends stx.assert.eq.term.Base<THExprdef> {
       case [TExprdef.ETry(eI,catchesI),TExprdef.ETry(eII,catchesII)] :
         var eq = Eq.Makro().Expr().Expr.comply(eI,eII);
         if(eq.is_ok()){
-          eq = Eq.ArrayEq(Eq.Makro().Expr().HCatch).comply(catchesI,catchesII);
+          eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HCatch).comply(catchesI,catchesII);
         }
         eq;
       case [TExprdef.EReturn(eI),TExprdef.EReturn(eII)] :

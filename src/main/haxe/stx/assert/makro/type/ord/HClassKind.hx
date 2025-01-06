@@ -13,7 +13,7 @@ class HClassKind extends OrdCls<THClassKind>{
       case [KNormal,KNormal] : NotLessThan;
       case [KTypeParameter(constraintsI),KTypeParameter(constraintsII)] : 
         //Array<Type>
-        Ord.ArrayOrd(Ord.Makro().Type().Type).comply(constraintsI,constraintsII);
+        new stx.assert.ord.term.ArrayOrd(Ord.Makro().Type().Type).comply(constraintsI,constraintsII);
       case [KModuleFields(moduleI),KModuleFields(moduleII)] : 
         //String
         Ord.String().comply(moduleI,moduleII);
@@ -25,7 +25,7 @@ class HClassKind extends OrdCls<THClassKind>{
         //Array<Type>
         var ord = Ord.Makro().Type().HClassType.comply(clI.get(),clII.get());
         if(ord.is_not_less_than()){
-          ord = Ord.ArrayOrd(Ord.Makro().Type().Type).comply(paramsI,paramsII);
+          ord = new stx.assert.ord.term.ArrayOrd(Ord.Makro().Type().Type).comply(paramsI,paramsII);
         }
         ord;
       case [KMacroType,KMacroType]      : NotLessThan;

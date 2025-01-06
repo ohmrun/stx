@@ -5,7 +5,8 @@ package stx.log.output.term;
  * TODO remove redundant code, send js output to console
  */
 class Full implements OutputApi extends Debugging{
-  private function render( v : Dynamic, infos : LogPosition ) : Void {
+	public function new(){}
+  public function render( v : Dynamic, infos : LogPosition, stamp:Stamp ) : Void {
     note('haxelog $infos');
 		#if (sys || nodejs)
 			sys.Debug.apply('${infos}');
@@ -20,7 +21,7 @@ class Full implements OutputApi extends Debugging{
 				//if( infos != null && infos.customParams != null ) for( v in infos.customParams ) str += "," + flash.Boot.__string_rec(v, "");
 				untyped __global__["trace"](pstr+": "+str);
 			#else
-				untyped new Flash().render(v,infos.pos);
+				untyped new Flash().render(v,infos.pos,stamp);
 			#end
 		#elseif neko
 			note('neko');
@@ -30,7 +31,7 @@ class Full implements OutputApi extends Debugging{
 			}
 		#elseif js
 			note('js');
-			untyped new Js().render(v,infos);
+			untyped new Js().render(v,infos,null);
 		#elseif php
 			note('php');
 				untyped _call__('_hx_trace', v, null);

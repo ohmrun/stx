@@ -1,3 +1,3 @@
 package stx.asys;
 
-typedef Errors = stx.asys.core.Errors;
+typedef Digests = stx.asys.core.Digests;

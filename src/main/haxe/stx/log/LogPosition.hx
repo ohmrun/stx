@@ -55,5 +55,22 @@ class LogPositionCls{
   #else
   static public function is_runtime() return false;
   #end
+
+  public function toPosInfos():haxe.PosInfos{
+    final p = this.pos.defv(null);
+    final params : Array<Dynamic> = [
+      this.scoping.method,
+      this.scoping.type,
+      this.scoping.module
+    ];
+    final x : PosInfos = {
+    	fileName     : p?.fileName,
+	    lineNumber   : p?.lineNumber,
+	    className    : p?.className,
+	    methodName   : p?.methodName,
+	    customParams : params   
+    }
+    return x;
+  }
 }
 

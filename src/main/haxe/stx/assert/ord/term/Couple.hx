@@ -1,6 +1,6 @@
 package stx.assert.ord.term;
 
-import stx.nano.Couple as StdCouple;
+import stx.pico.Couple as StdCouple;
 
 class Couple<L,R> extends OrdCls<StdCouple<L,R>>{
   var l : Ord<L>;

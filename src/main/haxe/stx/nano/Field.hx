@@ -1,5 +1,8 @@
 package stx.nano;
 
+import stx.nano.KV.KVDef;
+import stx.alias.StdString;
+
 @:using(stx.nano.KV.KVLift)
 @:forward abstract Field<V>(KVDef<StdString,V>) from KVDef<StdString,V> to KVDef<StdString,V>{
   public function new(self:KVDef<StdString,V>) this = self;
@@ -26,7 +29,7 @@ package stx.nano;
     return fn(this.key,this.val);
   }
   public function toCouple():Couple<StdString,V>{
-    return __.couple(this.key,this.val);
+    return Couple.make(this.key,this.val);
   }
   @:from static public function fromKeyValue<V>(self:{key:String,value:V}){
     return lift({

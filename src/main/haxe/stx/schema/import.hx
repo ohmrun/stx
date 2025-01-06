@@ -1,5 +1,6 @@
 package stx.schema;
 
+using stx.Fail;
 using stx.Schema;
 using stx.schema.Core;
 using stx.schema.Logging;

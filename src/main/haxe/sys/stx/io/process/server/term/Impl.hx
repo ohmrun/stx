@@ -39,16 +39,9 @@ class Impl{
           case Accept(IResState(s)) : 
             this.state = this.state.with_stdout(s);
           case Reject(err)          : 
-            this.state = err.data.fold(
-              (declination) -> declination.fold(
-                (e)   -> this.state.with_stdout(Io_Input_Error(e)),
-                (d)   -> this.state.with_stdout(Io_Input_Error(E_Io_Digest(d))),
-                (ext) -> this.state.with_stdout(Io_Input_Error(E_Io_Embedded(ext)))
-              ),
-              ()  -> this.state.with_stdout(Io_Input_Error(E_Io_UnsupportedValue))
-            );
+            this.state = this.state.with_stdout(Io_Input_Error(err));
           default                   : 
-            this.state = this.state.with_stdout(Io_Input_Error(E_Io_UnsupportedValue));
+            this.state = this.state.with_stdout(Io_Input_Error(__.fault().of(E_Io_UnsupportedValue)));
         }
       }
     );
@@ -59,16 +52,9 @@ class Impl{
           case Accept(IResState(s)) : 
             this.state = this.state.with_stderr(s);
           case Reject(err)          : 
-            this.state = err.data.fold(
-              (declination) -> declination.fold(
-                (e) -> this.state.with_stderr(Io_Input_Error(e)),
-                (d) -> this.state.with_stderr(Io_Input_Error(E_Io_Digest(d))),
-                (ext) -> this.state.with_stdout(Io_Input_Error(E_Io_Embedded(ext)))
-              ),
-              ()  -> this.state.with_stderr(Io_Input_Error(E_Io_UnsupportedValue))
-            );
+            this.state = this.state.with_stderr(Io_Input_Error(err));
           default                   : 
-            this.state = this.state.with_stderr(Io_Input_Error(E_Io_UnsupportedValue));
+            this.state = this.state.with_stderr(Io_Input_Error(__.fault().of(E_Io_UnsupportedValue)));
         }
       }
     );
@@ -99,7 +85,7 @@ class Impl{
                   req,
                   res -> res.fold(
                     ok -> source.trigger(__.yield(PResValue(Success(ok)),rec)),
-                    no -> source.trigger(__.ended(End(no.errate(E_Process_Io))))
+                    no -> source.trigger(__.ended(End(no.errata(E_Process_Io))))
                   )
                 );
                 __.belay(Belay.fromFuture(() -> source.asFuture()));
@@ -109,7 +95,7 @@ class Impl{
                   req,
                   res -> res.fold(
                     ok -> source.trigger(__.yield(PResValue(Failure(ok)),rec)),
-                    no -> source.trigger(__.ended(End(no.errate(E_Process_Io))))
+                    no -> source.trigger(__.ended(End(no.errata(E_Process_Io))))
                   )
                 );
                 __.belay(Belay.fromFuture(() -> source.asFuture()));

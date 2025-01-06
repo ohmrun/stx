@@ -17,19 +17,19 @@ class HAbstractType extends EqCls<THAbstractType>{
       eq = Eq.NullOr(Eq.Makro().Type().HRef(Eq.Makro().Type().HClassType)).comply(a.impl,b.impl);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Anon(binop_op)).comply(a.binops,b.binops);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Anon(binop_op)).comply(a.binops,b.binops);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Anon(unop_op)).comply(a.unops,b.unops);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Anon(unop_op)).comply(a.unops,b.unops);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Anon(from_and_to_op)).comply(a.from,b.from);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Anon(from_and_to_op)).comply(a.from,b.from);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Anon(from_and_to_op)).comply(a.to,b.to);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Anon(from_and_to_op)).comply(a.to,b.to);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Makro().Type().HClassField).comply(a.array,b.array);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().HClassField).comply(a.array,b.array);
     }
     if(eq.is_ok()){
       eq = Eq.NullOr(Eq.Makro().Type().HClassField).comply(a.resolve,b.resolve);

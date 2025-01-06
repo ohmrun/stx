@@ -15,7 +15,7 @@ class User implements UserApi extends Clazz{
         stx.fs.Path.parse(str)
           .provide((this:HasDevice))
           .flat_map(RawLift.toDirectory)
-          .errate(x -> E_ASys_Fs(E_Fs_Path(x)));
+          .errata(x -> E_ASys_Fs(E_Fs_Path(x)));
 
     return if (this.device.distro.is_windows()) {
       home = Sys.getEnv("USERPROFILE");

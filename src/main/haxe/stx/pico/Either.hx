@@ -1,6 +1,9 @@
 package stx.pico;
 
 
+/**
+ * Represents a value of either one type `Ti` or another.
+ */
 @:using(stx.pico.Either.EitherLift)
 typedef EitherSum<Ti,Tii>       = haxe.ds.Either<Ti,Tii>;
 
@@ -14,6 +17,9 @@ typedef EitherSum<Ti,Tii>       = haxe.ds.Either<Ti,Tii>;
   @stx.meta.prj
   public function prj():EitherSum<Pi,Pii> return this;
 }
+/**
+ * Lift class for `Either`
+ */
 class EitherLift{
   /**
    * Applies `lhs` if the value is `Left` and `rhs` if the value is `Right`, returning the result.

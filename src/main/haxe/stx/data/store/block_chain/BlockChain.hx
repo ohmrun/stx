@@ -191,7 +191,7 @@ class BlockChain<K,V>{
   }
   @:note("seems a bit heavy")
   public function itr():Produce<Cluster<Articulation<K>>,DataFailure>{
-    return Produce.fromRefuse(__.fault().of(E_Db_Unimplemented));
+    return Produce.fromError(__.fault().of(E_Db_Unimplemented));
   }
 }
 class BlockChainHelp{

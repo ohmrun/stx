@@ -13,9 +13,13 @@ class Json{
     try{
       out = haxe.Json.stringify(v,replacer,space);
     }catch(e:Dynamic){
-      err = Refuse.make(__.option(e),None,__.here());
+      err = ErrorCtr.instance.Make(
+        _ -> new LapseCtr().Value(e,
+          _ -> Loc.fromPos(Position.here())
+        ).enlist()
+      );
     }
-    return err == null ? __.accept(out) : __.reject(err);
+    return err == null ? Upshot.UpshotSum.Accept(out) : Upshot.UpshotSum.Reject(err);
   }
   /**
    * Alias for `haxe.Json.parse` with captured error.
@@ -28,8 +32,8 @@ class Json{
     try{
       out = haxe.Json.parse(str);
     }catch(e:Dynamic){
-      err = Refuse.make(__.option(e),None,__.here());
+      err = ErrorCtr.instance.Label('$e',_ -> Loc.fromPos(Position.here()));
     }
-    return err == null ? __.accept(out) : __.reject(err);
+    return err == null ? Upshot.UpshotSum.Accept(out) : Upshot.UpshotSum.Reject(err);
   }
 }

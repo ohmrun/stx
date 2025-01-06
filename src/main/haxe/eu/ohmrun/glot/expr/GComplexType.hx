@@ -3,32 +3,36 @@ package eu.ohmrun.glot.expr;
 final Expr = __.glot().Expr;
 
 class GComplexTypeCtr extends Clazz{
+	static public var instance(get,null) : GComplexTypeCtr;
+	static private function get_instance(){
+		return instance == null ? instance = new GComplexTypeCtr() : instance;
+	}
 	public function Path(p:CTR<GTypePathCtr,GTypePath>):GComplexType{
-		return GComplexType.lift(GTPath(p(Expr.GTypePath)));
+		return GComplexType.lift(GTPath(p.apply(Expr.GTypePath)));
 	}
 	public function Function(args:CTR<GComplexTypeCtr,Cluster<GComplexType>>, ret : CTR<GComplexTypeCtr,GComplexType>){
-		return GComplexType.lift(GTFunction(args(this),ret(this))); 
+		return GComplexType.lift(GTFunction(args.apply(this),ret.apply(this))); 
 	}
 	public function Anonymous(fields:CTR<GEFieldCtr,Cluster<GEField>>){
-		return GComplexType.lift(GTAnonymous(fields(Expr.GEField)));
+		return GComplexType.lift(GTAnonymous(fields.apply(Expr.GEField)));
 	}
 	public function Parent(t:CTR<GComplexTypeCtr,GComplexType>){
-		return GComplexType.lift(GTParent(t(this)));
+		return GComplexType.lift(GTParent(t.apply(this)));
 	}
 	public function Extend(p:CTR<GTypePathCtr,Cluster<GTypePath>>,fields:CTR<GEFieldCtr,Cluster<GEField>>){
 		return GComplexType.lift(GTExtend(
-			p(Expr.GTypePath),
-			fields(Expr.GEField)
+			p.apply(Expr.GTypePath),
+			fields.apply(Expr.GEField)
 		));
 	}
 	public function Optional(t:CTR<GComplexTypeCtr,GComplexType>){
-		return GComplexType.lift(GTOptional(t(this)));
+		return GComplexType.lift(GTOptional(t.apply(this)));
 	}
 	public function Named(n:String,t:CTR<GComplexTypeCtr,GComplexType>){
-		return GComplexType.lift(GTNamed(n,t(this)));
+		return GComplexType.lift(GTNamed(n,t.apply(this)));
 	}
 	public function Intersection(t:CTR<GComplexTypeCtr,Cluster<GComplexType>>){
-		return GComplexType.lift(GTIntersection(t(this)));
+		return GComplexType.lift(GTIntersection(t.apply(this)));
 	}
 	public function string(string:String){
 		return Path( p -> p.fromString(string));

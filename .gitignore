@@ -9,3 +9,5 @@ package-lock.json
 plz-out
 .plzconfig.local
 /dist
+/.direnv
+/.portal

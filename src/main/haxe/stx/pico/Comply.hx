@@ -1,15 +1,24 @@
 package stx.pico;
 
+/**
+ * 2 arity function ```Pi -> Pii -> R``` as an Interface
+ */
 interface ComplyApi<Pi,Pii,R>{
   public function comply(pI:Pi,pII:Pii):R;
   public function toComply():Comply<Pi,Pii,R>; 
 }
+/**
+ * 2 arity function ```Pi -> Pii -> R``` as a Class
+ */
 abstract class ComplyCls<Pi,Pii,R> implements ComplyApi<Pi,Pii,R> extends Clazz{
   abstract public function comply(pI:Pi,pII:Pii):R;
   public function toComply():Comply<Pi,Pii,R>{
     return this;
   }
 }
+/**
+ * 2 arity function ```Pi -> Pii -> R``` as an Abstract Type
+ */
 @:using(stx.pico.Comply.ComplyLift)
 @:forward abstract Comply<Pi,Pii,R>(ComplyApi<Pi,Pii,R>) from ComplyApi<Pi,Pii,R> to ComplyApi<Pi,Pii,R>{
   static public var __(default,never) = ComplyLift;

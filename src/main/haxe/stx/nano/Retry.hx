@@ -10,8 +10,8 @@ class Retry{
   }
   public function copy(?attempts,?born){
     return new Retry(
-      __.option(attempts).defv(this.attempts),
-      __.option(born).defv(this.born)
+      Option.make(attempts).defv(this.attempts),
+      Option.make(born).defv(this.born)
     );
   }
   @:noUsing static public function make(attempts,born){

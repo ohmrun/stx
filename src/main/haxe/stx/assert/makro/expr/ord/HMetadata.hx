@@ -7,6 +7,6 @@ final Ord = __.assert().Ord();
 class HMetadata extends OrdCls<HMetadataT>{
   public function new(){}
   public function comply(lhs:HMetadataT,rhs:HMetadataT){
-    return Ord.ArrayOrd(Ord.Makro().Expr().HMetadataEntry).comply(lhs.prj(),rhs.prj());
+    return new stx.assert.ord.term.ArrayOrd(Ord.Makro().Expr().HMetadataEntry).comply(lhs.prj(),rhs.prj());
   }
 }

@@ -1,9 +1,5 @@
 package stx.makro.di.core;
 
-import tink.priority.Item;
-import tink.priority.Queue;
-import tink.priority.ID;
-
 @:autoBuild(stx.makro.di.core.macro.AssemblyBuild.build())
 @:stx.makro.di.Dependencies.register(__)
 class Assembly implements AssemblyApi{
@@ -13,10 +9,10 @@ class Assembly implements AssemblyApi{
   public function react(di:stx.makro.di.DI){
     
   }
-  public function apply(q:Queue<AssemblyApi>){
+  public function apply(q:Array<{ data : AssemblyApi, id : String}>){
     var cls = __.definition(this).identifier().toString();
     var id  = '$cls::apply';
-    q.add({
+    q.push({
       data : this,
       id   : id
     });

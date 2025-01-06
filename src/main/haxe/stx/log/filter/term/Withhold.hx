@@ -7,7 +7,7 @@ class Withhold<T> extends Filter<T>{
   }
   override public function apply(value:Value<Dynamic>){
     final info = value.source;
-    return Report.make(E_Log_Zero);
+    return Report.make(stx.fail.Error.ErrorCtr.instance.Value(E_Log_Zero));
   }
   public function canonical(){
     return 'Withhold';

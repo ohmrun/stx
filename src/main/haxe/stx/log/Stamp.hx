@@ -10,7 +10,7 @@ class Stamp{
   public var hidden                   : Bool;
 
   public function new(?id,?level,?timestamp,?tags,?hidden=false){
-    this.id         = __.option(id).def(__.uuid.bind("xxxxx"));
+    this.id         = __.option(id).def(() -> __.uuid("xxxxx").toString());
     this.level      = __.option(level).defv(BLANK);
     this.timestamp  = __.option(timestamp).def(Date.now);
     this.tags       = __.option(tags).defv([]);
@@ -55,5 +55,9 @@ class Stamp{
   
   public function is_zero(){
     return this == ZERO;
+  }
+
+  public function toCustomParams():Array<Dynamic>{
+    return [id,level,timestamp,tags,hidden];
   }
 }

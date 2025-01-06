@@ -1,8 +1,5 @@
 package stx.assert;
 
-// TODO stx_release fix
-import stx.fail.Refuse;
-
 import stx.assert.predicate.term.*;
 
 interface PredicateApi<P,E>{
@@ -116,11 +113,8 @@ class PredicateLift{
     return new Not(self);
   }
 
-  static public function errata<T,E,EE>(self: Predicate<T,E>,fn:Refuse<E>->Refuse<EE>):Predicate<T,EE>{
+  static public function errata<T,E,EE>(self:Predicate<T,E>,fn:E->EE):Predicate<T,EE>{
     return new Transform(self,fn);
-  }
-  static public function errate<T,E,EE>(self:Predicate<T,E>,fn:E->EE):Predicate<T,EE>{
-    return errata(self,(err) -> err.errate(fn));
   }
   static public function map_i<T,Ti,E>(self:Predicate<T,E>,fn:Ti->T):Predicate<Ti,E>{
     return Predicate.Anon(

@@ -18,14 +18,14 @@ class PExpr extends Clazz{
         (next:TPExpr<Atom>,memo:Cluster<Dynamic>)-> {
           return apply(next).map(memo.snoc);
         },
-        [].imm()
+        Cluster.unit()
       );
       case PArray(xs) : Upshot.bind_fold(
         xs,
         (next:TPExpr<Atom>,memo:Cluster<Dynamic>)-> {
           return apply(next).map(memo.snoc);
         },
-        [].imm()
+        Cluster.unit()
       );
       case PSet(_)  : __.reject(f -> f.of(E_Glot('Set not expected here')));
       case PAssoc(_) : decode.Object.apply(self);

@@ -2,7 +2,7 @@ package stx.nano;
 
 typedef APPDef<P,R> = Tup2<P -> R,P>;
 
-@:callable abstract APP<P,R>(APPDef<P,R>) from APPDef<P,R> to APPDef<P,R>{
+abstract APP<P,R>(APPDef<P,R>) from APPDef<P,R> to APPDef<P,R>{
   public function new(self) this = self;
   @:noUsing static public function lift<P,R>(self:APPDef<P,R>):APP<P,R> return new APP(self);
 
@@ -17,5 +17,8 @@ typedef APPDef<P,R> = Tup2<P -> R,P>;
     return switch(this){
       case tuple2(f,p) : f(p);
     }
+  }
+  static public function app<P,R>(self:CTR<P,R>,p:P):APP<P,R>{
+    return Tup2.tuple2(self,p);
   }
 }

@@ -29,7 +29,7 @@ abstract Agenda<E>(AgendaDef<E>) from AgendaDef<E> to AgendaDef<E>{
       ()  -> Ended(Val(Nada))
     ));
   }
-  @:from static public function fromRefuse<E>(self:Refuse<E>):Agenda<E>{
+  @:from static public function fromError<E>(self:Error<E>):Agenda<E>{
     return Ended(End(self));
   }
   @:from static public function fromEffect<E>(self:Effect<E>):Agenda<E>{
@@ -105,7 +105,7 @@ private class AgendaCyclerCls<E> implements stx.stream.Cycle.CyclerApi{
     this.action     = action;
     this.report     = report;
     this.done       = false;
-    this.uuid       = __.uuid("xxxxx");
+    this.uuid       = __.uuid("xxxxx").toString();
     this.working    = false;
     __.log().trace('next agenda: ${this.uuid} $action ${this.pos}');
   }

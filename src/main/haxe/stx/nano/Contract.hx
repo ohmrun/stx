@@ -1,5 +1,6 @@
 package stx.nano;
 
+import stx.nano.Chunk.ChunkSum;
 import stx.nano.Chunk.ChunkLift;
 #if tink_state
   import tink.state.Promised;
@@ -33,13 +34,13 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
       (f) -> f(Val(ch))
     ); 
   }
-  @:noUsing static public function reject<T,E>(ch:Refuse<E>):Contract<T,E>{
+  @:noUsing static public function reject<T,E>(ch:Error<E>):Contract<T,E>{
     return Future.irreversible(
       (f) -> f(End(ch))
     ); 
   }
   @:noUsing static public function bind_fold<T,Ti,E>(it:Array<T>,fm:T->Ti->Contract<Ti,E>,start:Ti):Contract<Ti,E>{
-    return new Contract(__.nano().Ft().bind_fold(
+    return new Contract(new stx.nano.module.Future().bind_fold(
       it,
       function(next:T,memo:Chunk<Ti,E>):Future<Chunk<Ti,E>>{
         return switch (memo){
@@ -58,11 +59,6 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
   }
   @:noUsing static public function fromLazyError<T,E>(fn:Void->Error<E>):Contract<T,E>{
     return fromLazyChunk(
-      () -> End(fn().except())
-    );
-  }
-  @:noUsing static public function fromLazyRefuse<T,E>(fn:Void->Refuse<E>):Contract<T,E>{
-    return fromLazyChunk(
       () -> End(fn())
     );
   }
@@ -72,7 +68,7 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
     );
   }
 
-  @:noUsing static public function end<T,E>(?e:Refuse<E>):Contract<T,E>{
+  @:noUsing static public function end<T,E>(?e:Error<E>):Contract<T,E>{
     return pure(End(e));
   }
   @:noUsing static public function tap<T,E>():Contract<T,E>{
@@ -96,14 +92,22 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
     ));
   }
 
-  @:noUsing public function toTinkSurprise():tink.core.Promise<T>{
-    return ContractLift.fold(
-      this,
-      tink.core.Outcome.Success,
-      e  -> tink.core.Outcome.Failure(tink.core.Error.withData(500,e.toString(),e.data.defv(null),e.pos.defv(null))),
-      () -> tink.core.Outcome.Failure(new tink.core.Error(500,'empty'))  
-    );
-  }
+  // @:noUsing public function toTinkSurprise():tink.core.Promise<T>{
+  //   return ContractLift.fold(
+  //     this,
+  //     tink.core.Outcome.Success,
+  //     e  -> 
+  //     tink.core.Outcome.Failure(
+  //       tink.core.Error.withData(
+  //         500,
+  //         e.toString(),
+  //         e.data.defv(null),
+  //         null
+  //       )
+  //     ),
+  //     () -> tink.core.Outcome.Failure(new tink.core.Error(500,'empty'))  
+  //   );
+  // }
   #if js
   @:noUsing static public function fromJsPromise<T,E>(self:js.lib.Promise<T>,?pos:Pos):Contract<T,E>{
     return Contract.lift(Future.ofJsPromise(self).map(
@@ -115,9 +119,9 @@ typedef ContractDef<T,E> = Future<Chunk<T,E>>;
             switch(std.Type.typeof(e.data)){
               case TClass(js.lib.Error) :
                 var er : js.lib.Error = e.data; 
-                End(__.fault(pos).explain(_ -> _.e_js_error(er)));
+                End(Fault.make(pos).digest((_:stx.fail.Digests) -> _.e_js_error(er)));
               default : 
-                End(__.fault(pos).explain(_ -> _.e_js_error(new js.lib.Error('${e.data}'))));
+                End(Fault.make(pos).digest((_:stx.fail.Digests) -> _.e_js_error(new js.lib.Error('${e.data}'))));
             }
         }
       }
@@ -148,7 +152,7 @@ class ContractLift extends Clazz{
     return Contract.lift(self);
   }
   #if js
-  static public function toJsPromise<T,E>(self:Contract<T,E>):js.lib.Promise<Upshot<Option<T>,E>>{
+  static public function toJsPromise<T,E>(self:Contract<T,E>):js.lib.Promise<Upshot<Option<T>,Dynamic>>{
     var promise = new js.lib.Promise(
       (resolve,reject) -> {
         try{
@@ -156,25 +160,22 @@ class ContractLift extends Clazz{
             (res) -> {
               res.fold(
                 (v) -> {
-                  resolve(__.accept(Some(v)));
+                  resolve(Accept(Some(v)));
                 },
                 (e) -> {
-                  reject(__.reject(e));
+                  reject(Reject(e));
                 },
                 ()  -> {
                   //trace('empty');
-                  resolve(__.accept(None));
+                  resolve(Accept(None));
                 }
               );
             }
           );
         }catch(e:Error<Dynamic>){
-          reject(switch(Refuse.catcher(e)){
-            case Left(e)  : e.digest_with(x -> Std.string(x));
-            case Right(e) : e;  
-          });
+          reject(e);
         }catch(e:js.lib.Error){
-          reject(__.reject(__.fault().explain(_ -> _.e_js_error(e))));
+          reject(Reject(Fault.make().digest((_:stx.fail.Digests) -> _.e_js_error(e))));
         }
       }
     );
@@ -182,7 +183,7 @@ class ContractLift extends Clazz{
   }
   #end
   static public function zip<Ti,Tii,E>(self:ContractDef<Ti,E>,that:ContractDef<Tii,E>):Contract<Couple<Ti,Tii>,E>{
-    var out = __.nano().Ft().zip(self,that).map(
+    var out = new stx.nano.module.Future().zip(self,that).map(
       (tp) -> tp.fst().zip(tp.snd())
     );
     return out;
@@ -207,15 +208,15 @@ class ContractLift extends Clazz{
           case End(err) : Contract.fromChunk(End(err)).prj();
     }});
   }
-  static public function flat_fold<T,Ti,E>(self:ContractDef<T,E>,val:T->Future<Ti>,ers:Refuse<E>->Future<Ti>,nil:Void->Future<Ti>):Future<Ti>{
+  static public function flat_fold<T,Ti,E>(self:ContractDef<T,E>,val:T->Future<Ti>,ers:Error<E>->Future<Ti>,nil:Void->Future<Ti>):Future<Ti>{
     return self.flatMap(
       (chunk:Chunk<T,E>) -> chunk.fold(val,ers,nil)
     );
   }
-  static public function fold<T,Ti,E>(self:Contract<T,E>,val:T->Ti,ers:Null<Refuse<E>>->Ti,nil:Void->Ti):Future<Ti>{
+  static public function fold<T,Ti,E>(self:Contract<T,E>,val:T->Ti,ers:Null<Error<E>>->Ti,nil:Void->Ti):Future<Ti>{
     return self.prj().map(ChunkLift.fold.bind(_,val,ers,nil));
   }
-  static public function recover<T,E>(self:Contract<T,E>,fn:Refuse<E>->Chunk<T,E>):Contract<T,E>{
+  static public function recover<T,E>(self:Contract<T,E>,fn:Error<E>->Chunk<T,E>):Contract<T,E>{
     return lift(fold(
       self,
       (x) -> Val(x),
@@ -231,10 +232,10 @@ class ContractLift extends Clazz{
       ()->Tap
     ));
   }
-  static public function receive<T,E>(self:Contract<T,E>,fn:T->Void):Future<Option<Refuse<E>>>{
+  static public function receive<T,E>(self:Contract<T,E>,fn:T->Void):Future<Option<Error<E>>>{
     return self.prj().map(
       (chk) -> switch chk {
-        case End(e)   : __.option(e);
+        case End(e)   : Option.make(e);
         case Val(v)   : fn(v); None;
         case Tap      : None;
       }
@@ -250,13 +251,15 @@ class ContractLift extends Clazz{
     }
     return out;
   }
-  static public function errata<T,E,EE>(self:Contract<T,E>,fn:Refuse<E>->Refuse<EE>):Contract<T,EE>{
+  static public function blame<T,E>(self:ContractDef<T,E>,error:Null<Error<E>>){
+    return self.map(
+      chunk -> chunk.blame(error)
+    );
+  }
+  static public function errata<T,E,EE>(self:Contract<T,E>,fn:E->EE):Contract<T,EE>{
     return self.prj().map(
       (chk) -> chk.errata(fn)
     );
-  }
-  static public inline function errate<T,E,EE>(self:Contract<T,E>,fn:E->EE):Contract<T,EE>{
-    return errata(self,(x) -> x.errate(fn));
   }
   static public function tap<T,E>(self:Contract<T,E>,fn:Chunk<T,E>->?Pos->Void,?pos:Pos):Contract<T,E>{
     return lift(self.prj().map(

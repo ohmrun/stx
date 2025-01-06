@@ -6,7 +6,7 @@ typedef CommandDef<I,E>                 = FletcherDef<I,Report<E>,Nada>;
 enum CommandArgSum<I,E>{
   CommandArgFun1Void(fn:I->Void);
   CommandArgFun1Report(fn:I->Report<E>);
-  CommandArgFun1OptionRefuse(fn:I->Option<Refuse<E>>);
+  CommandArgFun1OptionError(fn:I->Option<Error<E>>);
   CommandFun1Execute(fn:I->Execute<E>);
 }
 abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandArgSum<I,E>{
@@ -23,8 +23,8 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
   @:from static public function fromCommandArgFun1Report<I,E>(fn:I->Report<E>):CommandArg<I,E>{
     return CommandArgFun1Report(fn);
   }
-  @:from static public function fromCommandArgFun1OptionRefuse<I,E>(fn:I->Option<Refuse<E>>):CommandArg<I,E>{
-    return CommandArgFun1OptionRefuse(fn);
+  @:from static public function fromCommandArgFun1OptionError<I,E>(fn:I->Option<Error<E>>):CommandArg<I,E>{
+    return CommandArgFun1OptionError(fn);
   }
   @:from static public function fromCommandArgFun1Void<I,E>(fn:I->Void):CommandArg<I,E>{
     return CommandArgFun1Void(fn);
@@ -34,7 +34,7 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
       case CommandFun1Execute(x)            : Command.fromFun1Execute(x);
       case CommandArgFun1Void(x)            : Command.fromFun1Void(x);
       case CommandArgFun1Report(x)          : Command.fromFun1Report(x);
-      case CommandArgFun1OptionRefuse(x) : Command.fromFun1OptionRefuse(x);
+      case CommandArgFun1OptionError(x) : Command.fromFun1OptionError(x);
     }
   }
 }
@@ -61,7 +61,7 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
   static public function fromFun1Report<I,E>(fn:I->Report<E>):Command<I,E>{
     return lift(Fletcher.fromFun1R((i) -> fn(i)));
   }
-  static public function fromFun1OptionRefuse<I,E>(fn:I->Option<Refuse<E>>):Command<I,E>{
+  static public function fromFun1OptionError<I,E>(fn:I->Option<Error<E>>):Command<I,E>{
     return lift(Fletcher.fromFun1R((i) -> Report.fromOption(fn(i))));
   } 
   static public function fromFletcher<I,E>(self:Fletcher<I,Nada,E>):Command<I,E>{
@@ -69,7 +69,7 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
       Fletcher.Anon((p:I,cont:Terminal<Report<E>,Nada>) -> cont.receive(
         self.forward(p).fold_mapp(
           _ -> __.success(__.report()),
-          e -> __.success(e.toRefuse().report())
+          e -> __.success(e.report())
         )
       )
     ));
@@ -113,7 +113,7 @@ abstract CommandArg<I,E>(CommandArgSum<I,E>) from CommandArgSum<I,E> to CommandA
         that.toFletcher()).map((tp) -> tp.fst().concat(tp.snd()))
     );
   }
-  public function errata<EE>(fn:Refuse<E>->Refuse<EE>){
+  public function errata<EE>(fn:E->EE){
     return self.map((report) -> report.errata(fn));
   }
   public function provide(i:I):Execute<E>{

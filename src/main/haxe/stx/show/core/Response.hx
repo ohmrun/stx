@@ -51,7 +51,7 @@ class Response{
       height,
       __.option(prefix).defv(None),
       __.option(postfix).defv(None),
-      __.option(children).defv([].imm()),
+      __.option(children).defv(Cluster.unit()),
       __.option(node).defv(LTree)
     );
   }

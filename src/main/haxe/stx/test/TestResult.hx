@@ -33,7 +33,7 @@ package stx.test;
     return pure(TestEffect.fromError(err));
   }
   public function concat(that:TestResult){
-    return __.nano().Ft().zip(this,that.prj()).map(__.decouple((l:TestEffect,r:TestEffect) -> l.concat(r)));
+    return stx.nano.module.Future.instance.zip(this,that.prj()).map(__.decouple((l:TestEffect,r:TestEffect) -> l.concat(r)));
   }
   public function tap(fn:TestEffect->Void){
     return lift(this.map(

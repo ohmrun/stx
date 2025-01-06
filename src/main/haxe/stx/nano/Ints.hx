@@ -1,5 +1,7 @@
 package stx.nano;
 
+import stx.alias.StdMath;
+
 class Ints {
 	//static public inline var MAX 	: Int = StdInt
 	static public inline var ZERO : Int = 0;

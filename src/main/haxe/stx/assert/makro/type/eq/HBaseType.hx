@@ -9,7 +9,7 @@ class HBaseType extends EqCls<THBaseType>{
   public function new(){}
 
   public function comply(a:THBaseType,b:THBaseType):Equaled{
-    var eq = Eq.ArrayEq(Eq.String()).comply(a.pack,b.pack);
+    var eq = new stx.assert.eq.term.ArrayEq(Eq.String()).comply(a.pack,b.pack);
     if(eq.is_ok()){
       eq = Eq.String().comply(a.name,b.name);
     }
@@ -23,7 +23,7 @@ class HBaseType extends EqCls<THBaseType>{
       eq = Eq.Bool().comply(a.isExtern,b.isExtern);
     }
     if(eq.is_ok()){
-      eq = Eq.ArrayEq(Eq.Makro().Type().HTypeParameter).comply(a.params,b.params);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().HTypeParameter).comply(a.params,b.params);
     }
     if(eq.is_ok()){
       eq = Eq.Makro().Expr().Metadata.comply(a.meta.get(),b.meta.get());

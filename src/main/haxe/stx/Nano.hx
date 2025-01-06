@@ -1,11 +1,7 @@
 package stx;
 
-#if (sys || nodejs)
-import sys.FileSystem;
-import sys.io.File;
-#end
-
 using stx.Pico;
+using stx.Fail;
 
 class Nano{
   static public function digests(wildcard:Wildcard):Digests{
@@ -14,8 +10,6 @@ class Nano{
   static public function stx<T>(wildcard:Wildcard):STX<T>{
     return STX;
   }
-  
-  
 }
 class Maps{
   static public function map_into<K,Vi,Vii>(self:Map<K,Vi>,fn:Vi -> Vii,memo:Map<K,Vii>):Map<K,Vii>{
@@ -25,113 +19,16 @@ class Maps{
     return memo;
   }
 }
-class PicoNano{
-  // static public function Option(pico:Pico):Stx<stx.pico.Option.Tag>{
-  //   return __.stx();
-  // }
-}
+// class PicoNano{
+//   // static public function Option(pico:Pico):Stx<stx.pico.Option.Tag>{
+//   //   return __.stx();
+//   // }
+// }
 class LiftArrayToCluster{
-  static public inline function toCluster<T>(self:Array<T>):Cluster<T>{
-    return Cluster.lift(self);
-  }
-  /**
-    Cluster is an immutable Array.
-  **/
-  static public inline function imm<T>(self:Array<T>):Cluster<T>{
-    return toCluster(self);
+  static public inline function toCluster<T>(self:Array<T>):stx.nano.Cluster<T>{
+    return stx.nano.Cluster.lift(self);
   }
 }
-typedef Dyn                     = Dynamic;
-
-@:using(stx.Nano.Tup2Lift)
-enum Tup2<L,R>{
-  tuple2(l:L,r:R);
-}
-class Tup2Lift{
-  /**
-   * create a function from `fn` that can be applied to a value of `Tup<L,R>`
-   * @param self 
-   * @return R
-   */
-  static public inline function detuple<L,R,Z>(self:Tup2<L,R>,fn:L->R->Z):Z{
-    return switch(self){
-        case tuple2(l,r) : fn(l,r);
-    }
-  }
-  /**
-   * consume value by applying `fn` on it.
-   * @param self 
-   * @param fn 
-   * @return Tup2<L,RR>
-   */
-  static public inline function reduce<L,R,Z>(self:Tup2<L,R>,fn:L->R->Z):Z{
-    return switch(self){
-      case tuple2(l,r) : fn(l,r);
-    }
-  }
-  /**
-   * produce left hand value
-   * @param self 
-   * @param fn 
-   * @return Tup2<L,RR>
-   */
-  static public inline function fst<L,R>(self:Tup2<L,R>):L{
-    return reduce(self,(l,_) -> l);
-  }
-  /**
-   * produce right hand value
-   * @param self 
-   * @param fn 
-   * @return Tup2<L,RR>
-   */
-  static public inline function snd<L,R>(self:Tup2<L,R>):R{
-    return reduce(self,(_,r) -> r);
-  }
-  /**
-   * apply `fn` to `fst`
-   * @param self 
-   * @param fn 
-   * @return Tup2<L,RR>
-   */
-  static public inline function mapl<L,LL,R>(self:Tup2<L,R>,fn:L->LL):Tup2<LL,R>{
-    return reduce(self,(l,r) -> tuple2(fn(l),r));
-  }
-  /**
-   * apply `fn` to `snd`
-   * @param self 
-   * @param fn 
-   * @return Tup2<L,RR>
-   */
-  static public inline function mapr<L,R,RR>(self:Tup2<L,R>,fn:R->RR):Tup2<L,RR>{
-    return reduce(self,(l,r) -> tuple2(l,fn(r)));
-  }
-  static public inline function toKV<L,R>(self:Tup2<L,R>):KV<L,R>{
-    return reduce(self,KV.make);
-  }
-}
-enum Tup3<Ti,Tii,Tiii>{
-  tuple3(tI:Ti,tII:Tii,tIII:Tiii);
-}
-
-typedef StdMath                 = std.Math;
-
-typedef CoupleDef<Ti,Tii>       = stx.nano.Couple.CoupleDef<Ti,Tii>;
-typedef CoupleCat<Ti,Tii>       = stx.nano.Couple.CoupleCat<Ti,Tii>;
-typedef Couple<Ti,Tii>          = stx.nano.Couple<Ti,Tii>;
-typedef Twin<T>                 = Couple<T,T>;
-
-typedef TripleDef<Ti,Tii,Tiii>  = stx.nano.Triple.TripleDef<Ti,Tii,Tiii>;
-typedef Triple<Ti,Tii,Tiii>     = stx.nano.Triple<Ti,Tii,Tiii>;
-
-typedef UpshotSum<T,E>          = stx.nano.Upshot.UpshotSum<T,E>;
-typedef Upshot<T,E>             = stx.nano.Upshot<T,E>;
-
-// typedef DeclineSum<T>       = stx.nano.Decline.DeclineSum<T>;
-//typedef Decline<T>          = stx.nano.Decline<T>;
-
-typedef Digests                 = stx.nano.Digests;
-
-typedef Fault                   = stx.nano.Fault;
 
 typedef VBlockDef<T>            = stx.nano.VBlock.VBlockDef<T>;
 typedef VBlock<T>               = stx.nano.VBlock<T>;
@@ -140,30 +37,27 @@ typedef VBlock<T>               = stx.nano.VBlock<T>;
 typedef PledgeDef<T,E>          = stx.nano.Pledge.PledgeDef<T,E>;
 typedef Pledge<T,E>             = stx.nano.Pledge<T,E>;
 
-//typedef Refuse<E>            = stx.nano.Refuse<E>;
-//typedef RefuseDef<E>         = stx.nano.Refuse.RefuseDef<E>;
+typedef Upshot<T,E>             = stx.nano.Upshot<T,E>;
+typedef UpshotSum<T,E>          = stx.nano.Upshot.UpshotSum<T,E>;
 
 typedef ByteSize                = stx.nano.ByteSize;
 typedef Endianness              = stx.nano.Endianness;
-/*
-typedef YDef<P, R>              = stx.nano.Y.YDef<P,R>;
-typedef Y<P, R>                 = stx.nano.Y<P,R>;
 
-typedef RecursiveDef<P>         = RecursiveDef<P> -> P; 
-typedef Recursive<P>            = RecursiveDef<P>;
-*/
+// typedef Recursive<P>            = stx.nano.Recursive<P>;
+
+// typedef Y<P, R>                 = stx.nano.Y<P,R>;
+// typedef YDef<P, R>              = stx.nano.Y.YDef<P,R>;
+
 
 class LiftPos{
-  @:noUsing static public function lift(pos:Pos):Position{
-    return new Position(pos);
+  @:noUsing static public function lift(pos:Pos):stx.nano.Position{
+    return new stx.nano.Position(pos);
   }
 }
-typedef LiftErrorStringToRefuse     = stx.nano.lift.LiftErrorStringToRefuse;
-typedef LiftTinkErrorToRefuse       = stx.nano.lift.LiftTinkErrorToRefuse;
-typedef LiftRefuseToUpshot             = stx.nano.lift.LiftRefuseToRes;
+typedef LiftTinkErrorToError        = stx.nano.lift.LiftTinkErrorToError;
+typedef LiftErrorToUpshot           = stx.nano.lift.LiftErrorToRes;
 typedef LiftErrorToReport           = stx.nano.lift.LiftErrorToReport;
 typedef LiftErrorToAlert            = stx.nano.lift.LiftErrorToAlert;
-typedef LiftErrorToRefuse           = stx.nano.lift.LiftErrorToRefuse;
 typedef LiftFuture                  = stx.nano.lift.LiftFuture;
 typedef LiftIMapToArrayKV           = stx.nano.lift.LiftIMapToArrayKV;
 typedef LiftOptionNano              = stx.nano.lift.LiftOptionNano;
@@ -185,17 +79,8 @@ typedef LiftContractToJsPromise     = stx.nano.lift.LiftContractToJsPromise;
 typedef LiftJsPromiseToPledge       = stx.nano.lift.LiftJsPromiseToPledge;
 typedef LiftFutureResToPledge       = stx.nano.lift.LiftFutureResToPledge;
 typedef LiftError                   = stx.nano.lift.LiftError;
-typedef LiftErrorDigestToRefuse  = stx.nano.lift.LiftErrorDigestToRefuse;
 typedef LiftBytes                   = stx.nano.lift.LiftBytes;
-
-class LiftArrayClassWithUnderscore{
-  static public function graft(clazz:Class<Array<Dynamic>>){
-    return stx.lift.ArrayLift;
-  }
-}
 typedef LiftPath                = stx.nano.lift.LiftPath;
-
-typedef Wildcard                = stx.nano.Wildcard;
 
 typedef ReportSum<E>            = stx.nano.ReportSum<E>;
 typedef Report<E>               = stx.nano.Report<E>;
@@ -267,11 +152,12 @@ typedef LogicalClock            = stx.nano.LogicalClock;
 typedef Cluster<T>              = stx.nano.Cluster<T>;
 typedef ClusterDef<T>           = stx.nano.Cluster.ClusterDef<T>;
 typedef Clustered<T>            = stx.nano.Clustered<T>;
-typedef Roster<T>             = stx.nano.Roster<T>;
+typedef Roster<T>               = stx.nano.Roster<T>;
 typedef Unfold<T,R>             = stx.nano.Unfold<T,R>;
 typedef Counter                 = stx.nano.Counter;
 typedef Json                    = stx.nano.Json;
 typedef LiftOutcomeTDefect      = stx.nano.lift.LiftOutcomeTDefect;
+typedef Xml                     = stx.nano.Xml;
 
 typedef Receipt<T,E>            = stx.nano.Receipt<T,E>;
 typedef ReceiptDef<T,E>         = stx.nano.Receipt.ReceiptDef<T,E>;
@@ -280,8 +166,6 @@ typedef ReceiptCls<T,E>         = stx.nano.Receipt.ReceiptCls<T,E>;
 typedef Accrual<T,E>            = stx.nano.Accrual<T,E>;
 typedef AccrualDef<T,E>         = stx.nano.Accrual.AccrualDef<T,E>;
 
-// typedef ErrataDef<E>            = stx.nano.Errata.ErrataDef<E>;
-// typedef Errata<E>               = stx.nano.Errata<E>;
 typedef Ledger<I,O,E>           = stx.nano.Ledger<I,O,E>;
 typedef LedgerDef<I,O,E>        = stx.nano.Ledger.LedgerDef<I,O,E>;
 typedef Equity<I,O,E>           = stx.nano.Equity<I,O,E>;
@@ -292,36 +176,38 @@ typedef EquityApi<I,O,E>        = stx.nano.Equity.EquityApi<I,O,E>;
 typedef Coord                   = stx.nano.Coord;
 typedef CoordSum                = stx.nano.Coord.CoordSum;
 
+typedef Tup2<L,R>               = stx.nano.Tup2<L,R>;
+
+typedef Triple<A,B,C>           = stx.nano.Triple<A,B,C>;
+typedef TripleDef<A,B,C>        = stx.nano.Triple.TripleDef<A,B,C>;
+
 typedef Retry                   = stx.nano.Retry;
 class LiftFutureToSlot{
-  static public inline function toSlot<T>(ft:tink.core.Future<T>,?pos:Pos):Slot<T>{
-    return Slot.Guard(ft,pos);
+  static public inline function toSlot<T>(ft:tink.core.Future<T>,?pos:Pos):stx.nano.Slot<T>{
+    return stx.nano.Slot.Guard(ft,pos);
   }
 }
 class LiftLazyFutureToSlot{
-  static public inline function toSlot<T>(fn:Void -> tink.core.Future<T>):Slot<T>{
-    return Slot.Guard(fn());
+  static public inline function toSlot<T>(fn:Void -> tink.core.Future<T>):stx.nano.Slot<T>{
+    return stx.nano.Slot.Guard(fn());
   }
 }
-// class LiftStringableToString{
-//   static public function toString(str:Stringable):String{
-//     //trace("STRINGABLE");
-//     return str.toString();
-//   }
-// }
-// class LiftTToString{
-//   static public function toString<T>(self:T):String{
-//     //trace("ANYTHING");
-//     return Std.string(self);
-//   }
-// }
+class LiftStringableToString{
+  static public function toString(str:Stringable):String{
+    //trace("STRINGABLE");
+    return str.toString();
+  }
+}
+class LiftTToString{
+  static public function toString<T>(self:T):String{
+    //trace("ANYTHING");
+    return Std.string(self);
+  }
+}
 
 typedef FPath               = stx.nano.FPath;
 typedef Unspecified         = stx.nano.Unspecified;
 typedef Timer               = stx.nano.Timer;
-
-typedef CTRDef<P,R>         = stx.nano.CTR.CTRDef<P,R>;
-typedef CTR<P,R>            = stx.nano.CTR<P,R>;
 
 typedef APPDef<P,R>         = stx.nano.APP.APPDef<P,R>;
 typedef APP<P,R>            = stx.nano.APP<P,R>;
@@ -380,39 +266,18 @@ enum abstract UNIMPLEMENTED(String){
   var UNIMPLEMENTED;
 }
 class LiftEnumValue{
-  @:noUsing static public function lift(self:stx.alias.StdEnumValue):EnumValue{
+  @:noUsing static public function lift(self:stx.alias.StdEnumValue):std.EnumValue{
     return stx.nano.EnumValue.lift(self);
   }
 }
-
-#if (sys || nodejs)
-class SysLift{
-  static public function cwd(self:Class<std.Sys>)
-    return {
-       get : ()           -> std.Sys.getCwd(),
-       put : (str:String) -> { std.Sys.setCwd(str); }
-    }
-  static public function fs(self:Class<std.Sys>) return new Fs();
-  static public function dir(self:Class<std.Sys>) return new Dir();
-
-  static public function env(self:Class<std.Sys>,key:String):Option<String>{
-    return Option.make(std.Sys.getEnv(key));
+class Couples{
+  static public function cat<Ti,Tii>(self:Couple<Ti,Tii>):Cluster<Either<Ti,Tii>>{
+    return stx.pico.Couple.CoupleLift.decouple(self,(l,r) -> [Left(l),Right(r)]);
+  }
+  static public function toTup2<Ti,Tii>(self:Couple<Ti,Tii>):Tup2<Ti,Tii>{
+    return stx.pico.Couple.CoupleLift.decouple(self,Tup2.tuple2);
+  }
+  static public function tup<Ti,Tii>(self:Couple<Ti,Tii>):Tup2<Ti,Tii>{
+    return stx.pico.Couple.CoupleLift.decouple(self,Tup2.tuple2);
   }
 }
-private class Fs extends Clazz{
-  public function exists(str:String):Bool{
-    return FileSystem.exists(str);
-  }
-  public function get(str:String):String{
-    return File.getContent(str);
-  }
-  public inline function set(key:String,val:String):Void{
-    File.saveContent(key,val);
-  }
-}
-private class Dir extends Clazz{
-  public function put(path:String){
-    FileSystem.createDirectory(path);
-  }
-}
-#end

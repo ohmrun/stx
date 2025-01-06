@@ -85,18 +85,18 @@ class ScenarioLift{
       )
     ));
   }
-  static public function errate<P,Ri,Rii,E,EE>(self:ScenarioDef<P,Ri,Rii,E>,fn:E->EE):Scenario<P,Ri,Rii,EE>{
+  static public function errata<P,Ri,Rii,E,EE>(self:ScenarioDef<P,Ri,Rii,E>,fn:E->EE):Scenario<P,Ri,Rii,EE>{
     return lift(
       Fletcher.Anon(
         (equity:Equity<P,Ri,EE>,cont:Terminal<Equity<P,Rii,EE>,Nada>) -> {
           __.log().debug('$equity');
-          final error = __.option(equity.error).defv(Refuse.unit());
+          final error = __.option(equity.error).defv(ErrorCtr.instance.Unit());
           
           return cont.receive(
             equity.has_error().if_else(
               () -> cont.value(equity.clear()),
               () -> self.forward(equity.defuse()).map( //Can't call with EE errors without profunctor
-                equity -> equity.errata(x -> error.concat(x.errate(fn)))
+                equity -> equity.errata(fn)
               )
             )
           );

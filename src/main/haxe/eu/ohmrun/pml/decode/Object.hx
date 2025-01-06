@@ -14,7 +14,7 @@ class Object extends Clazz{
             final data = new eu.ohmrun.pml.decode.PExpr().apply(next.snd());
             return name.zip(data).map(memo.snoc);
           },
-          [].imm()
+          Cluster.unit()
         ).map(
           cls -> cls.lfold(
             (next:Couple<String,Dynamic>,memo:Dynamic) -> {

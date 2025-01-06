@@ -6,7 +6,7 @@ abstract class FlatMap<P,Pi,E> extends FlatFold<P,Pi,E>{
   }
   abstract public function ok(p:P):Receiver<Pi,E>;
 
-  public function no(d:Defect<E>):Receiver<Pi,E>{
+  public function no(d:Error<E>):Receiver<Pi,E>{
     return Receiver.issue(Failure(d));
   }
   

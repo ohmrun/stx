@@ -11,13 +11,13 @@ class HTypePath extends stx.assert.eq.term.Base<THTypePath> {
       if(lhs.name == "DirectType" && lhs.pack[0] == "tink"){
         return AreEqual;
       }
-      eq = Eq.ArrayEq(Eq.String()).comply(lhs.pack,rhs.pack);
+      eq = new stx.assert.eq.term.ArrayEq(Eq.String()).comply(lhs.pack,rhs.pack);
     }
     if(eq.is_ok()){
       eq = Eq.NullOr(Eq.String()).comply(lhs.sub,rhs.sub);
     }
     if(eq.is_ok()){
-      eq = Eq.NullOr(Eq.ArrayEq(Eq.Makro().Expr().HTypeParam)).comply(lhs.params,rhs.params);
+      eq = Eq.NullOr(new stx.assert.eq.term.ArrayEq(Eq.Makro().Expr().HTypeParam)).comply(lhs.params,rhs.params);
     }
     return eq;
   }

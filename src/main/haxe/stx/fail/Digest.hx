@@ -1,48 +1,36 @@
 package stx.fail;
 
-/**
-  Represents information about an error. 
-  `uuid` is intended to be unique to make web search easier.
-**/
-class Digest implements DigestApi{
-  static public var register(get,null) : haxe.ds.StringMap<Digest>;
-  static function get_register(){
-    return register == null ? register = new haxe.ds.StringMap() : register;
-  } 
-  public final uuid    : String;
-  public final detail  : String;
-  public final code    : Int;
 
-  public function new(uuid,detail,code=-1){
-    this.uuid   = uuid;
-    this.detail = detail;
-    this.code   = code;
-    
-    if(register.exists(uuid)){
-      final val         = register.get(uuid);
-      final identifier  = std.Type.getClassName(std.Type.getClass(this));
-      if(Type.getClass(val) != Type.getClass(this)){
-        throw 'Digest identifier $uuid on ${identifier} already registered for $val';
-      }
-    }else{
-      register.set(uuid,this);
-    }
-  }
-  public function toString(){
-    return '($code,"$uuid","$detail")';
-  }
-  public function asDigest():Digest{
-    return this;
-  }
-  @:noUsing static public function Foreign(detail:String){
-    return new DigestForeign(detail);
-  }
-  @:noUsing static public function Secrete(detail:String){
-    return new stx.fail.digest.Secrete(detail);
+/**
+ * Conveniance function for creating `Lapse` instances of indeterminate type.
+ */
+class DigestCls{
+  public function new(uuid:Uuid,message:String,loc:Loc,?canon:Null<Int>){
+    this.label  = '$uuid';
+    this.crack  = new Exception(message);
+    this.loc    = loc;
+    this.canon  = canon ?? -1; 
+  }  
+  public final crack  : Exception;
+  public final label  : String;
+  public final loc    : Loc; 
+  public final canon  : Int; 
+
+  public function toLapse<E>():Lapse<E>{
+    return { crack : crack, label : label, loc : loc, canon : canon };
   }
 }
-private class DigestForeign extends Digest{
-  public function new(detail,code=-1){
-    super("125cb1ae06784bb586e87ea8f57cdb6e",detail,code);
+@:forward abstract Digest(DigestCls) from DigestCls to DigestCls{
+  public function new(self) this = self;
+  @:noUsing static public function lift(self:DigestCls):Digest return new Digest(self);
+  @:noUsing static public function make(uuid:Uuid,message:String,loc:Loc,?canon):Digest{
+    return new DigestCls(uuid,message,loc,canon);
+  }
+  public function prj():DigestCls return this;
+  private var self(get,never):Digest;
+  private function get_self():Digest return lift(this);
+
+  @:to public function toLapse<E>():Lapse<E>{
+    return this.toLapse();
   }
 }

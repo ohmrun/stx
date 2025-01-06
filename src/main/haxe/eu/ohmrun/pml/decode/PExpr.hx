@@ -5,13 +5,16 @@ using stx.Show;
 import eu.ohmrun.pml.PExpr in TPExpr;
 
 class PExpr extends Clazz{
+  public function comply(name:String,self:TPExpr<Atom>):Upshot<Dynamic,PmlFailure>{
+    return __.reject(__.fault().of(E_Pml_NoPApply(name)));
+  }
   public function apply(self:TPExpr<Atom>):Upshot<Dynamic,PmlFailure>{
     trace(self.toString());
     return switch(self){
-      case PEmpty     : __.accept(null);
-      case PValue(x)  : __.accept(x.toString());
-      case PLabel(x)  : __.accept(x);
-      case PApply(x)  : __.accept(x);
+      case PEmpty       : __.accept(null);
+      case PValue(x)    : __.accept(x.toString());
+      case PLabel(x)    : __.accept(x);
+      case PApply(x,r)  : __.accept(x);
       case PGroup(
         Cons(PGroup(Cons(PLabel(x),Cons(PLabel(y),Nil))),xs)
       ) : 
@@ -32,7 +35,7 @@ class PExpr extends Clazz{
             trace("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             return result.map(memo.snoc);
           },
-          [].imm()
+          Cluster.unit()
         );
       case PArray(xs) : 
         Upshot.bind_fold(
@@ -45,14 +48,14 @@ class PExpr extends Clazz{
             trace("'+++++++++++++++++++++++++++++++'");
             return result.map(memo.snoc);
           },
-          [].imm()
+          Cluster.unit()
         );
       case PSet(xs)  : Upshot.bind_fold(
         xs,
         (next:TPExpr<Atom>,memo:Cluster<Dynamic>)-> {
           return apply(next).map(memo.snoc);
         },
-        [].imm()
+        Cluster.unit()
       ).map(x -> PmlSet.lift(x));
       case PAssoc(_) : new Object().apply(self);
     }

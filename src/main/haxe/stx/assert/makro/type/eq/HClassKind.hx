@@ -13,7 +13,7 @@ class HClassKind extends EqCls<THClassKind>{
       case [KNormal,KNormal] : AreEqual;
       case [KTypeParameter(constraintsI),KTypeParameter(constraintsII)] : 
         //Array<Type>
-        Eq.ArrayEq(Eq.Makro().Type().Type).comply(constraintsI,constraintsII);
+        new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().Type).comply(constraintsI,constraintsII);
       case [KModuleFields(moduleI),KModuleFields(moduleII)] : 
         //String
         Eq.String().comply(moduleI,moduleII);
@@ -25,7 +25,7 @@ class HClassKind extends EqCls<THClassKind>{
         //Array<Type>
         var eq = Eq.Makro().Type().HClassType.comply(clI.get(),clII.get());
         if(eq.is_ok()){
-          eq = Eq.ArrayEq(Eq.Makro().Type().Type).comply(paramsI,paramsII);
+          eq = new stx.assert.eq.term.ArrayEq(Eq.Makro().Type().Type).comply(paramsI,paramsII);
         }
         eq;
       case [KMacroType,KMacroType]      : AreEqual;

@@ -22,7 +22,7 @@ abstract Propose<O,E>(ProposeDef<O,E>) from ProposeDef<O,E> to ProposeDef<O,E>{
   @:noUsing static public function pure<O,E>(o:O):Propose<O,E>{
     return fromChunk(Val(o));
   }
-  @:noUsing static public function fromRefuse<O,E>(e:Refuse<E>):Propose<O,E>{
+  @:noUsing static public function fromError<O,E>(e:Error<E>):Propose<O,E>{
     return fromChunk(End(e));
   }
   @:noUsing static public function unit<O,E>():Propose<O,E>{
@@ -203,8 +203,8 @@ class ProposeLift{
       )
     );
   }
-  static public inline function environment<O,E>(self:ProposeDef<O,E>,success:Option<O>->Void,?failure:Refuse<E>->Void){
-    failure = failure ?? (e:Refuse<E>) ->  e.crack();
+  static public inline function environment<O,E>(self:ProposeDef<O,E>,success:Option<O>->Void,?failure:Error<E>->Void){
+    failure = failure ?? (e:Error<E>) ->  e.crack();
     return FletcherLift.environment(
       Fletcher.lift(self),
       Nada,
