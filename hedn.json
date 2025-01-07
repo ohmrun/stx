@@ -3,7 +3,6 @@
     "-D"  : ["no-deprecation-warnings"],
     "-lib" : ["stx","tink_priority","pootle"],
     "unit" : {
-      "--times" : false,
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
       "hl" : {
         "--hl" : "build/hl/unit.hl"

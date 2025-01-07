@@ -6,7 +6,7 @@ class Executor extends Clazz{
       case Accept(ok) : __.log().debug(ok.info());
       case Reject(e)  : __.log().debug('$e');
     }
-    return @:privateAccess (sys.stx.cli.react.Main.handlers.toArray().lfold(
+    return @:privateAccess (sys.stx.cli.react.Main.handlers.lfold(
       (next:ProgramApi,memo:Unary<Upshot<CliContext,CliFailure>,Agenda<CliFailure>>) -> {  
         __.log().trace('$next');
           return memo.apply.fn().then(

@@ -3,9 +3,9 @@ package sys.stx.cli.react;
 using sys.stx.cli.Logging;
 
 class Main{
-  static public var handlers(get,null) : Queue<ProgramApi>;
+  static public var handlers(get,null) : Cluster<ProgramApi>;
   static public function get_handlers(){
-    return handlers == null ? handlers = new Queue() : handlers;
+    return handlers == null ? handlers = new Cluster() : handlers;
   }
   static public function main(){
     trace("main");

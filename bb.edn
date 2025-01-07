@@ -2,14 +2,12 @@
  :deps {
         ohmrun/stx_release {:local/root "."}
  }
- :tasks {
-         :requires 
-         ([cheshire.core :as json] 
-          [babashka.process :as proc] 
+ :tasks {:requires
+         ([cheshire.core :as json]
+          [babashka.process :as proc]
           [babashka.fs :as fs]
-          [stx_release :as release]
-          )
-         load (release/load)
-         
+          [release :as release])
+         load (release/-main)
+         unit (proc/shell "hedn" "build" "unit/interp")
          }
  }
