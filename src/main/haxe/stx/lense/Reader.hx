@@ -13,7 +13,7 @@ class Reader{
           case PValue(Str(s)) | PLabel(s) : __.accept(Coord.make(s,n));
           default                         : __.reject(error('coord',e));
         }
-      case PValue(Str(s)) : 
+      case PValue(Str(s)) | PLabel(s): 
         __.accept(Coord.make(s));
       default : __.reject(error('coord',e));
     }
@@ -36,34 +36,36 @@ class Reader{
   static public function apply(self:PExpr<Atom>,?rest:String->PExpr<Atom>->Upshot<LExpr<Coord,PExpr<Atom>>,LenseFailure>):Upshot<LExpr<Coord,PExpr<Atom>>,LenseFailure>{
     return switch(self){
       case PApply(x,xs) :
+        final args = xs.fold_layer((n,m:Cluster<PExpr<Atom>>) -> m.snoc(n),[]);
         switch(x){
           case 'id'     : __.accept(_.Id());
-          case 'const'  : switch(xs){
-            case PArray([v,d]) | PGroup(Cons(v,Cons(d,Nil)))  : 
-              __.accept(_.Constant(v,d));
-            default                   : 
-              __.reject(f -> f.of(E_Lense('const $xs')));
-          }
-          case 'seq'    : switch(xs){
-            case Cons(v,Cons(d,Nil)) : 
+          case 'const'  : 
+            switch(args){
+              case Accept([v,d]) :
+                __.accept(_.Constant(v,d));
+              default                   : 
+                __.reject(f -> f.of(E_Lense('const $xs')));
+            }
+          case 'seq'    : switch(args){
+            case Accept([v,d]) : 
               apply(v,rest).flat_map(vI -> apply(d,rest).map((vII) -> _.Sequence(vI,vII)));
             default : 
               __.reject(error('apply',xs));
           }
-          case 'hoist' : switch(xs){
-            case Cons(x,Nil) : 
+          case 'hoist' : switch(args){
+            case Accept([x]) : 
               k_of(x).map(_.Hoist);
             default : 
             __.reject(error('hoist',xs));
           }
-          case 'plunge' : switch(xs){
-            case Cons(x,Nil) : 
+          case 'plunge' : switch(args){
+            case Accept([x]) : 
               k_of(x).map(_.Plunge);
             default : 
             __.reject(error('plunge',xs));
           }
-          case 'xfork' : switch(xs){
-            case (Cons(PArray(pc),Cons(PArray(pa),Cons(l,Cons(r,Nil))))) : 
+          case 'xfork' : switch(args){
+            case Accept([PArray(pc),PArray(pa),l,r]) : 
               ks_of(PArray(pc)).zip(ks_of(PArray(pa))).flat_map(
                 __.decouple(
                   (pc,pa) -> {
@@ -79,30 +81,30 @@ class Reader{
               );
             default : __.reject(error('xfork',xs));
           }
-          case 'map' : switch(xs){
-            case Cons(x,Nil) : apply(x,rest).map(
+          case 'map' : switch(args){
+            case Accept([x]) : apply(x,rest).map(
               x -> _.Map(x)
             );
             default : __.reject(error('map',xs));
           }
-          case 'copy' : switch(xs){
-            case Cons(x,Cons(y,Nil)) : k_of(x).zip(k_of(y)).map(
+          case 'copy' : switch(args){
+            case Accept([x,y]) : k_of(x).zip(k_of(y)).map(
               __.decouple(
                 (x,y) -> _.Copy(x,y)
               )
             );
             default : __.reject(error('copy',xs));
           }
-          case 'merge' : switch(xs){
-            case Cons(x,Cons(y,Nil)) : k_of(x).zip(k_of(y)).map(
+          case 'merge' : switch(args){
+            case Accept([x,y]) : k_of(x).zip(k_of(y)).map(
               __.decouple(
                 (x,y) -> _.Merge(x,y)
               )
             );
             default : __.reject(error('merge',xs));
           }
-          case 'ccond' : switch(xs){
-            case Cons(c,Cons(_t,Cons(_f,Nil))) : 
+          case 'ccond' : switch(args){
+            case Accept([c,_t,_f]) : 
               apply(_t,rest).zip(apply(_f,rest)).map(
                 __.decouple(
                   (_t,_f) -> _.CCond(c,_t,_f)
@@ -110,8 +112,8 @@ class Reader{
               );
             default : __.reject(error('ccond',xs));
           }
-          case 'acond' : switch(xs){
-            case Cons(cc,Cons(ac,Cons(_t,Cons(_f,Nil)))) : 
+          case 'acond' : switch(args){
+            case Accept([cc,ac,_t,_f]) : 
               apply(_t,rest).zip(apply(_f,rest)).map(
                 __.decouple(
                   (_t,_f) -> _.ACond(cc,ac,_t,_f)
@@ -119,22 +121,22 @@ class Reader{
               );
             default : __.reject(error('acond',xs));
           }
-          case 'filter' : switch(xs){
-            case Cons(ks,Cons(d,Nil)) : 
+          case 'filter' : switch(args){
+            case Accept([ks,d]) : 
               ks_of(ks).map(x -> _.Filter(x,d));
-            case Cons(ks,Nil)         : 
+            case Accept([ks])         : 
               ks_of(ks).map(x -> _.Filter(x));
             default : __.reject(error('filter',xs));
           }
-          case 'focus' : switch(xs){
-            case Cons(k,Cons(d,Nil)) : 
+          case 'focus' : switch(args){
+            case Accept([k,d]) : 
               k_of(k).map(x -> _.Focus(x,d));
-            case Cons(k,Nil)         : 
+            case Accept([k])         : 
               k_of(k).map(x -> _.Focus(x));
             default : __.reject(error('focus',xs));
           }
-          case 'rename' : switch(xs){
-            case Cons(x,Cons(y,Nil)) : k_of(x).zip(k_of(y)).map(
+          case 'rename' : switch(args){
+            case Accept([x,y]) : k_of(x).zip(k_of(y)).map(
               __.decouple(
                 (x,y) -> _.Rename(x,y)
               )

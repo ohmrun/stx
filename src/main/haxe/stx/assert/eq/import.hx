@@ -1,3 +1,2 @@
-package stx.assert;
+package stx.assert.eq;
 
-using stx.Assert;

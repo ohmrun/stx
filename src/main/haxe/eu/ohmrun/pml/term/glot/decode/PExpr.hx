@@ -7,10 +7,10 @@ final decode = __.pml().glot().decode;
 class PExpr extends Clazz{
   public function apply(self:TPExpr<Atom>):Upshot<Dynamic,GlotFailure>{
     return switch(self){
-      case PEmpty     : __.accept(null);
-      case PValue(x)  : __.accept(x.toString());
-      case PLabel(x)  : __.accept(x);
-      case PApply(x)  : __.accept(x);
+      case PEmpty         : __.accept(null);
+      case PValue(x)      : __.accept(x.toString());
+      case PLabel(x)      : __.accept(x);
+      case PApply(x,arg)  : __.reject(__.fault().of(E_Glot_NotApplied(x)));
       case PGroup(
         Cons(PGroup(Cons(x,Cons(y,Nil))),xs)) : decode.EnumValue.apply(self);
       case PGroup(xs) : Upshot.bind_fold(

@@ -11,3 +11,10 @@ plz-out
 /dist
 /.direnv
 /.portal
+/.clj-kondo
+/.lsp
+/.env
+/.cp-cache
+/.cpcache
+/.calva
+/.portal

@@ -1,0 +1,15 @@
+{
+ :deps {
+        ohmrun/stx_release {:local/root "."}
+ }
+ :tasks {
+         :requires 
+         ([cheshire.core :as json] 
+          [babashka.process :as proc] 
+          [babashka.fs :as fs]
+          [stx_release :as release]
+          )
+         load (release/load)
+         
+         }
+ }

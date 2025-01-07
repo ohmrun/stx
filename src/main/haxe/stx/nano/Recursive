@@ -1,0 +1,4 @@
+package stx.nano;
+
+
+typedef Recursive<F>      = Recursive<F> -> F;

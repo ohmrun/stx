@@ -529,7 +529,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 				// }, Cluster.unit()).map(PAssoc);
 			case [PValue(l),PValue(r)] if (V.is_greater_or_equal(PValue(r),PValue(l))) : __.accept(PValue(r));
 			case [PLabel(l),PLabel(r)] if (V.is_greater_or_equal(PLabel(r),PLabel(l))) : __.accept(PLabel(r));
-			case [PApply(l),PApply(r)] if (V.is_greater_or_equal(PApply(r),PApply(l))) : __.accept(PApply(r));
+			case [PApply(l,lxs),PApply(r,rxs)] if (V.is_greater_or_equal(PApply(r,rxs),PApply(l,lxs))) : __.accept(PApply(r,rxs));
 			default:
 				__.reject(__.fault().of(stx.fail.PmlFailure.PmlFailureSum.E_Pml_CannotMix(lhs, rhs))).errata(E_Lense_Pml);
 		}

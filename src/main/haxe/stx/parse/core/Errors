@@ -1,0 +1,13 @@
+package stx.parse.core;
+
+class Errors{
+  static public function e_parse_failure<E>(digests:Digests,cursor:Int,?opaque:haxe.macro.Expr.Position,?known:haxe.PosInfos):Error<E>{
+    return new EParseFailure(cursor,opaque,known);
+  }
+}
+class EParseFailure<E> extends ErrorCls<E>{
+  public function new(cursor,?opaque,?known){
+    super(
+      new LapseCtr().Digest("01FRQ9XPNHGFY88XHMMSS8GBPZ","Parse Failed"),_ -> Loc.make(cursor,opaque,known));
+  }
+}

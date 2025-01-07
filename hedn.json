@@ -1,0 +1,88 @@
+{
+  "build" : {
+    "-D"  : ["no-deprecation-warnings"],
+    "-lib" : ["stx","tink_priority","pootle"],
+    "unit" : {
+      "--times" : false,
+      "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
+      "hl" : {
+        "--hl" : "build/hl/unit.hl"
+      },
+      "cpp" : {
+        "--cpp" : "build/unit/cpp"
+      },
+      "php" : {
+        "--php" : "build/php"
+      },
+      "python" : {
+        "--python" : "build/unit/python/stx.py"
+      },
+      "javascript" : {
+        "--macro" : "exclude('stx.asys')",
+        "--js"    : "build/javascript/unit/main.js"
+      },
+      "neko" : {
+        "--neko" : "build/neko/main.n"
+      },
+      "lua" : {
+        "--lua" : "build/lua/main.lua"
+      },
+      "interp" : {
+        "--interp" : true 
+      },
+      "cs" : {
+                "-D" : ["erase-generics"],
+        "--cs": "build/unit/cs"
+      }
+    },
+    "test" : {
+      "--main" : "Test",
+      "interp" : {
+        "--interp" : "true"
+      },
+      "cpp"  : {
+        "--cpp" : "build/test/cpp"
+      },
+      "php"  : {
+        "--php" : "build/test/php/main.php"
+      },
+      "python"  : {
+        "--python" : "build/test/python/main.py"
+      },
+      "neko" :  {
+        "--neko" : "build/test/neko/main.n"
+      },
+      "hl" :  {
+        "--hl" : "build/test/hl/main.hl"
+      },
+      "jvm" :  {
+        "--jvm" : "build/test/jvm/"
+      },
+      "lua" :  {
+        "--lua" : "build/test/lua/main.lua"
+      }
+    },
+    "docs" : {
+      "--lua" : [
+        "include('stx',true,['stx.makro','tink','hre','equals','hscript','httpstatus'])"
+      ],
+      "-lib"  : "stx",
+      "-D"    :  "doc-gen",
+      "--xml" :  "docs/doc.xml" 
+    },
+    "dox" : {
+      "--cmd" :  [
+        "haxelib run dox -i docs -o ../ohmrun.github.io/  -ex  bake -ex  bootstrap* -ex  haxe -ex  hx  -ex  tink.* -ex  hre.* -ex  equals.* -ex  hscript* -ex  httpstatus -in  stx.* -in  eu.*"
+      ]
+    },
+    "doc" : {
+      "--cmd" : [
+       "hedn build docs",
+       "hedn build dox" 
+      ]
+    },
+    "serve" : {
+      "--cmd" : "nekotools server -d ../ohmrun.github.io/ -rewrite"
+    }
+  }
+}

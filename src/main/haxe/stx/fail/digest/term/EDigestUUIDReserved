@@ -1,0 +1,9 @@
+package stx.nano.digest.term;
+
+class EDigestUUIDReserved<T> extends ErrorCls<T>{
+  public function new(uuid){
+    super(
+        new LapseCtr().Digest("01FRQ557XM5KFRCSZ2Q0FFY069",'Uuid "$uuid" already registered.').enlist()
+    );
+  }
+}

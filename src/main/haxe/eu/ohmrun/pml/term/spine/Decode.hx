@@ -6,8 +6,12 @@ class Decode extends Clazz{
   public function apply(expr:PExpr<Atom>):PmlSpine{
     __.log().trace('$expr');
     return switch(expr){
-      case PLabel(name) : Primate(PSprig(Textal(':$name')));
-      case PApply(name) : Primate(PSprig(Textal('#$name')));
+      case PLabel(name)     : Primate(PSprig(Textal(':$name')));
+      case PApply(name,arg) : Collate(
+        Record.fromMap(
+          ['#$name' => apply(arg)]
+        )
+      );
       case PGroup(list) :
         Collect(list.toCluster().map(
           x -> apply(x)

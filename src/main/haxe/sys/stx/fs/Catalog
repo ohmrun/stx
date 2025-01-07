@@ -1,0 +1,86 @@
+package sys.stx.fs;
+
+#if (sys || nodejs)
+  import sys.FileSystem;
+  import sys.io.File;
+#end
+
+import haxe.Constraints;
+
+using sys.stx.fs.Catalog;
+
+function snoc<T>(self:Array<T>,v:T){
+  final next= self.copy();
+        next.push(v);
+  return next;  
+}
+
+abstract class Catalog<V> implements haxe.Constraints.IMap<String,V> {
+  private static var sep = std.Sys.systemName() == "Windows" ? "\\" : "/";
+
+  
+  public final path : Array<String>;
+
+  public function new(path:Array<String>){
+    this.path     = path;
+  }
+  abstract public function encode(t:V):String;
+  abstract public function decode(str:String):V;
+
+	public function get(k:String):Null<V>{
+    final a = path.snoc(k).join(Catalog.sep);
+    return if(exists(k)){
+      decode(File.getContent(a));
+    }else{
+      null;
+    }
+  }
+	public function set(k:String, v:V):Void{
+    final a = path.snoc(k).join(Catalog.sep);
+    File.saveContent(k,encode(v));
+  }
+	public function exists(k:String):Bool{
+    final a = path.snoc(k).join(Catalog.sep);
+    return FileSystem.exists(k);
+  }
+	public function remove(k:String):Bool{
+    var result = exists(k);
+    FileSystem.deleteFile(path.snoc(k).join(Catalog.sep));
+    return result;
+  }
+	public function keys():Iterator<String>{
+    return FileSystem.readDirectory(path.join(Catalog.sep)).iterator();
+  }
+	public function iterator():Iterator<V>{
+    final result = [];
+    for (k in keys()){
+      result.push(get(k));
+    }
+    return result.iterator();
+  }
+	public function keyValueIterator():KeyValueIterator<String, V>{
+    final result = [];
+    for (k in keys()){
+      result.push({key : k, value : get(k)});
+    }
+    return result.iterator();
+  }
+	public function copy():IMap<String, V>{
+    var n = new haxe.ds.StringMap();
+    for(k => v in this){
+      n.set(k,v);
+    }
+    return n;
+  }
+	public function toString():String{
+    return 'Catalog($path)';
+  }
+	public function clear():Void{
+    for(key in this.keys()){
+      remove(key);
+    }
+  }
+  // static public function Unit(path):Catalog<String>{
+  //   return new sys.stx.fs.catalog.Unit(path);
+  // }
+}

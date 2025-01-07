@@ -1,0 +1,8 @@
+{
+ :paths ["src/dev/babashka"]
+ :deps {
+        cheshire/cheshire {:mvn/version "5.13.0"}
+        eu.ohmrun/ron {:mvn/version "1.6"}
+        ohmrun/blib {:git/sha "051808ead69482acd028a641a53317f44b230d02" :git/url "https://codeberg.org/ohmrun/blib/"}
+        }
+ :aliases {}}
