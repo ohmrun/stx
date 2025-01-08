@@ -129,7 +129,7 @@ class Reporter extends Clazz{
             }
           }
           if(!test_suite.is_clean()){
-            close(__.fault().digest((_:stx.Digests) -> _.e_suite_failed()));
+            close(__.fault().digest((_:stx.fail.Digests) -> _.e_suite_failed()));
           }else{
             close(null);
           }

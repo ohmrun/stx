@@ -14,7 +14,7 @@ abstract Perform(PerformDef) from PerformDef to PerformDef{
         (_:Upshot<Nada,E>,cont:Terminal<Upshot<Nada,E>,Nada>) -> {
           return cont.receive(
             //CPP fix 08/11/22
-            Fletcher.FletcherLift.map(this,(_:Nada) -> __.accept(_)).forward(Nada)
+            eu.ohmrun.Fletcher.FletcherLift.map(this,(_:Nada) -> __.accept(_)).forward(Nada)
           );
         }
       )

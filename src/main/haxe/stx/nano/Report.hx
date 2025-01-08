@@ -104,8 +104,8 @@ class ReportLift{
   static public function resolve<T,E>(self:ReportSum<E>,fn:Void->T):Upshot<T,E>{
     return fold(
       self,
-      (x) -> Upshot.UpshotSum.Reject(x),
-      ()  -> Upshot.UpshotSum.Accept(fn())
+      (x) -> UpshotSum.Reject(x),
+      ()  -> UpshotSum.Accept(fn())
     );
   }
   static public function concat<E>(self:Report<E>,that:Report<E>):Report<E>{

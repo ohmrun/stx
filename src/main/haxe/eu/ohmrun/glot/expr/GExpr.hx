@@ -39,7 +39,7 @@ class GExprCtr extends Clazz{
   public function Constant(c:CTR<GConstantCtr,GConstant>){
     return GExpr.lift(GEConst(c.apply(Expr.GConstant)));
   } 
-  public function Path(string:String){
+  public function Path(string:String):GExpr{
     final parts = string.split(".");
     return parts.tail().lfold(
         (next:String,memo:GExpr) -> this.Field(
@@ -63,7 +63,7 @@ class GExprCtr extends Clazz{
       () -> this.Const(_ -> _.Ident(head))
     );
   }
-  public function Array(lhs:CTR<GExprCtr,GExpr>,rhs:CTR<GExprCtr,GExpr>){
+  public function GArray(lhs:CTR<GExprCtr,GExpr>,rhs:CTR<GExprCtr,GExpr>){
     return GExpr.lift(GEArray(lhs.apply(this),rhs.apply(this)));
   }
   public function Binop(op,l:CTR<GExprCtr,GExpr>,r:CTR<GExprCtr,GExpr>){

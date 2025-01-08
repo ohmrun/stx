@@ -18,6 +18,6 @@ class Dependencies{
   //   }
   // }
   private function center(arr){
-    return Math.round(this.source.length / 2);
+    return std.Math.round(this.source.length / 2);
   }
 }

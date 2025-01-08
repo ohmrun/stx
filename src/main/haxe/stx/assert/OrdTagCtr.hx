@@ -51,10 +51,10 @@ class OrdTagCtr{
   static public inline function ArrayOrd<T>(tag:TAG,inner:Ord<T>):Ord<StdArray<T>>{
     return new ArrayOrd(inner);
   }
-  static public inline function Record<T>(tag:TAG, inner:Ord<T>):Ord<stx.Record<T>>{
+  static public inline function Record<T>(tag:TAG, inner:Ord<T>):Ord<stx.nano.Record<T>>{
     return new stx.assert.ord.term.Record(inner);
   }
-  static public inline function Cluster<T>(tag:TAG, inner:Ord<T>):Ord<stx.Cluster<T>>{
+  static public inline function Cluster<T>(tag:TAG, inner:Ord<T>):Ord<stx.nano.Cluster<T>>{
     return new Cluster(inner);
   }
   static public inline function Option<T>(tag:TAG, inner:Ord<T>):Ord<StdOption<T>>{

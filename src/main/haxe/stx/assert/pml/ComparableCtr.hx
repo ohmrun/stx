@@ -10,7 +10,7 @@ class ComparableCtr extends Clazz{
    * @param tag 
    * @return STX<stx.assert.Eq<eu.ohmrun.pml.Module>>
    */
-  static public inline function pml(tag:STX<stx.Comparable<Dynamic>>){
+  static public inline function pml(tag:STX<stx.assert.Comparable<Dynamic>>){
     return new ComparableCtr();
   }
   public inline function PExpr<T>(inner:stx.assert.Comparable<T>){

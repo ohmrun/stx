@@ -11,6 +11,6 @@ class Couple<L,R> extends OrdCls<StdCouple<L,R>>{
     this.r = r;
   }
   public function comply(a:StdCouple<L,R>,b:StdCouple<L,R>):Ordered{
-    return a.decouple((l0,r0) -> b.decouple((l1,r1)-> l.comply(l0,l1) || r.comply(r0,r1)));
+    return a.decouple((l0,r0) -> b.decouple((l1,r1)-> l.comply(l0,l1).or(r.comply(r0,r1))));
   }
 }

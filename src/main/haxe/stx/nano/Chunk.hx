@@ -253,16 +253,16 @@ class ChunkLift{
   }
   static public function toUpshot<O,E>(self:Chunk<O,E>){
     return self.fold(
-      ok  -> Upshot.UpshotSum.Accept(ok),
-      (e) -> Upshot.UpshotSum.Reject(e),
-      ()  -> Upshot.UpshotSum.Reject(Fault.make().digest((d:Digests)  -> d.e_undefined()))
+      ok  -> stx.nano.Upshot.UpshotSum.Accept(ok),
+      (e) -> stx.nano.Upshot.UpshotSum.Reject(e),
+      ()  -> stx.nano.Upshot.UpshotSum.Reject(Fault.make().digest((d:Digests)  -> d.e_undefined()))
     );
   }
   static public function toResOpt<O,E>(self:Chunk<O,E>){
     return self.fold(
-      ok  -> Upshot.UpshotSum.Accept(Some(ok)),
-      (e) -> Upshot.UpshotSum.Reject(e),
-      ()  -> Upshot.UpshotSum.Accept(None)
+      ok  -> stx.nano.Upshot.UpshotSum.Accept(Some(ok)),
+      (e) -> stx.nano.Upshot.UpshotSum.Reject(e),
+      ()  -> stx.nano.Upshot.UpshotSum.Accept(None)
     );
   }
   static public function toError<O,E>(self:Chunk<O,E>):Option<Error<E>>{

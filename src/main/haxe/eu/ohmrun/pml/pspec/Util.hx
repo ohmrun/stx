@@ -43,7 +43,7 @@ class Util{
     return result;
   }
   static public function enum_from_ident(self:Ident){
-    final _enum : stx.Enum<Dynamic> = std.Type.resolveEnum(self.pack.join("."));
+    final _enum : stx.nano.Enum<Dynamic> = std.Type.resolveEnum(self.pack.join("."));
     final _val = _enum.construct(Right(self.name),[]);
     return _val;
   }
@@ -62,7 +62,7 @@ class Util{
     return result;
   }
   static public function enum_path(self:EnumValue){
-    final _enum : stx.Enum<Dynamic>  = std.Type.getEnum(self);
+    final _enum : stx.nano.Enum<Dynamic>  = std.Type.getEnum(self);
     trace(_enum.name());
     //TODO move moniker
     final result = Ident.make(self.ctr(),_enum.name().split("."));

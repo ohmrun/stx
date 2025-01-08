@@ -13,7 +13,7 @@ class EqCtr extends Clazz{
    * @param tag 
    * @return STX<stx.assert.Eq<eu.ohmrun.pml.Module>>
    */
-  static public function pml(tag:STX<stx.Eq<Dynamic>>){
+  static public function pml(tag:STX<stx.assert.Eq<Dynamic>>){
     return new EqCtr();
   }
   public inline function PExpr<T>(inner:stx.assert.Eq<T>){

@@ -25,7 +25,13 @@ enum abstract OrderedSum(Bool) from Bool{
   }
   @:op(A || B)
   public function or(that:Ordered):Ordered{
-    return toBool() || that.toBool();
+    final l = toBool(); 
+    final r = that.toBool();
+    return switch ([l,r]){
+      case [true,_] : true;
+      case [_,true] : true;
+      default :  false;
+    }
   }
   @:op(!A)
   public function not():Ordered{
@@ -36,7 +42,12 @@ enum abstract OrderedSum(Bool) from Bool{
   }
   @:op(A && B)
   public function and(that:Ordered):Ordered{
-    return toBool() && that.toBool();
+    final l : Bool = OrderedLift.toBool(this);
+    final r : Bool = OrderedLift.toBool(that); 
+    return switch([l,r]){
+      case [true,true] : true;
+      default : false;
+    }
   }
 }
 class OrderedLift{
@@ -50,6 +61,12 @@ class OrderedLift{
     return switch(self){
       case NotLessThan : false;
       default          : true;
+    }
+  }
+  static public function toBool(self:OrderedSum):Bool{
+    return switch(self){
+      case OrderedSum.LessThan    : true;
+      case OrderedSum.NotLessThan : false;
     }
   }
 }

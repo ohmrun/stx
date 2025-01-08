@@ -7,7 +7,7 @@ import stx.makro.Expr;
 class Api{
   public function new(){}
   public function ref(name,pos){
-    return stx.makro.HExpr.ref(name,pos);
+    return stx.makro.expr.HExpr.ref(name,pos);
   }
   public function def(){
     return new ApiHExprdef();

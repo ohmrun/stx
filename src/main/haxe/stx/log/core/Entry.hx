@@ -1,8 +1,11 @@
 package stx.log.core;
 
-typedef EntryDef<T> = StringCtrDef<T> & {
-  val : T  
-};
+//> StringCtrDef<T>;
+typedef EntryDef<T> = {
+  public function ctr(t:T):String;
+  public var val : T;
+} 
+
 abstract Entry<T>(EntryDef<T>) from EntryDef<T> to EntryDef<T>{
   public function new(self:EntryDef<T>) this = self;
   @:from static public function fromString(str:String){

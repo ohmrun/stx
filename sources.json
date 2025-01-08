@@ -16,7 +16,6 @@
     "stx_fail",
     "stx_fn",
     "stx_fp",
-    "stx_http_client",
     "stx_lense",
     "stx_log",
     "stx_makro",

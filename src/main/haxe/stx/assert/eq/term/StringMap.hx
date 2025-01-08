@@ -51,7 +51,7 @@ class StringMap<T> extends EqCls<TStringMap<T>>{
     }
     final set_add  = function(arr:StdArray<std.String>,str:std.String):StdArray<std.String>{
       final res = arr.length == 0 ? { value : [str], input : None } : arr.lfold(
-        (next:std.String,memo:{value : StdArray<std.String>, input : stx.Option<std.String> }) -> {
+        (next:std.String,memo:{value : StdArray<std.String>, input : stx.pico.Option<std.String> }) -> {
           //trace('$next $memo');
           return switch(memo.input){
             case Some(str) : 

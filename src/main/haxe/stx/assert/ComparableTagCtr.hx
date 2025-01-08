@@ -69,7 +69,7 @@ class ComparableTagCtr{
    * @param inner 
    * @return Comparable<stx.nano.Cluster<T>>
    */
-  static public function Cluster<T>(tag:TAG,inner:Comparable<T>):Comparable<stx.Cluster<T>>{
+  static public function Cluster<T>(tag:TAG,inner:Comparable<T>):Comparable<stx.nano.Cluster<T>>{
     return new stx.assert.comparable.term.Cluster(inner);
   }
   /**

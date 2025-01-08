@@ -46,7 +46,7 @@ class HAbstractType extends OrdCls<THAbstractType>{
     }
     return ord;
   }
-  private function unop_op(a:{op:haxe.macro.Unop, postFix:Bool, field:TClassField},b:{op:haxe.macro.Expr.Unop, postFix:Bool, field:TClassField}){
+  private function unop_op(a:{op:haxe.macro.Expr.Unop, postFix:Bool, field:TClassField},b:{op:haxe.macro.Expr.Unop, postFix:Bool, field:TClassField}){
     var ord = Ord.Makro().Expr().Unop.comply(a.op,b.op);
     if(ord.is_not_less_than()){
       ord = Ord.Bool().comply(a.postFix,b.postFix);

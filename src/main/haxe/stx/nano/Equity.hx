@@ -175,18 +175,18 @@ class EquityLift extends Clazz{
 
   static public inline function toChunk<I,O,E>(self:EquityDef<I,O,E>):Chunk<O,E>{
     return switch(has_value(self)){
-      case true    : Chunk.ChunkSum.Val(self.value); 
+      case true    : stx.nano.Chunk.ChunkSum.Val(self.value); 
       case false   : switch(has_error(self)){
-        case true   : Chunk.ChunkSum.End(self.error);
-        case false  : Chunk.ChunkSum.Tap;
+        case true   : stx.nano.Chunk.ChunkSum.End(self.error);
+        case false  : stx.nano.Chunk.ChunkSum.Tap;
       } 
     }
   }
   static public function rebase<P,Oi,Oii,E>(self:EquityDef<P,Oi,E>,chunk:Chunk<Oii,E>):Equity<P,Oii,E>{
     return switch(chunk){
-      case Chunk.ChunkSum.Val(oII) : relate(clear(self),oII);
-      case Chunk.ChunkSum.End(e)   : refuse(clear(self),e);
-      case Chunk.ChunkSum.Tap      : clear(self);
+      case stx.nano.Chunk.ChunkSum.Val(oII) : relate(clear(self),oII);
+      case stx.nano.Chunk.ChunkSum.End(e)   : refuse(clear(self),e);
+      case stx.nano.Chunk.ChunkSum.Tap      : clear(self);
     }
   }
   static public function adjust<P,Oi,Oii,E>(self:EquityDef<P,Oi,E>,fn:Oi->Upshot<Oii,E>):Equity<P,Oii,E>{

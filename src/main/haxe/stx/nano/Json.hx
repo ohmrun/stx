@@ -19,7 +19,7 @@ class Json{
         ).enlist()
       );
     }
-    return err == null ? Upshot.UpshotSum.Accept(out) : Upshot.UpshotSum.Reject(err);
+    return err == null ? stx.nano.Upshot.UpshotSum.Accept(out) : stx.nano.Upshot.UpshotSum.Reject(err);
   }
   /**
    * Alias for `haxe.Json.parse` with captured error.
@@ -34,6 +34,6 @@ class Json{
     }catch(e:Dynamic){
       err = ErrorCtr.instance.Label('$e',_ -> Loc.fromPos(Position.here()));
     }
-    return err == null ? Upshot.UpshotSum.Accept(out) : Upshot.UpshotSum.Reject(err);
+    return err == null ? stx.nano.Upshot.UpshotSum.Accept(out) : stx.nano.Upshot.UpshotSum.Reject(err);
   }
 }

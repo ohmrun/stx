@@ -32,7 +32,7 @@ class ArrayLift{
       var length = {
         var minLength = alls[0].length;
         for (e in alls)
-          minLength = std.Std.int(Math.min(minLength, e.length));
+          minLength = std.Std.int(std.Math.min(minLength, e.length));
         minLength;
       }
       var i = 0;
@@ -329,7 +329,7 @@ class ArrayLift{
 	 * Produces an `Array` from `self[0]` to `self[n]`
 	**/
   static public function ltaken<T>(self:StdArray<T>,n):Array<T>{
-    return self.slice(0, std.Std.int(Math.min(n,self.length)));
+    return self.slice(0, std.Std.int(std.Math.min(n,self.length)));
   }
   /**
 	 * Produces an Array from `self[n]` up to and including the last element.
@@ -398,7 +398,7 @@ class ArrayLift{
 	**/
   static public function zip_with<T,Ti,TT>(self:StdArray<T>,that:StdArray<Ti>,fn:T->Ti->TT):Array<TT> {
     var next  = [];
-    var lower = std.Std.int(Math.min(self.length,that.length));
+    var lower = std.Std.int(std.Math.min(self.length,that.length));
     for(i in 0...lower){
       next.push(fn(self[i],that[i]));
     }
@@ -599,14 +599,14 @@ class ArrayLift{
   }
   static public function random<T>(self:StdArray<T>):Null<T>{
     var len = self.length;
-    var ind = Math.round( Math.random() * (len - 1));
+    var ind = std.Math.round( std.Math.random() * (len - 1));
     return self[ind];
   }
   static public function shuffle<T>(self: StdArray<T>): Array<T>{
     var res = [];
     var cp = self.copy();
     while (cp.length > 0) {
-      var randArray = Math.floor(Math.random()*cp.length);
+      var randArray = std.Math.floor(std.Math.random()*cp.length);
       res.push(cp.splice(randArray,1)[0]);
     }
     return res;

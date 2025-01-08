@@ -5,16 +5,16 @@
     "unit" : {
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
       "hl" : {
-        "--hl" : "build/hl/unit.hl"
+        "--hl" : "build/unit/hl/main.c"
       },
       "cpp" : {
         "--cpp" : "build/unit/cpp"
       },
       "php" : {
-        "--php" : "build/php"
+        "--php" : "build/unit/php"
       },
       "python" : {
-        "--python" : "build/unit/python/stx.py"
+        "--python" : "build/unit/python/main.py"
       },
       "javascript" : {
         "--macro" : "exclude('stx.asys')",
@@ -30,8 +30,14 @@
         "--interp" : true 
       },
       "cs" : {
-                "-D" : ["erase-generics"],
+        "-D" : ["erase-generics"],
         "--cs": "build/unit/cs"
+      },
+      "java" : {
+        "--java" : "build/unit/java"
+      },
+      "js" : {
+        "--js" : "build/unit/js/main.js"
       }
     },
     "test" : {

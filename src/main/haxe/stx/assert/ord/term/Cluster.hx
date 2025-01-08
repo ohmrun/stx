@@ -3,12 +3,12 @@ package stx.assert.ord.term;
 /**
   shortlex oerrdah!!
 **/
-class Cluster<T> extends OrdCls<stx.Cluster<T>> {
+class Cluster<T> extends OrdCls<stx.nano.Cluster<T>> {
   var inner : Ord<T>;
   public function new(inner){
     this.inner = inner;
   }
-  public function comply(v1: stx.Cluster<T>, v2: stx.Cluster<T>):Ordered {
+  public function comply(v1: stx.nano.Cluster<T>, v2: stx.nano.Cluster<T>):Ordered {
     var n = v1.length - v2.length;
     return if(n != 0){
       n > 0 ? NotLessThan : LessThan;

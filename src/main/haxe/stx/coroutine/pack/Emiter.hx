@@ -57,7 +57,7 @@ typedef EmiterDef<O,E> = SourceDef<O,Nada,E>;
       }
     ));
   }
-  @:noUsing static public function fromSignal<T>(self:stx.Signal<T>){
+  @:noUsing static public function fromSignal<T>(self:stx.nano.Signal<T>){
     return fromTinkSignal(self.prj());
   }
   @:noUsing static public function fromTinkSignal<T>(self:tink.core.Signal<T>){

@@ -154,6 +154,10 @@ class LiftAccessToGlot{
 			case AExtern  			: GAExtern;
 			case AAbstract			: GAAbstract;
 			case AOverload			: GAOverload;
+
+      #if (haxe_ver >= 5.0)
+      case AEnum : GAEnum;
+      #end
 		}
 	}
   #end

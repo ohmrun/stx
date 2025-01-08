@@ -6,7 +6,7 @@ class AnonSync<Pi,Pii,E> extends Sync<Pi,Pii,E>{
     super(pos);
     this._apply = _apply;
   }
-  public inline function apply(p:Pi){
+  public inline function apply(p:Pi):ArwOut<Pii,E>{
     return __.success(_apply(p));
   }
 }

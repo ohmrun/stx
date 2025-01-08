@@ -452,19 +452,19 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 			case [x, PGroup(Nil)]: __.accept(x);
 
 			case [PGroup(listI), PGroup(listII)]:
-				final max = Math.max(listI.size(),listII.size()).floor();
+				final max = std.Math.max(listI.size(),listII.size()).floor();
 				listI 	= listI.rpad(max,PEmpty);
 				listII 	= listII.rpad(max,PEmpty);
 
 				Upshot.bind_fold(listI.zip(listII), joiner, Cluster.unit()).map(xs -> xs.toLinkedList()).map(PGroup);
 			case [PGroup(arrayI), PArray(arrayII)]:
-				final max = Math.max(arrayI.size(),arrayII.size()).floor();
+				final max = std.Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.rpad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
 				Upshot.bind_fold(arrayI.zip(arrayII), joiner, Cluster.unit()).map(xs -> xs.toLinkedList()).map(PGroup);
 			case [PGroup(arrayI), PSet(arrayII)]:
-				final max = Math.max(arrayI.size(),arrayII.size()).floor();
+				final max = std.Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.rpad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
@@ -479,19 +479,19 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 				final set 	= RedBlackSet.make(this.V).concat(setI).concat(arrayII);
 				__.accept(PSet(set.toCluster()));
 			case [PArray(arrayI), PGroup(arrayII)]:
-				final max = Math.max(arrayI.size(),arrayII.size()).floor();
+				final max = std.Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.pad(max,PEmpty);
 				final arrayIII 	= arrayII.toCluster().pad(max,PEmpty);
 
 				Upshot.bind_fold(arrayI.zip(arrayIII), joiner, Cluster.unit()).map(PArray);
 			case [PArray(arrayI), PSet(arrayII)]:
-				final max = Math.max(arrayI.size(),arrayII.size()).floor();
+				final max = std.Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.pad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
 				Upshot.bind_fold(arrayI.zip(arrayII), joiner, Cluster.unit()).map(PArray);
 			case [PArray(arrayI), PArray(arrayII)]:
-				final max = Math.max(arrayI.size(),arrayII.size()).floor();
+				final max = std.Math.max(arrayI.size(),arrayII.size()).floor();
 				arrayI 		= arrayI.pad(max,PEmpty);
 				arrayII 	= arrayII.pad(max,PEmpty);
 
@@ -517,7 +517,7 @@ class Pml<V> implements LenseApi<Coord, PExpr<V>> {
 					},
 					Cluster.unit()
 				).map(PAssoc);
-				// final max 	= Math.max(mapI.size(),mapII.size()).floor();
+				// final max 	= std.Math.max(mapI.size(),mapII.size()).floor();
 				// mapI 	= mapI.pad(max,tuple2(PEmpty,PEmpty));
 				// mapII = mapII.pad(max,tuple2(PEmpty,PEmpty));
 				

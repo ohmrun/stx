@@ -1,7 +1,7 @@
 package stx.io;
 
 class Digests{
-  static public function e_input_closed(digests:stx.Digests,?pos:Pos){
+  static public function e_input_closed(digests:stx.fail.Digests,?pos:Pos){
     return CTR.make((pos:Pos) -> new EInputClosed(pos));
   }
 }

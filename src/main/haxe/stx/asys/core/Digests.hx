@@ -42,16 +42,16 @@ class EInputUnexpectedResponse extends DigestCls{
   }
 }
 class Digests{
-  static public function e_unknown_distro(digests:stx.Digests,name):CTR<Pos,Digest>{
+  static public function e_unknown_distro(digests:stx.fail.Digests,name):CTR<Pos,Digest>{
     return EUnknownDistro.make.bind(name);
   }
-  static public function e_input_parser_waiting_on_an_unitialized_process(digests:stx.Digests):CTR<Pos,Digest>{
+  static public function e_input_parser_waiting_on_an_unitialized_process(digests:stx.fail.Digests):CTR<Pos,Digest>{
     return EInputParserWaitingOnAnUninitializedProcess.make;
   }
-  static public function e_input_unexpected_end(digests:stx.Digests):CTR<Pos,Digest>{
+  static public function e_input_unexpected_end(digests:stx.fail.Digests):CTR<Pos,Digest>{
     return EInputUnexpectedEnd.make;
   }
-  static public function e_input_unexpected_response(digests:stx.Digests):CTR<Pos,Digest>{
+  static public function e_input_unexpected_response(digests:stx.fail.Digests):CTR<Pos,Digest>{
     return EInputUnexpectedResponse.make;
   }
 }

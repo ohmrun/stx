@@ -6,10 +6,10 @@ class XSetKey<K,V> extends ComparableCls<XSetVal<K,V>>{
   public function new(key_comparable){
     this.key_comparable = key_comparable;
   }
-  public function eq(){
+  public function eq():Eq<XSetVal<K,V>>{
     return new XSetKeyEq(key_comparable);
   }
-  public function lt(){
+  public function lt():Ord<XSetVal<K,V>>{
     return new XSetKeyOrd(key_comparable);
   }
 }

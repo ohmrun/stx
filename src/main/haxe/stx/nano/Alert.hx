@@ -91,7 +91,7 @@ class AlertLift{
     );
   }
   static public function resolve<E,T>(self:AlertDef<E>,val:T):Pledge<T,E>{
-    return Pledge.lift(fold(self,(e) -> Upshot.UpshotSum.Reject(e),() -> Accept(val)));
+    return Pledge.lift(fold(self,(e) -> stx.nano.Upshot.UpshotSum.Reject(e),() -> Accept(val)));
   }
   static public function ignore<E>(self:AlertDef<E>,?fn:Lapse<E>->Bool):Alert<E>{
     return Alert.lift(self.map(

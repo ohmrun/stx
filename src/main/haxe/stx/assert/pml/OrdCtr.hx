@@ -10,7 +10,7 @@ class OrdCtr extends Clazz{
    * @param tag 
    * @return STX<stx.assert.Ord<eu.ohmrun.pml.Module>>
    */
-  static public inline function pml(tag:STX<stx.Ord<Dynamic>>){
+  static public inline function pml(tag:STX<stx.assert.Ord<Dynamic>>){
     return new OrdCtr();
   }
   public inline function PExpr<T>(inner:stx.assert.Ord<T>){

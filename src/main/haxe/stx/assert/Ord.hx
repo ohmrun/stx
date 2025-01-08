@@ -73,11 +73,11 @@ abstract class OrdCls<T> implements OrdApi<T>{
   @:noUsing static public function ArrayOrd<T>(inner:Ord<T>):Ord<StdArray<T>>{
     return new ArrayOrd(inner);
   }
-  @:noUsing static public function Record<T>(inner:Ord<T>):Ord<stx.Record<T>>{
+  @:noUsing static public function Record<T>(inner:Ord<T>):Ord<stx.nano.Record<T>>{
     return new stx.assert.ord.term.Record(inner);
   }
-  @:noUsing static public function Cluster<T>(inner:Ord<T>):Ord<stx.Cluster<T>>{
-    return new Cluster(inner);
+  @:noUsing static public function Cluster<T>(inner:Ord<T>):Ord<stx.nano.Cluster<T>>{
+    return new stx.assert.ord.term.Cluster(inner);
   }
   @:noUsing static public function Option<T>(inner:Ord<T>):Ord<StdOption<T>>{
     return new stx.assert.ord.term.Option(inner);

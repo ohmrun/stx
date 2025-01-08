@@ -77,7 +77,7 @@ class HTypeLift{
     return -1;
   }
   static public function makro(t:StdMacroType):HType{
-    return new stx.makro.HType(t);
+    return new stx.makro.type.HType(t);
   }
   static public function getMeta(t:HType){
     return (getBaseType(t):stx.pico.Option<HBaseType>).map(

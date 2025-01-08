@@ -198,10 +198,10 @@ class UpshotLift{
   }
   static public function toChunk<T,E>(self:UpshotSum<T,E>):Chunk<T,E>{
     return switch(self){
-      case Accept(null) : Chunk.ChunkSum.Tap;
-      case Accept(v)    : Chunk.ChunkSum.Val(v);
-      case Reject(e)    : Chunk.ChunkSum.End(e);
-      case null         : Chunk.ChunkSum.Tap; 
+      case Accept(null) : stx.nano.Chunk.ChunkSum.Tap;
+      case Accept(v)    : stx.nano.Chunk.ChunkSum.Val(v);
+      case Reject(e)    : stx.nano.Chunk.ChunkSum.End(e);
+      case null         : stx.nano.Chunk.ChunkSum.Tap; 
     }
   }
   @:stx.effect

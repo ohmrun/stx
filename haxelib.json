@@ -9,7 +9,7 @@
   "classPath" : "src/main/haxe",
   "version" : "0.11.0",
   "dependencies" : {
-    "bake" : "0.7.1",
+    "bake" : "",
     "hscript" : "2.5.0",
     "tink_core" : "2.1.1",
     "equals" : "https://github.com/0b1kn00b/equals",

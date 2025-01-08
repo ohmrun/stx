@@ -15,6 +15,8 @@ import stx.assert.eq.term.Cluster;
 import stx.assert.eq.term.EnumValueIndex;
 import stx.assert.eq.term.NullOr;
 
+import stx.nano.Record as TRecord; 
+
 private typedef TAG = STX<Eq<Dynamic>>;
 
 class EqTagCtr{
@@ -114,9 +116,9 @@ class EqTagCtr{
    * @param tag 
    * @param l 
    * @param r 
-   * @return Eq<stx.Record<T>>
+   * @return Eq<TRecord<T>>
    */
-  static public function Record<T>(tag:TAG,inner:Eq<T>):Eq<stx.Record<T>>{
+  static public function Record<T>(tag:TAG,inner:Eq<T>):Eq<TRecord<T>>{
     return new stx.assert.eq.term.Record(inner);
   }
   /**

@@ -13,7 +13,7 @@ using stx.makro.Expr;
 #end
 
 class AssemblyBuild{
-  static macro function build():Array<haxe.macro.Field>{
+  static macro function build():Array<haxe.macro.Expr.Field>{
     final printer     = new haxe.macro.Printer();
     final btype       = Context.getLocalClass().get();
     final curr_fields = Context.getBuildFields();
@@ -83,14 +83,14 @@ class AssemblyBuild{
         new stx.makro.di.Registry().push($e{id});
       }
     }
-    var init : haxe.macro.Field = {
+    var init : haxe.macro.Expr.Field = {
       name    : "__init__",
       kind    : FFun(init_func),
       pos     : pos,
       access  : [AStatic]
     }
-    final react  : haxe.macro.Field             = member;
-    final fields : Array<haxe.macro.Field>      = curr_fields.concat([react,init]);
+    final react  : haxe.macro.Expr.Field             = member;
+    final fields : Array<haxe.macro.Expr.Field>      = curr_fields.concat([react,init]);
     return fields;
   }
 }

@@ -1,17 +1,17 @@
 package eu.ohmrun.glot.expr;
 
 class GAccessCtr extends Clazz{
-	public function Public() 		return GAccess.lift(GAPublic);
-	public function Private() 	return GAccess.lift(GAPrivate);
-	public function Static() 		return GAccess.lift(GAStatic);
-	public function Override() 	return GAccess.lift(GAOverride);
-	public function Dynamic() 	return GAccess.lift(GADynamic);
-	public function Inline() 		return GAccess.lift(GAInline);
-	public function Macro() 		return GAccess.lift(GAMacro);
-	public function Final() 		return GAccess.lift(GAFinal);
-	public function Extern() 		return GAccess.lift(GAExtern);
-	public function Abstract() 	return GAccess.lift(GAAbstract);
-	public function Overload() 	return GAccess.lift(GAOverload);
+	public function Public():GAccess 		return GAccess.lift(GAPublic);
+	public function Private():GAccess 	return GAccess.lift(GAPrivate);
+	public function Static():GAccess 		return GAccess.lift(GAStatic);
+	public function Override():GAccess 	return GAccess.lift(GAOverride);
+	public function GDynamic():GAccess 	return GAccess.lift(GAccessSum.GADynamic);
+	public function Inline():GAccess 		return GAccess.lift(GAInline);
+	public function Macro():GAccess 		return GAccess.lift(GAMacro);
+	public function Final():GAccess 		return GAccess.lift(GAFinal);
+	public function Extern():GAccess 		return GAccess.lift(GAExtern);
+	public function Abstract():GAccess 	return GAccess.lift(GAAbstract);
+	public function Overload():GAccess 	return GAccess.lift(GAOverload);
 }
 enum GAccessSum {
 	GAPublic;
@@ -25,6 +25,9 @@ enum GAccessSum {
 	GAExtern;
 	GAAbstract;
 	GAOverload;
+	#if (haxe_ver > 5.0)
+	GAEnum
+	#end
 }
 @:using(eu.ohmrun.glot.expr.GAccess.GAccessLift)
 abstract GAccess(GAccessSum) from GAccessSum to GAccessSum{

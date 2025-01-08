@@ -1,10 +1,10 @@
 package stx.test.core;
 
 class Digests{
-  static public function e_dependency_not_found(digests:stx.Digests,name):CTR<Pos,Digest>{
+  static public function e_dependency_not_found(digests:stx.fail.Digests,name):CTR<Pos,Digest>{
     return EDependencyNotFound.make.bind(name);
   }
-  static public function e_suite_failed(digests:stx.Digests):CTR<Pos,Digest>{
+  static public function e_suite_failed(digests:stx.fail.Digests):CTR<Pos,Digest>{
     return ESuiteFailed.make.bind();
   }
 }

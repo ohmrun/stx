@@ -2,7 +2,7 @@ package stx.log;
 
 import stx.Fail.ErrorCtr;
 
-class LogicCtr extends Clazz{
+class LogicCtr extends stx.pico.Clazz{
   static public function unit(){
     return new LogicCtr();
   }

@@ -31,8 +31,13 @@ enum abstract EqualedSum(Bool) from Bool{
     return b  ? AreEqual : NotEqual;
   }
   @:op(A && B)
-  public function and(that:Equaled):Equaled{
-    return toBool() && that.toBool();
+  public inline function and(that:Equaled):Equaled{
+    final l : Bool = EqualedLift.toBool(this);
+    final r : Bool = EqualedLift.toBool(that); 
+    return switch([l,r]){
+      case [true,true] : true;
+      default : false;
+    }
   }
   public function toBool():Bool{
     return switch(this){
@@ -42,7 +47,13 @@ enum abstract EqualedSum(Bool) from Bool{
   }
   @:op(A || B)
   public function or(that:Equaled):Equaled{
-    return toBool() || that.toBool();
+    final l = toBool();
+    final r = that.toBool();
+    return switch ([l,r]){
+      case [true,_] : true;
+      case [_,true] : true;
+      default : false;
+    }
   }
   @:op(!A)
   public function not():Equaled{
@@ -53,4 +64,12 @@ enum abstract EqualedSum(Bool) from Bool{
   }
   static public var AreEqual : Equaled = EqualedSum.AreEqual; 
   static public var NotEqual : Equaled = EqualedSum.NotEqual;
+}
+class EqualedLift{
+  @:noUsing static public inline function toBool(self:EqualedSum):Bool{
+    return switch(self){
+      case EqualedSum.AreEqual : true;
+      case EqualedSum.NotEqual : false;
+    }
+  }
 }

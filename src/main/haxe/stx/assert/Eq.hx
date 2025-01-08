@@ -1,7 +1,7 @@
 package stx.assert;
 
 import stx.pico.Couple as StdCouple;
-
+import stx.nano.Record as TRecord;
 
 import stx.assert.eq.term.Primitive; 
 import stx.assert.eq.term.Nada; 
@@ -91,7 +91,7 @@ class EqCtr extends Clazz{
   @:noUsing static public function ArrayEq<T>(inner:Eq<T>):Eq<StdArray<T>>{
     return new ArrayEq(inner);
   }
-  @:noUsing static public function Record<T>(inner:Eq<T>):Eq<stx.Record<T>>{
+  @:noUsing static public function Record<T>(inner:Eq<T>):Eq<TRecord<T>>{
     return new stx.assert.eq.term.Record(inner);
   }
   @:noUsing static public function Cluster<T>(inner:Eq<T>):Eq<stx.nano.Cluster<T>>{

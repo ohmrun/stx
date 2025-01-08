@@ -222,7 +222,7 @@ class TunnelLift{
     var l_res = __.option();
     var r_res = __.option();
 
-    final yes   = stx.Math.rndOne() == 1;
+    final yes   = stx.nano.Math.rndOne() == 1;
     final main  = yes ? that : self;
     final next  = yes ? self : that;
 

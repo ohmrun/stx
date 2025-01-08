@@ -58,19 +58,19 @@ typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
       attributes  : __.option(self.attributes).defv(new Map())
     });
   }
-  @:from static public function fromObjectIV(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, attributes : haxe.ds.Map<String, { ?validation : Validations, type : stx.Ident, relation : stx.schema.RelationType, ?meta : PExpr<Primitive>, ?inverse : String }> }){
+  @:from static public function fromObjectIV(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, attributes : haxe.ds.Map<String, { ?validation : Validations, type : Ident, relation : stx.schema.RelationType, ?meta : PExpr<Primitive>, ?inverse : String }> }){
     return fromObject({ 
       properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectII(x),new Map())
     });
   }
-  @:from static public function fromObjectV(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.PExpr<stx.Primitive>>, ?inverse : String }> } ):Procurements{
+  @:from static public function fromObjectV(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, attributes : haxe.ds.Map<String, { type : Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.pml.PExpr<Primitive>>, ?inverse : String }> } ):Procurements{
     return fromObject({ 
       properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
     });
   }
-  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprSum<PrimitiveSum>, ?inverse : String }> }):Procurements{
+  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprSum<PrimitiveSum>, ?inverse : String }> }):Procurements{
     return fromObject({ 
       properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())

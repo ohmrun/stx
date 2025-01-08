@@ -129,8 +129,8 @@ class ReceiptUses extends Clazz{
   }
   static public function toUpshot<T,E>(self:Receipt<T,E>):Upshot<T,E>{
     return switch(self.has_errors()){
-      case true   : Upshot.UpshotSum.Reject(self.error);
-      case false  : Upshot.UpshotSum.Accept(self.value); 
+      case true   : stx.nano.Upshot.UpshotSum.Reject(self.error);
+      case false  : stx.nano.Upshot.UpshotSum.Accept(self.value); 
     }
   }
 }

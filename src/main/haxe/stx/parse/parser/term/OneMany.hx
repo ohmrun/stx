@@ -6,7 +6,7 @@ class OneMany<P,R> extends With<P,R,Option<Array<R>>,Array<R>>{
   public function new(l:Parser<P,R>,?pos:Pos){
     super(l,Parsers.Many(l).option(),pos);
   }
-  public function transform(lhs:Null<R>,rhs:Null<Option<Array<R>>>):stx.Option<Array<R>>{
+  public function transform(lhs:Null<R>,rhs:Null<Option<Array<R>>>):stx.pico.Option<Array<R>>{
     #if debug __.log().trace('$lhs $rhs'); #end
     return __.option(lhs).map(
       (oI:R) -> {
