@@ -5,10 +5,16 @@ package stx.log.logger;
   static private function get_ZERO(){
     final result = ZERO == null ? {
       #if (sys || nodejs)
-        ZERO = new stx.log.logger.ConsoleLogger();
-        //ZERO = new stx.log.logger.Unit();
-        __.debug("stx.Log.global = stx.log.logger.ConsoleLogger()\n");
-        ZERO;
+        #if macro
+          ZERO = new stx.log.logger.Unit();
+          __.debug("stx.Log.global = stx.log.logger.Unit()\n");
+          ZERO;
+        #else
+          ZERO = new stx.log.logger.ConsoleLogger();
+          //ZERO = new stx.log.logger.Unit();
+          __.debug("stx.Log.global = stx.log.logger.ConsoleLogger()\n");
+          ZERO;
+        #end
       #else
         ZERO = new stx.log.logger.Unit();
         __.debug("stx.Log.global = stx.log.logger.Unit()");
