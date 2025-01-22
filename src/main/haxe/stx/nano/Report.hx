@@ -143,7 +143,7 @@ class ReportLift{
       () -> false
     );
   }
-  static public function ignore<T>(self:ReportSum<T>,?fn:Lapse<T>->Bool){
+  static public function ignore<T>(self:ReportSum<T>,?fn:Lapse<T>->Bool):Report<T>{
     Option.make(fn).def(() -> fn = (x) -> true);
     return fold(
       self,

@@ -1,6 +1,5 @@
 --define no-deprecation-warnings
 --library stx
---library tink_priority
 --library pootle
 --macro include('stx',true)
 --macro include('eu.ohmrun',true)
