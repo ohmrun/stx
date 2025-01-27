@@ -8,9 +8,10 @@
 (require '[clojure.string :as str])
 (def stx_release_root "/mnt/dat/i/prj/haxe/pub/ohmrun/stx_release")
 (defn load [] (-> (slurp (str/join "/" [stx_release_root "sources.json"])) (json/parse-string)) )
-(defn rm_stuff [] 
-  (fs/delete-tree (str/join "/" [stx_release_root "src/main/haxe"])) 
-  (fs/delete-tree (str/join "/" [stx_release_root "src/test/haxe"]))
+(defn rm_stuff []
+  (prn (str/join fs/file-separator [stx_release_root "src/main/haxe"]))
+  (fs/delete-tree (str/join fs/file-separator [stx_release_root "src/main/haxe"])) 
+  (fs/delete-tree (str/join fs/file-separator [stx_release_root "src/test/haxe"]))
   )
 
 (defn handle [data]
@@ -30,8 +31,8 @@
         test_part (str/join sep [part "src" "test" "haxe"])
         ]
       (println part)
-      (fs/copy-tree main_part "src/main/haxe")
-      (fs/copy-tree test_part "src/test/haxe")
+      (fs/copy-tree main_part (str/join sep [stx_release_root "src/main/haxe"]))
+      (fs/copy-tree test_part (str/join sep [stx_release_root "src/test/haxe"]))
       ))
   )
 )

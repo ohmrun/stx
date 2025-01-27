@@ -6,7 +6,7 @@ package stx.log.logger;
     final result = ZERO == null ? {
       #if (sys || nodejs)
         #if macro
-          ZERO = new stx.log.logger.Unit();
+        ZERO = new stx.log.logger.Unit();
           __.debug("stx.Log.global = stx.log.logger.Unit()\n");
           ZERO;
         #else

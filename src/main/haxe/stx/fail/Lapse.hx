@@ -26,6 +26,10 @@ typedef LapseDef<E> = {
   public final ?loc     : Loc;
 }
 class LapseCtr{
+  static public var instance(get,null) : LapseCtr;
+  static private function get_instance(){
+    return instance == null ? instance = new LapseCtr() : instance;
+  }
   public function new(){}
   public function Make<E>(?value,?label,?crack,?canon,?loc):Lapse<E>{
     return Lapse.make(value,label,crack,canon,loc);

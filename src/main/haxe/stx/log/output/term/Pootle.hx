@@ -1,5 +1,6 @@
 package stx.log.output.term;
 
+#if pootal
 class Pootle implements OutputApi{
   private final delegate : eu.ohmrun.pootle.PortalLogger;
   public function new(?config:eu.ohmrun.pootle.PortalConfig){
@@ -11,3 +12,4 @@ class Pootle implements OutputApi{
     this.delegate.trace(v,pos);
   }
 }
+#end

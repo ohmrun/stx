@@ -1,0 +1,3 @@
+[tools]
+haxe = "5.0.0-alpha.1+bdae3e7"
+lua = "latest"

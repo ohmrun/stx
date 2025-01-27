@@ -15,4 +15,7 @@ typedef StringifyDef<T> = EntryCtr<T>->stx.log.core.Entry<T>;
   @:from static public function fromBool(self:Bool):Stringify<String>{
     return (ctr) -> return stx.log.core.Entry.fromString('$self');
   }
+  // @:from static public function fromThunk<T>(self:Void->T):Stringify<T>{
+  //   return (ctr) -> stx.log.core.Entr
+  // }
 }
