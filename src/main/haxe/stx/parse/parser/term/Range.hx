@@ -17,7 +17,9 @@ class Range extends Sync<String,String>{
         var v = __.option(x);
         var l = v.map( x -> x >= min).defv(false);
         var r = v.map( x -> x <= max).defv(false);
+        #if debug
         __.log().debug('range: $min -> $max');
+        #end
         l && r ? ipt.tail().ok(s) : ipt.no();
       default : 
         ipt.no(E_Parse_NoHead);

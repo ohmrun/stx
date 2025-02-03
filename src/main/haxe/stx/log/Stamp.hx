@@ -10,7 +10,7 @@ class Stamp{
   public var hidden                   : Bool;
 
   public function new(?id,?level,?timestamp,?tags,?hidden=false){
-    this.id         = __.option(id).def(() -> __.uuid("xxxxx").toString());
+    this.id         = __.option(id).def(() -> '${Math.random()}'.toString());
     this.level      = __.option(level).defv(BLANK);
     this.timestamp  = __.option(timestamp).def(Date.now);
     this.tags       = __.option(tags).defv([]);

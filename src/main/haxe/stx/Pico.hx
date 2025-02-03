@@ -162,9 +162,14 @@ class LiftPico {
       default   : Some(v);
     }
   } 
+  @stx.bug('lua',"attempt to compare number with nil","27.01.25")
   static public function debug(wildcard:Wildcard,str:String){
     #if sys
-      sys.Debug.apply('$str\n');
+      #if lua
+        haxe.Log.trace(str,null);
+      #else
+        sys.Debug.apply('$str\n');
+      #end
     #else
       haxe.Log.trace(str,null);
     #end

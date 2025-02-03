@@ -1,9 +1,7 @@
 package stx.test;
 
 @:rtti class TestCase extends Assert{
-  public function new(){
-    super();
-  }
+
   private function __stx__tests(timeout){
     return TestCaseLift.get_tests(this,timeout);
   }

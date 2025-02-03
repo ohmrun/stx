@@ -5,18 +5,22 @@ import haxe.rtti.Meta;
 class TestCaseLift{
   static public function get_tests<T:TestCase>(v:T,timeout:Int){
     final clazz             = std.Type.getClass(v);
-    //trace(clazz);
+    __.log().debug( _ -> _.show(clazz));
     final class_name        = std.Type.getClassName(clazz);
-    //trace(class_name);
+    __.log().debug(_ -> _.pure(class_name));
     final type_meta         = Meta.getType(clazz);
     final type_is_async     = Reflect.hasField(type_meta,"stx.test.async");
 
     final fields            = std.Type.getInstanceFields(clazz);
     final fields_meta       = Meta.getFields(clazz);
-
-    __.log().debug(_ -> _.pure(fields));
+    
+    __.log().debug(_ -> _.show(fields));
+    __.log().debug(_ -> _.show(fields_meta));
     
     var test_fields         = fields.filter( cf -> cf.startsWith('test') );
+
+    __.log().debug(_ -> _.show(test_fields));
+
     var applications        = test_fields.map_filter(
       (field_name) -> {
         final field_meta      = __.option(Reflect.field(fields_meta,field_name));

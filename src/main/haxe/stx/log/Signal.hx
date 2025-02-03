@@ -47,7 +47,7 @@ typedef SignalDef = SignalCls;
 
     #if (sys || nodejs || macro)
       for(v in __.option(Sys.getEnv("STX_LOG__FILE"))){
-          final bake    = Bake.pop();
+          // final bake    = Bake.pop();
           final output  = sys.io.File.append(v);
           final log     = new sys.log.logger.File(output);
           instance.attach(log);

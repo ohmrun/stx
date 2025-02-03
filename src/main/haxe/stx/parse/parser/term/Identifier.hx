@@ -29,7 +29,9 @@ class Identifier extends Sync<String,String>{
       var next = ipt.drop(stamp.length);
       next.ok(stamp);
     }else{
+      #if debug
       __.log().debug('"Identifier expected *** $stamp *** instead found: *** $string ***');
+      #end
       ipt.no();
     }
   }

@@ -17,7 +17,4 @@ class Module extends Clazz{
 	public inline function inspect(?prefix,?postfix,?pos:Pos){
 		return Inspect(prefix,postfix,pos);
 	}
-	public function parsers(){
-		return new stx.parse.module.Parsers();
-	}
 }

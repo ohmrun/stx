@@ -16,7 +16,7 @@ class EntryCtr<T> extends Clazz{
   public function json<T>(val:T){
     return { val : val, ctr : (x) -> haxe.Json.stringify(x," ") };
   }
-  #if stx_show
+  #if (stx_show || stx)
   public function show<T>(val:T){
     return { val : val, ctr : (x:T) -> __.show(x) };
   }

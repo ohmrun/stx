@@ -170,5 +170,8 @@ class Parsers{
   @:noUsing static public function FlatMap<P,Ri,Rii>(self:Parser<P,Ri>,fn:Ri->Parser<P,Rii>,?pos:Pos):Parser<P,Rii>{
     return new stx.parse.parser.term.AnonFlatMap(self,fn,pos).asParser();
   }
+  @:noUsing static public function Literal():Parser<String,String>{
+    return new stx.parse.term.Literal().asParser();
+  }
 }
 

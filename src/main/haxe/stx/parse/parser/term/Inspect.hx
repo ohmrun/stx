@@ -9,7 +9,9 @@ class Inspect<I,O> extends Delegate<I,O>{
     }
   }
   private dynamic function postfix(result:ParseResult<I,O>){
+    #if debug
     __.log().trace(result.toString(),pos);
+    #end
   }
   public function new(delegation,?prefix:ParseInput<I> -> Void,?postfix:ParseResult<I,O> -> Void,?id:Pos){
     super(delegation,id);

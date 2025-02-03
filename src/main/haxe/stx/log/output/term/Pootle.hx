@@ -1,6 +1,6 @@
 package stx.log.output.term;
 
-#if pootal
+#if pootle
 class Pootle implements OutputApi{
   private final delegate : eu.ohmrun.pootle.PortalLogger;
   public function new(?config:eu.ohmrun.pootle.PortalConfig){

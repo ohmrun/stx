@@ -1,9 +1,11 @@
 package stx.parse.pml;
 
+import stx.parse.parsers.StringParsers;
+
 using stx.parse.pml.Parser;
 
 function id(wildcard:Wildcard,s:String){
-  return __.parse().parsers().string().id(s);
+  return StringParsers.id(s);
 }
 
 class Parser{

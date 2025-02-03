@@ -33,9 +33,9 @@ class RepeatedOnlyUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
       __.log().trace('$delegation');
       __.log().trace('${res.error}');
       __.log().trace('$arr');
-      #end
       __.log().blank(count);
       __.log().blank(res.is_ok());
+      #end
       return switch(res.is_ok()){
         case true : 
           count++;
@@ -47,7 +47,9 @@ class RepeatedOnlyUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
           if (count == number){
             res.asset.ok(arr); 
           }else{
+            #if debug
             __.log().debug('${res}');
+            #end
             return rec(res.asset,arr);
           }
         case false : 
@@ -58,7 +60,9 @@ class RepeatedOnlyUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
             if(count <= number){
               inputII.ok(arr); 
             }else{
+              #if debug
               __.log().debug('Should repeat $number times, but repeated $count times');
+              #end
               inputI.no();
             }
           }

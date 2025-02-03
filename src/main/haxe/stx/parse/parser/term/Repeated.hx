@@ -33,13 +33,15 @@ class Repeated<I,O> extends Base<I,Array<O>,Parser<I,O>>{
       __.log().trace('$delegation');
       __.log().trace('${res.error}');
       __.log().trace('$arr');
-      #end
       __.log().blank(count);
       __.log().blank(res.is_ok());
+      #end
       return switch(res.is_ok()){
         case true : 
           if (count > number){
+            #if debug
             __.log().debug('Should repeat $number times, but repeated $count times');
+            #end
             inputI.no(E_Parse_OutOfBounds);
           }else{
             count++;
@@ -48,19 +50,25 @@ class Repeated<I,O> extends Base<I,Array<O>,Parser<I,O>>{
               case Some(x) : arr.push(x); null;
               default : 
             }
+            #if debug
             __.log().debug('${res}');
+            #end
             return rec(res.asset,arr);
           }
         case false : 
           if(res.is_fatal()){
+            #if debug
             __.log().debug('failed many ${delegation}');
+            #end
             inputI.fatal(E_Parse_OutOfBounds).defect(res.error);
           }else{
             #if debug __.log().trace(_ -> _.thunk( () -> arr)); #end
             if(count == number){
               res.asset.ok(arr); 
             }else{
+              #if debug
               __.log().debug('Should repeat $number times, but repeated $count times');
+              #end
               inputI.no();
             }
           }

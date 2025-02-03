@@ -44,7 +44,7 @@ class LiftNano{
   /**
 		Returns a unique identifier, each `x` replaced with a hex character.
 	**/
-  static public function uuid(v:Wildcard, ?value : String) : Uuid {
+  static public inline function uuid(v:Wildcard, ?value : String) : Uuid {
     return new Uuid();
   }
   /**
