@@ -1,4 +1,4 @@
-ackage stx.parse.parsers;
+package stx.parse.parsers;
 
 import stx.parse.Parsers.*;
 
