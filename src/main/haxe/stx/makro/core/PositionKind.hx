@@ -18,7 +18,7 @@ abstract PositionKind(PositionKindSum) from PositionKindSum to PositionKindSum{
       #end
     ;
   }
-  static public function unit(){
+  @:noUsing static public function unit(){
     return new PositionKind();
   }
   public function prj():PositionKindSum return this;

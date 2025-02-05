@@ -1,3 +1,0 @@
--lib stx
---macro include('stx',true)
---macro include('eu.ohmrun',true)

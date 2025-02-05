@@ -3,7 +3,7 @@ package stx.log;
 import stx.Fail.ErrorCtr;
 
 class LogicCtr extends stx.pico.Clazz{
-  static public function unit(){
+  @:noUsing static public function unit(){
     return new LogicCtr();
   }
   private static function construct<T>(fn:LogPosition->Report<LogFailure>):stx.log.Logic<T>{

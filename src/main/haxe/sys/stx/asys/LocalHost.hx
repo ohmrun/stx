@@ -6,9 +6,9 @@ package sys.stx.asys;
     return instance == null ? instance = new LocalHost() : instance;
   }
   private function new(){
-    this = Device.make0(__.asys().Distro().unit());
+    this = Device.make0(Distro.unit());
   }
-  static public function unit():LocalHost{
+  @:noUsing static public function unit():LocalHost{
     return new LocalHost();
   }
 }

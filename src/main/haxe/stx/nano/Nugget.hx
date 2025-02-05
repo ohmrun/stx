@@ -109,7 +109,7 @@ abstract Producable<T>(NuggetApi<T>) from NuggetApi<T>{
   @:noUsing static public function lift<T>(self:NuggetApi<T>){
     return new Producable(self);
   } 
-  static public function unit<T>():Producable<T>{
+  @:noUsing static public function unit<T>():Producable<T>{
     return lift(new NuggetCls()); 
   }
   public function go(v:T){

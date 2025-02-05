@@ -20,7 +20,7 @@ class Device implements DeviceApi{
   }
   @:deprecated
   @:noUsing static public function make1(?distro,?sep,?system,?console){
-    final distro  = __.option(distro).defv(__.asys().Distro().unit()); 
+    final distro  = __.option(distro).defv(Distro.unit()); 
     final sep     = __.option(sep).defv(distro.is_windows() ? WinSeparator : PosixSeparator);
     return make(
       distro,

@@ -73,7 +73,7 @@ class LapseCtr{
   public inline function Embed<E>(self:Void->Void):Lapse<E>{
     return Make(null,null,new EmbedTypedErrorException(self));
   }
-  public inline function StashEmptyFor(uuid:String){
+  public inline function StashEmptyFor<E>(uuid:String):Lapse<E>{
     return new LapseCtr().Digest("4071e192-c82e-4c1e-9dc1-e4bdcb471072",'No stash found at $uuid',500);
   }
 }

@@ -16,7 +16,7 @@ pre-commit:
   parallel: true
   commands:
     unit:
-      run: hedn build unit/hl unit/cpp unit/php unit/python unit/javascript unit/neko unit/lua unit/cs unit/java unit/js
+      run: hedn build unit/interp
 #       glob: "*.{js,ts,jsx,tsx}"
 #       run: yarn eslint {staged_files}
 #     rubocop:

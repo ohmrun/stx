@@ -28,7 +28,7 @@ typedef ClusterDef<T> = Array<T>;
   @:noUsing static public function make<T>(self:ClusterDef<T>):Cluster<T> return new Cluster(self);
   @:noUsing static public function lift<T>(self:ClusterDef<T>):Cluster<T> return new Cluster(self);
 
-  static public function unit<T>():Cluster<T>{
+  @:noUsing static public function unit<T>():Cluster<T>{
     return lift([]);  
   } 
   @:noUsing static public inline function pure<T>(self:T):Cluster<T>{

@@ -19,7 +19,7 @@ class PlanCls<T,G,K>{
   static public function make<T,G,K>(global:G,buffer:Buffer<T,K>){
     return lift(new PlanCls(global,buffer));
   }
-  @:from static public function fromG<T,G,K>(self:G){
+  @:from static public function fromG<T,G,K>(self:G):Plan<T,G,K>{
     return lift(new PlanCls(self,Cluster.unit()));
   }
   public function prj():PlanCls<T,G,K> return this;

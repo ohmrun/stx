@@ -4,7 +4,7 @@ import stx.parse.parsers.StringParsers as SParse;
 using stx.Parse;
 
 function id(str){
-  return __.parse().parsers().string().id(str);
+  return SParse.id(str);
 }
 class Munge{
   static final fld : String = "___FLD___";

@@ -15,7 +15,7 @@ class StringParsers{
 	static public inline function range(start:Int,finish:Int):Parser<String,String>{
 		return Range(start,finish);
   }
-  static public final boolean 				= id('true').or(id('false'));
+  static public final boolean : Parser<String,String> 				= id('true').or(id('false'));
 	static public final integer     		= reg("^[+-]?\\d+");
   static public final float 					= reg("^[+-]?\\d+(\\.\\d+)?");
   
@@ -56,7 +56,7 @@ class StringParsers{
 	static public final x_quote 				= x._and(quote);
 
 	static public final literal 				= new stx.parse.term.Literal().asParser();
-	static public final symbol 					= Parsers.When(x -> StringTools.fastCodeAt(x,0) >= 33).one_many().tokenize().tagged('symbol');
+	static public final symbol : Parser<String,String> 					= Parsers.When(x -> StringTools.fastCodeAt(x,0) >= 33).one_many().tokenize().tagged('symbol');
 
 	static public	final brkt_l_square = id('[');
 	static public	final brkt_r_square = id(']');

@@ -46,7 +46,7 @@ class FormatCls{
   }
 }
 @:forward abstract Format(FormatCls) from FormatCls to FormatCls{
-  static public function unit():Format return lift(fromArray(DEFAULT));
+  @:noUsing static public function unit():Format return lift(fromArray(DEFAULT));
   
   public inline function new(self) this = self;
   static public inline function lift(self:FormatCls):Format return new Format(self);

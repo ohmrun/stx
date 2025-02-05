@@ -22,7 +22,13 @@ enum abstract EqualedSum(Bool) from Bool{
   
   @:op(A && B)
   public function and(that:Equaled):Equaled{
-    return ((this && that.is_ok()):Equaled);
+    return switch([this,that.prj()]){
+      case [true,true] : true;
+      default : false;
+    }
+  }
+  public function prj():Bool{
+    return this;
   }
 }
 

@@ -13,11 +13,13 @@ typedef ContinuationDef<R,P>  = (P -> R) -> R;
   public function new(self) this = self;
   
   static public function callcc<R,P,Pi>(f:(P->ContinuationDef<R,Pi>)->ContinuationDef<R,P>):Continuation<R,P>{
-    return (k:P->R) -> f(
-      (p:P) -> lift(
-        (_:Pi->R) -> k(p)
-      )
-    )(k);
+    return Continuation.lift(
+      (k:P->R) -> f(
+        (p:P) -> lift(
+          (_:Pi->R) -> k(p)
+        )
+      )(k)
+    );
   }
   public inline function asFunction():ContinuationDef<R,P>{
     return this;

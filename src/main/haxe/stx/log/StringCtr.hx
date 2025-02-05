@@ -5,7 +5,7 @@ typedef StringCtrDef<T> = {
 }
 abstract StringCtr<T>(StringCtrDef<T>) from StringCtrDef<T> to StringCtrDef<T>{
   public function new(self) this = self;
-  static public function unit<T>():StringCtr<T>{
+  @:noUsing static public function unit<T>():StringCtr<T>{
     return lift({ ctr : Std.string });
   }
   static public function make<T>(fn:T->String){

@@ -14,7 +14,7 @@ using stx.Fn;
 using stx.om.Spine;
 using stx.om.Signature;
 using eu.ohmrun.Fletcher;
-using stx.Query;
+// using stx.Query;
 using stx.Log;
 using stx.Fp;
 

@@ -10,7 +10,7 @@ enum abstract Separator(String) to String{
   
   public function new(distro){
     #if sys
-      this = distro == Windows ? WinSeparator : PosixSeparator;
+      this = distro == 'Windows' ? WinSeparator : PosixSeparator;
     #else
       this = PosixSeparator;
     #end

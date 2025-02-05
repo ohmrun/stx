@@ -35,7 +35,7 @@ typedef BlockChainDepsDef<K,V> = {
       }
     };
   }
-  static public function unit<K,V>():BlockChainDeps<K,V>{
+  @:noUsing static public function unit<K,V>():BlockChainDeps<K,V>{
     return form();
   } 
 }

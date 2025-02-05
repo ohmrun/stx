@@ -6,7 +6,7 @@ class Effect extends Clazz{
     super();
     this.module = new Expect(pos);
   }
-  public inline function equals<T>(lhs:T,rhs:T)                              this.module.equals().comply(lhs,rhs).crunch();
+  public inline function equals<T>(lhs:T,rhs:T):Void                         this.module.equals().comply(lhs,rhs).crunch();
   public inline function alike<E:StdEnumValue>(lhs:E,rhs:E)                  this.module.alike().comply(lhs,rhs).crunch();
   public inline function gt<T>(lhs:T,rhs:T)                                  this.module.gt().comply(lhs,rhs).crunch();
   public inline function gt_eq<T>(lhs:T,rhs:T)                               this.module.gt_eq().comply(lhs,rhs).crunch();

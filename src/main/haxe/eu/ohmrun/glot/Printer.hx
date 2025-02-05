@@ -31,7 +31,7 @@
    macro context to a human-readable String representation.
   */
  class Printer {
-   static public function iter<T>(iter:Cluster<T>,fn:T->Void){
+   static public function iter<T>(iter:Cluster<T>,fn:T->Void):Void{
      for(x in iter){
        fn(x);
      }

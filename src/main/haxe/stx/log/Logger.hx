@@ -1,5 +1,7 @@
 package stx.log;
 
+using stx.Fn;
+
 class Logger{
   static public function spur<T>(value:Value<T>):Upshot<String,LogFailure>{
     return __.reject(__.fault().of(E_Log_Zero));
@@ -7,10 +9,10 @@ class Logger{
   
   static public var ZERO(get,null) : stx.log.logger.Unit;
   static function get_ZERO(){
-    __.option(ZERO).def(
-      () -> ZERO = new stx.log.logger.Unit()
+    final getter = Fn._0r(stx.log.logger.Unit.make.bind(null,null,null)).cache();
+    return __.option(ZERO).def(
+      () -> ZERO = getter()
     );
-    return ZERO;
   }
 
   #if (sys || nodejs)

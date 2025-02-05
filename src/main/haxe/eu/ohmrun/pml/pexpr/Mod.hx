@@ -7,7 +7,7 @@ class Mod{
    * @param fn 
    * @param PmlFailure> 
    */
-  static public function mod<T,E>(self:PExpr<T>, fn:PExpr<T>->Upshot<Option<PExpr<T>>,E>) {
+  static public function mod<T,E>(self:PExpr<T>, fn:PExpr<T>->Upshot<Option<PExpr<T>>,E>):Upshot<Option<PExpr<T>>,E>{
 		return switch(self){
 			case 			PGroup(list)		: Upshot.bind_fold(
 				list,

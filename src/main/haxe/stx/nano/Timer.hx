@@ -22,7 +22,7 @@ typedef TimerDef = {
       created : v
     };
   }
-  static public function unit():Timer{
+  @:noUsing static public function unit():Timer{
     return pure(mark());
   }
   static public function mark():Float{

@@ -13,7 +13,7 @@ class Request{
   @:noUsing static public function make(xindex,yindex,node){
     return new Request(xindex,yindex,node);
   }
-  static public function unit(){
+  @:noUsing static public function unit(){
     return new Request(0,0,None);
   }
   public function with_node(fn:Option<LayoutNode>->Option<LayoutNode>){

@@ -61,7 +61,7 @@ class LocCtr{
       make(null,null,known); 
     #end
   }
-  static public function unit(?available:Pos){
+  @:noUsing static public function unit(?available:Pos){
     return #if (macro || eval || display ) makeI(null,available); #else make(null,available); #end
   }
   public function prj():LocDef return this;

@@ -8,7 +8,7 @@ using stx.sys.cli.CliParser;
 
 //local helpers//
 function id(str:String){
-  return __.parse().parsers().string().id(str);
+  return SParse.id(str);
 }
 /////////////////
 

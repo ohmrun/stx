@@ -31,9 +31,9 @@ using stx.makro.Logging;
  */
 class Plugin{
   static public macro function use(){
-    //#if (test||debug)
+    #if (test||debug)
     __.log().info('stx.makro.Plugin.use');
-    //#end
+    #end
     var args          = Sys.args();
     Context.onAfterTyping(module);
     return macro {};

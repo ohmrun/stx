@@ -1,7 +1,7 @@
 package sys.stx.asys;
 
 class Shell implements ShellApi extends Clazz{
-  static public function unit(){
+  @:noUsing static public function unit(){
     return new Shell();
   }
   public final env : EnvApi;

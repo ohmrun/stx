@@ -5,10 +5,10 @@ package stx.data.store.block_chain;
   @:noUsing static public function make(self:String):Hash{
     return new Hash(self);
   }
-  private function new(self) this = self;
+  private function new(self:String) this = self;
   private function prj():String return this;
 
-  public function truncate(int){
+  public function truncate(int:Int){
     return Chars.lift(this).truncate(int);
   }
   @:noUsing static public function pure<T:HasHashable>(v:T):Hash{

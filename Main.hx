@@ -4,6 +4,6 @@ using eu.ohmrun.Fletcher;
 
 class Main{
   static public function main(){
-       
+    
   }
 }

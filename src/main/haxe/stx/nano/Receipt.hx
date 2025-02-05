@@ -64,7 +64,7 @@ typedef ReceiptDef<T,E> = {
   
   public function new(self) this = self;
   @:noUsing static public function lift<T,E>(self:ReceiptDef<T,E>):Receipt<T,E> return new Receipt(self);
-  static public function unit<T,E>(){
+  @:noUsing static public function unit<T,E>(){
     return make(null,ErrorCtr.instance.Unit());
   }
   @:noUsing static public function make<T,E>(value:Null<T>,?error:Error<E>){

@@ -17,7 +17,7 @@ class Retry{
   @:noUsing static public function make(attempts,born){
     return new Retry(attempts,born);
   }
-  static public function unit(){
+  @:noUsing static public function unit(){
     return make(0,haxe.Timer.stamp());
   }
   public var duration(get,never) : Float;

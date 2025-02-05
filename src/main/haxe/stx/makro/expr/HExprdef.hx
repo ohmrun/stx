@@ -153,7 +153,7 @@ typedef HExprdefDef = StdExprDef;
   @:noUsing static public function lift(self:StdExprDef):HExprdef{
     return new HExprdef(self);
   }
-  static public function unit():HExprdef{
+  @:noUsing static public function unit():HExprdef{
     return lift(StdExprDef.EConst(CIdent('null')));
   }
   static public function mark():HExprdef{

@@ -11,7 +11,7 @@ class Options{
   static public function make0(?width:Int){
     return make(__.option(width).defv(100));
   }
-  static public function unit(){
+  @:noUsing static public function unit(){
     return make0();
   }
 }

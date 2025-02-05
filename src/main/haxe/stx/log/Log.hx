@@ -19,7 +19,7 @@ package stx.log;
                 name -> unit().tag(name)
              ).def(unit);
   }
-  static public function unit():Log{
+  @:noUsing static public function unit():Log{
     return new Log();
   }
   static public function empty():Log{

@@ -7,17 +7,17 @@ package stx.log.logger;
       #if (sys || nodejs)
         #if macro
         ZERO = new stx.log.logger.Unit();
-          __.debug("stx.Log.global = stx.log.logger.Unit()\n");
+          // __.debug("stx.Log.global = stx.log.logger.Unit()\n");
           ZERO;
         #else
           ZERO = new stx.log.logger.ConsoleLogger();
           //ZERO = new stx.log.logger.Unit();
-          __.debug("stx.Log.global = stx.log.logger.ConsoleLogger()\n");
+          // __.debug("stx.Log.global = stx.log.logger.ConsoleLogger()\n");
           ZERO;
         #end
       #else
         ZERO = new stx.log.logger.Unit();
-        __.debug("stx.Log.global = stx.log.logger.Unit()");
+        // __.debug("stx.Log.global = stx.log.logger.Unit()");
         ZERO;
       #end
      } : ZERO;
@@ -26,7 +26,7 @@ package stx.log.logger;
   public function new(){
     this = ZERO;
   }
-  static public function unit(){
+  @:noUsing static public function unit(){
     return new Global();
   }
   @:to public function toLoggerApi():LoggerApi<Dynamic>{

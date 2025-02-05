@@ -8,6 +8,15 @@
 (require '[clojure.string :as str])
 (def stx_release_root "/mnt/dat/i/prj/haxe/pub/ohmrun/stx_release")
 (defn load [] (-> (slurp (str/join "/" [stx_release_root "sources.json"])) (json/parse-string)) )
+(defn directories_absolute []
+  (let 
+   [data (load)
+    metaproject (-> data (get "root"))
+    projects (-> data (get "directories") )
+    ] 
+    (map (fn [dir] (str/join fs/file-separator [metaproject dir])) projects) 
+    )
+  )
 (defn rm_stuff []
   (prn (str/join fs/file-separator [stx_release_root "src/main/haxe"]))
   (fs/delete-tree (str/join fs/file-separator [stx_release_root "src/main/haxe"])) 

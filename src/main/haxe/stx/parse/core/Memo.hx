@@ -16,7 +16,7 @@ typedef MemoDef = {
 }
 
 @:forward abstract Memo(MemoDef) from MemoDef{
-  static public function unit():Memo{
+  @:noUsing static public function unit():Memo{
     return {
       symbols           : new haxe.ds.ObjectMap(),
       memoEntries       : new StdMap<String,MemoEntry>(),

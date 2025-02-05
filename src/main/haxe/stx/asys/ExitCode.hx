@@ -5,7 +5,7 @@ typedef ExitCodeDef = Option<Int>;
 @:forward abstract ExitCode(ExitCodeDef) from ExitCodeDef to ExitCodeDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:ExitCodeDef):ExitCode return new ExitCode(self);
-  static public function unit():ExitCode{
+  @:noUsing static public function unit():ExitCode{
     return lift(None);
   }
   @:noUsing static public function make(self){

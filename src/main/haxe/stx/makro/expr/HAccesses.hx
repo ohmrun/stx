@@ -4,7 +4,7 @@ package stx.makro.expr;
   public function new(self) this = self;
   @:noUsing static public function lift(self:Cluster<HAccess>):HAccessess return new HAccessess(self);
 
-  static public function unit(){
+  @:noUsing static public function unit(){
     return lift(Cluster.lift([HAccess.Public()]));
   }
   public function with_static(){

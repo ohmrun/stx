@@ -17,7 +17,7 @@ typedef GMetadataDef = Cluster<GMetadataEntry>;
 @:forward abstract GMetadata(GMetadataDef) from GMetadataDef to GMetadataDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:GMetadataDef):GMetadata return new GMetadata(self);
-  static public function unit(){
+  @:noUsing static public function unit(){
     return lift(Cluster.unit());
   }
   public function prj():GMetadataDef return this;

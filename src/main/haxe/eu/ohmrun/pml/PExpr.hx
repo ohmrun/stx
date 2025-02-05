@@ -155,7 +155,7 @@ class PExprLift {
 				arr.imap((i, _) -> CoIndex(i));
 		}
 	}
-	static public function is_label_map<T>(self:PExpr<T>) {
+	static public function is_label_map<T>(self:PExpr<T>):Bool{
 		return switch(self){
 			case PAssoc(map) 	: map.all(
 				(tup) -> switch (tup.fst()) {
@@ -165,43 +165,43 @@ class PExprLift {
 			default  					: false;
 		}
 	}
-	static public function get_label<T>(self:PExpr<T>) {
+	static public function get_label<T>(self:PExpr<T>):Option<String>{
 		return switch (self) {
 			case PLabel(str)	: __.option(str);
 			default 					: __.option();
 		}
 	}
-	static public function is_array<T>(self:PExpr<T>) {
+	static public function is_array<T>(self:PExpr<T>):Bool{
 		return switch (self) {
 			case PArray(_) 	: true;
 			default 				: false;
 		}
 	}
-	static public function is_set<T>(self:PExpr<T>) {
+	static public function is_set<T>(self:PExpr<T>):Bool{
 		return switch (self) {
 			case PSet(_)		: true;
 			default					: false;
 		}
 	}
-	static public function is_group<T>(self:PExpr<T>) {
+	static public function is_group<T>(self:PExpr<T>):Bool{
 		return switch (self) {
 			case PGroup(_)	: true;
 			default 				: false;
 		}
 	}
-	static public function is_assoc<T>(self:PExpr<T>) {
+	static public function is_assoc<T>(self:PExpr<T>):Bool{
 		return switch (self) {
 			case PAssoc(_)	: true;
 			default					: false;
 		}
 	}
-	static public function is_apply<T>(self:PExpr<T>) {
+	static public function is_apply<T>(self:PExpr<T>):Bool{
 		return switch (self) {
 			case PApply(_)	: true;
 			default					: false;
 		}
 	}
-	static public function is_leaf<T>(self:PExpr<T>) {
+	static public function is_leaf<T>(self:PExpr<T>):Bool{
 		return switch (self) {
 			case PLabel(name) 				: true;
 			case PApply(name,rest) 		: false;
@@ -213,7 +213,7 @@ class PExprLift {
 			case PSet(arr)						: false;
 		}
 	}
-	static public function head<T>(self:PExpr<T>) {
+	static public function head<T>(self:PExpr<T>):Option<PExpr<T>>{
 		return switch (self) {
 			case PGroup(listI) 		: __.option(listI.head());
 			case PArray(arrayI) 	: arrayI.head();
@@ -221,7 +221,7 @@ class PExprLift {
 			default 							: __.option();
 		}
 	}
-	static public function tail<T>(self:PExpr<T>) {
+	static public function tail<T>(self:PExpr<T>):Option<PExpr<T>>{
 		return switch (self) {
 			case PGroup(Cons(x,xs)) 		: __.option(PGroup(xs));
 			case PArray(arrayI) 				: __.option(PArray(arrayI.tail()));
@@ -242,7 +242,7 @@ class PExprLift {
 			case PAssoc(map)					: map.size();
 		}
 	}
-	static public function traverse<T>(self:PExpr<T>,fn:PExpr<T>->Upshot<Option<PExpr<T>>,PmlFailure>){
+	static public function traverse<T>(self:PExpr<T>,fn:PExpr<T>->Upshot<Option<PExpr<T>>,PmlFailure>):Upshot<Option<PExpr<T>>,PmlFailure>{
 		return fn(self).flat_map(
 			(opt) -> opt.fold(
 				function rec(ok){
@@ -261,7 +261,7 @@ class PExprLift {
 			)
 		);
 	}
-	static public function imod<T,E>(self:PExpr<T>,fn:Int->PExpr<T>->Upshot<Option<PExpr<T>>,E>){
+	static public function imod<T,E>(self:PExpr<T>,fn:Int->PExpr<T>->Upshot<Option<PExpr<T>>,E>):Upshot<Option<PExpr<T>>,E>{
 		var i = 0;
 		return self.mod(
 			(p) -> {
@@ -269,7 +269,7 @@ class PExprLift {
 			}
 		);
 	}
-	static public function access<T>(self:PExpr<T>,coord:Coord){
+	static public function access<T,E>(self:PExpr<T>,coord:Coord):Option<PExpr<T>>{
 		var result = None;
 		imod(
 			self,
@@ -405,7 +405,7 @@ class PExprLift {
 	static public function as_assoc<T>(self:Cluster<PExpr<T>>):Upshot<PExpr<T>,PmlFailure>{
 		return as_assoc_cluster(self).map(PAssoc);
 	}
-	static public function assoc_label<T>(self:PExpr<T>){
+	static public function assoc_label<T>(self:PExpr<T>):Option<String>{
 		return as_tuple2(self).flat_map(
 			x -> switch(x.fst()){
 				case PLabel(x) 	: __.option(x);

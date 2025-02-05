@@ -7,7 +7,7 @@ abstract AsyncResult<T>(Option<T>) from Option<T>{
   @:noUsing static public function pure<T>(v:T):AsyncResult<T>{
     return lift(Some(v));
   }
-  static public function unit<T>():AsyncResult<T>{
+  @:noUsing static public function unit<T>():AsyncResult<T>{
     return lift(None);
   }
   public function tap(fn:T->Void):Void{

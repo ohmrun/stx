@@ -8,7 +8,7 @@ typedef AlertDef<E> = Future<Report<E>>;
     return new AlertTrigger();
   }
   
-  static public function unit<E>():Alert<E>{
+  @:noUsing static public function unit<E>():Alert<E>{
     return Future.irreversible((cb) -> cb(Report.unit()));
   }
   @:noUsing static public function pure<E>(e:Error<E>):Alert<E>{

@@ -14,7 +14,7 @@ typedef EnsembleDef<T> = haxe.DynamicAccess<T>;
 
   public function new(self) this = self;
   @:noUsing static public function lift<T>(self:EnsembleDef<T>):Ensemble<T> return new Ensemble(self);
-  static public function unit<T>():Ensemble<T>{
+  @:noUsing static public function unit<T>():Ensemble<T>{
     return lift({});
   }
   @:noUsing static public function fromMap<T>(self:haxe.ds.StringMap<T>){

@@ -1,6 +1,6 @@
 package stx.log;
 
-interface LoggerApi<T>{
+interface LoggerApi<T=Any>{
   public var logic(get,null) : stx.log.Logic<T>;
   public function get_logic():stx.log.Logic<T>;
   public function with_logic(f : CTR<stx.log.Logic<T>,stx.log.Logic<T>>,?pos:Pos):LoggerApi<T>;

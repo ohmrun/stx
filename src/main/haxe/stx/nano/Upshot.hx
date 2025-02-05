@@ -224,12 +224,13 @@ class UpshotLift{
       no -> Reject(
         ErrorCtr.instance.Make(
           _ -> no.lapse.map(
-            lapse -> 
-              if(stash.has(lapse.label)){
+            function (lapse):Lapse<EE>{
+              return if(stash.has(lapse.label)){
                 stash.get(lapse.label);
               }else{
                 new LapseCtr().StashEmptyFor(lapse.label);
               }
+            }
           )
         )
       )

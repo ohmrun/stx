@@ -7,6 +7,9 @@ enum abstract Distro(String){
   var BSD;
   var Mac;
 
+  @:noUsing static public function unit(){
+    return new Distro(Sys.systemName());
+  }
   public function new(system_name:String){
     this = switch(system_name){
       case "Windows"  : "Windows"; 

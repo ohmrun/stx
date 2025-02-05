@@ -12,9 +12,6 @@ class Fp{
   @:noUsing @:allow(stx)static private dynamic function handle<T>(opt:T):Void{
 
   }
-  static public function with<A,B,C>(wildcard:Wildcard,a:A,b:B):With<A,B,C>{
-    return (c:C) -> __.triple(a,b,c);
-  }
   static public function fp(wildcard:Wildcard){
     return new stx.fp.Module();
   } 

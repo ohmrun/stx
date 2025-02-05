@@ -21,6 +21,9 @@ class Fn{
   @:noUsing static public inline function _1r(){
     return Unary.unit();
   }
+  @:noUsing static public inline function _0r<R>(fn:Void->R):Thunk<R>{
+    return Thunk.lift(fn);
+  }
   // @:noUsing static public inline function execute<P>(fn:P->Void):Unary<P,P>{
   //   return (p:P) -> {
   //     fn(p);

@@ -11,7 +11,7 @@ package stx.test;
       }
     );
   }
-  static public function unit():TestResult{
+  @:noUsing static public function unit():TestResult{
     return pure(TestEffect.unit());
   }
   // public function resolve(test_case:TestCase):Signal<TestPhaseSum>{

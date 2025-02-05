@@ -199,6 +199,11 @@ class LiftStringableToString{
   }
 }
 class LiftTToString{
+  /**
+   * Run `Std.string` on anything.
+   * @param self `T`
+   * @return `String`
+   */
   static public function toString<T>(self:T):String{
     //trace("ANYTHING");
     return Std.string(self);

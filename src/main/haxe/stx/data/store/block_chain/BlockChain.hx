@@ -5,7 +5,8 @@ import stx.data.store.block_chain.term.MemoryBlockChain;
 import stx.data.store.settable_store.*;
 import stx.data.store.block_chain.*;
 
-class BlockChain<K,V>{
+//implements stx.data.store.SettableStoreApi<Articulation<K>,V>
+class BlockChain<K,V> {
   static public function Memory<K,V>(deps):BlockChain<K,V>{
     return new MemoryBlockChain(deps);
   }
