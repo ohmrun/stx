@@ -1,6 +1,6 @@
 package stx.parse.parser.term;
 
-class Failed<P,R> extends Sync<P,R>{
+class Failed<P,R> extends ParserCls<P,R>{
   final reason    : ParseFailure;
   final message   : ParseFailureMessage;
 
@@ -9,8 +9,8 @@ class Failed<P,R> extends Sync<P,R>{
     this.reason     = reason;
     this.message    = message;
   }
-  public inline function apply(ipt:ParseInput<P>):ParseResult<P,R>{
-    final result = Parse.refuse(ipt,reason,message,pos);
+  override public inline function apply(ipt:ParseInput<P>):ParseResult<P,R>{
+    final result = ipt.refuse(reason,message,pos);
     return result;
   }
 }

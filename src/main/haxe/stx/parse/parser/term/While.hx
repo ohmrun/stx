@@ -13,7 +13,7 @@ class While<P,R> extends Base<P,Cluster<R>,Parser<P,R>>{
    * @param ipt 
    * @return ParseResult<P,Cluster<R>>
    */
-  public final function apply(ipt:ParseInput<P>):ParseResult<P,Cluster<R>>{
+  override public final function apply(ipt:ParseInput<P>):ParseResult<P,Cluster<R>>{
     final result = [];
     function rec(ipt:ParseInput<P>){
       final res = delegation.apply(ipt);

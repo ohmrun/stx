@@ -7,7 +7,7 @@ class Sub<I,O,Oi,Oii> extends Base<I,Oii,Parser<I,O>>{
   }
   public final transform : Option<O>->Couple<ParseInput<Oi>,Parser<Oi,Oii>>;
 
-  public function apply(input:ParseInput<I>):ParseResult<I,Oii>{
+  override public function apply(input:ParseInput<I>):ParseResult<I,Oii>{
     final res 		= delegation.apply(input);
     return switch(res.is_ok()){
       case true : 

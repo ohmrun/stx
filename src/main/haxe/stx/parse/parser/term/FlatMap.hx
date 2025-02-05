@@ -11,7 +11,7 @@ abstract class FlatMap<P,Ri,Rii> extends ParserCls<P,Rii>{
   }
   final delegate : Parser<P,Ri>;
   abstract function flat_map(rI:Ri):Parser<P,Rii>;
-  @:privateAccess public inline function apply(input:ParseInput<P>):ParseResult<P,Rii>{
+  @:privateAccess override public inline function apply(input:ParseInput<P>):ParseResult<P,Rii>{
     final ok = this.delegate.apply(input);
 
     final after = through_bind(input,ok);

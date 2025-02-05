@@ -16,7 +16,7 @@ class Many<I,O> extends Base<I,Array<O>,Parser<I,O>>{
     // __.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
     #end
   }
-  public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
+  override public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
     final arr   = [];
     var out : Option<ParseResult<I,Array<O>>>     = None;
     var ipt     = inputI;

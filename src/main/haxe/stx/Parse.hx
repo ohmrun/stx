@@ -5,7 +5,6 @@ import stx.parse.ParseLapse;
 using stx.Pico;
 using stx.Fail;
 using stx.Nano;
-using stx.Parse;
 using stx.Fn;
 using stx.Log;
 
@@ -31,72 +30,6 @@ typedef ParseFailureMessage 	= stx.fail.ParseFailureMessage;
 
 
 class Parse{
-	static public function value<P,R>(rest:ParseInput<P>,match:R):ParseResult<P,R>{
-    return ParseResult.make(rest,Some(match),null);
-	}
-	static public function no<P,R>(rest:ParseInput<P>,?message:ParseFailureMessage,?pos:Pos):ParseResult<P,R>{
-		return error(rest,message,pos);
-	}
-	static public function eof<P,R>(rest:ParseInput<P>,?message:ParseFailureMessage,?pos:Pos):ParseResult<P,R>{
-		return refuse(rest,EOF,message,pos);
-	}
-	static public function ok<P,R>(rest:ParseInput<P>,match:R):ParseResult<P,R>{
-		return value(rest,match);
-	}
-	static public function nil<P,R>(rest:ParseInput<P>):ParseResult<P,R>{
-    return ParseResult.make(rest,None,null);
-  }
-	static public function refuse<P,R>(rest:ParseInput<P>,?reason:ParseFailure,?message:ParseFailureMessage,?pos:Pos):ParseResult<P,R>{
-		return ParseResult.make(
-			rest,
-			None,
-			ErrorCtr.instance.Make(
-			 _ -> (new ParseLapse(
-					reason ?? ERROR,
-					message,
-					reason == ParseFailure.FATAL ? new haxe.Exception("FATAL") : null,
-					rest.index,
-					pos
-				):Lapse<ParseFailure>).enlist()
-			)
-		);
-	}
-	static public function error<P,R>(rest:ParseInput<P>,?message:ParseFailureMessage,?pos:Pos):ParseResult<P,R>{
-		return refuse(rest,ERROR,message,pos);
-	}
-	static public function fatal<P,R>(rest:ParseInput<P>,?message:ParseFailureMessage,?pos:Pos):ParseResult<P,R>{
-		return refuse(rest,FATAL,message);
-	}
-	static public function except<P,R>(rest:ParseInput<P>,?message:String,?pos:Pos):ParseResult<P,R>{
-		return ParseResult.make(
-			rest,
-			None,
-			ErrorCtr.instance.Make(
-			 _ -> (new ParseLapse(
-					ParseFailure.FATAL,
-					new haxe.Exception(message),
-					rest.index,
-					pos
-				):Lapse<ParseFailure>).enlist()
-			)
-		);
-	}
-	static public function digest<P,R>(rest:ParseInput<P>,label:String,?pos:Pos):ParseResult<P,R>{
-		return ParseResult.make(
-			rest,
-			None,
-			ErrorCtr.instance.Digest(
-				new DigestCls(
-					Uuid.unit(),
-					label,
-					Loc.fromPos(pos).with_cursor(@:privateAccess rest.content.index)
-				)
-			)
-		);
-	}
-	static public function defect<P,R>(self:ParseInput<P>,error:Error<ParseFailure>){
-		return ParseResult.make(self,None,error);
-	}
 	static public function e_error(hook:Ingests<ParseFailure>,label:String):CTR<Loc,Ingest<ParseFailure>>{
 		return stx.parse.ParseErrorIngest.make.bind(label);
 	}
@@ -148,7 +81,7 @@ class LiftParse{
   // static public function erration<P>(rest:ParseInput<P>,message:ParseFailure,fatal=false):Error<ParseFailure>{
   //   return Error.pure(ParseFailure.make(@:privateAccess rest.content.index,message,fatal));
   // }
-	static public function sub<I,O,Oi,Oii>(p:Parser<I,O>,p0:Option<O>->Couple<ParseInput<Oi>,Parser<Oi,Oii>>){
+	static public function sub<I,O,Oi,Oii>(p:Parser<I,O>,p0:Option<O>->Couple<ParseInput<Oi>,Parser<Oi,Oii>>):Parser<I,Oii>{
 		return stx.parse.Parsers.Sub(p,p0);
 	}
 	static public inline function tagged<I,T>(p : Parser<I,T>, tag : String):Parser<I,T> {

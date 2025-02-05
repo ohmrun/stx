@@ -9,11 +9,11 @@ class AndR<I,T,U> extends With<I,T,U,U>{
     super(l,r,pos);
   }
   override function check(){
-    __.assert().that().exists(delegation);
+    // __.assert().that().exists(delegation);
   }
-  public inline function transform(lhs:Null<T>,rhs:Null<U>){
+  override public inline function transform(lhs:Null<T>,rhs:Null<U>):Option<U>{
     #if debug 
-    __.log().trace(_ -> _.thunk(() -> '${delegation.fst()} $lhs ${delegation.snd()} $rhs'));
+    __.log().trace(_ -> _.thunk(() -> '${lhs} $lhs ${rhs} $rhs'));
     #end 
     return __.option(rhs);
   }

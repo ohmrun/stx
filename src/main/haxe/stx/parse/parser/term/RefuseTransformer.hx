@@ -6,7 +6,7 @@ class ErrorTransformer<I,O> extends Base<I,O,Parser<I,O>>{
     super(delegation,pos);
     this.transformer = transformer;
   }
-  inline public function apply(input:ParseInput<I>):ParseResult<I,O>{
+  override inline public function apply(input:ParseInput<I>):ParseResult<I,O>{
     final result = delegation.apply(input);
     return mod(result);
   }

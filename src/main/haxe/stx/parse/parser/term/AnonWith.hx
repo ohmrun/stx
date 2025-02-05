@@ -5,10 +5,10 @@ class AnonWith<I,T,U,V> extends With<I,T,U,V>{
     super(l,r,pos);
     this.__transform = __transform;
   }
-  public dynamic function __transform(lhs:Null<T>,rhs:Null<U>){
+  public dynamic function __transform(lhs:Null<T>,rhs:Null<U>):Option<V>{
     return throw 'constructor not called';
   }
-  public inline function transform(lhs:Null<T>,rhs:Null<U>):Option<V>{
+  override public inline function transform(lhs:Null<T>,rhs:Null<U>):Option<V>{
     return __transform(lhs,rhs);
   }
 }

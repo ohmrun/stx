@@ -13,7 +13,7 @@ class Or<P,R> extends ParserCls<P,R>{
     __.assert().that().exists(rhs);
     #end
   }
-  public inline function apply(input:ParseInput<P>):ParseResult<P,R>{
+  override public inline function apply(input:ParseInput<P>):ParseResult<P,R>{
     #if debug __.log().trace(_ -> _.thunk( () -> '$this')); #end 
     __.assert().that().exists(input);
     __.assert().that().exists(lhs);

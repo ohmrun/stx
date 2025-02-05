@@ -1,6 +1,6 @@
 package stx.parse.parser.term;
 
-class LAnon<I,O> extends Base<I,O,Parser<I,O>>{
+class LAnon<I,O> extends Delegate<I,O>{
   var closure : Void -> Parser<I,O>;
 
   public function new(closure:Void->Parser<I,O>,?id:Pos){
@@ -13,7 +13,7 @@ class LAnon<I,O> extends Base<I,O,Parser<I,O>>{
   private function open(){
     this.delegation = closure();
   }
-  public inline function apply(ipt:ParseInput<I>):ParseResult<I,O>{
+  override public inline function apply(ipt:ParseInput<I>):ParseResult<I,O>{
     return if(delegation == null){
       open();
       __.assert().that().exists(delegation);

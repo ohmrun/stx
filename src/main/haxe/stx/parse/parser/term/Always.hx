@@ -1,7 +1,7 @@
 package stx.parse.parser.term;
 
 class Always<I> extends Sync<I,I>{
-  public function apply(input:ParseInput<I>):ParseResult<I,I>{
+  override public function apply(input:ParseInput<I>):ParseResult<I,I>{
     #if debug __.log().debug('${input.head()}'); #end
     return switch(input.head()){
       case Val(i) : 

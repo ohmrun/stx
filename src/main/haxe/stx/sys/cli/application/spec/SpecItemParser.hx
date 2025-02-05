@@ -7,7 +7,7 @@ class SpecItemParser extends ParserCls<CliToken,SpecValue>{
     super();
     this.delegate = delegate;
   }
-  public function apply(ipt:ParseInput<CliToken>){
+  override public function apply(ipt:ParseInput<CliToken>){
     __.log().trace('item ${this.delegate}');
     __.log().trace('${ipt.head()}');
     final is_greedy = !delegate.rest.is_defined() && delegate.spec.config.greedy;

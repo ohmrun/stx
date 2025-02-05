@@ -9,7 +9,7 @@ abstract class BoundFun<I,O,Oi> extends ParserCls<I,Oi>{
   }
   abstract private function bound(input:ParseInput<I>,result:ParseResult<I,O>):ParseResult<I,Oi>;
 
-  public function apply(i:ParseInput<I>):ParseResult<I,Oi>{
+  override public function apply(i:ParseInput<I>):ParseResult<I,Oi>{
     return bound(i,parser.apply(i));
   }
   override public function toString(){

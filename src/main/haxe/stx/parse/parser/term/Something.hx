@@ -4,7 +4,7 @@ package stx.parse.parser.term;
  * Parser that produces a single value from the input if one exists.
  */
 class Something<I> extends Sync<I,I>{
-  inline public function apply(input:ParseInput<I>):ParseResult<I,I>{
+  override inline public function apply(input:ParseInput<I>):ParseResult<I,I>{
     return if(input.is_end()){
       input.eof();
     }else{

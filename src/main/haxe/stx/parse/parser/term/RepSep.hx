@@ -17,7 +17,7 @@ class RepSep<I,O,S> extends Base<I,Cluster<O>,Parser<I,O>>{
       )
     ).asParser();
   }
-  public inline function apply(ipt:ParseInput<I>):ParseResult<I,Cluster<O>>{
+  override public inline function apply(ipt:ParseInput<I>):ParseResult<I,Cluster<O>>{
     return actual().apply(ipt);
   }
 } 

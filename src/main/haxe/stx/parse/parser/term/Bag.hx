@@ -4,7 +4,7 @@ class Bag<I,O> extends Base<I,Array<O>,Array<Parser<I,O>>>{
   public function new(delegation,?id:Pos){
     super(delegation,id);
   }
-  public function apply(input:ParseInput<I>):ParseResult<I,Array<O>>{
+  override public function apply(input:ParseInput<I>):ParseResult<I,Array<O>>{
     final parsers = delegation;
     function rec(input:ParseInput<I>,arr:Array<O>){
       if(parsers.length == 0){

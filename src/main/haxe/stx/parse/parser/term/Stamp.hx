@@ -6,7 +6,7 @@ class Stamp<P,R> extends ParserCls<P,R>{
     super(pos);
     this.value = value;
   }
-  inline public function apply(input:ParseInput<P>):ParseResult<P,R>{
+  override inline public function apply(input:ParseInput<P>):ParseResult<P,R>{
     return value;
   }
   override public function toString(){

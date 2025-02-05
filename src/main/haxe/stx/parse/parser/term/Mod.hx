@@ -8,7 +8,7 @@ abstract class Mod<P,R> extends ParserCls<P,R>{
   var delegate  : Parser<P,R>;
   abstract function bound(input:ParseInput<P>,result:ParseResult<P,R>): ParseResult<P,R>;
 
-  public function apply(input:ParseInput<P>):ParseResult<P,R>{
+  override public function apply(input:ParseInput<P>):ParseResult<P,R>{
     return bound(input,delegate.apply(input));
   }
 }

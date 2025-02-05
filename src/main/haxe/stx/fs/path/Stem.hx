@@ -15,7 +15,7 @@ abstract Stem(StemSum) from StemSum to StemSum{
   private var self(get,never):Stem;
   private function get_self():Stem return lift(this);
 
-  public function fold<Z>(here:()->Z,root:Drive->Z){
+  public function fold<Z>(here:()->Z,root:Drive->Z):Z{
     return switch(this){
       case Here         : here();
       case Root(drive)  : root(drive);

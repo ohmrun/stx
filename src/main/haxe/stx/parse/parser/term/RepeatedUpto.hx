@@ -25,7 +25,7 @@ class RepeatedUpto<I,O> extends Base<I,Array<O>,Parser<I,O>>{
     // __.assert(pos).expect().exists().errata( e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
     #end
   }
-  public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
+  override public function apply(inputI:ParseInput<I>):ParseResult<I,Array<O>>{
     var count = 0;
     function rec(inputII:ParseInput<I>,arr:Array<O>){
       final res = delegation.apply(inputII);

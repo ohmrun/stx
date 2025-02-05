@@ -3,9 +3,9 @@ package stx.parse.term;
 import stx.parse.Parsers.*;
 
 @:note("neko throws without explicit typing of input.content.data")
-@:access(stx.parse) class Literal extends stx.parse.parser.term.SyncBase<String,String,Parser<String,String>>{
+@:access(stx.parse) class Literal extends ParserCls<String,String>{
   
-  public function apply(input:ParseInput<String>):ParseResult<String,String>{
+  override public function apply(input:ParseInput<String>):ParseResult<String,String>{
     var all  : String = input.content.data;
     var data : String = all.substr(input.offset);
     var code = StringTools.fastCodeAt;

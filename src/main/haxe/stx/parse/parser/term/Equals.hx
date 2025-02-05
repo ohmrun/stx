@@ -6,7 +6,7 @@ class Equals<I> extends ParserCls<I,I>{
     super(tag,pos);
     this.value = value;
   }
-  public function apply(input:ParseInput<I>):ParseResult<I,I>{
+  override public function apply(input:ParseInput<I>):ParseResult<I,I>{
     return input.head().fold(
       (vI) 	-> value == vI ? input.tail().ok(vI) : input.no(),
       (e) 	-> ParseResult.make(input,None,e),

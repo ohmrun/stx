@@ -5,9 +5,10 @@ class AndL<I,T,U> extends With<I,T,U,T>{
     super(l,r,pos);
   }
   override function check(){
-    __.assert().that().exists(delegation);
+    __.assert().that().exists(lhs);
+    __.assert().that().exists(rhs);
   }
-  public inline function transform(lhs:Null<T>,rhs:Null<U>){
+  override public inline function transform(lhs:Null<T>,rhs:Null<U>):Option<T>{
     return __.option(lhs);
   }
 }

@@ -16,8 +16,8 @@ class StringParsers{
 		return Range(start,finish);
   }
   static public final boolean : Parser<String,String> 				= id('true').or(id('false'));
-	static public final integer     		= reg("^[+-]?\\d+");
-  static public final float 					= reg("^[+-]?\\d+(\\.\\d+)?");
+	static public final integer : Parser<String,String>     		= reg("^[+-]?\\d+");
+  static public final float   : Parser<String,String> 					= reg("^[+-]?\\d+(\\.\\d+)?");
   
 	static public function primitive():Parser<String,Primitive>{
 		return boolean.then((x) -> PBool(x == 'true' ? true : false))
@@ -27,44 +27,44 @@ class StringParsers{
 	}
 		
 
-	static public final lower						= Range(97, 122);
-	static public final upper						= Range(65, 90);
-	static public final alpha						= Or(upper,lower);
-	static public final digit						= Range(48, 57);
-	static public final alphanum				= alpha.or(digit);
-	static public final ascii						= Range(0, 255);
+	static public final lower 			: Parser<String,String>					= Range(97, 122);
+	static public final upper				: Parser<String,String>					= Range(65, 90);
+	static public final alpha				: Parser<String,String>					= Or(upper,lower);
+	static public final digit				: Parser<String,String>					= Range(48, 57);
+	static public final alphanum 		: Parser<String,String>					= alpha.or(digit);
+	static public final ascii    		: Parser<String,String>					= Range(0, 255);
 	
-	static public final valid						= alpha.or(digit).or(id('_'));
+	static public final valid     	: Parser<String,String>					= alpha.or(digit).or(id('_'));
 	
-	static public final tab							= id('	');
-	static public final space						= id(' ');
+	static public final tab					: Parser<String,String>			= id('	');
+	static public final space				: Parser<String,String>						= id(' ');
 	
-	static public final nl							= id('\n');
-	static public final cr							= id('\r\n');
-	static public final cr_or_nl				= nl.or(cr);
+	static public final nl					: Parser<String,String>							= id('\n');
+	static public final cr					: Parser<String,String>							= id('\r\n');
+	static public final cr_or_nl  	: Parser<String,String>				= nl.or(cr);
 
-	static public final gap							= tab.or(space);
-	static public final whitespace			= Range(0, 32).tagged('whitespace');
+	static public final gap					: Parser<String,String>			= tab.or(space);
+	static public final whitespace	: Parser<String,String>			= Range(0, 32).tagged('whitespace');
 
-	//static public final camel 				= lower.and_with(word, mergeString);
-	static public final word						= lower.or(upper).one_many().tokenize();//[a-z]*
-	static public final quote						= id('"').or(id("'"));
-	static public final escape					= id('\\');
-	static public final not_escaped			= id('\\\\');
+	//static public final camel 		: Parser<String,String>		= lower.and_with(word, mergeString);
+	static public final word				: Parser<String,String>		= lower.or(upper).one_many().tokenize();//[a-z]*
+	static public final quote				: Parser<String,String>		= id('"').or(id("'"));
+	static public final escape			: Parser<String,String>		= id('\\');
+	static public final not_escaped : Parser<String,String>			= id('\\\\');
 	
-	static public final x 							= not_escaped.not()._and(escape);
-	static public final x_quote 				= x._and(quote);
+	static public final x 					: Parser<String,String> = not_escaped.not()._and(escape);
+	static public final x_quote 		: Parser<String,String>		= x._and(quote);
 
-	static public final literal 				= new stx.parse.term.Literal().asParser();
-	static public final symbol : Parser<String,String> 					= Parsers.When(x -> StringTools.fastCodeAt(x,0) >= 33).one_many().tokenize().tagged('symbol');
+	static public final literal  		: Parser<String,String> 				= new stx.parse.term.Literal().asParser();
+	static public final symbol   		: Parser<String,String> 					= Parsers.When(x -> StringTools.fastCodeAt(x,0) >= 33).one_many().tokenize().tagged('symbol');
 
-	static public	final brkt_l_square = id('[');
-	static public	final brkt_r_square = id(']');
+	static public	final brkt_l_square  :Parser<String,String> = id('[');
+	static public	final brkt_r_square  :Parser<String,String> = id(']');
 
-	static public function spaced( p : Parser<String,String> ) {
+	static public function spaced( p : Parser<String,String> ):Parser<String,String> {
 		return p.and_(gap.many());
 	}
-	static public function returned(p : Parser<String,String>) {
+	static public function returned(p : Parser<String,String>):Parser<String,String>{
 		return p.and_(whitespace.many());
 	}
 }

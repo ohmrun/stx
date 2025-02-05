@@ -6,7 +6,7 @@ class Pure<I,O> extends SyncBase<I,O,Nada>{
     this.value = value;
     super(pos);
   }
-  inline public function apply(ipt:ParseInput<I>):ParseResult<I,O>{
+  override inline public function apply(ipt:ParseInput<I>):ParseResult<I,O>{
     return value;
   }
 }

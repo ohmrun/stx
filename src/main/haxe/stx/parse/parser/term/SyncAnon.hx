@@ -7,7 +7,7 @@ class SyncAnon<P,R> extends SyncBase<P,R,ParseInput<P> -> ParseResult<P,R>>{
     super(tag,pos);
     this.method = method;
   }
-  public function apply(ipt:ParseInput<P>):ParseResult<P,R>{
+  override public function apply(ipt:ParseInput<P>):ParseResult<P,R>{
     #if test
       __.assert().that().exists(pos);
     #end

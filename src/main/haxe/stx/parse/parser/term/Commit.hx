@@ -1,7 +1,7 @@
 package stx.parse.parser.term;
 
 class Commit<I,T> extends Base<I,T,Parser<I,T>>{
-  public inline function apply(ipt:ParseInput<I>):ParseResult<I,T>{
+  override public inline function apply(ipt:ParseInput<I>):ParseResult<I,T>{
     return mod(delegation.apply(ipt));
   }
   private function mod(result:ParseResult<I,T>){

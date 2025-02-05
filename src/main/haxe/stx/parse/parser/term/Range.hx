@@ -10,7 +10,7 @@ class Range extends Sync<String,String>{
     this.min = min;
     this.max = max;
   }
-  inline public function apply(ipt:ParseInput<String>):ParseResult<String,String>{
+  override inline public function apply(ipt:ParseInput<String>):ParseResult<String,String>{
     return switch(ipt.head()){
       case Val(s) : 
         var x = StringTools.fastCodeAt(s,0);

@@ -15,7 +15,7 @@ class Rep1Sep<I,O,S> extends Base<I,Cluster<O>,Parser<I,O>>{
       )
     ).asParser();
   }
-  inline public function apply(ipt:ParseInput<I>):ParseResult<I,Cluster<O>>{
+  override inline public function apply(ipt:ParseInput<I>):ParseResult<I,Cluster<O>>{
     return actual().apply(ipt);
   }
   override public function toString(){

@@ -1,6 +1,6 @@
 package stx.parse.parser.term;
 
-abstract class Base<I,O,T> extends ParserCls<I,O>{
+class Base<I,O,T> extends ParserCls<I,O>{
 
   public var delegation(default,null)        : T;
 

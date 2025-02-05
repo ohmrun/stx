@@ -6,7 +6,7 @@ class CharCode extends Sync<String,String>{
     super(Some('code'),id);
     this.code = code;
   }
-  public function apply(ipt:ParseInput<String>):ParseResult<String,String>{
+  override public function apply(ipt:ParseInput<String>):ParseResult<String,String>{
     return ipt.head().fold(
       ok -> ok.charCodeAt(0) == code ? ipt.tail().value(ok) : ipt.error(),
       e   -> ipt.error().defect(e),

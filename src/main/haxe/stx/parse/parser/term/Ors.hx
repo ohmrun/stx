@@ -9,7 +9,7 @@ class Ors<I,T> extends Base<I,T,Array<Parser<I,T>>>{
       __.assert().that().exists(delegate);
     }
   }
-  public function apply(input:ParseInput<I>):ParseResult<I,T>{
+  override public function apply(input:ParseInput<I>):ParseResult<I,T>{
     var idx    = 1;
     final res  = delegation[0].apply(input);
     var errs  : Error<ParseFailure> = null;

@@ -1,8 +1,10 @@
 package stx.parse.parser.term;
 
-using stx.parse.parser.term.With;
 
-abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
+class With<I,T,U,V> extends ParserCls<I,V>{
+  final lhs : Parser<I,T>;
+  final rhs : Parser<I,U>;
+
   public function new(l:Parser<I,T>,r:Parser<I,U>,?pos:Pos){
     #if debug
     __.assert().that().exists(l);
@@ -10,19 +12,24 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
     #end
     //__.log().debug(_ -> _.thunk(() -> '${l} ${r}'));
     //__.log().debug(_ -> _.thunk(() -> '${l.tag} ${r.tag}'));
-    super(__.couple(l,r),pos);
+    this.lhs = l;
+    this.rhs = r;
+    super(None,pos);
   }
-  abstract public function transform(lhs:Null<T>,rhs:Null<U>):Option<V>;
-  override function check(){
-    __.assert().expect().exists().crunch(delegation);
+  public function transform(lhs:Null<T>,rhs:Null<U>):Option<V>{
+    return None;
   }
-  inline public function apply(input:ParseInput<I>):ParseResult<I,V>{  
+  function check(){
+      __.assert().expect().exists().crunch(lhs);
+      __.assert().expect().exists().crunch(rhs);
+  }
+  override inline public function apply(input:ParseInput<I>):ParseResult<I,V>{  
     // trace("with apply");
-    var res = delegation.fst().apply(input);
+    var res =lhs.apply(input);
     #if debug
     __.log().trace(_ -> _.thunk(
       () -> {
-        final parser = delegation.fst().toString();
+        final parser =lhs.toString();
         final result = () -> res.toString();
         return 'lh parser result: ${result()} ${res.is_ok()} $parser ';
       }
@@ -31,13 +38,11 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
     return switch(res.is_ok()){
       case true:
         // trace("fst ok"); 
-        __.assert().that().exists(delegation);
-        __.assert().that().exists(delegation.snd());
-        final resI = delegation.snd().apply(res.asset);
+        final resI = rhs.apply(res.asset);
         #if debug
         __.log().trace(_ -> _.thunk(
           () -> {
-            final parser = delegation.snd().toString();
+            final parser = rhs.toString();
             final result = resI.toString();
             return 'rh parser: $parser result: $result $this';
           }
@@ -48,7 +53,7 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
             final result = transform(res.value.defv(null),resI.value.defv(null));
             #if debug
             __.log().trace(_ -> _.thunk(() -> {
-              var parsers = '${delegation.tup()}';
+              var parsers = 'With(${lhs}  ${rhs})';
               return 'parsers: $parsers, result: $result';
             }));
             #end
@@ -68,7 +73,7 @@ abstract class With<I,T,U,V> extends Base<I,V,Couple<Parser<I,T>,Parser<I,U>>>{
         input.defect(res.error);
     }  
   }
-  override public function toString(){
-    return '${delegation.toString()}';
+  override public function toString():String{
+    return 'With($lhs $rhs)';
   }
 }

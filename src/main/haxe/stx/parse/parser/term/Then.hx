@@ -11,7 +11,7 @@ abstract class Then<I,T,U> extends Base<I,U,Parser<I,T>>{
   override public function check(){
    // __.assert(pos).expect().exists().errata(e -> e.fault().of(E_Parse_UndefinedParseDelegate)).crunch(delegation);
   }
-  inline public function apply(input:ParseInput<I>):ParseResult<I,U>{
+  override inline public function apply(input:ParseInput<I>):ParseResult<I,U>{
     #if debug __.log().trace('$delegation then'); #end
     __.assert().that().exists(delegation);
     final res = delegation.apply(input);

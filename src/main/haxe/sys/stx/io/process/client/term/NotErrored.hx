@@ -5,7 +5,7 @@ package sys.stx.io.process.client.term;
   Impatient request for state, `Ended` if `exit_code` non-zero.
 **/
 class NotErrored{
-  static public function make<R>(next:ProcessClientDef<R>){
+  static public function make<R>(next:ProcessClientDef<R>):ProcessClient<R>{
     return __.await(
       PReqState(false),
       (y:ProcessResponse) -> {

@@ -12,7 +12,7 @@ class Filter<I,O> extends Base<I,O,Parser<I,O>>{
       ,id
     );
   }
-  public function apply(ipt:ParseInput<I>):ParseResult<I,O>{
+  override public function apply(ipt:ParseInput<I>):ParseResult<I,O>{
     return this.apply(ipt);
   }
 }

@@ -5,9 +5,9 @@ using stx.parse.path.Base;
 
 import stx.parse.parsers.StringParsers as SParse;
 
-function alts(str) 	return __.parse().alts(str);
-function id(str) 		return SParse.id(str);
-function reg(str) 	return SParse.reg(str);
+function alts<I,O>(str):Parser<I,O> 			return __.parse().alts(str);
+function id(str):Parser<String,String> 		return SParse.id(str);
+function reg(str):Parser<String,String> 	return SParse.reg(str);
 
 function log(wildcard:Wildcard):stx.Log{
 	return new stx.Log().tag(__.pkg().toString());
@@ -51,11 +51,11 @@ class Base extends ParserCls<String,Cluster<Token>>{
 		'..'.id().then ( function(x) return FPTUp ).with_tag('p_up');
 
 
-	public var char_and_space
+	public var char_and_space : Parser<String,String>
 		= SParse.alphanum.or(SParse.whitespace).with_tag('char_and_space');
 
 	//public var p_special_chars_exceptions = 
-	public var p_special_chars 
+	public var p_special_chars : Parser<String,String>
 		= alts(
 			["<>:\"\\|?*/"].map(id)
 		).not()._and(
@@ -65,7 +65,7 @@ class Base extends ParserCls<String,Cluster<Token>>{
 	//= "[^<>:\"\\\\|?*\\/A-Za-z0-9]".reg().with_tag('p_special_chars');
 
 
-	public function p_path_chars(){
+	public function p_path_chars() : Parser<String,String>{
 		final not_sep = p_sep().not().with_tag('p_path_chars.p_sep');
 		final char 		= char_and_space.or(p_special_chars); 
 		return 
@@ -79,18 +79,18 @@ class Base extends ParserCls<String,Cluster<Token>>{
 			).tokenize()
 			 .with_tag('p_path_chars'); 
 	}		
-	public function p_file_chars(){
+	public function p_file_chars():Parser<String,String>{
 		return char_and_space.or(p_special_chars).one_many().tokenize().with_tag('p_file_chars');
 	}
-	static function spect<I,O>(parser:Parser<I,O>,?pos:Pos){
+	static function spect<I,O>(parser:Parser<I,O>,?pos:Pos):Parser<I,O>{
 		return parser;
 	}
-	static function inspect<I,O>(parser:Parser<I,O>,?pos:Pos){
+	static function inspect<I,O>(parser:Parser<I,O>,?pos:Pos):Parser<I,O>{
 		return Parsers.Inspect(
 			parser,
 			__.log().printer(pos),((x:ParseResult<I,O>) -> x.toString()).fn().then(__.log().printer(pos)));
 	}
-	public function p_term(){
+	public function p_term():Parser<String,Token>{
 		//__.log().debug('pterm');
 		return p_path_chars().and_(
 			':'.id().not()
@@ -117,18 +117,18 @@ class Base extends ParserCls<String,Cluster<Token>>{
 			}
 		).with_tag('p_term');
 	}
-	public function p_junction(){
+	public function p_junction():Parser<String,Token>{
 		return inspect(p_term().or(p_up).or(p_down()));
 	}
-	public function p_down(){
+	public function p_down():Parser<String,Token>{
 		return p_path_chars().and_(
 			':'.id().not()
 		).then( function(str) { return FPTDown(str); } );
 	}
-	public function p_body(){
+	public function p_body():Parser<String,Cluster<Token>>{
 		return inspect(p_junction().rep1sep0(p_sep()));
 	}
-	public function p_abs(){ 
+	public function p_abs():Parser<String,Cluster<Token>>{ 
 		return p_root()
 		.and( p_body().option() )
 		.then( 
@@ -151,7 +151,7 @@ class Base extends ParserCls<String,Cluster<Token>>{
 			}
 		);
 	}
-	public function p_rel_root(){
+	public function p_rel_root():Parser<String,Token>{
 		return '.'.id().and_('.'.id().not().and(p_sep().option())).then( (_) -> FPTRel);
 	}
 	public function p_rel():Parser<String,Cluster<Token>>{ 
@@ -181,7 +181,7 @@ class Base extends ParserCls<String,Cluster<Token>>{
 			)
 		);
 	}
-	public function p_path(){
+	public function p_path():Parser<String,Cluster<Token>>{
 		return p_rel()
 			.or(p_abs())
 			.and(p_sep().option())
@@ -199,7 +199,7 @@ class Base extends ParserCls<String,Cluster<Token>>{
 				)
 			).and_(Parsers.Eof());
 	}               
-	public function apply(i:ParseInput<String>):ParseResult<String,Cluster<Token>>{
+	override public function apply(i:ParseInput<String>):ParseResult<String,Cluster<Token>>{
 		return p_path().apply(i);
 	}
 	public function format(arr:Cluster<Token>){
