@@ -5,7 +5,7 @@ import haxe.rtti.Meta;
 class TestCaseLift{
   static public function get_tests<T:TestCase>(v:T,timeout:Int){
     final clazz             = std.Type.getClass(v);
-    __.log().debug( _ -> _.show(clazz));
+    __.log().debug( _ -> _.pure(clazz));
     final class_name        = std.Type.getClassName(clazz);
     __.log().debug(_ -> _.pure(class_name));
     final type_meta         = Meta.getType(clazz);
@@ -14,12 +14,12 @@ class TestCaseLift{
     final fields            = std.Type.getInstanceFields(clazz);
     final fields_meta       = Meta.getFields(clazz);
     
-    __.log().debug(_ -> _.show(fields));
-    __.log().debug(_ -> _.show(fields_meta));
+    __.log().debug(_ -> _.pure(fields));
+    __.log().debug(_ -> _.pure(fields_meta));
     
     var test_fields         = fields.filter( cf -> cf.startsWith('test') );
 
-    __.log().debug(_ -> _.show(test_fields));
+    __.log().debug(_ -> _.pure(test_fields));
 
     var applications        = test_fields.map_filter(
       (field_name) -> {

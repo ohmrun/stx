@@ -32,8 +32,8 @@ class Delegate<T> implements LoggerApi<T>{
   private function get_output(){
     return delegate.output;
   }
-  public function copy(){
-    return new Delegate(this.delegate.copy());
+  public function copy(?logic,?format,?output){
+    return new Delegate(this.delegate.copy(logic,format,output));
   }
   public function with_output(output){
     final next = this.delegate.with_output(output);

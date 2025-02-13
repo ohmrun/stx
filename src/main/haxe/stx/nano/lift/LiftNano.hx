@@ -1,8 +1,13 @@
 
 package stx.nano.lift;
 
+using stx.nano.lift.LiftNano;
+
 import stx.pico.Identifier;
 import stx.alias.StdType;
+
+import stx.nano.Chunk;
+import stx.nano.Upshot;
 
 class LiftNano{
   // static public function nano(wildcard:Wildcard):Module{
@@ -66,13 +71,6 @@ class LiftNano{
   }
   static public function reject<T,E>(wildcard:Wildcard,e:CTR<Fault,Error<E>>,?pos:Pos):Upshot<T,E>{
     return Upshot.reject(e.apply(pos));
-  }
-  static public function success<T,E>(wildcard:Wildcard,t:T):Outcome<T,E>{
-    return Outcome.success(t);
-  }
-  static public function failure<T,E>(wildcard:Wildcard,e:E):Outcome<T,E>{
-    //trace(e);
-    return Outcome.failure(e);
   }
   /**
    * Wildcard static extension constructor for `stx.nano.Fault`

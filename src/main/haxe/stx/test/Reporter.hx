@@ -30,9 +30,9 @@ class Reporter extends Clazz{
   }
   public function enact(){
     final p = printing;
-    // __.log().debug(_ -> _.show(std.Sys.getEnv('TEST')));
-    // __.log().debug(_ -> _.show(std.Sys.getEnv('HOME')));
-    // __.log().debug(_ -> _.show(std.Sys.getEnv('STX_TEST__VERBOSE')));
+    // __.log().debug(_ -> _.pure(std.Sys.getEnv('TEST')));
+    // __.log().debug(_ -> _.pure(std.Sys.getEnv('HOME')));
+    // __.log().debug(_ -> _.pure(std.Sys.getEnv('STX_TEST__VERBOSE')));
     #if (sys || nodejs)
       final is_verbose = __.option(Sys.getEnv('STX_TEST__VERBOSE')).is_defined();
       __.log().info('STX_TEST__VERBOSE = $is_verbose');
@@ -47,7 +47,7 @@ class Reporter extends Clazz{
       final method_call_string_fn = p.method_call_string;
       final test_case_string_fn   = p.test_case_string;
   
-      switch(data){
+      switch(data){ 
         case TP_Null                              : 
         case TP_Tick(info)                        : p.println(info);
         case TP_StartTestCase(test_case_data)     : p.println(test_case_string_fn(test_case_data),l1);
@@ -67,7 +67,7 @@ class Reporter extends Clazz{
         case TP_ReportFailure(assertion,_)        :
           final assertion_string = assertion.outcome().fold(
             s -> s,
-            (err:TestFailure) -> __.show(err)
+            (err:TestFailure) -> Std.string(err)
           );
           p.print_status(p.red_cross_on_black,p.fail_string('${assertion_string}'),l3); 
         case TP_ReportTestComplete(method_call)           :

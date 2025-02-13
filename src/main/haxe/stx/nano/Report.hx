@@ -1,5 +1,7 @@
 package stx.nano;
 
+import stx.nano.Upshot;
+
 @:using(stx.nano.Report.ReportLift)
 abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
   
@@ -97,8 +99,7 @@ abstract Report<E>(ReportSum<E>) from ReportSum<E> to ReportSum<E>{
     return Alert.make(this);
   }
 }
-class ReportLift{
-  static function lift<T>(self:ReportSum<T>):Report<T>{
+class ReportLift{ static function lift<T>(self:ReportSum<T>):Report<T>{
     return Report.lift(self);
   }
   static public function resolve<T,E>(self:ReportSum<E>,fn:Void->T):Upshot<T,E>{

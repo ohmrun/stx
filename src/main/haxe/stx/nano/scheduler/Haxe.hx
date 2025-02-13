@@ -1,24 +1,22 @@
-package stx.stream.scheduler;
+package stx.nano.scheduler;
 
 import haxe.MainLoop;
 
-using stx.stream.scheduler.Logging;
-
 class Haxe{
-  static public function apply(self:Cycle,?pos:Pos){
-    __.log().trace('Haxe.apply');
+  static public function apply(self:Cycle,?pos:Pos):Void{
+    // __.log().trace('Haxe.apply');
     final cycle_ref : Ref<Cycle>        = self; 
     var ready       = true;
     var event : MainEvent       = null;
         event       = MainLoop.add(
           (function start(){
-            __.log().trace('ready: $ready');
+            // __.log().trace('ready: $ready');
             switch(ready){
               case false : 
-              case true  : 
+             case true  : 
                 switch(cycle_ref.value?.after){
                   case null :
-                    __.log().trace('${cycle_ref.value}');
+                    // __.log().trace('${cycle_ref.value}');
                     event.stop();
                   case after    : 
                     ready = false;

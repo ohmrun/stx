@@ -1,6 +1,6 @@
 package stx.log.log.term;
 
-abstract class Mod implements LogApi extends Base{
+abstract class Mod implements LogApi extends Delegate{
   public final delegate : Log;
   public function new(delegate){
     __.assert().that().exists(delegate);

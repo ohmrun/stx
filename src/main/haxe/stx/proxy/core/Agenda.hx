@@ -1,8 +1,8 @@
 package stx.proxy.core;
 
 using stx.Stream;
-using stx.stream.Cycle;
-using stx.stream.Work;
+using stx.nano.Cycle;
+using stx.nano.Work;
 
 /**
  * Def for `stx.proxy.core.Agenda`
@@ -92,7 +92,7 @@ class AgendaExecute<E> extends FletcherCls<Nada,Report<E>,Nada>{
     );
   }
 }
-private class AgendaCyclerCls<E> implements stx.stream.Cycle.CyclerApi{
+private class AgendaCyclerCls<E> implements stx.nano.Cycle.CyclerApi{
   public var done     : Bool;
   public final uuid   : String;
   public final report : Report<E> -> Void;

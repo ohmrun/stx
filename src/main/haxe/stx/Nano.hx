@@ -2,6 +2,7 @@ package stx;
 
 using stx.Pico;
 using stx.Fail;
+import stx.nano.*;
 
 class Nano{
   static public function digests(wildcard:Wildcard):Digests{
@@ -11,25 +12,6 @@ class Nano{
     return STX;
   }
 }
-class Maps{
-  static public function map_into<K,Vi,Vii>(self:Map<K,Vi>,fn:Vi -> Vii,memo:Map<K,Vii>):Map<K,Vii>{
-    for(k => v in self){
-      memo.set(k,fn(v));
-    }
-    return memo;
-  }
-}
-// class PicoNano{
-//   // static public function Option(pico:Pico):Stx<stx.pico.Option.Tag>{
-//   //   return __.stx();
-//   // }
-// }
-class LiftArrayToCluster{
-  static public inline function toCluster<T>(self:Array<T>):stx.nano.Cluster<T>{
-    return stx.nano.Cluster.lift(self);
-  }
-}
-
 typedef VBlockDef<T>            = stx.nano.VBlock.VBlockDef<T>;
 typedef VBlock<T>               = stx.nano.VBlock<T>;
 
@@ -49,11 +31,7 @@ typedef Endianness              = stx.nano.Endianness;
 // typedef YDef<P, R>              = stx.nano.Y.YDef<P,R>;
 
 
-class LiftPos{
-  @:noUsing static public function lift(pos:Pos):stx.nano.Position{
-    return new stx.nano.Position(pos);
-  }
-}
+
 typedef LiftTinkErrorToError        = stx.nano.lift.LiftTinkErrorToError;
 typedef LiftErrorToUpshot           = stx.nano.lift.LiftErrorToRes;
 typedef LiftErrorToReport           = stx.nano.lift.LiftErrorToReport;
@@ -80,7 +58,7 @@ typedef LiftJsPromiseToPledge       = stx.nano.lift.LiftJsPromiseToPledge;
 typedef LiftFutureResToPledge       = stx.nano.lift.LiftFutureResToPledge;
 typedef LiftError                   = stx.nano.lift.LiftError;
 typedef LiftBytes                   = stx.nano.lift.LiftBytes;
-typedef LiftPath                = stx.nano.lift.LiftPath;
+typedef LiftPath                    = stx.nano.lift.LiftPath;
 
 typedef ReportSum<E>            = stx.nano.ReportSum<E>;
 typedef Report<E>               = stx.nano.Report<E>;
@@ -182,33 +160,6 @@ typedef Triple<A,B,C>           = stx.nano.Triple<A,B,C>;
 typedef TripleDef<A,B,C>        = stx.nano.Triple.TripleDef<A,B,C>;
 
 typedef Retry                   = stx.nano.Retry;
-class LiftFutureToSlot{
-  static public inline function toSlot<T>(ft:tink.core.Future<T>,?pos:Pos):stx.nano.Slot<T>{
-    return stx.nano.Slot.Guard(ft,pos);
-  }
-}
-class LiftLazyFutureToSlot{
-  static public inline function toSlot<T>(fn:Void -> tink.core.Future<T>):stx.nano.Slot<T>{
-    return stx.nano.Slot.Guard(fn());
-  }
-}
-class LiftStringableToString{
-  static public function toString(str:Stringable):String{
-    //trace("STRINGABLE");
-    return str.toString();
-  }
-}
-class LiftTToString{
-  /**
-   * Run `Std.string` on anything.
-   * @param self `T`
-   * @return `String`
-   */
-  static public function toString<T>(self:T):String{
-    //trace("ANYTHING");
-    return Std.string(self);
-  }
-}
 
 typedef FPath               = stx.nano.FPath;
 typedef Unspecified         = stx.nano.Unspecified;
@@ -255,10 +206,10 @@ typedef PrimitiveType       = stx.nano.PrimitiveType;
 typedef PrimitiveTypeSum    = stx.nano.PrimitiveType.PrimitiveTypeSum;
 typedef PrimitiveTypeCtr    = stx.nano.PrimitiveType.PrimitiveTypeCtr;
 
-typedef Record<T>           = stx.nano.Record<T>;
-typedef RecordDef<T>        = stx.nano.Record.RecordDef<T>;
+typedef Record<T>                 = stx.nano.Record<T>;
+typedef RecordDef<T>              = stx.nano.Record.RecordDef<T>;
 
-typedef Generator<T>        = stx.nano.Generator<T>;
+typedef Generator<T>              = stx.nano.Generator<T>;
 
 typedef PartialFunction<P,R>      = stx.nano.PartialFunction<P,R>;
 typedef PartialFunctionApi<P,R>   = stx.nano.PartialFunction.PartialFunctionApi<P,R>;
@@ -267,6 +218,19 @@ typedef PartialFunctionCls<P,R>   = stx.nano.PartialFunction.PartialFunctionCls<
 typedef PartialFunctions<P,R>     = stx.nano.PartialFunctions<P,R>;
 typedef PartialFunctionsDef<P,R>  = stx.nano.PartialFunctions.PartialFunctionsDef<P,R>;
 
+
+typedef Work                                    = stx.nano.Work;
+typedef Bang                                    = stx.nano.Work.Bang;
+typedef Cycle                                   = stx.nano.Cycle;
+typedef CYCLED                                  = stx.nano.Cycle.CYCLED;
+typedef CycleState                              = stx.nano.Cycle.CycleState;
+typedef Cycler                                  = stx.nano.Cycle.Cycler;
+
+class LiftPos{
+  @:noUsing static public function lift(pos:Pos):stx.nano.Position{
+    return new stx.nano.Position(pos);
+  }
+}
 enum abstract UNIMPLEMENTED(String){
   var UNIMPLEMENTED;
 }
@@ -284,5 +248,49 @@ class Couples{
   }
   static public function tup<Ti,Tii>(self:Couple<Ti,Tii>):Tup2<Ti,Tii>{
     return stx.pico.Couple.CoupleLift.decouple(self,Tup2.tuple2);
+  }
+}class LiftFutureToSlot{
+  static public inline function toSlot<T>(ft:tink.core.Future<T>,?pos:Pos):stx.nano.Slot<T>{
+    return stx.nano.Slot.Guard(ft,pos);
+  }
+}
+class LiftLazyFutureToSlot{
+  static public inline function toSlot<T>(fn:Void -> tink.core.Future<T>):stx.nano.Slot<T>{
+    return stx.nano.Slot.Guard(fn());
+  }
+}
+// class LiftStringableToString{
+//   static public function toString(str:Stringable):String{
+//     //trace("STRINGABLE");
+//     return str.toString();
+//   }
+// }
+class LiftTToString{
+  /**
+   * Run `Std.string` on anything.
+   * @param self `T`
+   * @return `String`
+   */
+  static public function toString<T>(self:T):String{
+    //trace("ANYTHING");
+    return Std.string(self);
+  }
+}
+class Maps{
+  static public function map_into<K,Vi,Vii>(self:Map<K,Vi>,fn:Vi -> Vii,memo:Map<K,Vii>):Map<K,Vii>{
+    for(k => v in self){
+      memo.set(k,fn(v));
+    }
+    return memo;
+  }
+}
+// class PicoNano{
+//   // static public function Option(pico:Pico):Stx<stx.pico.Option.Tag>{
+//   //   return __.stx();
+//   // }
+// }
+class LiftArrayToCluster{
+  static public inline function toCluster<T>(self:Array<T>):stx.nano.Cluster<T>{
+    return stx.nano.Cluster.lift(self);
   }
 }

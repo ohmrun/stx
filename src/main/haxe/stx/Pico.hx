@@ -15,6 +15,13 @@ class Pico{
     #end
     return out;
   }
+  static public function success<T,E>(wildcard:Wildcard,t:T):Outcome<T,E>{
+    return Outcome.success(t);
+  }
+  static public function failure<T,E>(wildcard:Wildcard,e:E):Outcome<T,E>{
+    //trace(e);
+    return Outcome.failure(e);
+  }
 }
 interface StxMemberApi{
   public var stx_tag(get,null) : Int;

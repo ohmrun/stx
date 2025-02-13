@@ -1,6 +1,16 @@
---define no-deprecation-warnings
---library stx
+--class-path src/main/haxe
+--library tink_priority
 --library pootle
+--library bake
+--library hscript
+--library tink_core
+--library tink_macro
+--library equals
+--library tink_chunk
+--library http-status
+--library hxmlparser
+--library console.hx
+--define no-deprecation-warnings
 --macro include('stx',true)
 --macro include('eu.ohmrun',true)
 --interp 

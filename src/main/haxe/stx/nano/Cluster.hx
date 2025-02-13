@@ -1,8 +1,5 @@
 package stx.nano;
 
-#if tink_json
-  import tink.json.Representation;
-#end
 import haxe.Constraints.IMap;
 
 /**

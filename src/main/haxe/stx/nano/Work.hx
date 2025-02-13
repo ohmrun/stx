@@ -1,8 +1,10 @@
-package stx.stream;
+package stx.nano;
+
+import stx.nano.Cycle.Cycler;
 
 typedef WorkDef = Null<Cycle>;
 
-@:using(stx.stream.Work.WorkLift)
+@:using(stx.nano.Work.WorkLift)
 @:forward(toCyclerApi) abstract Work(WorkDef) from WorkDef to WorkDef{
   @:noUsing static inline public function unit():Work{
     return lift(null);
@@ -60,7 +62,7 @@ class WorkLift{
   @:noUsing static inline public function lift(self:WorkDef):Work return Work.lift(self);
 
   static public function seq(self:Work,that:Work):Work{
-    __.log().trace('work seq setup $self $that');
+    // __.log().trace('work seq setup $self $that');
     return lift(
       switch([self,that]){
         case [null,null] : null;

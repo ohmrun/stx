@@ -22,20 +22,20 @@ abstract EnumValue(StdEnumValue) from StdEnumValue to StdEnumValue{
    * @return stx.nano.Cluster<Dynamic>
    */
   public function params():stx.nano.Cluster<Dynamic>{
-    return StdType.enumParameters(this);
+    return stx.alias.StdType.enumParameters(this);
   }
   /**
    * Returns the enum constructor.
    */
   public function ctr(){
-    return StdType.enumConstructor(this);
+    return stx.alias.StdType.enumConstructor(this);
   }
   /**
    * Index among the enums constructors.
    */
   public var index(get,never):Int;
   public function get_index():Int{
-    return StdType.enumIndex(this);
+    return stx.alias.StdType.enumIndex(this);
   }
   /**
    * Partial equality, ignoreing the value of the params.

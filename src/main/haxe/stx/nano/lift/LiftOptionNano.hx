@@ -1,5 +1,7 @@
 package stx.nano.lift;
 
+import stx.nano.Upshot;
+
 class LiftOptionNano{
   static public function zip<T,TT>(self:OptionSum<T>,that:OptionSum<TT>):OptionSum<Couple<T,TT>>{
     return switch([self,that]){

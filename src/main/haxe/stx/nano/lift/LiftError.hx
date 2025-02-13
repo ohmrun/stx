@@ -1,6 +1,7 @@
 package stx.nano.lift;
 
 import tink.core.Error.Pos;
+import stx.nano.ReportSum;
 
 class LiftError{
   static public function report<E>(error:Error<E>):Report<E>{

@@ -14,14 +14,8 @@ using stx.Nano;
 using stx.stream.Core;
 
 typedef Timeout                                 = stx.stream.Timeout;
-typedef Work                                    = stx.stream.Work;
-typedef Bang                                    = stx.stream.Work.Bang;
-typedef Cycle                                   = stx.stream.Cycle;
-typedef CYCLED                                  = stx.stream.Cycle.CYCLED;
-typedef CycleState                              = stx.stream.Cycle.CycleState;
-typedef Cycler                                  = stx.stream.Cycle.Cycler;
-typedef Window<T,E>                             = stx.stream.Window<T,E>;
-typedef Buffer<T>                               = stx.stream.Buffer<T>;
+// typedef Window<T,E>                             = stx.stream.Window<T,E>;
+// typedef Buffer<T>                               = stx.stream.Buffer<T>;
 
 typedef StreamDef<T,E>                          = TinkSignal<Chunk<T,E>>;
 
@@ -42,9 +36,9 @@ typedef StreamDef<T,E>                          = TinkSignal<Chunk<T,E>>;
   static public function fromFuture<T,E>(self:Future<T>):Stream<T,E>{
     return fromThunkFuture(() -> self);
   }
-  public function window(?buffer:Buffer<Chunk<T,E>>):Stream<T,E>{
-    return lift(Window.make(this,buffer).toSignal());
-  }
+  // public function window(?buffer:Buffer<Chunk<T,E>>):Stream<T,E>{
+  //   return lift(Window.make(this,buffer).toSignal());
+  // }
   static inline public function fromThunkFuture<T,E>(self:Void->Future<T>):Stream<T,E>{
     return lift(
       Signal.make(

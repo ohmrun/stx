@@ -18,5 +18,5 @@ interface LoggerApi<T=Any>{
   public function with_output(output : OutputApi):LoggerApi<T>;
   //public function configure(logic:APP<stx.log.Logic<T>,stx.log.Logic<T>>,format:APP<Format,Format>):LoggerApi<T>;
 
-  public function copy():LoggerApi<T>;
+  public function copy(?logic:Logic<T>,?format:Format,?output:OutputApi):LoggerApi<T>;
 }

@@ -1,7 +1,8 @@
 {
   "build" : {
+    "-cp" : "src/main/haxe",
     "-D"  : ["no-deprecation-warnings"],
-    "-lib" : ["stx","tink_priority","pootle"],
+    "-lib" : ["tink_priority","pootle","bake","hscript","tink_core","tink_macro","equals","tink_chunk","http-status","hxmlparser","console.hx"],
     "unit" : {
       "--macro" : ["include('stx',true)","include('eu.ohmrun',true)"],
       "hl" : {

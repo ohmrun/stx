@@ -1,34 +1,43 @@
 {
   "root"        : "/mnt/dat/i/prj/haxe/pub/ohmrun/stx",
   "directories" : [
-    "halva",
+    "stx_pico",
+    "stx_fail",
+    "stx_nano",
+    "stx_fn",
+    "stx_assert",
+    "stx_fp",
+    "stx_pkg",
+    "stx_log",
+    "stx_ds",
+    "stx_stream",
     "fletcher",
+    "stx_parse",
+    "stx_coroutine",
+    "stx_proxy",
+
+    "halva",
+    
     "pml",
     "pml_om",
     "pml_xml",
-    "stx_assert",
+
+
     "stx_asys",
     "stx_cli",
-    "stx_coroutine",
     "stx_data",
     "stx_makro_di",
-    "stx_ds",
-    "stx_fail",
-    "stx_fn",
-    "stx_fp",
     "stx_lense",
-    "stx_log",
+    
     "stx_makro",
-    "stx_nano",
     "stx_om",
-    "stx_parse",
-    "stx_pico",
-    "stx_pkg",
-    "stx_proxy",
+    
+   
+
     "stx_query",
     "stx_schema",
     "stx_show",
-    "stx_stream",
+
     "stx_test",
     "stx_ds_xset",
     "walker",

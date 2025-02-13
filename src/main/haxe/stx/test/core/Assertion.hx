@@ -21,7 +21,7 @@ typedef AssertionDef = {
   public function toString(){
     return outcome().fold(
       ok  -> ok,
-      e   -> __.show(e)
+      e   -> Std.string(e)
     );
   }
   public function new(self) this = self;

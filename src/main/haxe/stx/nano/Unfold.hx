@@ -1,6 +1,8 @@
 package stx.nano;
 
-
+/**
+ * Produce an Iter
+ */
 @:callable abstract Unfold<T,R>(T->Iterable<R>) from T->Iterable<R>{
   @:from static public function fromFunction<T,R>(fn:T -> Option<Couple<T, R>>):Unfold<T,R>{
     return unfold.bind(_,fn);

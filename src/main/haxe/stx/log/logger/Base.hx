@@ -13,8 +13,7 @@ class Base<T> implements LoggerApi<T> extends Debugging{
     return this.output;
   }
   public function with_output(output){
-    final next = this.copy();
-    @:privateAccess next.output = output;
+    final next = this.copy(null,null,output);
     return next;
   }
   public var logic(get,null)  : stx.log.Logic<T>;
@@ -24,14 +23,14 @@ class Base<T> implements LoggerApi<T> extends Debugging{
   public function with_logic(f : CTR<stx.log.Logic<T>,stx.log.Logic<T>>,?pos:Pos):LoggerApi<T>{
     final res = f.apply(logic);
     stx.log.Logging.log(__).info('${res.toString()} at ${pos.toPosition()}');
-    return new Base(res,this.format);
+    return copy(res);
   }
   public var format(get,null) : Format;
   public function get_format():Format{
     return this.format;
   }
   public function with_format(f : CTR<Format,Format>):LoggerApi<T>{
-    return new Base(logic,f.apply(this.format));
+    return copy(null,f.apply(this.format));
   }
 
   public function apply(value:Value<T>):Continuation<Upshot<String,LogFailure>,Value<T>>{
@@ -72,7 +71,7 @@ class Base<T> implements LoggerApi<T> extends Debugging{
       }
     );
   }
-  public function copy(){
-    return new Base(logic,format,output);  
+  public function copy(?logic,?format,?output){
+    return new Base(logic ?? this.logic,format ?? this.format,output ?? this.output);  
   }
 } 

@@ -1,6 +1,17 @@
 package stx.nano;
 
-
+class UpshotCtr extends Clazz{ 
+  static public var instance(get,null) : UpshotCtr;
+  static private function get_instance(){
+    return instance == null ? instance = new UpshotCtr() : instance;
+  }
+  public function Accept<T,E>(v:T):Upshot<T,E>{
+    return UpshotSum.Accept(v);
+  }
+  public function Reject<T,E>(e:Error<E>):Upshot<T,E>{
+    return UpshotSum.Reject(e);
+  }
+}
 @:using(stx.nano.Upshot.UpshotLift)
 @:using(stx.nano.Upshot.UpshotSumLift)
 enum UpshotSum<T,E>{

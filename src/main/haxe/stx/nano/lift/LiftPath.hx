@@ -1,5 +1,7 @@
 package stx.nano.lift;
 
+using stx.nano.lift.LiftNano;
+
 import haxe.io.Path;
 
 class LiftPath{

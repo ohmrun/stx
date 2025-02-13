@@ -40,7 +40,7 @@ class Empty<T> implements LoggerApi<T>{
   }
   //public function configure(logic:APP<stx.log.Logic<T>,stx.log.Logic<T>>,format:APP<Format,Format>):LoggerApi<T>;
 
-  public function copy():LoggerApi<T>{
-    return new Empty(this.logic,this.format);
+  public function copy(?logic,?format,?output):LoggerApi<T>{
+    return new Empty(logic ?? this.logic,format ?? this.format);
   }
 }

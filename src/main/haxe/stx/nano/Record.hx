@@ -2,9 +2,9 @@ package stx.nano;
 
 import haxe.DynamicAccess;
 
-#if (stx_assert || stx)
-  using stx.Assert;
-#end
+// #if (stx_assert || stx)
+//   using stx.Assert;
+// #end
 
 
 typedef RecordDef<T> = Cluster<Field<Void -> T>>;
@@ -27,28 +27,28 @@ typedef RecordDef<T> = Cluster<Field<Void -> T>>;
   public function add(that:Field<Void -> T>):Record<T>{
     return this.concat([that]);
   }
-  #if (stx_assert || stx)
-  public function equals(that:Record<T>,with:Eq<T>):Bool{
-    return if(this.length != that.size()){
-      false;
-    }else{
-      var ok = true;
-      for(v in this){
-        var key   = v.key;
-        var other = that.get(key);
-        switch(other){
-          case None       : false;
-          case Some(v0)   : 
-            if(!with.comply(v.val(),v0()).is_ok()){
-              ok = false;
-              break;
-            } 
-        } 
-      };
-      ok;
-    }
-  }
-  #end
+  // #if (stx_assert || stx)
+  // public function equals(that:Record<T>,with:Eq<T>):Bool{
+  //   return if(this.length != that.size()){
+  //     false;
+  //   }else{
+  //     var ok = true;
+  //     for(v in this){
+  //       var key   = v.key;
+  //       var other = that.get(key);
+  //       switch(other){
+  //         case None       : false;
+  //         case Some(v0)   : 
+  //           if(!with.comply(v.val(),v0()).is_ok()){
+  //             ok = false;
+  //             break;
+  //           } 
+  //       } 
+  //     };
+  //     ok;
+  //   }
+  // }
+  // #end
   public function get(key:String):Option<Void -> T>{
     var out = None;
     for(v in this){
@@ -117,12 +117,12 @@ typedef RecordDef<T> = Cluster<Field<Void -> T>>;
   
 }
 class RecordLift{
-  #if (stx_assert || stx)
-  static public function ord<T>(inner:Ord<T>):Ord<Record<T>>{
-    return new stx.assert.ord.term.Record(inner);
-  }
-  static public function eq<T>(inner):Eq<Record<T>>{
-    return new stx.assert.eq.term.Record(inner);
-  }
-  #end
+  // #if (stx_assert || stx)
+  // static public function ord<T>(inner:Ord<T>):Ord<Record<T>>{
+  //   return new stx.assert.ord.term.Record(inner);
+  // }
+  // static public function eq<T>(inner):Eq<Record<T>>{
+  //   return new stx.assert.eq.term.Record(inner);
+  // }
+  // #end
 }

@@ -1,5 +1,6 @@
 package stx.assert.om.eq.term;
 
+import stx.assert.eq.term.ArrayEq;
 import stx.om.sig.Signature in SignatureT;
 
 class Signature<T> extends stx.assert.eq.term.Base<SignatureT<T>>{
@@ -11,7 +12,7 @@ class Signature<T> extends stx.assert.eq.term.Base<SignatureT<T>>{
   public function comply(a:SignatureT<T>,b:SignatureT<T>):Equaled{
     return switch [a,b] {
       case [SigCollate(arr0),SigCollate(arr1)]:
-        arr0.equals(arr1,this);
+        new stx.assert.eq.term.Record(this).comply(arr0,arr1);
       case [SigPrimate(s0),SigPrimate(s1)] if (std.Type.enumEq(s0.prj(),s1.prj())) : 
         true;
       case [SigCollect(fn0),SigCollect(fn1)] : 

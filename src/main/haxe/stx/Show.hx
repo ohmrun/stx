@@ -169,3 +169,8 @@ typedef ShowableDef<T>  = stx.show.Showable.ShowableDef<T>;
 typedef ShowableCls<T>  = stx.show.Showable.ShowableCls<T>;
 typedef ShowableApi<T>  = stx.show.Showable.ShowableApi<T>;
 typedef Showable<T>     = stx.show.Showable.Showable<T>;
+// class LogEntryCtrLift{
+//   static public function show<T>(self:stx.log.EntryCtr<T>,val:T){
+//     return { val : val, ctr : (x:T) -> __.show(x) };
+//   }
+// }

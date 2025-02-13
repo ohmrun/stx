@@ -5,7 +5,6 @@ import tink.core.Future;
 using stx.Pico;
 using stx.Nano;
 using stx.Fail;
-using stx.Stream;
 using stx.Log;
 using stx.Assert;
 using eu.ohmrun.fletcher.Core;

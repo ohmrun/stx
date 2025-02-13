@@ -1,7 +1,7 @@
 package stx.makro.di;
 
-@:keep class Overrides{
-  public function react(_){
+@:keep class Overrides extends stx.makro.di.core.Assembly{
+  override public function react(_){
     
   }
 }
